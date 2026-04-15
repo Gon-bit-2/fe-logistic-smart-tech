@@ -7,7 +7,7 @@
  * Dùng div thường thay vì Card vì section này cần layout transparent & custom.
  */
 import React, { useRef } from "react";
-import { testimonialData } from "@/lib/mockData";
+import { testimonialData } from "@/features/landing/data";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";

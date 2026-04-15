@@ -8,7 +8,7 @@
  */
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
-import { sustainabilityData } from "@/lib/mockData";
+import { sustainabilityData } from "@/features/landing/data";
 import { Badge } from "@/components/ui/badge";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -22,7 +22,7 @@ type SustainabilitySceneState = {
 };
 
 const SustainabilityParticleScene = dynamic(
-  () => import("./three/SustainabilityParticleScene"),
+  () => import("@/components/3d/SustainabilityParticleScene"),
   {
     ssr: false,
     loading: () => (

@@ -6,7 +6,7 @@
  * Khi người dùng cuộn tới, mỗi con số sẽ nhảy từ 0 đến giá trị thực.
  */
 import React, { useRef } from "react";
-import { statData } from "@/lib/mockData";
+import { statData } from "@/features/landing/data";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";

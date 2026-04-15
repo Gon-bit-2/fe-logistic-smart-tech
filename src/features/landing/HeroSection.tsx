@@ -6,7 +6,7 @@
  */
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
-import { heroData } from "@/lib/mockData";
+import { heroData } from "@/features/landing/data";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -18,12 +18,15 @@ type HeroSceneState = {
   progress: number;
 };
 
-const HeroLogisticsScene = dynamic(() => import("./three/HeroLogisticsScene"), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.18),transparent_58%)]" />
-  ),
-});
+const HeroLogisticsScene = dynamic(
+  () => import("@/components/3d/HeroLogisticsScene"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.18),transparent_58%)]" />
+    ),
+  },
+);
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLElement>(null);

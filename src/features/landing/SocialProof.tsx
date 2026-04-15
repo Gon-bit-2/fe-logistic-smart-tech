@@ -2,7 +2,7 @@
  * SocialProof component
  * Hiển thị logo đối tác theo bố cục ổn định, ưu tiên khả năng đọc.
  */
-import { socialProofData } from "@/lib/mockData";
+import { socialProofData } from "@/features/landing/data";
 
 export default function SocialProof() {
   return (
