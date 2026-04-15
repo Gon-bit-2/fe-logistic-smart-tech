@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emerald Logistics - The Precision Ecosystem</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed": "#002113",
+                        "inverse-surface": "#27332d",
+                        "surface-container-high": "#deebe3",
+                        "surface-container": "#e4f1e8",
+                        "primary": "#006c49",
+                        "on-secondary-container": "#306d58",
+                        "on-secondary-fixed-variant": "#0b513d",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#adedd3",
+                        "surface-bright": "#f0fdf4",
+                        "secondary": "#2b6954",
+                        "surface-container-low": "#eaf7ee",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f0fdf4",
+                        "on-primary-container": "#00422b",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "surface-tint": "#006c49",
+                        "on-primary-fixed-variant": "#005236",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#d9e6dd",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "on-secondary-fixed": "#002117",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#3c4a42",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#6ffbbe",
+                        "surface-container-highest": "#d9e6dd",
+                        "surface": "#f0fdf4",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#b0f0d6",
+                        "primary-container": "#10b981",
+                        "inverse-primary": "#4edea3",
+                        "secondary-fixed-dim": "#95d3ba",
+                        "error": "#ba1a1a",
+                        "outline": "#6c7a71",
+                        "surface-dim": "#d0ddd5",
+                        "tertiary": "#006591",
+                        "on-surface": "#131e19",
+                        "outline-variant": "#bbcabf",
+                        "on-tertiary-container": "#003d59",
+                        "inverse-on-surface": "#e7f4eb",
+                        "tertiary-container": "#23acf1",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-background": "#131e19"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'sunken': '0 20px 40px -10px rgba(6, 78, 59, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared TopNavBar (Strictly Included) -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7f3ef] px-10 py-3 bg-[#f8fcfa]">
+<div class="flex items-center gap-4 text-[#0d1b17]">
+<div class="size-4">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0d1b17] text-lg font-bold leading-tight tracking-[-0.015em]">Emerald Logistics</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-[#0d1b17] text-sm font-medium leading-normal" href="#">Features</a>
+<a class="text-[#0d1b17] text-sm font-medium leading-normal" href="#">Technology</a>
+<a class="text-[#0d1b17] text-sm font-medium leading-normal" href="#">Sustainability</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-emerald-500 text-[#0d1b17] text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Get Started</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col w-full overflow-x-hidden">
+<!-- Hero Section: Immersive 3D Scene -->
+<section class="relative w-full min-h-[870px] flex items-center justify-center bg-surface-container overflow-hidden">
+<!-- 3D Background Element -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="high-tech sleek electric truck hovering slightly in a lush futuristic glass arboretum with soft glowing volumetric light and rich emerald foliage" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzXUUHTZfQj5nHlJUqTs9U9J_ZfTZpHM3S0femsVlI3C9RUIxYdI_DID5BcDT3BdpP16ocqiev--rXiNfl-68pFtmj4gDLIxMarkS_Ua50ZtbLaUPTKdaDKMLJgpaGCSwKItJNV-0xp6CUYN7kFWl4AFgzo_5ROOXN5q88eQ9x9KKBHrP4zJcZlcohYoiomTP5GIw3H0LVJgMCYDY3vsa1DnbLGZpP18m4pUyKjP-cBiokSQU5qxGC7kuAgJbYW5lOIqRf3cD0k47A');">
+</div>
+<!-- Glassmorphism Content Card -->
+<div class="relative z-10 max-w-4xl mx-auto px-6 w-full">
+<div class="bg-surface-container-lowest/80 backdrop-blur-[12px] p-10 md:p-16 rounded-DEFAULT shadow-sunken flex flex-col items-start gap-8">
+<div class="flex flex-col gap-4">
+<span class="font-label text-sm uppercase tracking-wider text-primary font-bold">The Digital Arboretum</span>
+<h1 class="font-headline text-[2.75rem] leading-tight font-black text-on-surface">
+                            The Future of Logistics is Dimensional
+                        </h1>
+<p class="font-body text-base text-on-surface-variant max-w-2xl">
+                            Step into a managed ecosystem where high-tech precision meets organic fluidity. Experience data not as flat numbers, but as a living, breathing network.
+                        </p>
+</div>
+<button class="flex items-center justify-center px-8 py-4 rounded-DEFAULT bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold hover:shadow-[0_0_20px_rgba(111,251,190,0.4)] transition-all duration-300">
+                        Experience the Precision
+                        <span class="material-symbols-outlined ml-2 text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Features Section: Isometric Cards -->
+<section class="w-full py-24 px-6 md:px-12 lg:px-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto flex flex-col gap-16">
+<div class="flex flex-col gap-4">
+<h2 class="font-headline text-[1.5rem] font-bold text-on-surface">Precision Core Capabilities</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-8 shadow-sunken flex flex-col gap-6 transform transition-transform hover:-translate-y-2 group">
+<div class="w-full h-48 rounded-DEFAULT bg-cover bg-center" data-alt="3D isometric view of a glowing digital map showing optimized routing paths with bright green neon lines over a dark stylized city grid" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAt6yhfd0pZdGhbCrgvoKuAWSTpAYTL__z8EWsJlC4PV9Q0SJESSENH_9CcHl_Zw-T5sUdWcgzFMxGaIJVMzY4DXJzOUj4BCHaacLcJ0qyaJnlZ-tCKek5qj3Q21TFfpZJ1XIu37Oo7Tonyhbj5bLm9YS-Txd_YURKcBD94Ym0Gswc-1NXWInnW-TPrnevfUbFan7sA3wrA4v1pBi2aDn8e0-bLtYnP0uLJOdxoHLCMOx6GyyjG4PBJAm5Np-g_fkZBS7uZ1YoiTg85');">
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary flex-shrink-0"></div>
+<h3 class="font-headline text-xl font-bold text-on-surface">Smart Routing</h3>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Navigate the complexities of global transit with AI-driven, multi-dimensional pathfinding that adapts in real-time.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-8 shadow-sunken flex flex-col gap-6 transform transition-transform hover:-translate-y-2 group">
+<div class="w-full h-48 rounded-DEFAULT bg-cover bg-center" data-alt="3D isometric visualization of a delicate green leaf composed of glowing geometric data points inside a clear glass cube" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBt6IsJVcRUS9P9-7GqtpXRGRe5kMAnjBFKsqgpqU7tzvsExkSsOl3VJcm47hQ7psgq6VcP4PUZbcH1PLajv0gBaWpUn-tocSatLKqqBWeF0J-y5yEgC4ToEtQnX2a0jJMOiq84Rm67jbKMyUgRebhVyQcTSIiSK9CIEenzH-7YtizmmDglFiC6SXmVBTsG1kcfez7qgBBGDGxx9pL5eXM9HgKf7eCs6_6n85BiyaoqyVN58tJ4J-ZEPw9odUtXWIM4kzIy4Z89wVT2');">
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary flex-shrink-0"></div>
+<h3 class="font-headline text-xl font-bold text-on-surface">Eco-Tracking</h3>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Monitor and offset your carbon footprint dynamically. Turn sustainability from a metric into a strategic advantage.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-8 shadow-sunken flex flex-col gap-6 transform transition-transform hover:-translate-y-2 group">
+<div class="w-full h-48 rounded-DEFAULT bg-cover bg-center" data-alt="3D isometric render of a sleek futuristic cargo truck surrounded by floating holographic data panels and status indicators" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmMRw1Qg8jwEU8xLnSjIuwwjRRSGhxKAs7Qd5OEVSYAiKYHWwdExJLoK2u_Ca1rVDCqWlPpk3O5a4tzquJ9pOTqQHjs5jJsJe-r_xSM2IpgyFK91jexKNdzMlJAlypbFH7n9rJyENLfDoaTlVGYZpRSB17oBtt6KSMfVATO_2i_FIJ8GGB08R5W2AGCtvZiP4u8_QcCDusdEaLvz1Ye9E2TLwkKfYtGaypYmsq5Im2pmFKB2S-FsGqxutnPcm31X10no1mhNZTM3f1');">
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 rounded-full bg-primary flex-shrink-0"></div>
+<h3 class="font-headline text-xl font-bold text-on-surface">Fleet Intelligence</h3>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Deep telemetry combined with predictive maintenance ensures your fleet operates at peak organic efficiency.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Data: 3D Globe -->
+<section class="w-full py-32 px-6 bg-surface relative overflow-hidden flex flex-col items-center justify-center">
+<div class="absolute inset-0 z-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-colors-primary)_0%,_transparent_70%)]"></div>
+<div class="max-w-7xl mx-auto flex flex-col items-center gap-12 relative z-10 w-full">
+<div class="text-center flex flex-col gap-4 max-w-2xl">
+<h2 class="font-headline text-[1.5rem] font-bold text-on-surface">Global Interactive Data</h2>
+<p class="font-body text-base text-on-surface-variant">Watch your logistics network come alive. A living map of efficiency spanning the globe.</p>
+</div>
+<div class="w-full max-w-4xl aspect-[16/9] rounded-DEFAULT bg-surface-container-lowest shadow-sunken overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="highly detailed 3D dark mode globe visualization with glowing emerald green shipping routes arching across oceans and continents with soft depth of field" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAehUgb0I9ci--x2O1rRTZOcS4wQ_mYcCKQwNjEdz4MgP-QZ_yWtH4F8PXVBEwmBsgv0ROALypeQm5lNZ3Zu5DLKTnqWTYpYGyCjB3tcm-9GRH2y-sMbwb0Qyjy0XVUvhFKWWTRwDziNWARlLYyeBmwowm-qzfoGWUqKeQoUtuW2QmPFKstoIIEoXF5sAUakvXtgLNO6CP1_h1UF5Jpq2sxui0vfHKXFgSuRwSogkl1BXRaVljF8cZlLp1NjurBqi86uqKm8ff__1n1');">
+</div>
+<!-- Glassmorphism overlay for UI controls -->
+<div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+<div class="bg-surface-container-lowest/80 backdrop-blur-[12px] px-4 py-3 rounded-DEFAULT flex gap-6">
+<div class="flex flex-col">
+<span class="font-label text-xs uppercase text-on-surface-variant tracking-wider">Active Nodes</span>
+<span class="font-headline font-bold text-on-surface">1,402</span>
+</div>
+<div class="w-px bg-outline-variant/15"></div>
+<div class="flex flex-col">
+<span class="font-label text-xs uppercase text-on-surface-variant tracking-wider">Carbon Saved</span>
+<span class="font-headline font-bold text-tertiary">42.5k T</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sustainability: Forest to Grid -->
+<section class="w-full bg-surface-container-low py-24 px-6 md:px-12 lg:px-24">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 h-[500px] rounded-DEFAULT shadow-sunken overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center" data-alt="dramatic 3D transition showing a dense realistic lush green forest organically transforming into a structured glowing digital wireframe grid matrix" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPBJmEcFbBipJiabZtTGcHZX8n0e0avQOhPaLvxhVOoYdWfqeyBtKJR5p1EnPNPgQ_rXxW1uW8rtRHPWe-qmGhpkbqyIhZT90njj5LaKug_6-09kzgmj2Z-81NoQoiQuwx5wioiwHJmWY1MJBDaSq3XzVwkiEv0yuKz6ijyOwRcK6zo0G_kfNJR0ftoa8w5tyoNhSeybdANODsIiCKQQPKmKW3VNRJ2PQuL0ZNFpJGlorPTsV34kNDZZhgcRZLgu6G3Vl9FwDL6BNP');">
+</div>
+</div>
+<div class="order-1 lg:order-2 flex flex-col gap-8">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs uppercase tracking-wider w-fit">
+                        The Digital Arboretum Concept
+                    </div>
+<h2 class="font-headline text-[2.75rem] leading-tight font-black text-on-surface">
+                        Rooted in Nature, Powered by Data.
+                    </h2>
+<p class="font-body text-lg text-on-surface-variant">
+                        We don't just optimize routes; we cultivate them. By treating logistics networks as organic ecosystems, we achieve unprecedented efficiency while actively nurturing the environments we pass through.
+                    </p>
+<div class="flex flex-col gap-3 mt-4">
+<div class="flex items-center gap-4 bg-surface p-4 rounded-DEFAULT">
+<span class="material-symbols-outlined text-primary" data-icon="energy_savings_leaf">energy_savings_leaf</span>
+<span class="font-body text-sm font-medium text-on-surface">100% Renewable Cloud Infrastructure</span>
+</div>
+<div class="flex items-center gap-4 bg-surface p-4 rounded-DEFAULT">
+<span class="material-symbols-outlined text-primary" data-icon="recycling">recycling</span>
+<span class="font-body text-sm font-medium text-on-surface">Closed-loop Fleet Lifecycle Management</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>
