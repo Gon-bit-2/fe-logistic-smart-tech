@@ -13,40 +13,13 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export interface StatBarProps {}
-
-export default function StatBar({}: Readonly<StatBarProps>) {
+export default function StatBar() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      // Fade-in cho tiêu đề
-      gsap.from(".stat-title", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-
-      // Stagger cho mỗi stat item
-      gsap.from(".stat-item", {
-        y: 40,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".stat-grid",
-          start: "top 85%",
-        },
-      });
-
       // Hiệu ứng đếm số cho mỗi con số thống kê
-      document.querySelectorAll<HTMLElement>(".stat-value").forEach((el) => {
+      sectionRef.current?.querySelectorAll<HTMLElement>(".stat-value").forEach((el) => {
         const raw = el.dataset.value || "0";
         // Tách phần số và phần suffix (ví dụ: "1.2M+" -> numericPart=1.2, suffix="M+")
         const match = raw.match(/^([\d.]+)(.*)$/);
@@ -62,6 +35,7 @@ export default function StatBar({}: Readonly<StatBarProps>) {
           scrollTrigger: {
             trigger: el,
             start: "top 90%",
+            once: true,
           },
           onUpdate: () => {
             // Giữ định dạng thập phân nếu giá trị gốc có dấu chấm
@@ -73,23 +47,26 @@ export default function StatBar({}: Readonly<StatBarProps>) {
         });
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
-    <section ref={sectionRef} className="bg-emerald-950 py-20 px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="stat-title text-center text-primary-fixed text-2xl md:text-4xl font-bold mb-16 tracking-tight">
+    <section ref={sectionRef} className="bg-emerald-950 px-8 py-20">
+      <div className="mx-auto max-w-7xl">
+        <h2 className="stat-title mb-16 text-center text-2xl font-bold tracking-tight text-primary-fixed md:text-4xl">
           Sustainability Solutions For Every Stage Of Your Journey
         </h2>
-        <div className="stat-grid grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="stat-grid grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {statData.map((stat, index) => (
-            <div key={index} className="stat-item text-center space-y-2">
-              <div className="text-white/60 text-xs font-bold uppercase tracking-widest">
+            <div
+              key={index}
+              className="stat-item group flex h-full min-h-36 flex-col justify-between rounded-3xl border border-white/8 bg-white/[0.04] px-5 py-6 text-center shadow-[0_18px_40px_-32px_rgba(111,251,190,0.45)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08]"
+            >
+              <div className="text-xs font-bold tracking-widest text-white/70 uppercase transition-colors duration-300 group-hover:text-primary-fixed/80">
                 {stat.label}
               </div>
               <div
-                className="stat-value text-4xl md:text-5xl font-black text-white"
+                className="stat-value text-4xl font-black leading-none text-white transition-all duration-300 group-hover:text-primary-fixed group-hover:[text-shadow:0_0_24px_rgba(111,251,190,0.25)] md:text-5xl"
                 data-value={stat.value}
               >
                 0

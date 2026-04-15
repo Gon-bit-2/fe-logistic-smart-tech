@@ -14,9 +14,7 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export interface TestimonialSectionProps {}
-
-export default function TestimonialSection({}: Readonly<TestimonialSectionProps>) {
+export default function TestimonialSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -77,11 +75,11 @@ export default function TestimonialSection({}: Readonly<TestimonialSectionProps>
             </span>
           ))}
         </div>
-        <blockquote className="testimonial-quote text-3xl md:text-4xl font-medium tracking-tight text-on-surface italic leading-snug">
+        <blockquote className="testimonial-quote cursor-default text-3xl md:text-4xl font-medium italic leading-snug tracking-tight text-on-surface transition-all duration-500 hover:-translate-y-1 hover:text-primary">
           &ldquo;{testimonialData.quote}&rdquo;
         </blockquote>
-        <div className="testimonial-author flex flex-col items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-surface-container overflow-hidden ring-4 ring-primary-fixed">
+        <div className="testimonial-author group flex flex-col items-center gap-4 transition-transform duration-300 hover:-translate-y-1">
+          <div className="h-16 w-16 overflow-hidden rounded-full bg-surface-container ring-4 ring-primary-fixed transition-all duration-300 group-hover:scale-105 group-hover:ring-primary">
             <img
               alt={testimonialData.author}
               className="w-full h-full object-cover"
@@ -89,10 +87,10 @@ export default function TestimonialSection({}: Readonly<TestimonialSectionProps>
             />
           </div>
           <div>
-            <div className="font-bold text-on-surface text-xl">
+            <div className="text-xl font-bold text-on-surface transition-colors duration-300 group-hover:text-primary">
               {testimonialData.author}
             </div>
-            <div className="text-on-surface-variant uppercase text-xs font-black tracking-widest">
+            <div className="text-xs font-black uppercase tracking-widest text-on-surface-variant transition-colors duration-300 group-hover:text-on-surface">
               {testimonialData.role}
             </div>
           </div>

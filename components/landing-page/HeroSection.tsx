@@ -2,58 +2,99 @@
 
 /**
  * HeroSection component
- * The visually striking initial impression using background image with gradients.
+ * 3D logistics globe hero with GSAP-driven camera motion.
  */
-import React, { useRef } from 'react';
-import { heroData } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import React, { useRef } from "react";
+import dynamic from "next/dynamic";
+import { heroData } from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export interface HeroSectionProps {}
+type HeroSceneState = {
+  progress: number;
+};
 
-export default function HeroSection({}: Readonly<HeroSectionProps>) {
+const HeroLogisticsScene = dynamic(() => import("./three/HeroLogisticsScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.18),transparent_58%)]" />
+  ),
+});
+
+export default function HeroSection() {
   const containerRef = useRef<HTMLElement>(null);
+  const sceneStateRef = useRef<HeroSceneState>({ progress: 0 });
 
-  useGSAP(() => {
-    gsap.from(".hero-anim", {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.2,
-      ease: "power3.out",
-      delay: 0.2
-    });
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      sceneStateRef.current.progress = 0;
+
+      gsap.from(".hero-anim", {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        delay: 0.2,
+      });
+
+      gsap.to(sceneStateRef.current, {
+        progress: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    },
+    { scope: containerRef },
+  );
 
   return (
-    <section ref={containerRef} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* High-quality realistic background image */}
-      <img alt="Electric delivery fleet at charging station" className="absolute inset-0 w-full h-full object-cover" src={heroData.bgImage} />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-emerald-950/90"></div>
-      
-      <div className="relative z-10 max-w-5xl mx-auto px-8 text-center pt-20">
-        <h1 className="hero-anim text-5xl md:text-8xl font-extrabold tracking-tighter text-white leading-[1.1] mb-8">
-          {heroData.titleLine1} <br/><span className="text-primary-fixed italic">{heroData.titleLine2}</span>
+    <section
+      ref={containerRef}
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#03140f]"
+    >
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <HeroLogisticsScene sceneStateRef={sceneStateRef} />
+      </div>
+
+      <div className="pointer-events-none absolute left-[-10%] top-[15%] z-0 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-12%] right-[-8%] z-0 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.12),transparent_38%)]" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#02100c]/40 via-[#03140f]/55 to-emerald-950/92" />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-8 pt-20 text-center">
+        <h1 className="hero-anim mb-8 text-5xl leading-[1.1] font-extrabold tracking-tighter text-white md:text-8xl">
+          {heroData.titleLine1} <br />
+          <span className="text-primary-fixed italic">
+            {heroData.titleLine2}
+          </span>
         </h1>
-        
-        <p className="hero-anim text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 font-medium">
+
+        <p className="hero-anim mx-auto mb-12 max-w-2xl text-xl font-medium text-white/80 md:text-2xl">
           {heroData.description}
         </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <Button className="hero-anim w-full sm:w-auto px-10 py-7 bg-primary-fixed text-on-primary-fixed rounded-lg font-black text-sm uppercase tracking-widest shadow-xl hover:bg-primary-fixed hover:brightness-110 transition-all active:scale-95">
+
+        <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
+          <Button className="hero-anim w-full rounded-lg bg-primary-fixed px-10 py-7 text-sm font-black tracking-widest text-on-primary-fixed uppercase shadow-xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95 sm:w-auto">
             Get Started
           </Button>
-          <Button className="hero-anim w-full sm:w-auto px-10 py-7 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-lg font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+          <Button className="hero-anim flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-10 py-7 text-sm font-black tracking-widest text-white uppercase backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
+            <span className="material-symbols-outlined" data-icon="play_circle">
+              play_circle
+            </span>
             Watch Video
           </Button>
         </div>
-        
-        <div className="hero-anim mt-16 text-white/60 text-sm font-bold tracking-widest uppercase">
+
+        <div className="hero-anim mt-16 text-sm font-bold tracking-widest text-white/60 uppercase">
           Trusted Data For Resilient Supply Chains.
         </div>
       </div>
