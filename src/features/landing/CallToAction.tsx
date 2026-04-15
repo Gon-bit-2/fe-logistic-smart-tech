@@ -5,7 +5,7 @@
  * Glass CTA staged over the warehouse background from Stitch.
  */
 import React, { useRef } from "react";
-import { ctaData } from "@/lib/mockData";
+import { ctaData } from "@/features/landing/data";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -57,7 +57,7 @@ export default function CallToAction() {
         );
       }
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (

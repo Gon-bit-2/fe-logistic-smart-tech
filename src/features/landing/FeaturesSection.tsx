@@ -5,7 +5,7 @@
  * Tích hợp hiệu ứng 3D tilt với chiều sâu thật cho từng lớp nội dung.
  */
 import React, { useRef } from "react";
-import { featuresData } from "@/lib/mockData";
+import { featuresData } from "@/features/landing/data";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
