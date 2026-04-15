@@ -1,8 +1,11 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-
-export type AuthRole = "admin" | "driver" | "customer";
+import type {
+  AuthCredentials,
+  AuthRole,
+  OtpChallenge,
+} from "@/features/auth/types/auth.types";
 
 export type AuthUser = {
   id: string;
@@ -14,18 +17,27 @@ export type AuthUser = {
 type AuthState = {
   token: string | null;
   user: AuthUser | null;
+  otpChallenge: OtpChallenge | null;
+  pendingRegistration: AuthCredentials | null;
 };
 
 type AuthSnapshot = AuthState & {
   isAuthenticated: boolean;
   clearSession: () => void;
+  clearOtpChallenge: () => void;
   setSession: (nextState: Partial<AuthState>) => void;
+  setOtpChallenge: (
+    challenge: OtpChallenge,
+    registration?: AuthCredentials | null,
+  ) => void;
 };
 
 const listeners = new Set<() => void>();
 const initialState: AuthState = {
   token: null,
   user: null,
+  otpChallenge: null,
+  pendingRegistration: null,
 };
 
 let state = initialState;
@@ -33,6 +45,22 @@ let state = initialState;
 const actions = {
   setSession(nextState: Partial<AuthState>) {
     state = { ...state, ...nextState };
+    emit();
+  },
+  setOtpChallenge(challenge: OtpChallenge, registration?: AuthCredentials | null) {
+    state = {
+      ...state,
+      otpChallenge: challenge,
+      pendingRegistration: registration ?? state.pendingRegistration,
+    };
+    emit();
+  },
+  clearOtpChallenge() {
+    state = {
+      ...state,
+      otpChallenge: null,
+      pendingRegistration: null,
+    };
     emit();
   },
   clearSession() {

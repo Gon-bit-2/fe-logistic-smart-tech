@@ -7,9 +7,9 @@ type TrackingTimelineProps = {
 
 export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
   return (
-    <section className="rounded-[1.5rem] border border-border bg-card p-6">
+    <section className="rounded-xl bg-surface-container-lowest p-6 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
       <div className="mb-5">
-        <p className="text-xs font-black tracking-[0.28em] text-primary uppercase">
+        <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
           Live tracking
         </p>
         <h3 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
@@ -17,19 +17,47 @@ export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
         </h3>
       </div>
 
-      <div className="space-y-4">
+      <div className="relative space-y-8">
+        <div className="absolute bottom-2 left-5 top-2 w-px bg-surface-container-high" />
         {stops.map((stop) => (
-          <div key={stop.id} className="rounded-2xl border border-border bg-background px-4 py-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="font-bold text-on-surface">{stop.label}</div>
-              <span className="text-xs font-black tracking-[0.24em] text-primary uppercase">
-                {stop.status}
+          <div key={stop.id} className="relative flex gap-5">
+            <div
+              className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ring-8 ring-white ${
+                stop.status === "completed"
+                  ? "bg-tertiary-fixed text-tertiary"
+                  : stop.status === "current"
+                    ? "bg-tertiary-container text-white shadow-xl shadow-tertiary/25"
+                    : "bg-surface-container-highest text-outline"
+              }`}
+            >
+              <span className="material-symbols-outlined text-lg">
+                {stop.status === "completed"
+                  ? "check_circle"
+                  : stop.status === "current"
+                    ? "local_shipping"
+                    : "inventory_2"}
               </span>
             </div>
-            <p className="mt-2 text-sm text-on-surface-variant">{stop.location}</p>
-            <p className="mt-1 text-xs font-semibold text-on-surface-variant/80">
-              {formatDate(stop.timestamp)}
-            </p>
+            <div className={stop.status === "pending" ? "opacity-45" : undefined}>
+              <div className="flex items-center gap-3">
+                <div className="font-bold text-on-surface">{stop.label}</div>
+                <span className="text-[10px] font-black tracking-[0.14em] text-outline uppercase">
+                  {stop.status.replaceAll("_", " ")}
+                </span>
+              </div>
+              <p className="mt-2 text-sm text-on-surface-variant">{stop.location}</p>
+              <p className="mt-1 text-xs font-semibold text-on-surface-variant/80">
+                {formatDate(stop.timestamp)}
+              </p>
+              {stop.status === "current" ? (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2 text-sm text-on-tertiary-container">
+                  <span className="material-symbols-outlined text-base text-tertiary">
+                    info
+                  </span>
+                  Processing for the next delivery leg.
+                </div>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>

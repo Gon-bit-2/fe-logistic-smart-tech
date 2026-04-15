@@ -2,6 +2,51 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+smart-logistics-frontend/
+├── public/ # Chứa ảnh tĩnh, icon, font, 3d models (.gltf, .glb)
+│
+├── src/
+│ ├── app/ # 🚀 LỚP ROUTING (Next.js App Router)
+│ │ ├── (auth)/ # Route group: /login, /register
+│ │ ├── (dashboard)/ # Route group: /admin, /driver (Dùng chung Layout Dashboard)
+│ │ ├── tracking/ # Route: /tracking/[id]
+│ │ ├── layout.tsx # Root layout (Chứa Providers)
+│ │ └── page.tsx # Landing page (Gọi các component từ features/landing)
+│ │
+│ ├── components/ # 🧱 LỚP SHARED UI (Dùng chung toàn hệ thống)
+│ │ ├── ui/ # Shadcn UI (button.tsx, badge.tsx, dialog.tsx...)
+│ │ ├── layout/ # Global Layouts (Navbar.tsx, Footer.tsx, Sidebar.tsx)
+│ │ └── 3d/ # Các component React Three Fiber dùng chung
+│ │
+│ ├── features/ # 🌟 TRÁI TIM CỦA CLEAN ARCHITECTURE (Chia theo Domain)
+│ │ ├── landing/ # Chứa các section của trang chủ (HeroSection, StatBar...)
+│ │ ├── auth/ # Domain Xác thực (Login Form, UseAuth hook)
+│ │ ├── orders/ # Domain Đơn hàng
+│ │ │ ├── api/ # Hàm gọi API: createOrder.ts, getOrderById.ts
+│ │ │ ├── components/ # UI riêng: OrderForm.tsx, OrderTimeline.tsx
+│ │ │ ├── hooks/ # Logic: useCreateOrder.ts (React Query)
+│ │ │ ├── store/ # Local state: orderStore.ts
+│ │ │ └── types/ # DTOs: order.dto.ts
+│ │ ├── fleet/ # Domain Xe & Kho bãi (VehicleList, HubMap)
+│ │ ├── tracking/ # Domain Theo dõi & POD
+│ │ └── green-tech/ # Domain Thống kê CO2 (CO2Dashboard)
+│ │
+│ ├── lib/ # 🛠 LỚP INFRASTRUCTURE (Cấu hình Third-party)
+│ │ ├── api-client.ts # Config Axios (gắn JWT token vào header)
+│ │ ├── query-client.ts # Config React Query / SWR
+│ │ ├── gsap-config.ts # Khởi tạo GSAP & ScrollTrigger global
+│ │ └── utils.ts # cn() function của Shadcn
+│ │
+│ ├── store/ # 📦 GLOBAL STATE (Zustand / Redux)
+│ │ └── useAuthStore.ts # Lưu thông tin User & Token dùng toàn app
+│ │
+│ ├── types/ # 🏷 GLOBAL TYPES
+│ │ └── common.type.ts # Response type chung (VD: PaginationResponse)
+│ │
+│ └── utils/ # 🧮 GLOBAL UTILS (Hàm helper thuần)
+│ ├── formatters.ts # formatCurrency, formatDate
+│ └── geo.ts # calculateDistance (FE cũng có thể cần tính toán tạm)
+
 First, run the development server:
 
 ```bash
