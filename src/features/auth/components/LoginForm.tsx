@@ -7,6 +7,7 @@ import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useGoogleLoginMutation } from "@/features/auth/hooks/useGoogleLoginMutation";
 import { useLoginMutation } from "@/features/auth/hooks/useLoginMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/hooks/useRequestRegisterOtpMutation";
 import type { AuthFormMode } from "@/features/auth/types/auth.types";
@@ -18,6 +19,7 @@ type LoginFormProps = {
 export default function LoginForm({ mode = "login" }: LoginFormProps) {
   const isRegister = mode === "register";
   const router = useRouter();
+  const googleLoginMutation = useGoogleLoginMutation();
   const loginMutation = useLoginMutation();
   const requestOtpMutation = useRequestRegisterOtpMutation();
   const [status, setStatus] = useState<string | null>(null);
@@ -50,7 +52,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
 
         setStatus("Verification code sent. Continue to OTP confirmation.");
         startTransition(() => {
-          router.push("/auth/otp");
+          router.push("/auth/otp?mode=register");
         });
         return;
       }
@@ -179,7 +181,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             </span>
             {!isRegister ? (
               <span className="text-[10px] font-black tracking-[0.16em] text-tertiary uppercase">
-                Forgot key?
+                <Link href="/auth/forgot-password">Forgot key?</Link>
               </span>
             ) : null}
           </div>
@@ -233,6 +235,12 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         </div>
       ) : null}
 
+      {googleLoginMutation.error ? (
+        <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {googleLoginMutation.error.message}
+        </div>
+      ) : null}
+
       <div className="relative">
         <Separator />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -251,13 +259,26 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           <button
             key={item.label}
             type="button"
-            className="rounded-xl border border-outline-variant/12 px-3 py-4 text-center transition hover:bg-surface-container-low"
+            disabled={
+              item.label !== "Google" ||
+              googleLoginMutation.isPending ||
+              isSubmitting
+            }
+            onClick={() => {
+              if (item.label === "Google") {
+                setStatus(null);
+                googleLoginMutation.mutate();
+              }
+            }}
+            className="rounded-xl border border-outline-variant/12 px-3 py-4 text-center transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="material-symbols-outlined text-on-surface-variant">
               {item.icon}
             </span>
             <div className="mt-2 text-[10px] font-black tracking-[0.08em] text-outline uppercase">
-              {item.label}
+              {item.label === "Google" && googleLoginMutation.isPending
+                ? "Connecting..."
+                : item.label}
             </div>
           </button>
         ))}

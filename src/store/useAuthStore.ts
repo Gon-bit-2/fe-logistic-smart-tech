@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import type {
   AuthStatus,
+  ForgotPasswordDraft,
   OtpChallengeMeta,
   RegisterDraft,
 } from "@/features/auth/types/auth.types";
@@ -13,17 +14,20 @@ type AuthState = {
   accessToken: string | null;
   isHydrated: boolean;
   otpChallengeMeta: OtpChallengeMeta | null;
+  pendingPasswordReset: ForgotPasswordDraft | null;
   pendingRegistration: RegisterDraft | null;
   refreshToken: string | null;
   status: AuthStatus;
 };
 
 type AuthSnapshot = AuthState & {
+  clearOtpFlowState: () => void;
   clearSession: () => void;
   initialize: () => void;
   isAuthenticated: boolean;
   setAuthSessionTokens: (tokens: SessionTokens) => void;
   setOtpChallengeMeta: (challenge: OtpChallengeMeta | null) => void;
+  setPendingPasswordReset: (passwordReset: ForgotPasswordDraft | null) => void;
   setPendingRegistration: (registration: RegisterDraft | null) => void;
 };
 
@@ -32,6 +36,7 @@ const initialState: AuthState = {
   accessToken: null,
   isHydrated: false,
   otpChallengeMeta: null,
+  pendingPasswordReset: null,
   pendingRegistration: null,
   refreshToken: null,
   status: "anonymous",
@@ -91,9 +96,23 @@ const actions = {
     });
   },
 
+  setPendingPasswordReset(pendingPasswordReset: ForgotPasswordDraft | null) {
+    setState({
+      pendingPasswordReset,
+    });
+  },
+
   setOtpChallengeMeta(otpChallengeMeta: OtpChallengeMeta | null) {
     setState({
       otpChallengeMeta,
+    });
+  },
+
+  clearOtpFlowState() {
+    setState({
+      otpChallengeMeta: null,
+      pendingPasswordReset: null,
+      pendingRegistration: null,
     });
   },
 
@@ -102,6 +121,7 @@ const actions = {
     setState({
       accessToken: null,
       otpChallengeMeta: null,
+      pendingPasswordReset: null,
       pendingRegistration: null,
       refreshToken: null,
       status: "anonymous",
@@ -149,8 +169,16 @@ export function clearAuthSession() {
   actions.clearSession();
 }
 
+export function clearOtpFlowState() {
+  actions.clearOtpFlowState();
+}
+
 export function setPendingRegistration(registration: RegisterDraft | null) {
   actions.setPendingRegistration(registration);
+}
+
+export function setPendingPasswordReset(passwordReset: ForgotPasswordDraft | null) {
+  actions.setPendingPasswordReset(passwordReset);
 }
 
 export function setOtpChallengeMeta(challenge: OtpChallengeMeta | null) {

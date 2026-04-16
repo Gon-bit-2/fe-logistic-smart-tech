@@ -24,6 +24,9 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
 Authorization: Bearer <accessToken>
 ```
 
+Toàn bộ route private hiện được bảo vệ theo mặc định bằng `Bearer`, trừ các route backend gắn `@isPublic()`.
+Sau bước verify token, backend còn check permission theo `role + path + method`, nên một user đăng nhập hợp lệ vẫn có thể nhận `403` nếu backend chưa seed quyền cho route đó.
+
 ### Refresh strategy
 
 - Khi gặp `401`, gọi `POST /auth/refresh-token`
@@ -206,6 +209,7 @@ export function extractApiMessage(error: any): string {
 
 ### Customer
 
+- Tạo và theo dõi order qua `/orders`
 - Thanh toán Stripe cho order đã có backend support
 - Xem payment status theo `orderId`
 
@@ -215,6 +219,7 @@ export function extractApiMessage(error: any): string {
 - CRUD hubs
 - Gán / gỡ staff khỏi hub
 - CRUD language
+- Xem và cập nhật order/trip ở các màn vận hành nội bộ
 - Force calculate emission
 - Xem emission log theo trip
 
@@ -223,23 +228,24 @@ export function extractApiMessage(error: any): string {
 - Tạo tracking event
 - Xem timeline tracking nội bộ
 - Driver confirm COD
+- Theo dõi danh sách trip nội bộ qua `/trips`
 
-## 8. Những màn chưa nên làm ngay
+## 8. Những màn có thể tích hợp thêm ngay
 
-Chưa nên code production integration cho:
+Hai nhóm route sau đã được mount vào runtime và có thể tích hợp:
 
 - `/orders`
 - `/trips`
 
-Lý do: hai module này chưa mount vào `AppModule`, nên route chưa chạy trong runtime hiện tại.
+Lưu ý: hiện tại hai nhóm này đi qua `Bearer` mặc định và permission check theo `path + method`, nhưng chưa có role decorator chi tiết riêng ở controller.
 
 ## 9. Caveat runtime cần biết
 
-1. `AuthenticationGuard` có source nhưng chưa được wire đầy đủ ở runtime, nên auth enforcement hiện tại chưa đồng bộ với design dự kiến.
-2. `HubRepository.findAll()` chưa lọc `deletedAt` và `isActive`, nên list hub có thể lẫn hub không còn hợp lệ.
+1. Auth enforcement hiện là `Bearer by default`, nên frontend phải coi mọi route không-public là private kể cả khi docs endpoint chưa gắn `@Auth(...)` riêng.
+2. Với route private, `403` có thể đến từ permission lookup của backend chứ không chỉ từ role decorator; frontend nên tách cách xử lý `401` và `403`.
 3. `POST /hubs/:id/staff` trả raw Prisma record; frontend chỉ nên dùng field an toàn.
-4. `LanguageService` đang throw `Error` generic, có thể tạo ra `500`.
-5. `POST /payments/webhook` cần raw body để verify Stripe signature, nhưng bootstrap app chưa bật `rawBody`.
+4. `LanguageService` hiện map lỗi nghiệp vụ sang `404` và `409`, nên frontend nên handle các status này đúng nghĩa.
+5. `POST /payments/webhook` đã có raw body support ở backend; frontend/public client không cần gọi route này trực tiếp.
 
 ## 10. Tài liệu liên quan
 

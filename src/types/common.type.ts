@@ -1,16 +1,14 @@
-export type ApiResponse<T> = {
-  data: T;
+export type ValidationIssue = {
   message: string;
-  success: boolean;
+  path?: string;
 };
 
-export type PaginationMeta = {
-  page: number;
-  pageSize: number;
+export type SessionTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type PaginatedResult<T> = {
+  data: T[];
   totalItems: number;
-  totalPages: number;
-};
-
-export type PaginationResponse<T> = ApiResponse<T[]> & {
-  meta: PaginationMeta;
 };

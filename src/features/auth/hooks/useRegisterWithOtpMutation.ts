@@ -3,7 +3,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { registerWithOtp } from "@/features/auth/api/auth.api";
 import { ApiError } from "@/lib/api/errors";
-import { clearAuthSession, getAuthSessionSnapshot, setOtpChallengeMeta, setPendingRegistration } from "@/store/useAuthStore";
+import {
+  clearOtpFlowState,
+  getAuthSessionSnapshot,
+} from "@/store/useAuthStore";
 
 type RegisterWithOtpMutationInput = {
   code: string;
@@ -15,7 +18,9 @@ export function useRegisterWithOtpMutation() {
       const { pendingRegistration } = getAuthSessionSnapshot();
 
       if (!pendingRegistration) {
-        throw new Error("Registration session is missing. Please request a new OTP.");
+        throw new ApiError({
+          message: "Registration session is missing. Please request a new OTP.",
+        });
       }
 
       return registerWithOtp({
@@ -24,9 +29,7 @@ export function useRegisterWithOtpMutation() {
       });
     },
     onSuccess: () => {
-      setOtpChallengeMeta(null);
-      setPendingRegistration(null);
-      clearAuthSession();
+      clearOtpFlowState();
     },
   });
 }

@@ -2,9 +2,13 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { requestRegisterOtp } from "@/features/auth/api/auth.api";
-import { buildRegisterOtpChallenge, toRegisterDraft } from "@/features/auth/lib/auth.utils";
+import { buildOtpChallenge, toRegisterDraft } from "@/features/auth/lib/auth.utils";
 import { ApiError } from "@/lib/api/errors";
-import { setOtpChallengeMeta, setPendingRegistration } from "@/store/useAuthStore";
+import {
+  setOtpChallengeMeta,
+  setPendingPasswordReset,
+  setPendingRegistration,
+} from "@/store/useAuthStore";
 import type { RequestRegisterOtpInput } from "@/features/auth/types/auth.types";
 
 export function useRequestRegisterOtpMutation() {
@@ -23,8 +27,9 @@ export function useRequestRegisterOtpMutation() {
       };
     },
     onSuccess: ({ draft }) => {
+      setPendingPasswordReset(null);
       setPendingRegistration(draft);
-      setOtpChallengeMeta(buildRegisterOtpChallenge(draft.email));
+      setOtpChallengeMeta(buildOtpChallenge(draft.email, "REGISTER"));
     },
   });
 }

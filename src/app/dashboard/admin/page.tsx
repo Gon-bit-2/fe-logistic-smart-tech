@@ -13,7 +13,7 @@ const adminOrder: OrderDTO = {
   deliveryAddress: "District 7 Distribution Center",
   estimatedArrival: new Date(Date.now() + 80 * 60 * 1000).toISOString(),
   co2SavedKg: 42,
-  status: "in_transit",
+  status: "IN_TRANSIT",
   stops: [
     {
       id: "stop-1",

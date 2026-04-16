@@ -5,5 +5,5 @@ export default async function TrackingDetailPage(
 ) {
   const { id } = await props.params;
 
-  return <TrackingDetailScreen orderId={id} />;
+  return <TrackingDetailScreen trackingCode={id} />;
 }
