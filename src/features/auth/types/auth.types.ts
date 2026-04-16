@@ -52,3 +52,7 @@ export type GoogleCallbackParams = {
   errorMessage: string | null;
   refreshToken: string | null;
 };
+
+export type MessageResponse = {
+  message: string;
+};
