@@ -1,25 +1,32 @@
-export type AuthRole = "admin" | "driver" | "customer";
-
 export type AuthFormMode = "login" | "register";
 
-export type AuthCredentials = {
+export type AuthStatus = "anonymous" | "authenticated";
+
+export type VerificationCodeType = "FORGOT_PASSWORD" | "LOGIN" | "REGISTER";
+
+export type AuthLoginInput = {
   email: string;
   password: string;
-  name?: string;
+};
+
+export type RegisterDraft = {
+  email: string;
+  fullName: string;
   organization?: string;
+  password: string;
   phone?: string;
-  role?: AuthRole;
 };
 
-export type OtpChallenge = {
-  id: string;
+export type OtpChallengeMeta = {
+  channel: "email";
   destination: string;
-  maskedDestination: string;
-  channel: "email" | "sms";
   expiresAt: string;
+  maskedDestination: string;
+  type: VerificationCodeType;
 };
 
-export type OtpVerificationInput = {
-  challengeId: string;
+export type RequestRegisterOtpInput = RegisterDraft;
+
+export type RegisterWithOtpInput = RegisterDraft & {
   code: string;
 };

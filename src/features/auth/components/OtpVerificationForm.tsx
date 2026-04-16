@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuthSession } from "@/features/auth/hooks/useAuthSession";
+import { useRegisterWithOtpMutation } from "@/features/auth/hooks/useRegisterWithOtpMutation";
+import { useRequestRegisterOtpMutation } from "@/features/auth/hooks/useRequestRegisterOtpMutation";
 
 const OTP_LENGTH = 6;
 
@@ -14,36 +16,31 @@ function getInitialDigits() {
 
 export default function OtpVerificationForm() {
   const router = useRouter();
-  const { otpChallenge, resendOtpChallenge, verifyOtpChallenge } = useAuth();
+  const { otpChallengeMeta, pendingRegistration } = useAuthSession();
+  const registerMutation = useRegisterWithOtpMutation();
+  const resendOtpMutation = useRequestRegisterOtpMutation();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [digits, setDigits] = useState<string[]>(getInitialDigits);
-  const [secondsLeft, setSecondsLeft] = useState(59);
+  const [now, setNow] = useState(() => Date.now());
   const [status, setStatus] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const expiresAtMs = otpChallengeMeta
+    ? new Date(otpChallengeMeta.expiresAt).getTime()
+    : null;
+  const secondsLeft = expiresAtMs
+    ? Math.max(0, Math.floor((expiresAtMs - now) / 1000))
+    : 0;
 
   useEffect(() => {
-    if (!otpChallenge) {
-      return;
-    }
-
-    const nextSeconds = Math.max(
-      0,
-      Math.floor((new Date(otpChallenge.expiresAt).getTime() - Date.now()) / 1000),
-    );
-    setSecondsLeft(nextSeconds);
-  }, [otpChallenge]);
-
-  useEffect(() => {
-    if (secondsLeft <= 0) {
+    if (!otpChallengeMeta || secondsLeft <= 0) {
       return;
     }
 
     const interval = window.setInterval(() => {
-      setSecondsLeft((current) => Math.max(current - 1, 0));
+      setNow(Date.now());
     }, 1000);
 
     return () => window.clearInterval(interval);
-  }, [secondsLeft]);
+  }, [otpChallengeMeta, secondsLeft]);
 
   function setDigit(index: number, value: string) {
     const nextValue = value.replace(/\D/g, "").slice(-1);
@@ -61,44 +58,41 @@ export default function OtpVerificationForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsSubmitting(true);
     setStatus(null);
 
     try {
       const code = digits.join("");
-      await verifyOtpChallenge({
-        challengeId: otpChallenge?.id ?? "demo-challenge",
-        code,
-      });
+      await registerMutation.mutateAsync({ code });
 
-      setStatus("Verification successful. Redirecting to order creation...");
-      router.push("/orders/create");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Unable to verify OTP.");
-    } finally {
-      setIsSubmitting(false);
+      setStatus("Verification successful. Redirecting to login...");
+      startTransition(() => {
+        router.push("/auth/login");
+      });
+    } catch {
+      return;
     }
   }
 
   async function handleResend() {
+    if (!pendingRegistration) {
+      setStatus("Registration session expired. Please request a new OTP.");
+      return;
+    }
+
     try {
-      const challenge = await resendOtpChallenge();
-      setSecondsLeft(
-        Math.max(
-          0,
-          Math.floor((new Date(challenge.expiresAt).getTime() - Date.now()) / 1000),
-        ),
-      );
+      const challenge = await resendOtpMutation.mutateAsync(pendingRegistration);
+      setNow(Date.now());
       setDigits(getInitialDigits());
       inputRefs.current[0]?.focus();
-      setStatus(`A new code has been sent to ${challenge.maskedDestination}.`);
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Unable to resend OTP.");
+      setStatus(`A new code has been sent to ${challenge.draft.email}.`);
+    } catch {
+      return;
     }
   }
 
   const destination =
-    otpChallenge?.maskedDestination ?? "cu******@emerald-logistics.com";
+    otpChallengeMeta?.maskedDestination ?? "cu******@emerald-logistics.com";
+  const activeError = registerMutation.error ?? resendOtpMutation.error;
 
   return (
     <div className="space-y-10">
@@ -137,9 +131,10 @@ export default function OtpVerificationForm() {
 
         <Button
           type="submit"
+          disabled={registerMutation.isPending || !pendingRegistration}
           className="h-14 w-full bg-gradient-to-r from-primary to-primary-container text-base font-black text-white"
         >
-          {isSubmitting ? "Verifying..." : "Verify & Complete"}
+          {registerMutation.isPending ? "Verifying..." : "Verify & Complete"}
         </Button>
       </form>
 
@@ -148,7 +143,7 @@ export default function OtpVerificationForm() {
         <button
           type="button"
           onClick={handleResend}
-          disabled={secondsLeft > 0}
+          disabled={secondsLeft > 0 || resendOtpMutation.isPending || !pendingRegistration}
           className="ml-2 inline-flex items-center gap-2 font-black text-primary disabled:text-outline"
         >
           Resend Code
@@ -161,6 +156,12 @@ export default function OtpVerificationForm() {
       {status ? (
         <div className="rounded-xl bg-surface-container p-4 text-sm text-on-surface">
           {status}
+        </div>
+      ) : null}
+
+      {activeError ? (
+        <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive">
+          {activeError.message}
         </div>
       ) : null}
 
