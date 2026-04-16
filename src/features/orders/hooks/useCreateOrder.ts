@@ -4,6 +4,8 @@ import { useState } from "react";
 import { buildDemoOrder } from "@/features/orders/data/orderMockData";
 import { createOrder } from "@/features/orders/api/createOrder";
 import { upsertRecentOrder } from "@/features/orders/store/orderStore";
+import { hasApiBaseUrl } from "@/lib/api/env";
+import { isApiError } from "@/lib/api/errors";
 import type { CreateOrderInput, OrderDTO } from "@/features/orders/types/order.dto";
 
 export function useCreateOrder() {
@@ -18,10 +20,21 @@ export function useCreateOrder() {
     try {
       let nextOrder: OrderDTO;
 
-      try {
-        nextOrder = await createOrder(input);
-      } catch {
+      if (!hasApiBaseUrl) {
         nextOrder = buildDemoOrder(input);
+      } else {
+        try {
+          nextOrder = await createOrder(input);
+        } catch (apiError) {
+          if (
+            isApiError(apiError) &&
+            (apiError.status === 401 || apiError.status === 403)
+          ) {
+            throw apiError;
+          }
+
+          nextOrder = buildDemoOrder(input);
+        }
       }
 
       upsertRecentOrder(nextOrder);

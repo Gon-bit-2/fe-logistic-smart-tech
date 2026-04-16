@@ -45,12 +45,12 @@ export default function TrackingLookupScreen() {
             Quick start
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-            Demo tracking is ready
+            Live tracking is wired, demo fallback stays explicit
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
             Use <span className="font-black text-primary">{DEFAULT_TRACKING_ID}</span> or
-            continue from the order creation and checkout flow to inspect a generated
-            shipment.
+            continue from the order creation and checkout flow to inspect a locally
+            generated shipment when the tracking API is unavailable.
           </p>
         </div>
       </main>

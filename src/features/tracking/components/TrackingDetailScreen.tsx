@@ -6,21 +6,43 @@ import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getFallbackOrderById } from "@/features/orders/data/orderMockData";
+import { DEFAULT_TRACKING_ID, getFallbackOrderById } from "@/features/orders/data/orderMockData";
 import { getRecentOrderById } from "@/features/orders/store/orderStore";
+import { isApiError } from "@/lib/api/errors";
+import { hasApiBaseUrl } from "@/lib/api/env";
 import ProofOfDeliveryCard from "@/features/tracking/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/components/TrackingTimeline";
+import { usePublicTrackingQuery } from "@/features/tracking/hooks/usePublicTrackingQuery";
+import { mapOrderToTrackingViewModel } from "@/features/tracking/mappers/tracking.mapper";
+import { formatEnumLabel } from "@/utils/formatters";
 
 type TrackingDetailScreenProps = Readonly<{
-  orderId: string;
+  trackingCode: string;
 }>;
 
 export default function TrackingDetailScreen({
-  orderId,
+  trackingCode,
 }: TrackingDetailScreenProps) {
   const router = useRouter();
-  const [trackingId, setTrackingId] = useState(orderId);
-  const order = getRecentOrderById(orderId) ?? getFallbackOrderById(orderId);
+  const [trackingId, setTrackingId] = useState(trackingCode);
+  const trackingQuery = usePublicTrackingQuery(trackingCode);
+  const demoOrder =
+    getRecentOrderById(trackingCode) ??
+    (trackingCode === DEFAULT_TRACKING_ID ? getFallbackOrderById(trackingCode) : null);
+  const shouldUseDemo =
+    !trackingQuery.data &&
+    Boolean(demoOrder) &&
+    (!hasApiBaseUrl ||
+      (trackingQuery.isError &&
+        (!isApiError(trackingQuery.error) ||
+          (trackingQuery.error.status !== 401 &&
+            trackingQuery.error.status !== 403))));
+  const tracking =
+    trackingQuery.data ??
+    (demoOrder && shouldUseDemo ? mapOrderToTrackingViewModel(demoOrder) : null);
+  const isNotFound = isApiError(trackingQuery.error) && trackingQuery.error.status === 404;
+  const queryMessage =
+    trackingQuery.error?.message ?? "Live tracking is unavailable right now.";
 
   return (
     <div className="min-h-screen bg-surface">
@@ -48,45 +70,93 @@ export default function TrackingDetailScreen({
           </div>
         </div>
 
-        <section className="overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
-          <div className="grid gap-6 bg-surface-container-low p-8 md:grid-cols-3">
-            <div>
-              <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                Tracking ID
-              </p>
-              <p className="mt-1 text-lg font-black text-on-surface">
-                {order.reference}
-              </p>
+        {trackingQuery.isPending ? (
+          <section className="rounded-xl bg-surface-container-lowest p-10 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+            <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
+              Loading
+            </p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
+              Fetching the latest tracking events
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
+              We&apos;re pulling the public shipment timeline from the logistics API.
+            </p>
+          </section>
+        ) : tracking ? (
+          <section className="overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+            <div className="grid gap-6 bg-surface-container-low p-8 md:grid-cols-3">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+                  Tracking Code
+                </p>
+                <p className="mt-1 text-lg font-black text-on-surface">
+                  {tracking.trackingCode}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+                  Current Status
+                </p>
+                <p className="mt-1 text-lg font-semibold text-on-surface">
+                  {formatEnumLabel(tracking.currentStatus)}
+                </p>
+                <p className="text-sm text-outline">
+                  {tracking.dataSource === "api"
+                    ? "Live public timeline"
+                    : "Local demo timeline fallback"}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+                  Receiver
+                </p>
+                <p className="mt-1 text-lg font-semibold text-on-surface">
+                  {tracking.recipientName ?? "Awaiting delivery confirmation"}
+                </p>
+                <p className="text-sm text-outline">
+                  {tracking.isDemo
+                    ? "Showing demo shipment data because live tracking was unavailable."
+                    : "Public tracking data hides sensitive internal fields."}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                Sender
-              </p>
-              <p className="mt-1 text-lg font-semibold text-on-surface">
-                {order.customerName}
-              </p>
-              <p className="text-sm text-outline">{order.pickupAddress}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                Receiver
-              </p>
-              <p className="mt-1 text-lg font-semibold text-on-surface">
-                {order.receiverName ?? "Marcus Thorne"}
-              </p>
-              <p className="text-sm text-outline">{order.deliveryAddress}</p>
-            </div>
-          </div>
 
-          <div className="grid gap-8 p-8 md:p-10 xl:grid-cols-[1.15fr_0.85fr]">
-            <TrackingTimeline stops={order.stops} />
-            <ProofOfDeliveryCard
-              orderId={order.reference}
-              recipient={order.receiverName ?? "Marcus Thorne"}
-              co2SavedKg={order.co2SavedKg}
-            />
-          </div>
-        </section>
+            <div className="grid gap-8 p-8 md:p-10 xl:grid-cols-[1.15fr_0.85fr]">
+              <TrackingTimeline stops={tracking.events} />
+              <ProofOfDeliveryCard
+                podImageUrl={tracking.podImageUrl}
+                podPackageCondition={tracking.podPackageCondition}
+                recipient={tracking.recipientName}
+                trackingCode={tracking.trackingCode}
+              />
+            </div>
+          </section>
+        ) : (
+          <section className="rounded-xl bg-surface-container-lowest p-10 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+            <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
+              {isNotFound ? "Not Found" : "Tracking Error"}
+            </p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
+              {isNotFound
+                ? "No public shipment was found for this tracking code"
+                : "Unable to load the shipment timeline"}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
+              {queryMessage}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Button
+                onClick={() => trackingQuery.refetch()}
+                className="bg-gradient-to-br from-primary to-primary-container text-white"
+              >
+                Retry
+              </Button>
+              <Button variant="outline" onClick={() => router.push("/tracking")}>
+                Search Another Shipment
+              </Button>
+            </div>
+          </section>
+        )}
 
         <div className="mt-10 flex flex-col items-center gap-4 text-center text-sm text-outline">
           <p>

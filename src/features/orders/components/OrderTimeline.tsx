@@ -1,4 +1,4 @@
-import { formatDate } from "@/utils/formatters";
+import { formatDate, formatEnumLabel } from "@/utils/formatters";
 import type { OrderDTO } from "@/features/orders/types/order.dto";
 
 type OrderTimelineProps = {
@@ -18,7 +18,7 @@ export default function OrderTimeline({ order }: OrderTimelineProps) {
           </h3>
         </div>
         <span className="rounded-full bg-primary/8 px-4 py-2 text-xs font-black tracking-[0.24em] text-primary uppercase">
-          {order.status.replaceAll("_", " ")}
+          {formatEnumLabel(order.status)}
         </span>
       </div>
 

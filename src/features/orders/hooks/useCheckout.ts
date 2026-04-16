@@ -57,11 +57,11 @@ export function useCheckout() {
       const nextOrder: OrderDTO =
         patchRecentOrder(order.id, {
           paymentMethod,
-          status: "in_transit",
+          status: "IN_TRANSIT",
         }) ?? {
           ...order,
           paymentMethod,
-          status: "in_transit",
+          status: "IN_TRANSIT",
         };
 
       upsertRecentOrder(nextOrder);

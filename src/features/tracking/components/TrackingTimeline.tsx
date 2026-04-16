@@ -1,8 +1,8 @@
-import { formatDate } from "@/utils/formatters";
-import type { OrderStop } from "@/features/orders/types/order.dto";
+import { formatDate, formatEnumLabel } from "@/utils/formatters";
+import type { TrackingTimelineItem } from "@/features/tracking/types/tracking.types";
 
 type TrackingTimelineProps = {
-  stops: OrderStop[];
+  stops: TrackingTimelineItem[];
 };
 
 export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
@@ -42,10 +42,15 @@ export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
               <div className="flex items-center gap-3">
                 <div className="font-bold text-on-surface">{stop.label}</div>
                 <span className="text-[10px] font-black tracking-[0.14em] text-outline uppercase">
-                  {stop.status.replaceAll("_", " ")}
+                  {formatEnumLabel(stop.status)}
                 </span>
               </div>
               <p className="mt-2 text-sm text-on-surface-variant">{stop.location}</p>
+              {stop.description ? (
+                <p className="mt-2 text-sm text-on-surface-variant/80">
+                  {stop.description}
+                </p>
+              ) : null}
               <p className="mt-1 text-xs font-semibold text-on-surface-variant/80">
                 {formatDate(stop.timestamp)}
               </p>

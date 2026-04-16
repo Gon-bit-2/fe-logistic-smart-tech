@@ -1,5 +1,13 @@
 export type OrderStopStatus = "completed" | "current" | "pending";
-export type OrderStatus = "draft" | "confirmed" | "in_transit" | "delivered";
+export type OrderStatus =
+  | "PENDING"
+  | "ASSIGNED"
+  | "PICKED_UP"
+  | "IN_TRANSIT"
+  | "ARRIVED_AT_HUB"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED";
 export type ServiceTier = "express" | "eco_green" | "standard";
 export type PaymentMethod = "card" | "cash_on_delivery";
 

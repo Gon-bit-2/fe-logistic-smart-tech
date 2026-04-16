@@ -119,7 +119,7 @@ function buildStops(input: CreateOrderInput, orderId: string) {
 
 export function buildDemoOrder(
   input: CreateOrderInput,
-  status: OrderStatus = "draft",
+  status: OrderStatus = "PENDING",
 ): OrderDTO {
   const reference = `PL-${new Date().getFullYear().toString().slice(-2)}${Date.now()
     .toString()
@@ -151,12 +151,12 @@ export function buildDemoOrder(
 }
 
 export function getFallbackOrderById(orderId: string): OrderDTO {
-  const order = buildDemoOrder(DEFAULT_CREATE_ORDER_INPUT, "in_transit");
+  const order = buildDemoOrder(DEFAULT_CREATE_ORDER_INPUT, "IN_TRANSIT");
 
   return {
     ...order,
     id: orderId || DEFAULT_TRACKING_ID,
     reference: orderId || DEFAULT_TRACKING_ID,
-    status: "in_transit",
+    status: "IN_TRANSIT",
   };
 }
