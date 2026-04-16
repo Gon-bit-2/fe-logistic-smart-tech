@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#6c7a71",
+                    "on-background": "#131e19",
+                    "on-primary-fixed": "#002113",
+                    "background": "#f0fdf4",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#deebe3",
+                    "primary-fixed": "#6ffbbe",
+                    "primary-fixed-dim": "#4edea3",
+                    "surface-container-highest": "#d9e6dd",
+                    "on-primary-fixed-variant": "#005236",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#95d3ba",
+                    "tertiary-fixed": "#c9e6ff",
+                    "surface": "#f0fdf4",
+                    "secondary-fixed": "#b0f0d6",
+                    "primary": "#006c49",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#adedd3",
+                    "on-tertiary-fixed": "#001e2f",
+                    "on-tertiary-container": "#003d59",
+                    "on-surface": "#131e19",
+                    "on-surface-variant": "#3c4a42",
+                    "inverse-surface": "#27332d",
+                    "outline-variant": "#bbcabf",
+                    "surface-tint": "#006c49",
+                    "surface-bright": "#f0fdf4",
+                    "tertiary": "#006591",
+                    "surface-container": "#e4f1e8",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "inverse-primary": "#4edea3",
+                    "inverse-on-surface": "#e7f4eb",
+                    "primary-container": "#10b981",
+                    "surface-container-low": "#eaf7ee",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#00422b",
+                    "tertiary-container": "#23acf1",
+                    "secondary": "#2b6954",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d9e6dd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "on-secondary-fixed": "#002117",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d0ddd5",
+                    "on-secondary-container": "#306d58"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (The Anchor) -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-50 flex flex-col bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-emerald-100/20 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-emerald-700 leading-tight">Precision Admin</h1>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Logistics Hub</p>
+</div>
+</div>
+<nav class="space-y-2">
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-emerald-50/50 hover:text-emerald-600 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-xs font-bold uppercase tracking-widest">Overview</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-emerald-50/50 hover:text-emerald-600 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-xs font-bold uppercase tracking-widest">Analytics</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-emerald-50/50 hover:text-emerald-600 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-xs font-bold uppercase tracking-widest">Orders</span>
+</a>
+<a class="flex items-center gap-3 bg-emerald-50 text-emerald-700 rounded-lg px-4 py-3 font-semibold shadow-sm scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-xs font-bold uppercase tracking-widest">Fleet</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-emerald-50/50 hover:text-emerald-600 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="eco">eco</span>
+<span class="text-xs font-bold uppercase tracking-widest">Sustainability</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto px-6 py-6 border-t border-emerald-50/50">
+<button class="w-full mb-6 bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-lg font-semibold shadow-lg shadow-emerald-900/10 hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-xs uppercase tracking-wider">Add New Route</span>
+</button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-slate-500 px-4 py-2 hover:text-emerald-600 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="help">help</span>
+<span class="text-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-2 hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="logout">logout</span>
+<span class="text-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-40 bg-emerald-50/80 backdrop-blur-md px-8 py-4 flex justify-between items-center shadow-sm">
+<div class="flex items-center gap-8 flex-1">
+<h2 class="text-xl font-bold tracking-tight text-emerald-800">Precision Logistics</h2>
+<div class="max-w-md w-full relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-primary focus:bg-white transition-all" placeholder="Search vehicle IDs or drivers..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-emerald-100/50 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-emerald-100/50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/30 mx-2"></div>
+<button class="px-4 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-100/50 rounded-lg transition-colors">Support</button>
+<img alt="Admin profile photo" class="w-10 h-10 rounded-full object-cover ring-2 ring-emerald-100" data-alt="portrait of a professional administrator in a clean office setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTY6wOlYbYbUUasCFvbq65biJCsdq7EVpuLVh0PwDkfpUcUWtHzcavogog5kva44_Wh9Lh8mbtUSHkopXs0vYte5DoAXPcS9ox8WpmJQhWaMo1LSWW0Dzy8ptvqa1qPYtptHiAfbb3jHC_HO0qCVC2fVBwrusdCYxacls_4T6rmOsNxiQ18BvtKyuc_mrNnKfqIXugwSKrnrW9wF_xDdZkF8axoLH0ZyY-jwpVg8m0tEryO1EttpU9YeGmCQsdodX-9NQNblFAr8Sv"/>
+</div>
+</header>
+<!-- Content -->
+<div class="p-8">
+<div class="flex justify-between items-end mb-10">
+<div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-1 block">Operational Dashboard</span>
+<h3 class="text-4xl font-black text-on-surface tracking-tight">Fleet Operations</h3>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant font-medium text-sm rounded-lg hover:bg-white transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                        Filters
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant font-medium text-sm rounded-lg hover:bg-white transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export Report
+                    </button>
+</div>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-4 gap-6 mb-12">
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<span class="text-emerald-500 flex items-center text-xs font-bold bg-emerald-50 px-2 py-1 rounded">+12%</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Total Vehicles</p>
+<p class="text-3xl font-black text-on-surface">1,284</p>
+</div>
+</div>
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="text-emerald-500 flex items-center text-xs font-bold bg-emerald-50 px-2 py-1 rounded">On Track</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Active Now</p>
+<p class="text-3xl font-black text-on-surface">942</p>
+</div>
+</div>
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-tertiary-fixed rounded-lg flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">build</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">In Maintenance</p>
+<p class="text-3xl font-black text-on-surface">48</p>
+</div>
+</div>
+<div class="col-span-1 bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.2)] flex flex-col justify-between h-40 text-white">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">eco</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-emerald-200">EV Percentage</p>
+<p class="text-3xl font-black">68.4%</p>
+</div>
+</div>
+</div>
+<!-- Fleet Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Vehicle Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] hover:shadow-lg transition-all group border border-emerald-50">
+<div class="relative h-48">
+<img alt="Electric Delivery Van" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Modern sleek white electric delivery van parked in a sunny sustainable urban warehouse district with greenery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdzXPLPylxLtRLepqemZdJHRYJasy2kHf9ycyn1WNWEAlfWCKZ073JGzg23tNzQQfY0QKsbEztHj4V2Iy6OZlJ2sS2N5ez5p3-Go5PgPRxa2jNR9LsmLX0EPOUTu8Wa3ta6Qn8o8jKlUyU22OAia_OV06LFfCy877fEwrvrH_HD9-AreUhEFb0CmtuRNRYaL8cnJFmgYAiABIFQ4mMf4vSwr9vvnV9tw012Zc1IGlImoKLr7O4_9fnEOzR8VoF0WOASN26gQF3KQkV"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Electric</span>
+<span class="bg-white/90 backdrop-blur-md text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Active</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="text-lg font-bold text-on-surface">TRK-1022</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">person</span>
+<span class="text-xs text-slate-500 font-medium">Marcus Sterling</span>
+</div>
+</div>
+<div class="relative w-14 h-14">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#EAF7EE" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-dasharray="82, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-700">82%</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-600 text-lg">eco</span>
+<span class="text-xs font-bold text-emerald-700 uppercase tracking-tight">CO2 Saved</span>
+</div>
+<span class="text-sm font-black text-on-surface">1.2 Tons</span>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] hover:shadow-lg transition-all group border border-emerald-50">
+<div class="relative h-48">
+<img alt="Commercial Logistics Truck" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Heavy-duty hybrid logistics truck driving on a scenic highway through rolling hills during golden hour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBg7MLGSVZY78i09mawYPOiQJOjOpl1OuZeD-oSXNWIH8wTeiBqvOXQexYkRvtNK0OV8c5WzjULrmQUDUhHSMW9ciEYPn5RnqbijP6llLh8Ba22aiItwf-m4fCH6KJY7SJ53FNNwJPdM_629nf7nAjnyC_lUqqOq3-9Z7Et5eJFkuyicAMU_g8saihxpadNjKcpLb6okNXEs9qFYzSgE5rUpNbQ7gyRXoLoWO3X7eIPyppkOywB5G8CWkNA3Ly9c9HhssYOnxvN7Hp"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-tertiary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Hybrid</span>
+<span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Idle</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="text-lg font-bold text-on-surface">TRK-2409</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">person</span>
+<span class="text-xs text-slate-500 font-medium">Sarah Chen</span>
+</div>
+</div>
+<div class="relative w-14 h-14">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#EAF7EE" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F59E0B" stroke-dasharray="45, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-amber-700">45%</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-600 text-lg">eco</span>
+<span class="text-xs font-bold text-emerald-700 uppercase tracking-tight">CO2 Saved</span>
+</div>
+<span class="text-sm font-black text-on-surface">0.8 Tons</span>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] hover:shadow-lg transition-all group border border-emerald-50">
+<div class="relative h-48">
+<img alt="Electric Transit Van" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Side profile of a futuristic electric delivery van with emerald branding decals parked at a charging station" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAEAj43JhQWyZRhvZVUI3Id2RdrUnLbxdjGDxcReqr1SmYiosfa2CRqrr3iR4p5S5j5dF2RQa07vNjN5RVPOBKhKOyHWdVCQ5g0YbxSgJzELY7hYndEdok11ewvSjRGjZFbmzRFDMOQev3XsA3oqbajZMUWQMKXXmINTs65mAN0hn2LjI-5xS28WqfHlNqIjPxCSVDA3Gp9_rW89heTdNQVY9XfYf_nB_laT8Fszs2ZmcG4fvrWP6OzOQgD-DinL2PAEW_gLXnDV98"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Electric</span>
+<span class="bg-primary-container/20 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Charging</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="text-lg font-bold text-on-surface">VAN-8812</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">person</span>
+<span class="text-xs text-slate-500 font-medium">David Miller</span>
+</div>
+</div>
+<div class="relative w-14 h-14">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#EAF7EE" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-dasharray="12, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-700">12%</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-600 text-lg">eco</span>
+<span class="text-xs font-bold text-emerald-700 uppercase tracking-tight">CO2 Saved</span>
+</div>
+<span class="text-sm font-black text-on-surface">1.4 Tons</span>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)] hover:shadow-lg transition-all group border border-emerald-50">
+<div class="relative h-48">
+<img alt="Delivery Fleet" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Long shot of several emerald branded delivery trucks lined up neatly in a modern loading bay at dawn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDavL27KU7Dw5f9N3PvtaSbs_67gqMa8Vjz5q_i9OZFBbgBGtRjPtefhHFVOI0JnbWaFdJP6g_aNJJ_w61USnAm0JIUK55peUbsGUflcKV8eS1LTHyGc2SFTnGLNUrYbEHEHWFuVx6RWT6_ULKxTnlxEu16o2vf6uSCWapGUh-YF8fqGku3Etcz-OLqkOzPY_RWrhNB6jfrg3nOckcMg8LW3kB5Lncvjc_j_W_9pPyiea-uWKjoqfuzrAcpHZBrG_vY1wq1CcqR47hA"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Electric</span>
+<span class="bg-white/90 backdrop-blur-md text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Active</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="text-lg font-bold text-on-surface">TRK-1105</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">person</span>
+<span class="text-xs text-slate-500 font-medium">Elena Rodriguez</span>
+</div>
+</div>
+<div class="relative w-14 h-14">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#EAF7EE" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-dasharray="94, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-700">94%</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-600 text-lg">eco</span>
+<span class="text-xs font-bold text-emerald-700 uppercase tracking-tight">CO2 Saved</span>
+</div>
+<span class="text-sm font-black text-on-surface">2.1 Tons</span>
+</div>
+</div>
+</div>
+<!-- Performance Trend Card (Asymmetric Layout Element) -->
+<div class="bg-surface-container-low/40 rounded-xl p-8 border border-emerald-100/30 flex flex-col justify-center text-center">
+<div class="mb-6">
+<div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-lg mb-4">
+<span class="material-symbols-outlined text-4xl text-emerald-600">trending_up</span>
+</div>
+<h4 class="text-xl font-bold text-emerald-800">System Performance</h4>
+<p class="text-sm text-slate-500 mt-2 max-w-xs mx-auto">Fleet utilization is up 8.4% compared to last week with 0% downtime in electric units.</p>
+</div>
+<button class="mx-auto px-6 py-2 bg-emerald-700 text-white font-bold rounded-lg hover:bg-emerald-800 transition-colors">View Insights</button>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for Task-Specific Action -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-50">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">add_location</span>
+</button>
+</body></html>

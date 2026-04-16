@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Logistics Admin Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#c9e6ff",
+                    "inverse-primary": "#4edea3",
+                    "on-primary-fixed-variant": "#005236",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "primary-container": "#10b981",
+                    "surface-tint": "#006c49",
+                    "primary": "#006c49",
+                    "secondary": "#2b6954",
+                    "surface-container-high": "#deebe3",
+                    "surface": "#f0fdf4",
+                    "on-surface": "#131e19",
+                    "inverse-on-surface": "#e7f4eb",
+                    "tertiary": "#006591",
+                    "secondary-container": "#adedd3",
+                    "surface-container-low": "#eaf7ee",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "on-primary-container": "#00422b",
+                    "primary-fixed-dim": "#4edea3",
+                    "inverse-surface": "#27332d",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f0fdf4",
+                    "surface-dim": "#d0ddd5",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#23acf1",
+                    "surface-variant": "#d9e6dd",
+                    "secondary-fixed-dim": "#95d3ba",
+                    "outline": "#6c7a71",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001e2f",
+                    "on-surface-variant": "#3c4a42",
+                    "on-secondary-fixed": "#002117",
+                    "background": "#f0fdf4",
+                    "on-background": "#131e19",
+                    "on-secondary-container": "#306d58",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#bbcabf",
+                    "on-tertiary-container": "#003d59",
+                    "surface-container-highest": "#d9e6dd",
+                    "surface-container": "#e4f1e8",
+                    "on-primary-fixed": "#002113",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#6ffbbe",
+                    "secondary-fixed": "#b0f0d6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed-dim">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-emerald-100/20 flex flex-col h-full py-6 space-y-4 shadow-xl">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-black text-emerald-900 dark:text-emerald-50 tracking-tighter">Admin Console</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">Global Operations</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-200 rounded-lg mx-2 flex items-center px-4 py-3 text-sm font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 mx-2 rounded-lg flex items-center px-4 py-3 text-sm font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="bar_chart">bar_chart</span>
+                Analytics
+            </a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 mx-2 rounded-lg flex items-center px-4 py-3 text-sm font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="receipt_long">receipt_long</span>
+                Orders
+            </a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 mx-2 rounded-lg flex items-center px-4 py-3 text-sm font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="local_shipping">local_shipping</span>
+                Fleet
+            </a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 mx-2 rounded-lg flex items-center px-4 py-3 text-sm font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="eco">eco</span>
+                Sustainability
+            </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-lg font-bold text-sm shadow-lg hover:shadow-primary-container/20 transition-all active:scale-95">
+                New Shipment
+            </button>
+</div>
+<div class="pt-4 border-t border-emerald-100/20 mx-2 space-y-1">
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg flex items-center px-4 py-3 text-sm font-medium transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+                Help Center
+            </a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg flex items-center px-4 py-3 text-sm font-medium transition-all text-error" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="logout">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-50 bg-emerald-50/80 dark:bg-emerald-950/80 backdrop-blur-md flex justify-between items-center px-8 h-16 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<div class="flex items-center space-x-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search shipments..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<nav class="hidden md:flex space-x-8 text-sm font-medium">
+<a class="text-emerald-900 dark:text-emerald-50 border-b-2 border-emerald-600 dark:border-emerald-400 pb-1" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300" href="#">Shipments</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300" href="#">Inventory</a>
+</nav>
+<div class="h-6 w-[1px] bg-emerald-100/50"></div>
+<div class="flex items-center space-x-4">
+<button class="relative text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-emerald-50"></span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="System Admin profile" class="w-8 h-8 rounded-full border-2 border-emerald-200" data-alt="professional portrait of a male system administrator in business casual attire with a blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJgZiEqpp-X3qaukjXRB0CRfiSY2jwaXq4bwOZIt6qK48Osgl_lREJjf0kBH0YZg9ncqhREoWPMnZJGAD70Q5SKpTiNeldxbFe4o65e5PwYklhKfaIFYFeA37inJc5VYfODTHFr-DtmMLQfE0jPV3GZKVcJLaQf8sjjA0X_SBOj59Ewd0CM2FjDOYV_QKDbryZeGlRi-pLRqjfCHTc9R5CJ0Kv2do3HHWB8ls4of7j0_LcEpdTko5hQq0t3tnF5bF-OtLrCxtFE5zg"/>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Bento Metric Cards -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Total Active Trips -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] flex justify-between items-start group hover:translate-y-[-4px] transition-all duration-300">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Total Active Trips</p>
+<h2 class="text-3xl font-black text-on-surface">1,284</h2>
+<div class="mt-4 flex items-center text-xs font-medium text-emerald-600">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="trending_up">trending_up</span>
+<span>+12% from last week</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="local_shipping">local_shipping</span>
+</div>
+</div>
+<!-- Card 2: Total Revenue -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] flex justify-between items-start group hover:translate-y-[-4px] transition-all duration-300">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Total Revenue</p>
+<h2 class="text-3xl font-black text-tertiary tracking-tight">$42,900.00</h2>
+<div class="mt-4 flex items-center text-xs font-medium text-tertiary">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="payments">payments</span>
+<span>Growth targets on track</span>
+</div>
+</div>
+<div class="bg-tertiary-fixed p-3 rounded-lg text-tertiary group-hover:bg-tertiary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="show_chart">show_chart</span>
+</div>
+</div>
+<!-- Card 3: CO2 Saved -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] flex justify-between items-start group hover:translate-y-[-4px] transition-all duration-300">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">CO2 Emissions Saved</p>
+<h2 class="text-3xl font-black text-primary tracking-tight">14.2 <span class="text-lg font-medium">Tons</span></h2>
+<div class="mt-4 flex items-center text-xs font-medium text-emerald-600">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="eco">eco</span>
+<span>84% of monthly goal reached</span>
+</div>
+</div>
+<div class="bg-primary-fixed p-3 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="leafy_green">energy_savings_leaf</span>
+</div>
+</div>
+</section>
+<!-- Wide Content Section: Deliveries vs CO2 Saved -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] overflow-hidden">
+<div class="p-8 flex justify-between items-end border-b border-outline-variant/10">
+<div>
+<h3 class="text-xl font-black text-on-surface tracking-tight">Deliveries vs CO2 Saved</h3>
+<p class="text-sm text-slate-500 mt-1">Operational efficiency metrics for the past 7 days.</p>
+</div>
+<div class="flex space-x-2">
+<button class="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container text-slate-600">Weekly</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-bold bg-primary text-white">Monthly</button>
+</div>
+</div>
+<div class="p-8 h-[320px] relative">
+<!-- Faux Chart Visualization using Gradients and SVG -->
+<div class="absolute inset-x-8 inset-y-12 flex items-end space-x-4">
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-32 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative group">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Mon</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-48 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Tue</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-40 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Wed</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-56 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Thu</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-36 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Fri</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-52 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Sat</span>
+</div>
+<div class="flex-1 flex flex-col justify-end space-y-4">
+<div class="w-full h-64 bg-gradient-to-t from-primary/5 to-primary/20 rounded-t-lg relative">
+<div class="absolute inset-0 border-t-2 border-primary opacity-40"></div>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] py-1 px-2 rounded whitespace-nowrap shadow-lg">Peak efficiency reached</div>
+</div>
+<span class="text-[10px] text-center font-bold text-slate-400 uppercase tracking-tighter">Sun</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Recent Active Orders -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] overflow-hidden">
+<div class="p-8 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="text-xl font-black text-on-surface tracking-tight">Recent Active Orders</h3>
+<button class="text-sm font-bold text-primary hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+<tr>
+<th class="px-8 py-4">Tracking ID</th>
+<th class="px-8 py-4">Customer</th>
+<th class="px-8 py-4">Status</th>
+<th class="px-8 py-4">Estimated ETA</th>
+<th class="px-8 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-emerald-50/20">
+<tr class="hover:bg-surface transition-colors">
+<td class="px-8 py-6 font-mono text-xs font-bold text-slate-600">TRK-9902-12</td>
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-primary font-bold text-xs mr-3">JD</div>
+<div>
+<p class="text-sm font-bold text-on-surface">John Doe Enterprises</p>
+<p class="text-xs text-slate-400">Premium Tier</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-container">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full mr-1.5"></span>
+                                        IN TRANSIT
+                                    </span>
+</td>
+<td class="px-8 py-6 text-sm font-medium text-slate-600">Oct 24, 14:30</td>
+<td class="px-8 py-6 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="px-8 py-6 font-mono text-xs font-bold text-slate-600">TRK-4521-88</td>
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary font-bold text-xs mr-3">AM</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Acme Manufacturing</p>
+<p class="text-xs text-slate-400">Standard Tier</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full mr-1.5"></span>
+                                        PENDING
+                                    </span>
+</td>
+<td class="px-8 py-6 text-sm font-medium text-slate-600">Oct 25, 09:15</td>
+<td class="px-8 py-6 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="px-8 py-6 font-mono text-xs font-bold text-slate-600">TRK-1102-44</td>
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-primary font-bold text-xs mr-3">GS</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Green Systems Ltd.</p>
+<p class="text-xs text-slate-400">Eco-Priority Tier</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-container">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full mr-1.5"></span>
+                                        IN TRANSIT
+                                    </span>
+</td>
+<td class="px-8 py-6 text-sm font-medium text-slate-600">Oct 24, 18:45</td>
+<td class="px-8 py-6 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual FAB (Only for Main Screens) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-[0_12px_32px_rgba(0,108,73,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all group z-50">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+</body></html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#eaf7ee",
+                    "inverse-primary": "#4edea3",
+                    "tertiary": "#006591",
+                    "secondary": "#2b6954",
+                    "on-primary-container": "#00422b",
+                    "background": "#f0fdf4",
+                    "surface-container": "#e4f1e8",
+                    "outline-variant": "#bbcabf",
+                    "surface-container-high": "#deebe3",
+                    "primary-fixed-dim": "#4edea3",
+                    "primary": "#006c49",
+                    "on-primary-fixed-variant": "#005236",
+                    "error": "#ba1a1a",
+                    "surface": "#f0fdf4",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#3c4a42",
+                    "secondary-container": "#adedd3",
+                    "surface-dim": "#d0ddd5",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "surface-tint": "#006c49",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#95d3ba",
+                    "tertiary-container": "#23acf1",
+                    "on-tertiary-container": "#003d59",
+                    "error-container": "#ffdad6",
+                    "outline": "#6c7a71",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#c9e6ff",
+                    "on-tertiary-fixed": "#001e2f",
+                    "inverse-surface": "#27332d",
+                    "surface-container-highest": "#d9e6dd",
+                    "on-surface": "#131e19",
+                    "primary-fixed": "#6ffbbe",
+                    "secondary-fixed": "#b0f0d6",
+                    "primary-container": "#10b981",
+                    "on-background": "#131e19",
+                    "inverse-on-surface": "#e7f4eb",
+                    "on-primary-fixed": "#002113",
+                    "on-secondary-fixed": "#002117",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#306d58",
+                    "surface-variant": "#d9e6dd",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f0fdf4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "0.75rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "sans-serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Sidebar Navigation Shell (Hidden on mobile) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-xl border-r border-emerald-100/20 py-6 space-y-4">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-black text-emerald-900 dark:text-emerald-50">Admin Console</h1>
+<p class="text-xs font-medium text-slate-500 uppercase tracking-widest">Global Operations</p>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="bg-emerald-50 text-emerald-700 rounded-lg mx-2 flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 mx-2 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">bar_chart</span>
+<span class="text-sm font-medium">Analytics</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 mx-2 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">receipt_long</span>
+<span class="text-sm font-medium">Orders</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 mx-2 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">local_shipping</span>
+<span class="text-sm font-medium">Fleet</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 mx-2 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">eco</span>
+<span class="text-sm font-medium">Sustainability</span>
+</div>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Shipment
+            </button>
+</div>
+<div class="px-2 pt-4 border-t border-emerald-100/20">
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg flex items-center px-4 py-3 cursor-pointer hover:translate-x-1 transition-transform duration-200">
+<span class="material-symbols-outlined mr-3 text-error">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 min-h-screen flex flex-col">
+<!-- Top Bar Header -->
+<header class="w-full sticky top-0 z-50 bg-emerald-50/80 backdrop-blur-md shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] flex justify-between items-center px-8 h-16">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold tracking-tighter text-emerald-800">Hanoi Central Hub</span>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-600">Shift A • Morning Ops</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-8 text-sm font-medium">
+<a class="text-emerald-900 border-b-2 border-emerald-600 pb-1" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-emerald-600 transition-colors" href="#">Shipments</a>
+<a class="text-slate-500 hover:text-emerald-600 transition-colors" href="#">Inventory</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-emerald-100/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-700">notifications</span>
+</button>
+<button class="p-2 hover:bg-emerald-100/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-700">settings</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border-2 border-primary-container object-cover" data-alt="Professional portrait of a male system administrator in a clean office environment with natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNztzb1cQAH-y9YwtWJIM7S0ouZBwErK6xeFJoLNWA2rRtrhRNLQm5xCAcP3MxXkmprtAr8srP4fCKgkPiQFmvHNJWINYm7sl76S54vzU7JDOa5OGOwCcUdzwOOKhjGuykZiBmtKjS1WV_Vf-HJ9-kjYLV_mzzlFsVcCVnXRdUi6ZAxvSDmQ1IJeWBpSdZYS9g_3xurX4tmge13KIv5BOqRtPf4ExVqHNOL3UZzHD3L4DjbuzSc29d1rvEN4m8G6t6UKjBoT265BVT"/>
+</div>
+</div>
+</header>
+<!-- Scanning Section -->
+<section class="px-8 pt-10 pb-6">
+<div class="max-w-6xl mx-auto">
+<div class="flex flex-col md:flex-row gap-4 items-end bg-surface-container-lowest p-8 rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.05)]">
+<div class="flex-1 w-full">
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-3 px-1">Ready for Input</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-primary text-3xl">barcode_scanner</span>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-outline-variant/20 focus:ring-0 focus:border-primary focus:bg-surface-container-lowest py-6 pl-16 pr-6 text-2xl font-bold text-on-surface transition-all placeholder:text-outline-variant" placeholder="Scan Tracking Code..." type="text"/>
+</div>
+</div>
+<button class="bg-tertiary-container hover:bg-tertiary text-on-tertiary-container hover:text-white px-10 py-6 rounded-lg font-black text-lg transition-all shadow-lg shadow-tertiary/20 flex items-center gap-3 active:scale-95">
+                        SUBMIT
+                        <span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Content Tabs & Table -->
+<section class="px-8 pb-12 flex-1">
+<div class="max-w-6xl mx-auto space-y-6">
+<!-- Tab Navigation -->
+<div class="flex gap-2">
+<button class="px-8 py-4 bg-surface-container-lowest text-primary font-bold rounded-t-lg border-b-4 border-primary shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined">move_to_inbox</span>
+                        Inbound (Receiving)
+                    </button>
+<button class="px-8 py-4 bg-surface-container text-on-surface-variant font-medium rounded-t-lg hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">outbox</span>
+                        Outbound (Dispatching)
+                    </button>
+</div>
+<!-- Bento-style Data Container -->
+<div class="bg-surface-container-lowest rounded-xl rounded-tl-none overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-separate border-spacing-0">
+<thead>
+<tr class="bg-surface-container-high/50">
+<th class="px-6 py-5 text-[10px] font-black text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/10">Tracking ID</th>
+<th class="px-6 py-5 text-[10px] font-black text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/10">Item Type</th>
+<th class="px-6 py-5 text-[10px] font-black text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/10">Weight</th>
+<th class="px-6 py-5 text-[10px] font-black text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/10">Destination Hub</th>
+<th class="px-6 py-5 text-[10px] font-black text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/10">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1: Successfully Scanned -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 font-mono text-primary font-bold">#TRK-9920-8812</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">inventory_2</span>
+<span class="text-on-surface font-medium">Electronics</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface">14.2 kg</td>
+<td class="px-6 py-5 text-on-surface">Singapore Int'l</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                            Successfully Scanned
+                                        </span>
+</td>
+</tr>
+<!-- Row 2: Pending -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-5 font-mono text-outline font-medium">#TRK-9920-8815</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">conveyor_belt</span>
+<span class="text-outline font-medium">Textiles</span>
+</div>
+</td>
+<td class="px-6 py-5 text-outline">5.8 kg</td>
+<td class="px-6 py-5 text-outline">Tokyo Bay Hub</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-outline text-xs font-bold uppercase">
+                                            Pending
+                                        </span>
+</td>
+</tr>
+<!-- Row 3: Successfully Scanned -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 font-mono text-primary font-bold">#TRK-9920-8901</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">medical_services</span>
+<span class="text-on-surface font-medium">Medical Supplies</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface">2.4 kg</td>
+<td class="px-6 py-5 text-on-surface">Bangkok South</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            Successfully Scanned
+                                        </span>
+</td>
+</tr>
+<!-- Row 4: Pending -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-5 font-mono text-outline font-medium">#TRK-9920-8912</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">package_2</span>
+<span class="text-outline font-medium">Perishables</span>
+</div>
+</td>
+<td class="px-6 py-5 text-outline">22.1 kg</td>
+<td class="px-6 py-5 text-outline">HCMC Central</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-outline text-xs font-bold uppercase">
+                                            Pending
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Empty state/Pagination placeholder -->
+<div class="p-6 border-t border-outline-variant/10 flex justify-between items-center bg-surface-container-low/30">
+<span class="text-sm font-medium text-on-surface-variant">Showing 4 of 128 shipments</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container-lowest hover:bg-primary-container hover:text-white transition-colors border border-outline-variant/20 shadow-sm">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container-lowest hover:bg-primary-container hover:text-white transition-colors border border-outline-variant/20 shadow-sm">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Grid (Asymmetric Layout) -->
+<section class="px-8 pb-12">
+<div class="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+<div class="col-span-12 lg:col-span-8 bg-tertiary rounded-2xl p-8 text-white relative overflow-hidden shadow-2xl">
+<div class="relative z-10">
+<h3 class="text-3xl font-black mb-2">Shift Efficiency: 94.2%</h3>
+<p class="text-tertiary-fixed/80 max-w-md mb-6">Your hub is operating at peak capacity. 450 items scanned in the last 2 hours with zero reported errors.</p>
+<div class="flex gap-8">
+<div>
+<div class="text-[10px] uppercase font-black tracking-widest text-tertiary-fixed-dim">Processed</div>
+<div class="text-4xl font-bold">1,204</div>
+</div>
+<div>
+<div class="text-[10px] uppercase font-black tracking-widest text-tertiary-fixed-dim">Flagged</div>
+<div class="text-4xl font-bold">2</div>
+</div>
+</div>
+</div>
+<!-- Decorate Background -->
+<span class="material-symbols-outlined absolute -right-10 -bottom-10 text-[200px] opacity-10 rotate-12">monitoring</span>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-primary-container rounded-2xl p-8 text-on-primary-container shadow-xl">
+<div class="flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-4xl mb-4">bolt</span>
+<h4 class="text-xl font-black leading-tight mb-2">Next Fleet Arrival</h4>
+<p class="font-bold text-3xl">12:40 PM</p>
+<p class="text-sm font-medium opacity-80">Route: SG-HAN-02 (Heavy Cargo)</p>
+</div>
+<button class="mt-8 py-3 bg-on-primary-container text-white rounded-lg font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-transform">
+                            View Logistics Map
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Bottom Nav (Suppressed on large screens as per instructions) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-up p-4 flex justify-around items-center border-t border-emerald-100 z-50">
+<div class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Overview</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">barcode_scanner</span>
+<span class="text-[10px] font-bold">Scan</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="text-[10px] font-bold">Fleet</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Setup</span>
+</div>
+</nav>
+</body></html>

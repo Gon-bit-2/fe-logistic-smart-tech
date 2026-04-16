@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Logistics | Dispatcher Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eaf7ee",
+                        "inverse-primary": "#4edea3",
+                        "tertiary": "#006591",
+                        "secondary": "#2b6954",
+                        "on-primary-container": "#00422b",
+                        "background": "#f0fdf4",
+                        "surface-container": "#e4f1e8",
+                        "outline-variant": "#bbcabf",
+                        "surface-container-high": "#deebe3",
+                        "primary-fixed-dim": "#4edea3",
+                        "primary": "#006c49",
+                        "on-primary-fixed-variant": "#005236",
+                        "error": "#ba1a1a",
+                        "surface": "#f0fdf4",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3c4a42",
+                        "secondary-container": "#adedd3",
+                        "surface-dim": "#d0ddd5",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "surface-tint": "#006c49",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#95d3ba",
+                        "tertiary-container": "#23acf1",
+                        "on-tertiary-container": "#003d59",
+                        "error-container": "#ffdad6",
+                        "outline": "#6c7a71",
+                        "on-secondary-fixed-variant": "#0b513d",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-tertiary-fixed": "#001e2f",
+                        "inverse-surface": "#27332d",
+                        "surface-container-highest": "#d9e6dd",
+                        "on-surface": "#131e19",
+                        "primary-fixed": "#6ffbbe",
+                        "secondary-fixed": "#b0f0d6",
+                        "primary-container": "#10b981",
+                        "on-background": "#131e19",
+                        "inverse-on-surface": "#e7f4eb",
+                        "on-primary-fixed": "#002113",
+                        "on-secondary-fixed": "#002117",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#306d58",
+                        "surface-variant": "#d9e6dd",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f0fdf4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-hidden h-screen flex">
+<!-- SideNavBar (Predicted Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-emerald-100/20 flex flex-col py-6 space-y-4 shadow-xl">
+<div class="px-6 mb-4">
+<h1 class="text-lg font-black text-emerald-900 dark:text-emerald-50 tracking-tighter">Precision Logistics</h1>
+<div class="mt-4 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-700">person</span>
+</div>
+<div>
+<p class="text-sm font-bold text-emerald-900">Admin Console</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Global Operations</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active: Overview (Dashboard context) -->
+<div class="bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-200 rounded-lg mx-2 flex items-center px-4 py-3 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-3 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-sm font-medium">Analytics</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-3 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-sm font-medium">Orders</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-3 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="text-sm font-medium">Fleet</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-3 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">eco</span>
+<span class="text-sm font-medium">Sustainability</span>
+</div>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 rounded-lg bg-gradient-to-br from-primary to-primary-container text-white text-sm font-bold shadow-lg shadow-emerald-700/10 active:scale-95 transition-all">
+                New Shipment
+            </button>
+</div>
+<div class="pt-4 border-t border-emerald-100/20">
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-2 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</div>
+<div class="text-slate-500 hover:bg-emerald-50/50 rounded-lg mx-2 flex items-center px-4 py-2 gap-3 cursor-pointer transition-transform duration-200 hover:translate-x-1">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col h-full bg-surface">
+<!-- TopAppBar (Predicted Component) -->
+<header class="bg-emerald-50/80 backdrop-blur-md sticky top-0 z-50 flex justify-between items-center px-8 h-16 w-full shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<div class="flex items-center gap-8">
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-sm focus:ring-2 focus:ring-primary/20 w-64 transition-all" placeholder="Search shipments..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-emerald-900 border-b-2 border-emerald-600 pb-1 font-sans tracking-tight text-sm" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-emerald-600 transition-colors text-sm" href="#">Shipments</a>
+<a class="text-slate-500 hover:text-emerald-600 transition-colors text-sm" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-emerald-100/50 transition-colors relative">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-emerald-100/50 transition-colors">
+<span class="material-symbols-outlined text-slate-600">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="professional dispatcher portrait in well-lit office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMQSZic_VxN18IjdGGQYb8h6-mNlrMGO24cG9iKi1E6VLycg8FD2JA6t8sgWotP4Z_8-ZPNuM4OokaMjNW__1xAfn9_v1O6RoerqcfVBkffZq_N9WN79mWd0ah1Z1-ST7R6Chd_C_ZMmIIikTLXID5B5EuCzgco0RRMlQXRC3tGmiFEscN6prlzN1A3TBHkLXM_Uxff1Q4GMRXcqaBwl762qiUa5ohm-R8Mj_Cd0vaqAOTO00p1YuomJDBqwduQ7W7BBcmEjz-GkxP"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Half: Interactive Map -->
+<section class="h-1/2 relative bg-surface-container overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="highly detailed digital map interface with glowing green and blue route lines over a grey metropolitan area" data-location="Chicago" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCExiaYxxKt5_KGxJX7DseB_rQtlwJSkVpXkwBxqOkwNXGn0se_LM8xU-sUNCIuyJrroWjWDZaBw_mLm0ihdD-R3ApWGRwZNVAGC_JG21ySg4eSat8KRNsQOJgr2wthfMTS-YiwTNWNULXdA3-RSfhgGrAUxX2rPOOnkZfnjUnkv9lipUmo44FvVI2bjteivHS-UpT9U95YtyZ8MfPD7mSvXr9JemwlPXmpjEG68gFofQ058ELN4p1ivaYEe8NNHiagcYNx8rlsTdwD"/>
+<!-- Overlay SVG for Routes -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 1000 500">
+<path d="M100,200 Q250,150 400,300 T700,250" fill="none" opacity="0.8" stroke="#006c49" stroke-dasharray="10,5" stroke-width="3"></path>
+<path d="M200,400 Q400,380 600,420 T900,350" fill="none" opacity="0.6" stroke="#006591" stroke-dasharray="10,5" stroke-width="3"></path>
+<circle cx="100" cy="200" fill="#006c49" r="6"></circle>
+<circle cx="700" cy="250" fill="#006c49" r="6"></circle>
+<circle cx="200" cy="400" fill="#006591" r="6"></circle>
+<circle cx="900" cy="350" fill="#006591" r="6"></circle>
+</svg>
+</div>
+<!-- Floating Map Controls -->
+<div class="absolute top-6 left-6 z-10 flex flex-col gap-2">
+<div class="glass-panel p-4 rounded-xl shadow-lg border border-white/20">
+<h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Live Fleet Stats</h2>
+<div class="flex gap-4">
+<div>
+<p class="text-2xl font-black text-primary">42</p>
+<p class="text-[10px] text-slate-600 font-medium">In Transit</p>
+</div>
+<div class="border-l border-emerald-100 pl-4">
+<p class="text-2xl font-black text-tertiary">18</p>
+<p class="text-[10px] text-slate-600 font-medium">Available</p>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 glass-panel px-6 py-3 rounded-full shadow-xl flex items-center gap-6 border border-white/40">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_#10b981]"></div>
+<span class="text-xs font-bold text-on-surface">Route Active</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary shadow-[0_0_8px_#23acf1]"></div>
+<span class="text-xs font-bold text-on-surface">Scheduled</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-surface-dim"></div>
+<span class="text-xs font-bold text-on-surface">Inactive</span>
+</div>
+</div>
+</section>
+<!-- Bottom Half: Two Panels -->
+<section class="h-1/2 flex flex-col p-6 gap-6 bg-surface">
+<!-- Panel Header & Actions -->
+<div class="flex justify-between items-center px-2">
+<div class="flex gap-4">
+<h2 class="text-xl font-bold tracking-tight text-slate-800">Operational Flow</h2>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full text-[11px] font-bold text-emerald-700">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                            System Live
+                        </div>
+</div>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-tertiary text-white font-bold text-sm shadow-lg shadow-tertiary/20 hover:translate-y-[-2px] transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">auto_fix</span>
+                        Auto-Optimize Routes
+                    </button>
+</div>
+<!-- Panels Grid -->
+<div class="flex-1 grid grid-cols-2 gap-8 overflow-hidden">
+<!-- Panel 1: Fleet Status -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] overflow-hidden">
+<div class="px-6 py-4 border-b border-surface-container flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<h3 class="font-bold text-slate-800">Fleet Status</h3>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">12 Available</span>
+</div>
+<div class="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6">
+<!-- Vehicle Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-slate-700">TRK-8829</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">Electric</span>
+</div>
+<p class="text-xs text-slate-400 font-medium">Mercedes-Benz eActros</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-primary">ETA: 14:30</p>
+<p class="text-[10px] text-slate-400 uppercase">Sector A-4</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>VOLUME</span>
+<span>85%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>WEIGHT</span>
+<span>62%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 62%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Vehicle Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-slate-700">VAN-4401</span>
+</div>
+<p class="text-xs text-slate-400 font-medium">Ford E-Transit</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-emerald-600">IDLE</p>
+<p class="text-[10px] text-slate-400 uppercase">Central Hub</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>VOLUME</span>
+<span>12%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 12%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>WEIGHT</span>
+<span>8%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 8%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Vehicle Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-slate-700">TRK-1022</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">Electric</span>
+</div>
+<p class="text-xs text-slate-400 font-medium">Scania 25 P</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-primary">ETA: 16:15</p>
+<p class="text-[10px] text-slate-400 uppercase">Sector B-1</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>VOLUME</span>
+<span>92%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-500">
+<span>WEIGHT</span>
+<span>44%</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 44%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Panel 2: Unassigned Orders -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] overflow-hidden">
+<div class="px-6 py-4 border-b border-surface-container flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">inventory_2</span>
+<h3 class="font-bold text-slate-800">Unassigned Orders</h3>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">8 Pending</span>
+</div>
+<div class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-3">
+<!-- Order Card (Draggable UI) -->
+<div class="p-4 bg-surface-container-low rounded-lg border border-transparent hover:border-tertiary/30 hover:bg-white transition-all cursor-grab active:cursor-grabbing group">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-white rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-tertiary">drag_indicator</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-sm text-slate-800">#ORD-9902</h4>
+<span class="text-xs font-black text-tertiary">1.2 Tons</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                            822 Michigan Ave, Chicago
+                                        </div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">Express</span>
+<button class="text-tertiary hover:underline text-[11px] font-bold">Assign</button>
+</div>
+</div>
+</div>
+<!-- Order Card -->
+<div class="p-4 bg-surface-container-low rounded-lg border border-transparent hover:border-tertiary/30 hover:bg-white transition-all cursor-grab active:cursor-grabbing group">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-white rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-tertiary">drag_indicator</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-sm text-slate-800">#ORD-9884</h4>
+<span class="text-xs font-black text-tertiary">0.4 Tons</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                            1500 N Wells St, Chicago
+                                        </div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-slate-600 text-[10px] font-bold">Standard</span>
+<button class="text-tertiary hover:underline text-[11px] font-bold">Assign</button>
+</div>
+</div>
+</div>
+<!-- Order Card -->
+<div class="p-4 bg-surface-container-low rounded-lg border border-transparent hover:border-tertiary/30 hover:bg-white transition-all cursor-grab active:cursor-grabbing group">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-white rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-tertiary">drag_indicator</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-sm text-slate-800">#ORD-9881</h4>
+<span class="text-xs font-black text-tertiary">2.8 Tons</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                            400 W Ontario St, Chicago
+                                        </div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-slate-600 text-[10px] font-bold">Standard</span>
+<button class="text-tertiary hover:underline text-[11px] font-bold">Assign</button>
+</div>
+</div>
+</div>
+<!-- Order Card -->
+<div class="p-4 bg-surface-container-low rounded-lg border border-transparent hover:border-tertiary/30 hover:bg-white transition-all cursor-grab active:cursor-grabbing group">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-white rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-tertiary">drag_indicator</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-sm text-slate-800">#ORD-9877</h4>
+<span class="text-xs font-black text-tertiary">0.2 Tons</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                            222 W Merchandise Mart Plaza
+                                        </div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">Express</span>
+<button class="text-tertiary hover:underline text-[11px] font-bold">Assign</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

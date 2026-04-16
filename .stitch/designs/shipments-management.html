@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#89ceff",
+                        "tertiary-fixed": "#c9e6ff",
+                        "surface-dim": "#d0ddd5",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "on-primary-fixed-variant": "#005236",
+                        "secondary-fixed-dim": "#95d3ba",
+                        "surface-container-low": "#eaf7ee",
+                        "error": "#ba1a1a",
+                        "tertiary": "#006591",
+                        "on-surface": "#131e19",
+                        "outline": "#6c7a71",
+                        "secondary-fixed": "#b0f0d6",
+                        "tertiary-container": "#23acf1",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-primary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#4edea3",
+                        "inverse-on-surface": "#e7f4eb",
+                        "on-secondary-container": "#306d58",
+                        "surface-bright": "#f0fdf4",
+                        "background": "#f0fdf4",
+                        "on-tertiary-container": "#003d59",
+                        "secondary": "#2b6954",
+                        "outline-variant": "#bbcabf",
+                        "primary-fixed-dim": "#4edea3",
+                        "secondary-container": "#adedd3",
+                        "primary-fixed": "#6ffbbe",
+                        "on-secondary-fixed-variant": "#0b513d",
+                        "on-background": "#131e19",
+                        "surface-container-high": "#deebe3",
+                        "on-primary-container": "#00422b",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002117",
+                        "surface-container": "#e4f1e8",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d9e6dd",
+                        "surface-variant": "#d9e6dd",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#10b981",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#27332d",
+                        "on-surface-variant": "#3c4a42",
+                        "on-primary": "#ffffff",
+                        "primary": "#006c49",
+                        "surface": "#f0fdf4",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#006c49"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="text-on-background min-h-screen">
+<!-- TopAppBar Execution -->
+<header class="w-full sticky top-0 z-40 bg-emerald-50/80 dark:bg-slate-950/80 backdrop-blur-md shadow-sm flex justify-between items-center px-8 h-16 w-full font-inter tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-emerald-800 dark:text-emerald-200">The Precision Ecosystem</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 hover:text-emerald-600 transition-colors duration-200" href="#">Dashboard</a>
+<a class="text-emerald-700 border-b-2 border-emerald-600 font-semibold transition-transform active:scale-95" href="#">Shipments</a>
+<a class="text-slate-500 hover:text-emerald-600 transition-colors duration-200" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-emerald-700 hover:text-emerald-600 p-2 rounded-full">notifications</button>
+<button class="material-symbols-outlined text-emerald-700 hover:text-emerald-600 p-2 rounded-full">settings</button>
+<img alt="Dispatcher Profile" class="w-8 h-8 rounded-full border border-outline-variant/20 shadow-sm" data-alt="Professional headshot of a logistics dispatcher in a clean office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoUAPU5rsHuIY_q1dfQx6IPJLlJe1awO6_GKKuwPSZbAwdtey7IAz59DC6pK6t7d52uEBq7GPII8nr2unBbW9eN447v72yfsoUZfn08r-mLfsxg_IIp0P_GFIZTgMD5pAulNE5otVjfywBIi7gu8m37sJdLLapKzczxfW-VHvTcbY_ywOkphPzG9HRdbxLoz6LbcTFF-SZso7YTHyruMvGSsqaDjkmbcLwIWXhr3KsSZcpaM_oj8lhgmVqrfmqcrQAO4BcyXxShgYc"/>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar Execution -->
+<aside class="h-screen w-64 fixed left-0 top-16 bg-emerald-50 dark:bg-slate-900 flex flex-col gap-4 p-6 h-[calc(100vh-64px)] overflow-y-auto">
+<div class="mb-6">
+<h2 class="text-sm font-medium tracking-wide uppercase text-emerald-700">Dispatcher Hub</h2>
+<p class="text-xs text-slate-500">Precision Logistics</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg group transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-emerald-700">dashboard</span>
+<span class="text-sm font-medium tracking-wide uppercase">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg group transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-emerald-700">insights</span>
+<span class="text-sm font-medium tracking-wide uppercase">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg group transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-emerald-700">local_shipping</span>
+<span class="text-sm font-medium tracking-wide uppercase">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white text-emerald-700 rounded-lg shadow-sm font-bold" href="#">
+<span class="material-symbols-outlined">conveyor_belt</span>
+<span class="text-sm font-medium tracking-wide uppercase">Fleet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg group transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-emerald-700">eco</span>
+<span class="text-sm font-medium tracking-wide uppercase">Sustainability</span>
+</a>
+</nav>
+<button class="mt-4 bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-lg font-semibold shadow-lg hover:shadow-emerald-900/10 transition-all active:scale-[0.98]">
+                New Dispatch
+            </button>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="text-sm font-medium tracking-wide uppercase">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-emerald-100/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium tracking-wide uppercase">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 w-full p-8 bg-surface min-h-[calc(100vh-64px)]">
+<!-- Page Header & Action -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Shipments Management</h1>
+<p class="text-on-surface-variant text-lg">Real-time oversight of the precision distribution network.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-DEFAULT font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-[1.02] active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                    Add Shipment
+                </button>
+</div>
+<!-- Dashboard Statistics Bento Grid -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<div class="col-span-8 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between overflow-hidden relative group">
+<div class="relative z-10">
+<span class="text-label-md tracking-widest text-on-surface-variant uppercase text-xs font-bold">Network Efficiency</span>
+<div class="text-4xl font-black text-primary mt-2">98.4%</div>
+<p class="text-sm text-on-surface-variant mt-1">Carbon-optimized routes active</p>
+</div>
+<div class="mt-8 flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<div class="bg-surface-container-low px-4 py-2 rounded-lg min-w-[120px]">
+<span class="block text-[10px] uppercase font-bold text-outline">Active</span>
+<span class="text-xl font-bold">1,204</span>
+</div>
+<div class="bg-error-container/20 px-4 py-2 rounded-lg min-w-[120px]">
+<span class="block text-[10px] uppercase font-bold text-error">Delayed</span>
+<span class="text-xl font-bold text-error">12</span>
+</div>
+<div class="bg-tertiary-fixed-dim/30 px-4 py-2 rounded-lg min-w-[120px]">
+<span class="block text-[10px] uppercase font-bold text-tertiary">Financials</span>
+<span class="text-xl font-bold text-tertiary">+$42k</span>
+</div>
+</div>
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<div class="col-span-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col items-center justify-center text-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-secondary text-3xl">eco</span>
+</div>
+<h3 class="font-bold text-lg">Eco-Impact Score</h3>
+<p class="text-sm text-on-surface-variant mb-4">You have offset 12.4 tons of CO2 this week.</p>
+<button class="text-tertiary font-bold text-sm hover:underline">View Carbon Report</button>
+</div>
+</div>
+<!-- Filters Bar -->
+<div class="flex items-center gap-4 mb-6">
+<div class="flex bg-surface-container-high p-1 rounded-full gap-1">
+<button class="px-6 py-2 rounded-full text-sm font-bold bg-surface-container-lowest shadow-sm text-primary">All Shipments</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-on-surface-variant hover:bg-surface-container-lowest transition-colors">Active</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-on-surface-variant hover:bg-surface-container-lowest transition-colors">Delayed</button>
+</div>
+<div class="ml-auto relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-transparent border-b border-outline-variant/20 focus:border-primary focus:ring-0 text-sm transition-all outline-none" placeholder="Filter by ID, Vehicle, or Route..." type="text"/>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/5">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 text-[10px] uppercase font-bold tracking-widest text-outline">Tracking ID</th>
+<th class="px-6 py-4 text-[10px] uppercase font-bold tracking-widest text-outline">Route</th>
+<th class="px-6 py-4 text-[10px] uppercase font-bold tracking-widest text-outline">Vehicle ID</th>
+<th class="px-6 py-4 text-[10px] uppercase font-bold tracking-widest text-outline">Status</th>
+<th class="px-6 py-4 text-[10px] uppercase font-bold tracking-widest text-outline">ETA</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/30">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<span class="font-mono font-bold text-emerald-800">#PX-88102</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface">Seattle, WA</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+<span class="font-semibold text-on-surface">Portland, OR</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<span class="text-sm font-medium text-on-surface-variant tracking-tight">EV-TRAN-99</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                    In Transit
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-semibold text-on-surface">Today, 14:30</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<span class="font-mono font-bold text-emerald-800">#PX-88105</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface">Austin, TX</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+<span class="font-semibold text-on-surface">Dallas, TX</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<span class="text-sm font-medium text-on-surface-variant tracking-tight">EV-LOG-42</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                    Delayed
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-semibold text-on-surface">Tomorrow, 09:15</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<span class="font-mono font-bold text-emerald-800">#PX-88211</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface">San Jose, CA</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+<span class="font-semibold text-on-surface">Oakland, CA</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<span class="text-sm font-medium text-on-surface-variant tracking-tight">EV-TRAN-12</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed-dim/40 text-on-tertiary-container text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                    Out for Delivery
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-semibold text-on-surface">Today, 11:45</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<span class="font-mono font-bold text-emerald-800">#PX-88300</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface">Chicago, IL</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+<span class="font-semibold text-on-surface">Detroit, MI</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<span class="text-sm font-medium text-on-surface-variant tracking-tight">EV-MID-04</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                    In Transit
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-semibold text-on-surface">Today, 18:20</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="bg-surface-container-low/30 px-6 py-4 flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Showing 4 of 1,204 active shipments</span>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Contextual Map Hint (Editorial Style) -->
+<div class="mt-8 rounded-xl overflow-hidden h-48 relative border border-outline-variant/10 group cursor-crosshair">
+<img alt="Logistics Map Overlay" class="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-700" data-alt="Stylized topological map of North America with glowing digital routes in emerald green over a dark moody background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDf_7LoalMEAfaHZTyDrAk4pHOdv4X6wtEPfagfShHw09W_Hz5keYZv7y3k5E-NDq6QLDqTI7LIfW-BEX4QcdhPkZ6SA5dWxt_Kw8JiC3Cpnj2EwEsir_uus0_F2fj-MznL3mBYQKogxHlEsZ0Kd-KY_J7KLHiLv_ZkNoZA5jEsV-SvZtCvJNCHOhNlpgbXaBGNkqU2AuNqABSkkTI5ZZw0emqWfQw7lYslipuUCiia9H0JKCD18ga8FSisAEIBVyqFYmgDCKPHgXvb"/>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-white glass-panel bg-primary/10">
+<span class="material-symbols-outlined text-4xl mb-2">map</span>
+<p class="font-bold uppercase tracking-widest text-xs">Live Network Geospatial view</p>
+<button class="mt-3 px-4 py-1.5 bg-white text-primary rounded-full text-xs font-bold shadow-md hover:bg-primary hover:text-white transition-all">Launch Full Screen Map</button>
+</div>
+<div class="hidden" data-location="United States" style=""></div>
+</div>
+</main>
+</div>
+</body></html>
