@@ -1,5 +1,24 @@
 export type OrderStopStatus = "completed" | "current" | "pending";
-export type OrderStatus = "draft" | "confirmed" | "in_transit" | "delivered";
+export type OrderStatus =
+  | "PENDING"
+  | "ASSIGNED"
+  | "PICKED_UP"
+  | "IN_TRANSIT"
+  | "ARRIVED_AT_HUB"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED";
+export type ServiceTier = "express" | "eco_green" | "standard";
+export type PaymentMethod = "card" | "cash_on_delivery";
+
+export type OrderPricing = {
+  logisticsFee: number;
+  handlingFee: number;
+  ecoDiscount: number;
+  vat: number;
+  total: number;
+  currency: "USD";
+};
 
 export type OrderStop = {
   id: string;
@@ -18,11 +37,34 @@ export type OrderDTO = {
   estimatedArrival: string;
   co2SavedKg: number;
   status: OrderStatus;
+  contactName?: string;
+  contactPhone?: string;
+  receiverName?: string;
+  receiverPhone?: string;
+  packageWeightKg?: number;
+  packageDimensions?: string;
+  declaredValueUsd?: number;
+  serviceTier?: ServiceTier;
+  paymentMethod?: PaymentMethod;
+  itemDescription?: string;
+  pricing?: OrderPricing;
   stops: OrderStop[];
 };
 
 export type CreateOrderInput = Pick<
   OrderDTO,
-  "customerName" | "pickupAddress" | "deliveryAddress"
-> &
-  Partial<Pick<OrderDTO, "estimatedArrival">>;
+  | "customerName"
+  | "pickupAddress"
+  | "deliveryAddress"
+  | "estimatedArrival"
+  | "contactName"
+  | "contactPhone"
+  | "receiverName"
+  | "receiverPhone"
+  | "itemDescription"
+> & {
+  packageWeightKg: number;
+  packageDimensions: string;
+  declaredValueUsd: number;
+  serviceTier: ServiceTier;
+};

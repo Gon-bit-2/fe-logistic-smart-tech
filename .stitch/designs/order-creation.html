@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Logistics | Create Order</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #bbcabf; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#c9e6ff",
+                      "inverse-primary": "#4edea3",
+                      "on-primary-fixed-variant": "#005236",
+                      "tertiary-fixed-dim": "#89ceff",
+                      "primary-container": "#10b981",
+                      "surface-tint": "#006c49",
+                      "primary": "#006c49",
+                      "secondary": "#2b6954",
+                      "surface-container-high": "#deebe3",
+                      "surface": "#f0fdf4",
+                      "on-surface": "#131e19",
+                      "inverse-on-surface": "#e7f4eb",
+                      "tertiary": "#006591",
+                      "secondary-container": "#adedd3",
+                      "surface-container-low": "#eaf7ee",
+                      "on-secondary-fixed-variant": "#0b513d",
+                      "on-primary-container": "#00422b",
+                      "primary-fixed-dim": "#4edea3",
+                      "inverse-surface": "#27332d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f0fdf4",
+                      "surface-dim": "#d0ddd5",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#23acf1",
+                      "surface-variant": "#d9e6dd",
+                      "secondary-fixed-dim": "#95d3ba",
+                      "outline": "#6c7a71",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#001e2f",
+                      "on-surface-variant": "#3c4a42",
+                      "on-secondary-fixed": "#002117",
+                      "background": "#f0fdf4",
+                      "on-background": "#131e19",
+                      "on-secondary-container": "#306d58",
+                      "on-tertiary-fixed-variant": "#004c6e",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#bbcabf",
+                      "on-tertiary-container": "#003d59",
+                      "surface-container-highest": "#d9e6dd",
+                      "surface-container": "#e4f1e8",
+                      "on-primary-fixed": "#002113",
+                      "on-tertiary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#6ffbbe",
+                      "secondary-fixed": "#b0f0d6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Inter"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface overflow-hidden">
+<!-- Top Navigation Anchor -->
+<header class="w-full sticky top-0 z-50 bg-emerald-50/80 backdrop-blur-md shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] flex justify-between items-center px-8 h-16">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-emerald-800">Precision Logistics</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-sans tracking-tight text-slate-500 hover:text-emerald-600 transition-colors" href="#">Dashboard</a>
+<a class="font-sans tracking-tight text-emerald-900 border-b-2 border-emerald-600 pb-1" href="#">Shipments</a>
+<a class="font-sans tracking-tight text-slate-500 hover:text-emerald-600 transition-colors" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-700 hover:bg-emerald-100/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-700 hover:bg-emerald-100/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="User profile" data-alt="professional portrait of a system administrator in a clean office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1GXzYPOTBdMh7wW_x04xOzNvCufI_hIxySgNcn2T33Opp8lKk4IQk74MtRyTm2mheHo6l5pzhRvdFfN9FYgByaHbUsxVjCGjE2pq_aDB8BZPkAxwtSOKmtbLvEhgIWr1N61707hvzX6W0ijAczOMDiKLvuqOuOwiIJShPYIrtKEOcqiWuPwZp1fKKYV7p3CwZeowaWjs1zodYROnq6G2O-is3M250G-E8-S1PjTZppoffebdGgni0Q0OGrc-XGIi6mTSLsOhHoVbg"/>
+</div>
+</div>
+</header>
+<main class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- Left Side: Order Form (40%) -->
+<section class="w-full md:w-[40%] h-full bg-surface p-6 lg:p-10 overflow-y-auto custom-scrollbar">
+<div class="max-w-xl mx-auto space-y-8">
+<!-- Stepper -->
+<div class="flex justify-between items-center relative px-2">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-outline-variant opacity-20 -z-10 -translate-y-1/2"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold ring-4 ring-surface">1</div>
+<span class="text-[10px] font-bold tracking-widest uppercase text-primary">Locations</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-xs font-bold ring-4 ring-surface">2</div>
+<span class="text-[10px] font-bold tracking-widest uppercase text-outline">Details</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-xs font-bold ring-4 ring-surface">3</div>
+<span class="text-[10px] font-bold tracking-widest uppercase text-outline">Service</span>
+</div>
+</div>
+<!-- Form Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)] p-8 space-y-8">
+<div>
+<h1 class="text-2xl font-bold text-on-surface tracking-tight mb-1">Create New Order</h1>
+<p class="text-sm text-outline">Define your delivery route and package specifications.</p>
+</div>
+<!-- Location Section -->
+<div class="space-y-4">
+<div class="group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1 px-1">Pickup Address</label>
+<div class="flex items-center gap-3 border-b border-outline-variant/20 group-focus-within:border-primary transition-colors py-2 px-1">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface placeholder:text-outline-variant" placeholder="Street, Building, City" type="text"/>
+</div>
+</div>
+<div class="group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1 px-1">Delivery Address</label>
+<div class="flex items-center gap-3 border-b border-outline-variant/20 group-focus-within:border-primary transition-colors py-2 px-1">
+<span class="material-symbols-outlined text-tertiary" data-icon="flag">flag</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface placeholder:text-outline-variant" placeholder="Recipient's destination" type="text"/>
+</div>
+</div>
+</div>
+<!-- Dimensions Grid -->
+<div class="grid grid-cols-2 gap-6">
+<div class="group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1 px-1">Weight (kg)</label>
+<div class="flex items-center gap-3 border-b border-outline-variant/20 group-focus-within:border-primary transition-colors py-2 px-1">
+<span class="material-symbols-outlined text-outline" data-icon="weight">weight</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface" type="number" value="5.0"/>
+</div>
+</div>
+<div class="group">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1 px-1">Dimensions (cm)</label>
+<div class="flex items-center gap-3 border-b border-outline-variant/20 group-focus-within:border-primary transition-colors py-2 px-1">
+<span class="material-symbols-outlined text-outline" data-icon="square_foot">square_foot</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface" type="text" value="30x30x40"/>
+</div>
+</div>
+</div>
+<!-- Service Selection -->
+<div class="space-y-4">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline">Select Service Tier</label>
+<div class="grid gap-3">
+<!-- Option 1 -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-all group active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-tertiary-fixed rounded-lg text-tertiary">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</div>
+<div>
+<div class="font-semibold text-sm">Express Delivery</div>
+<div class="text-[11px] text-outline">Next day arrival guaranteed</div>
+</div>
+</div>
+<div class="text-sm font-bold">$24.50</div>
+</div>
+<!-- Option 2 (Featured) -->
+<div class="flex items-center justify-between p-4 rounded-lg border-2 border-primary bg-surface-container-lowest shadow-lg cursor-pointer transition-all relative overflow-hidden active:scale-[0.98]">
+<div class="absolute top-0 right-0">
+<div class="bg-primary text-on-primary text-[10px] font-bold px-3 py-1 rounded-bl-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="eco" style="font-variation-settings: 'FILL' 1;">eco</span>
+                                        Save CO2
+                                    </div>
+</div>
+<div class="flex items-center gap-4">
+<div class="p-2 bg-primary-container text-on-primary-container rounded-lg">
+<span class="material-symbols-outlined" data-icon="compost">compost</span>
+</div>
+<div>
+<div class="font-bold text-sm text-primary">Eco-Green Shared Trip</div>
+<div class="text-[11px] text-on-surface-variant">Carbon-neutral multi-stop</div>
+</div>
+</div>
+<div class="text-sm font-bold text-primary">$12.20</div>
+</div>
+<!-- Option 3 -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-all group active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-outline-variant/20 rounded-lg text-outline">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<div>
+<div class="font-semibold text-sm">Standard Shipping</div>
+<div class="text-[11px] text-outline">3-5 business days</div>
+</div>
+</div>
+<div class="text-sm font-bold">$8.90</div>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-gradient-to-br from-tertiary to-tertiary-container text-white py-4 rounded-lg font-bold tracking-wide shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
+                        Calculate Price &amp; Continue
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Right Side: Interactive Map (60%) -->
+<section class="hidden md:block md:w-[60%] h-full relative">
+<div class="absolute inset-0 bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="minimalist satellite map of an urban city with clean white and emerald green color coding showing major transportation routes" data-location="Seattle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1EByM4P4ZumoaFFipisz9TAgcNnRgaEBNgGXFh42fDjt3QnBeu8mSIxOkBa3ElREei3MafvigoECR4nSaqb59mQbCzz0Rsx71ysdRMCh9CTCnRktuf8lLxTXWMvCE5Fm9mAHxvkuq7obHPMnfJWseSouunFgZ5oGxOhKGvB_zDEHWWLEBhmQdWv82XRsBDSXK6RtOsMeGWRXdIRt7fld4acvO5GiLUgtJGEqHsOlpqBvRb7UBeqwnfYOqTx6z7D1pTRIAPLRL4PjQ"/>
+</div>
+<!-- Map Overlay UI -->
+<div class="absolute inset-0 bg-gradient-to-r from-surface/40 to-transparent pointer-events-none"></div>
+<!-- Floating Route Info -->
+<div class="absolute top-8 right-8 z-10 w-72 space-y-4">
+<div class="bg-surface-container-lowest/80 backdrop-blur-xl p-5 rounded-xl shadow-xl border border-white/20">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline">Route Preview</span>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">Optimal</span>
+</div>
+<div class="space-y-4 relative">
+<div class="absolute left-[11px] top-6 bottom-6 w-0.5 bg-dashed border-l-2 border-dotted border-outline-variant"></div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="radio_button_checked">radio_button_checked</span>
+<div>
+<div class="text-xs font-bold">402 Industry Way</div>
+<div class="text-[10px] text-outline">Departure: 09:30 AM</div>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="location_on">location_on</span>
+<div>
+<div class="text-xs font-bold">The Green Plaza, 8th Floor</div>
+<div class="text-[10px] text-outline">ETA: 11:45 AM</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 backdrop-blur-xl p-4 rounded-xl shadow-xl border border-white/20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="distance">distance</span>
+</div>
+<div>
+<div class="text-[10px] font-bold text-outline uppercase tracking-wider">Distance</div>
+<div class="text-sm font-black">12.4 km</div>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+</div>
+<div>
+<div class="text-[10px] font-bold text-outline uppercase tracking-wider">Duration</div>
+<div class="text-sm font-black">28 min</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-8 right-8 flex flex-col gap-2">
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-lg flex items-center justify-center text-outline hover:text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-lg flex items-center justify-center text-outline hover:text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<button class="w-10 h-10 bg-surface-container-lowest rounded-lg shadow-lg flex items-center justify-center text-primary transition-colors active:scale-90">
+<span class="material-symbols-outlined" data-icon="my_location" style="font-variation-settings: 'FILL' 1;">my_location</span>
+</button>
+</div>
+</section>
+</main>
+</body></html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+            color: #131e19;
+            margin: 0;
+            padding: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-gradient {
+            background: linear-gradient(135deg, #006c49 0%, #001e2f 100%);
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #006c49 0%, #10b981 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#adedd3",
+                      "on-primary-container": "#00422b",
+                      "on-primary-fixed-variant": "#005236",
+                      "surface-container-high": "#deebe3",
+                      "on-tertiary-fixed": "#001e2f",
+                      "outline-variant": "#bbcabf",
+                      "surface-tint": "#006c49",
+                      "surface-container": "#e4f1e8",
+                      "background": "#f0fdf4",
+                      "inverse-surface": "#27332d",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#95d3ba",
+                      "tertiary-fixed-dim": "#89ceff",
+                      "surface-variant": "#d9e6dd",
+                      "error-container": "#ffdad6",
+                      "on-background": "#131e19",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#004c6e",
+                      "tertiary-fixed": "#c9e6ff",
+                      "inverse-primary": "#4edea3",
+                      "tertiary": "#006591",
+                      "primary-fixed-dim": "#4edea3",
+                      "on-secondary-fixed": "#002117",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#002113",
+                      "on-tertiary-container": "#003d59",
+                      "on-surface-variant": "#3c4a42",
+                      "surface-container-highest": "#d9e6dd",
+                      "inverse-on-surface": "#e7f4eb",
+                      "on-primary": "#ffffff",
+                      "surface": "#f0fdf4",
+                      "outline": "#6c7a71",
+                      "surface-container-low": "#eaf7ee",
+                      "primary-fixed": "#6ffbbe",
+                      "on-secondary-container": "#306d58",
+                      "secondary-fixed": "#b0f0d6",
+                      "secondary": "#2b6954",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#23acf1",
+                      "primary": "#006c49",
+                      "primary-container": "#10b981",
+                      "surface-dim": "#d0ddd5",
+                      "on-surface": "#131e19",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f0fdf4",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#0b513d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Inter"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen flex items-stretch">
+<!-- Split Layout Container -->
+<main class="flex w-full min-h-screen">
+<!-- Left Side: Visual Experience (Hidden on small screens) -->
+<section class="hidden lg:flex lg:w-1/2 custom-gradient relative overflow-hidden flex-col justify-between p-12">
+<!-- Background Image with data-alt -->
+<div class="absolute inset-0 z-0">
+<img alt="Modern logistics" class="w-full h-full object-cover opacity-40 mix-blend-overlay" data-alt="cinematic wide shot of a sleek modern cargo jet on a high-tech airport runway at dusk with vibrant emerald and deep blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD71GiZjcbSj_iPfrsRfIB_FqJr0mTyGEU5r9JjqFKM50RXWb2TL1Fuq0sOISqFEROMbqGq7SYONVAqbNfB_0z3kTuwWGitrzbC9l7SyGOKwd5wEdSROhwxy2tNBfvlzIeYxK4UEUbHBqfDUy4XIk-8FSJc0ZtwF0jXTNwB1fbvPEUUJad9-qit2vdrCz2zirCde-58FjeuPLiBdXhneJE3f5eVtOrGYFlLYynDCnX7c_PUt-zNJFGp6x7P-OEikkt7awY-PRC7uBxi"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/60 to-transparent"></div>
+</div>
+<!-- Branding / Top Overlay -->
+<div class="relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-fixed rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed">hub</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-surface-container-lowest">Fleet Command</span>
+</div>
+</div>
+<!-- Central Message -->
+<div class="relative z-10 max-w-lg">
+<h1 class="text-5xl font-extrabold text-surface-container-lowest leading-[1.1] mb-6 tracking-tight">
+                    Command your global fleet with absolute clarity.
+                </h1>
+<p class="text-xl text-surface-container-high/80 leading-relaxed font-light">
+                    The Precision Stream experience transforms raw logistics data into actionable, high-precision visual narratives.
+                </p>
+</div>
+<!-- Bottom Badge -->
+<div class="relative z-10">
+<div class="inline-flex items-center gap-3 px-4 py-3 glass-panel rounded-xl shadow-2xl">
+<div class="p-2 bg-primary/20 rounded-full">
+<span class="material-symbols-outlined text-primary-fixed text-sm" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<span class="text-[10px] font-bold tracking-[0.1em] text-on-primary-container uppercase">12% REDUCED CARBON FOOTPRINT PER MANIFEST</span>
+</div>
+</div>
+</section>
+<!-- Right Side: Interaction UI -->
+<section class="w-full lg:w-1/2 bg-surface-container-lowest flex flex-col justify-center items-center px-6 md:px-20 py-12">
+<div class="w-full max-w-md">
+<!-- Header -->
+<header class="mb-10 text-center lg:text-left">
+<h2 class="text-3xl font-bold text-on-surface tracking-tight mb-2">Welcome to Emerald Logistics</h2>
+<p class="text-on-surface-variant body-md">Access your precision logistics dashboard.</p>
+</header>
+<!-- Auth Tabs -->
+<div class="flex gap-8 mb-10 border-b border-outline-variant/20">
+<button class="pb-4 text-sm font-bold tracking-[0.1em] text-primary border-b-2 border-primary">LOGIN</button>
+<button class="pb-4 text-sm font-bold tracking-[0.1em] text-outline hover:text-primary transition-colors">REGISTER</button>
+</div>
+<!-- Form -->
+<form class="space-y-6">
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-outline tracking-widest uppercase px-1">ORGANIZATION EMAIL</label>
+<input class="w-full bg-transparent border-b border-outline-variant/30 py-3 px-1 focus:outline-none focus:border-primary focus:ring-0 transition-all text-on-surface placeholder:text-outline-variant/60" placeholder="name@precision-stream.com" type="email"/>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-end px-1">
+<label class="text-[10px] font-bold text-outline tracking-widest uppercase">SECURITY KEY</label>
+<a class="text-[10px] font-bold text-tertiary tracking-widest uppercase hover:underline decoration-tertiary/30" href="#">FORGOT KEY?</a>
+</div>
+<input class="w-full bg-transparent border-b border-outline-variant/30 py-3 px-1 focus:outline-none focus:border-primary focus:ring-0 transition-all text-on-surface" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" id="persist" type="checkbox"/>
+<label class="text-sm text-on-surface-variant" for="persist">Keep session active for 24 hours</label>
+</div>
+<!-- Primary Action -->
+<button class="w-full cta-gradient h-14 rounded-lg text-surface-container-lowest font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-[0.98]" type="submit">
+                        Access Fleet Command
+                        <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-10">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/10"></div>
+</div>
+<div class="relative flex justify-center text-[10px] uppercase tracking-widest font-bold">
+<span class="bg-surface-container-lowest px-4 text-outline">OR ENTER WITH</span>
+</div>
+</div>
+<!-- Social Auth -->
+<div class="grid grid-cols-3 gap-4">
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">account_circle</span>
+<span class="text-[10px] font-bold tracking-tight text-outline uppercase">Google</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary transition-colors">corporate_fare</span>
+<span class="text-[10px] font-bold tracking-tight text-outline uppercase text-center">Enterprise SSO</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">fingerprint</span>
+<span class="text-[10px] font-bold tracking-tight text-outline uppercase">Biometric</span>
+</button>
+</div>
+<!-- Footer -->
+<footer class="mt-16 flex flex-col items-center gap-6">
+<p class="text-[10px] font-medium text-outline-variant tracking-wider uppercase">© 2024 The Precision Stream Logistics.</p>
+<div class="flex gap-8">
+<a class="text-[10px] font-bold text-outline tracking-[0.15em] uppercase hover:text-primary transition-colors" href="#">PRIVACY</a>
+<a class="text-[10px] font-bold text-outline tracking-[0.15em] uppercase hover:text-primary transition-colors" href="#">API DOCS</a>
+<a class="text-[10px] font-bold text-outline tracking-[0.15em] uppercase hover:text-primary transition-colors" href="#">SUPPORT</a>
+</div>
+</footer>
+</div>
+</section>
+</main>
+</body></html>

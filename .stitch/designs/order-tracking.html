@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Track Your Shipment | Precision Logistics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-fixed": "#c9e6ff",
+                "inverse-primary": "#4edea3",
+                "on-primary-fixed-variant": "#005236",
+                "tertiary-fixed-dim": "#89ceff",
+                "primary-container": "#10b981",
+                "surface-tint": "#006c49",
+                "primary": "#006c49",
+                "secondary": "#2b6954",
+                "surface-container-high": "#deebe3",
+                "surface": "#f0fdf4",
+                "on-surface": "#131e19",
+                "inverse-on-surface": "#e7f4eb",
+                "tertiary": "#006591",
+                "secondary-container": "#adedd3",
+                "surface-container-low": "#eaf7ee",
+                "on-secondary-fixed-variant": "#0b513d",
+                "on-primary-container": "#00422b",
+                "primary-fixed-dim": "#4edea3",
+                "inverse-surface": "#27332d",
+                "surface-container-lowest": "#ffffff",
+                "surface-bright": "#f0fdf4",
+                "surface-dim": "#d0ddd5",
+                "on-secondary": "#ffffff",
+                "tertiary-container": "#23acf1",
+                "surface-variant": "#d9e6dd",
+                "secondary-fixed-dim": "#95d3ba",
+                "outline": "#6c7a71",
+                "on-error": "#ffffff",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed": "#001e2f",
+                "on-surface-variant": "#3c4a42",
+                "on-secondary-fixed": "#002117",
+                "background": "#f0fdf4",
+                "on-background": "#131e19",
+                "on-secondary-container": "#306d58",
+                "on-tertiary-fixed-variant": "#004c6e",
+                "error": "#ba1a1a",
+                "on-primary": "#ffffff",
+                "outline-variant": "#bbcabf",
+                "on-tertiary-container": "#003d59",
+                "surface-container-highest": "#d9e6dd",
+                "surface-container": "#e4f1e8",
+                "on-primary-fixed": "#002113",
+                "on-tertiary": "#ffffff",
+                "error-container": "#ffdad6",
+                "primary-fixed": "#6ffbbe",
+                "secondary-fixed": "#b0f0d6"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Inter"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="text-on-background min-h-screen">
+<!-- TopNavBar (Shared Component Logic) -->
+<header class="w-full sticky top-0 z-50 bg-emerald-50/80 dark:bg-emerald-950/80 backdrop-blur-md shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<div class="flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-emerald-800 dark:text-emerald-100">Precision Logistics</span>
+<nav class="hidden md:flex gap-6 font-sans tracking-tight text-slate-700 dark:text-slate-200 text-sm font-medium">
+<a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors" href="#">Dashboard</a>
+<a class="text-emerald-900 dark:text-emerald-50 border-b-2 border-emerald-600 dark:border-emerald-400 pb-1" href="#">Shipments</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 material-symbols-outlined text-slate-700 dark:text-slate-200 hover:bg-emerald-100/50 rounded-lg transition-colors">notifications</button>
+<button class="p-2 material-symbols-outlined text-slate-700 dark:text-slate-200 hover:bg-emerald-100/50 rounded-lg transition-colors">settings</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border-2 border-primary-container" data-alt="Professional headshot of a logistics manager in a light-filled modern office setting with soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnA3T5WFLA0xdri_6L0YVDHXU1sQYla_k0qdhmtAwAoA6iLDhq6dhI-fWNd22pAoHOhGg7agxUM7JVCZgsK9vCsh7gcbqU5fdpTXPNc0jCCCwRxPVWzYCp5hU89uBkVK07jRm36qwpJm-Xdm-H6LKgDlJcNM5xb3N7xnikOcWvn7T8jWwPfBhm1vY3MUlONWvkKzSiQZVDho_O1PTgSmBHtFb4NtG4B4pb6blNm6I6v9velz-1bmg8j6fm7nngScfbdEv51dDrCMJC"/>
+</div>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-6 py-12 md:py-20">
+<!-- Search Section -->
+<div class="mb-16 text-center">
+<h1 class="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight mb-8">Track Your Journey</h1>
+<div class="relative group">
+<div class="flex flex-col md:flex-row gap-4 p-2 bg-surface-container-lowest rounded-xl shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<div class="flex-grow flex items-center px-4 gap-3">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-lg placeholder-outline-variant py-4" placeholder="Enter tracking ID (e.g. PL-882-990-21)" type="text"/>
+</div>
+<button class="bg-gradient-to-br from-tertiary to-tertiary-container text-white px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-tertiary/20">
+                        Track Order
+                    </button>
+</div>
+</div>
+</div>
+<!-- Order Detail Card -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
+<!-- Header Tonal Layering -->
+<div class="p-8 bg-surface-container-low grid md:grid-cols-3 gap-6">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-outline mb-1">Tracking ID</p>
+<p class="text-lg font-bold text-on-surface">PL-882-990-21</p>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-outline mb-1">Sender</p>
+<p class="text-lg font-semibold text-on-surface">Sustainable Goods Co.</p>
+<p class="text-sm text-outline">Oslo, Norway</p>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-outline mb-1">Receiver</p>
+<p class="text-lg font-semibold text-on-surface">Marcus Thorne</p>
+<p class="text-sm text-outline">Copenhagen, Denmark</p>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-8 md:p-12">
+<!-- Vertical Timeline -->
+<div class="relative mb-16">
+<div class="absolute left-6 top-2 bottom-2 w-0.5 bg-surface-container-high"></div>
+<div class="space-y-12">
+<!-- Node 1: Completed -->
+<div class="relative flex gap-8">
+<div class="z-10 w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary ring-8 ring-white">
+<span class="material-symbols-outlined text-2xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-on-surface">Order Placed</h3>
+<p class="text-sm text-outline">October 24, 2023 — 09:15 AM</p>
+<p class="text-sm mt-2 text-on-surface-variant bg-surface-container py-1 px-3 rounded-full inline-block">Order confirmed and being prepared</p>
+</div>
+</div>
+<!-- Node 2: Completed -->
+<div class="relative flex gap-8">
+<div class="z-10 w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary ring-8 ring-white">
+<span class="material-symbols-outlined text-2xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-on-surface">Picked Up</h3>
+<p class="text-sm text-outline">October 24, 2023 — 02:30 PM</p>
+<p class="text-sm mt-2 text-on-surface-variant">Handed over to carrier in Oslo Center</p>
+</div>
+</div>
+<!-- Node 3: Active/Current -->
+<div class="relative flex gap-8">
+<div class="z-10 w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-white ring-8 ring-white shadow-xl shadow-tertiary/30">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
+</div>
+<div>
+<h3 class="text-xl font-black text-on-surface">Arrived at Hub</h3>
+<p class="text-sm text-outline font-medium">October 25, 2023 — 11:45 PM</p>
+<div class="mt-4 p-4 rounded-lg bg-surface-container-low border border-tertiary-fixed flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">info</span>
+<p class="text-sm text-on-tertiary-container font-medium">Processing for final delivery to Copenhagen.</p>
+</div>
+</div>
+</div>
+<!-- Node 4: Pending -->
+<div class="relative flex gap-8 opacity-40">
+<div class="z-10 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-outline ring-8 ring-white">
+<span class="material-symbols-outlined text-2xl">inventory_2</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-on-surface">Out for Delivery</h3>
+<p class="text-sm text-outline">Expected tomorrow</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Proof of Delivery Section -->
+<div class="border-t border-outline-variant/15 pt-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="space-y-6 flex-grow max-w-lg">
+<div>
+<h2 class="text-2xl font-extrabold text-on-surface tracking-tight mb-2">Proof of Delivery</h2>
+<p class="text-slate-500 text-sm">Visual confirmation and recipient verification for high-value logistics.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="rounded-xl overflow-hidden aspect-video bg-surface-container relative group">
+<img alt="Proof of package delivery" class="w-full h-full object-cover grayscale opacity-50" data-alt="Close-up of a neatly packaged cardboard box sitting on a clean wooden porch in soft morning daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV2GBNJwQJo5CamIfYGyyJyFgWtHIIMjCjqro1f1MY0SoagytN0yo5v33HTBkvLG4ZRPIOiHXb_YlNRKdXkye-fj-_OCqJ_9f71_R0n-aS71m1kNuNuAW-gr-e3J_Hzdqm0pvlkYdzc3V-w4JNi4sd8Md4-m0Uy7uK-ukP1B2KjdWluNy811y64vRzRbNxnfV6Nwkt06Ly2h1xrw20XhrDOxyUI_nbqTsGHVQKeNbCU81pcc7DEIKiUIALeBqW3POPoRfnf48e--_k"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-sm">
+<span class="text-[10px] font-bold text-outline uppercase tracking-wider">Pending Capture</span>
+</div>
+</div>
+</div>
+<div class="rounded-xl border-2 border-dashed border-outline-variant flex items-center justify-center bg-surface p-4">
+<div class="text-center">
+<span class="material-symbols-outlined text-outline-variant text-4xl mb-2">draw</span>
+<p class="text-[10px] uppercase font-bold text-outline-variant tracking-widest">Digital Signature Required</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Eco Badge -->
+<div class="flex-shrink-0">
+<div class="bg-primary-container/10 border border-primary-container/20 rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl text-primary">eco</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-sm" data-weight="fill" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<span class="text-xs font-black text-primary tracking-widest uppercase">Eco-Green Selection</span>
+</div>
+<p class="text-sm font-medium text-on-primary-container leading-relaxed">
+                                    By choosing <span class="font-bold">Eco-Green</span>, you saved <span class="text-primary font-black text-lg">2.5kg</span> of CO2 on this trip.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center text-sm text-outline flex flex-col items-center gap-4">
+<p>Need help? Visit our <a class="text-tertiary font-bold hover:underline" href="#">Help Center</a> or contact 24/7 support.</p>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 text-on-surface font-semibold bg-surface-container-high px-4 py-2 rounded-lg hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-lg">print</span>
+                    Print Labels
+                </button>
+<button class="flex items-center gap-2 text-on-surface font-semibold bg-surface-container-high px-4 py-2 rounded-lg hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-lg">share</span>
+                    Share Tracking
+                </button>
+</div>
+</div>
+</main>
+<!-- SideNavBar Simulation for Admin context (Suppressed on this transactional page as per rules, but showing knowledge of structure) -->
+<!-- The BottomNavBar/SideNav is suppressed because this is a focused Task-Focused tracking journey -->
+</body></html>

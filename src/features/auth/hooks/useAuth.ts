@@ -1,36 +1,34 @@
 "use client";
 
-import { useAuthStore, type AuthRole } from "@/store/useAuthStore";
-
-export type AuthCredentials = {
-  email: string;
-  name?: string;
-  password: string;
-  role?: AuthRole;
-};
+import { useAuthSession } from "@/features/auth/hooks/useAuthSession";
+import { useLoginMutation } from "@/features/auth/hooks/useLoginMutation";
+import { useLogoutMutation } from "@/features/auth/hooks/useLogoutMutation";
+import { useRegisterWithOtpMutation } from "@/features/auth/hooks/useRegisterWithOtpMutation";
+import { useRequestRegisterOtpMutation } from "@/features/auth/hooks/useRequestRegisterOtpMutation";
+import { getAuthSessionSnapshot } from "@/store/useAuthStore";
 
 export function useAuth() {
-  const auth = useAuthStore();
-
-  async function login(credentials: AuthCredentials) {
-    const user = {
-      id: `user-${Date.now()}`,
-      name: credentials.name ?? credentials.email.split("@")[0],
-      email: credentials.email,
-      role: credentials.role ?? "customer",
-    } as const;
-
-    auth.setSession({
-      token: `demo-token-${Date.now()}`,
-      user,
-    });
-
-    return user;
-  }
+  const auth = useAuthSession();
+  const loginMutation = useLoginMutation();
+  const requestOtpMutation = useRequestRegisterOtpMutation();
+  const registerMutation = useRegisterWithOtpMutation();
+  const logoutMutation = useLogoutMutation();
 
   return {
     ...auth,
-    login,
-    logout: auth.clearSession,
+    login: loginMutation.mutateAsync,
+    logout: logoutMutation.mutateAsync,
+    requestOtpChallenge: requestOtpMutation.mutateAsync,
+    resendOtpChallenge: async () => {
+      const { pendingRegistration } = getAuthSessionSnapshot();
+
+      if (!pendingRegistration) {
+        throw new Error("No pending registration found.");
+      }
+
+      return requestOtpMutation.mutateAsync(pendingRegistration);
+    },
+    verifyOtpChallenge: async (input: { code: string }) =>
+      registerMutation.mutateAsync({ code: input.code }),
   };
 }

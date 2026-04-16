@@ -11,9 +11,10 @@ type SidebarProps = {
 };
 
 const defaultItems: SidebarItem[] = [
-  { href: "/admin", label: "Admin Overview" },
-  { href: "/driver", label: "Driver Workspace" },
-  { href: "/tracking/demo-order", label: "Live Tracking" },
+  { href: "/dashboard/admin", label: "Admin Overview" },
+  { href: "/dashboard/driver", label: "Driver Workspace" },
+  { href: "/orders/create", label: "Create Order" },
+  { href: "/tracking/PL-882-990-21", label: "Live Tracking" },
 ];
 
 export default function Sidebar({
