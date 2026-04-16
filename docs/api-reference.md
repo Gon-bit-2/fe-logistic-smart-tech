@@ -1,12 +1,15 @@
 # API Reference
 
-Tài liệu này được viết từ source backend hiện tại tại ngày `2026-04-15`.
+Tài liệu này được viết từ source backend hiện tại tại ngày `2026-04-16`.
 
 ## Tổng quan runtime
 
 - Base URL local: `http://localhost:8386`
 - Không có prefix `/api`
 - CORS bật toàn cục
+- `GET /` là public
+- Auth mặc định là `Bearer` cho mọi route, trừ các route có `@isPublic()`
+- Với route `Bearer`, runtime hiện tại còn check permission theo `role + path + method` trong DB/cache
 - Response là JSON, `Date` serialize thành ISO string
 - Pagination chuẩn:
   - `page`: mặc định `1`
@@ -24,15 +27,8 @@ Các module đang được import trong `src/app.module.ts`:
 - `tracking-events`
 - `green-tech`
 - `payments`
-
-## API có trong source nhưng chưa publish
-
-Hai nhóm sau có controller/service nhưng hiện chưa được import vào `AppModule`:
-
 - `orders`
 - `trips`
-
-Frontend không nên gọi hai nhóm này cho tới khi backend mount lại module.
 
 ## 1. Auth
 
@@ -98,6 +94,7 @@ Response login:
   - `refreshToken`
   - hoặc `errorMessage`
 - `refresh-token` đang dùng rotation, frontend phải ghi đè cả access token lẫn refresh token sau mỗi lần refresh.
+- Tầng guard hiện hỗ trợ thêm `AuthType.APIKey` dùng `API_KEY_SECRET` và `AuthType.PaymentAPIKey` dùng `PAYMENT_API_KEY`, nhưng các endpoint public trong tài liệu này hiện không expose flow đó cho frontend web.
 
 ## 2. Vehicles
 
@@ -191,7 +188,7 @@ Body tạo ngôn ngữ:
 
 Lưu ý:
 
-- `LanguageService` hiện throw `Error` generic ở một số nhánh, nên runtime có thể trả `500` thay vì `404/409`.
+- `LanguageService` hiện trả `404` khi không tìm thấy ngôn ngữ và `409` khi tạo trùng mã ngôn ngữ.
 
 ## 5. Tracking
 
@@ -268,7 +265,40 @@ Response emission log gồm các field chính:
 - `ghgScope`
 - `calculatedAt`
 
-## 7. Payments
+## 7. Orders
+
+| Method | Path                  | Quyền dự kiến  | Mục đích                 | Response chính        |
+| ------ | --------------------- | -------------- | ------------------------ | --------------------- |
+| POST   | `/orders`             | Authenticated  | Tạo đơn hàng             | `{ order }`           |
+| GET    | `/orders`             | Authenticated  | Danh sách đơn hàng       | `{ data, totalItems}` |
+| GET    | `/orders/:id`         | Authenticated  | Chi tiết đơn hàng        | order                 |
+| PUT    | `/orders/:id/status`  | Authenticated  | Cập nhật trạng thái đơn  | order                 |
+| DELETE | `/orders/:id`         | Authenticated  | Xóa mềm đơn              | order                 |
+
+Lưu ý:
+
+- Runtime hiện tại bảo vệ nhóm này bằng `Bearer` mặc định.
+- Sau khi verify token, request còn phải pass permission check theo `role + path + method`; nếu chưa có permission row tương ứng, API có thể trả `403`.
+- Nhóm này chưa gắn role decorator chi tiết riêng ở controller.
+
+## 8. Trips
+
+| Method | Path                                 | Quyền dự kiến | Mục đích                             | Response chính        |
+| ------ | ------------------------------------ | ------------- | ------------------------------------ | --------------------- |
+| POST   | `/trips/auto-dispatch`               | Authenticated | Trigger gom chuyến theo 1 hub / all  | `{ message, jobId }`  |
+| POST   | `/trips/auto-dispatch/all`           | Authenticated | Trigger gom chuyến toàn hệ thống     | `{ message, jobId }`  |
+| GET    | `/trips`                             | Authenticated | Danh sách chuyến                     | `{ data, totalItems}` |
+| GET    | `/trips/:id`                         | Authenticated | Chi tiết chuyến                      | trip                  |
+| PATCH  | `/trips/:id/status`                  | Authenticated | Cập nhật trạng thái chuyến           | trip                  |
+| PATCH  | `/trips/:id/cancel-order/:orderId`   | Authenticated | Gỡ đơn khỏi chuyến                   | trip / result object  |
+
+Lưu ý:
+
+- Runtime hiện tại bảo vệ nhóm này bằng `Bearer` mặc định.
+- Sau khi verify token, request còn phải pass permission check theo `role + path + method`; nếu chưa có permission row tương ứng, API có thể trả `403`.
+- Nhóm này chưa gắn role decorator chi tiết riêng ở controller.
+
+## 9. Payments
 
 | Method | Path                               | Quyền dự kiến                               | Mục đích               | Response chính                            |
 | ------ | ---------------------------------- | ------------------------------------------- | ---------------------- | ----------------------------------------- |
@@ -300,8 +330,9 @@ Lưu ý:
 
 - `GET /payments/order/:orderId` có thể trả `null` nếu order chưa có payment record.
 - Webhook Stripe yêu cầu header `stripe-signature`.
+- App bootstrap đã bật `rawBody`, nên webhook Stripe verify signature bằng payload thô từ request.
 
-## 8. Error format hiện tại
+## 10. Error format hiện tại
 
 Backend chưa có 1 error envelope thống nhất, frontend nên chịu được cả 3 dạng:
 
@@ -324,10 +355,9 @@ Ví dụ validation:
 }
 ```
 
-## 9. Caveat quan trọng
+## 11. Runtime notes
 
-1. `OrdersModule` và `TripsModule` chưa mount.
-2. `AuthenticationGuard` có source nhưng chưa được wire đầy đủ ở runtime.
-3. `HubRepository.findAll()` hiện chưa lọc `deletedAt` và `isActive`.
-4. `LanguageService` có thể trả `500` do throw `Error` generic.
-5. `Payment webhook` đang cần raw body nhưng bootstrap app chưa bật `rawBody`.
+- `GET /hubs` chỉ trả hub đang active và chưa soft-delete.
+- `LanguageService` dùng `404` cho not found và `409` cho duplicate create thay vì generic `500`.
+- `POST /hubs/:id/staff` vẫn trả raw Prisma record; frontend chỉ nên dùng các field an toàn đã liệt kê ở phần Hub.
+- Các route private hiện phụ thuộc cả JWT hợp lệ lẫn permission record theo `path + method`.

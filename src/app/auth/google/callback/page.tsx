@@ -1,18 +1,18 @@
 import { Suspense } from "react";
 import AuthScreen from "@/features/auth/components/AuthScreen";
-import OtpVerificationForm from "@/features/auth/components/OtpVerificationForm";
+import GoogleCallbackHandler from "@/features/auth/components/GoogleCallbackHandler";
 
-export default function OtpPage() {
+export default function GoogleCallbackPage() {
   return (
-    <AuthScreen variant="otp">
+    <AuthScreen variant="auth">
       <Suspense
         fallback={
           <div className="rounded-xl bg-primary/8 px-4 py-4 text-sm text-on-surface">
-            Loading verification flow...
+            Finalizing Google sign-in...
           </div>
         }
       >
-        <OtpVerificationForm />
+        <GoogleCallbackHandler />
       </Suspense>
     </AuthScreen>
   );

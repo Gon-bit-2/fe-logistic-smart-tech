@@ -1,41 +1,31 @@
-type ApiClientOptions = RequestInit & {
+import { httpClient } from "@/lib/api/http-client";
+import { API_BASE_URL } from "@/lib/api/env";
+
+type ApiClientOptions = Omit<RequestInit, "body"> & {
   baseUrl?: string;
+  body?: unknown;
   token?: string | null;
 };
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export async function apiClient<T>(
   endpoint: string,
   options: ApiClientOptions = {},
 ): Promise<T> {
-  const { baseUrl = API_BASE_URL, headers, token, ...init } = options;
-  const requestHeaders = new Headers(headers);
-
-  requestHeaders.set("Accept", "application/json");
-
-  if (!requestHeaders.has("Content-Type") && init.body) {
-    requestHeaders.set("Content-Type", "application/json");
-  }
+  const { baseUrl = API_BASE_URL, body, headers, token, ...init } = options;
+  const normalizedHeaders = Object.fromEntries(new Headers(headers).entries());
 
   if (token) {
-    requestHeaders.set("Authorization", `Bearer ${token}`);
+    normalizedHeaders.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${baseUrl}${endpoint}`, {
-    ...init,
-    headers: requestHeaders,
-  });
+  const response = (await httpClient.request({
+    baseURL: baseUrl,
+    data: body ?? undefined,
+    headers: normalizedHeaders,
+    method: init.method,
+    signal: init.signal ?? undefined,
+    url: endpoint,
+  })) as { data: T };
 
-  if (!response.ok) {
-    throw new Error(
-      `API request failed: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-
-  return (await response.json()) as T;
+  return response.data;
 }

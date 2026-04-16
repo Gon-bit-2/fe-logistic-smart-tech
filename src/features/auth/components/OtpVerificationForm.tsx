@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { startTransition, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useAuthSession } from "@/features/auth/hooks/useAuthSession";
+import { useForgotPasswordMutation } from "@/features/auth/hooks/useForgotPasswordMutation";
 import { useRegisterWithOtpMutation } from "@/features/auth/hooks/useRegisterWithOtpMutation";
+import { useRequestForgotPasswordOtpMutation } from "@/features/auth/hooks/useRequestForgotPasswordOtpMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/hooks/useRequestRegisterOtpMutation";
 
 const OTP_LENGTH = 6;
@@ -16,8 +18,16 @@ function getInitialDigits() {
 
 export default function OtpVerificationForm() {
   const router = useRouter();
-  const { otpChallengeMeta, pendingRegistration } = useAuthSession();
+  const searchParams = useSearchParams();
+  const otpMode =
+    searchParams.get("mode") === "forgot-password"
+      ? "forgot-password"
+      : "register";
+  const { otpChallengeMeta, pendingPasswordReset, pendingRegistration } =
+    useAuthSession();
+  const forgotPasswordMutation = useForgotPasswordMutation();
   const registerMutation = useRegisterWithOtpMutation();
+  const resendForgotPasswordOtpMutation = useRequestForgotPasswordOtpMutation();
   const resendOtpMutation = useRequestRegisterOtpMutation();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [digits, setDigits] = useState<string[]>(getInitialDigits);
@@ -62,9 +72,14 @@ export default function OtpVerificationForm() {
 
     try {
       const code = digits.join("");
-      await registerMutation.mutateAsync({ code });
+      if (otpMode === "forgot-password") {
+        await forgotPasswordMutation.mutateAsync({ code });
+        setStatus("Password updated. Redirecting to login...");
+      } else {
+        await registerMutation.mutateAsync({ code });
+        setStatus("Verification successful. Redirecting to login...");
+      }
 
-      setStatus("Verification successful. Redirecting to login...");
       startTransition(() => {
         router.push("/auth/login");
       });
@@ -74,13 +89,30 @@ export default function OtpVerificationForm() {
   }
 
   async function handleResend() {
-    if (!pendingRegistration) {
-      setStatus("Registration session expired. Please request a new OTP.");
-      return;
-    }
-
     try {
-      const challenge = await resendOtpMutation.mutateAsync(pendingRegistration);
+      const challenge =
+        otpMode === "forgot-password"
+          ? await (async () => {
+              if (!pendingPasswordReset) {
+                setStatus("Password reset session expired. Please request a new OTP.");
+                return null;
+              }
+
+              return resendForgotPasswordOtpMutation.mutateAsync(pendingPasswordReset);
+            })()
+          : await (async () => {
+              if (!pendingRegistration) {
+                setStatus("Registration session expired. Please request a new OTP.");
+                return null;
+              }
+
+              return resendOtpMutation.mutateAsync(pendingRegistration);
+            })();
+
+      if (!challenge) {
+        return;
+      }
+
       setNow(Date.now());
       setDigits(getInitialDigits());
       inputRefs.current[0]?.focus();
@@ -90,19 +122,34 @@ export default function OtpVerificationForm() {
     }
   }
 
+  const pendingDraft =
+    otpMode === "forgot-password" ? pendingPasswordReset : pendingRegistration;
   const destination =
     otpChallengeMeta?.maskedDestination ?? "cu******@emerald-logistics.com";
-  const activeError = registerMutation.error ?? resendOtpMutation.error;
+  const activeError =
+    registerMutation.error ??
+    forgotPasswordMutation.error ??
+    resendForgotPasswordOtpMutation.error ??
+    resendOtpMutation.error;
+  const isSubmitting =
+    registerMutation.isPending || forgotPasswordMutation.isPending;
+  const resendMutation =
+    otpMode === "forgot-password"
+      ? resendForgotPasswordOtpMutation
+      : resendOtpMutation;
 
   return (
     <div className="space-y-10">
       <header className="space-y-3">
         <h1 className="text-4xl font-black tracking-tight text-on-surface">
-          Security Verification
+          {otpMode === "forgot-password"
+            ? "Reset Password Verification"
+            : "Security Verification"}
         </h1>
         <p className="leading-7 text-on-surface-variant">
-          We&apos;ve sent a 6-digit code to {destination}. Enter it below to
-          complete your workspace registration.
+          {otpMode === "forgot-password"
+            ? `We've sent a 6-digit code to ${destination}. Enter it below to confirm your password reset.`
+            : `We've sent a 6-digit code to ${destination}. Enter it below to complete your workspace registration.`}
         </p>
       </header>
 
@@ -131,10 +178,14 @@ export default function OtpVerificationForm() {
 
         <Button
           type="submit"
-          disabled={registerMutation.isPending || !pendingRegistration}
+          disabled={isSubmitting || !pendingDraft}
           className="h-14 w-full bg-gradient-to-r from-primary to-primary-container text-base font-black text-white"
         >
-          {registerMutation.isPending ? "Verifying..." : "Verify & Complete"}
+          {isSubmitting
+            ? "Verifying..."
+            : otpMode === "forgot-password"
+              ? "Verify & Reset Password"
+              : "Verify & Complete"}
         </Button>
       </form>
 
@@ -143,7 +194,7 @@ export default function OtpVerificationForm() {
         <button
           type="button"
           onClick={handleResend}
-          disabled={secondsLeft > 0 || resendOtpMutation.isPending || !pendingRegistration}
+          disabled={secondsLeft > 0 || resendMutation.isPending || !pendingDraft}
           className="ml-2 inline-flex items-center gap-2 font-black text-primary disabled:text-outline"
         >
           Resend Code
@@ -170,8 +221,9 @@ export default function OtpVerificationForm() {
         <div>
           <p className="font-semibold text-on-surface">Having trouble?</p>
           <p className="mt-1 text-sm text-on-surface-variant">
-            Check spam folders or confirm the contact details used during
-            registration.
+            {otpMode === "forgot-password"
+              ? "Check spam folders or confirm the email address used for the password reset request."
+              : "Check spam folders or confirm the contact details used during registration."}
           </p>
         </div>
       </div>

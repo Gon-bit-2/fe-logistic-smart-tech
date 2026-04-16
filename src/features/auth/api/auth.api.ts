@@ -1,7 +1,10 @@
 import type {
   AuthLoginInput,
+  ForgotPasswordInput,
+  GoogleLoginLinkResponse,
   RegisterWithOtpInput,
   RequestRegisterOtpInput,
+  VerificationCodeType,
 } from "@/features/auth/types/auth.types";
 import { httpClient } from "@/lib/api/http-client";
 import type { SessionTokens } from "@/types/common.type";
@@ -10,17 +13,21 @@ type MessageResponse = {
   message: string;
 };
 
-type GoogleLinkResponse = {
-  url: string;
-};
-
-export async function requestRegisterOtp(input: RequestRegisterOtpInput) {
+async function requestOtp(email: string, type: VerificationCodeType) {
   const response = await httpClient.post<MessageResponse>("/auth/otp", {
-    email: input.email,
-    type: "REGISTER",
+    email,
+    type,
   });
 
   return response.data;
+}
+
+export async function requestRegisterOtp(input: RequestRegisterOtpInput) {
+  return requestOtp(input.email, "REGISTER");
+}
+
+export async function requestForgotPasswordOtp(email: string) {
+  return requestOtp(email, "FORGOT_PASSWORD");
 }
 
 export async function registerWithOtp(input: RegisterWithOtpInput) {
@@ -31,6 +38,17 @@ export async function registerWithOtp(input: RegisterWithOtpInput) {
     fullName: input.fullName,
     password: input.password,
     phone: input.phone,
+  });
+
+  return response.data;
+}
+
+export async function forgotPassword(input: ForgotPasswordInput) {
+  const response = await httpClient.post<MessageResponse>("/auth/forgot-password", {
+    code: input.code,
+    confirmPassword: input.confirmPassword,
+    email: input.email,
+    password: input.password,
   });
 
   return response.data;
@@ -50,7 +68,7 @@ export async function logout(refreshToken: string) {
 }
 
 export async function getGoogleLoginLink() {
-  const response = await httpClient.get<GoogleLinkResponse>("/auth/google-link", {
+  const response = await httpClient.get<GoogleLoginLinkResponse>("/auth/google-link", {
     skipAuthRefresh: true,
   });
 

@@ -17,6 +17,12 @@ export type RegisterDraft = {
   phone?: string;
 };
 
+export type ForgotPasswordDraft = {
+  confirmPassword: string;
+  email: string;
+  password: string;
+};
+
 export type OtpChallengeMeta = {
   channel: "email";
   destination: string;
@@ -29,4 +35,20 @@ export type RequestRegisterOtpInput = RegisterDraft;
 
 export type RegisterWithOtpInput = RegisterDraft & {
   code: string;
+};
+
+export type RequestForgotPasswordOtpInput = ForgotPasswordDraft;
+
+export type ForgotPasswordInput = ForgotPasswordDraft & {
+  code: string;
+};
+
+export type GoogleLoginLinkResponse = {
+  url: string;
+};
+
+export type GoogleCallbackParams = {
+  accessToken: string | null;
+  errorMessage: string | null;
+  refreshToken: string | null;
 };
