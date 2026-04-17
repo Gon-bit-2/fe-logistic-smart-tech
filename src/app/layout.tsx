@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
+import { appMetadata } from "@/i18n/vi";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Logistics Frontend",
-  description: "Scaffolded clean architecture for a smart logistics platform.",
+  title: appMetadata.title,
+  description: appMetadata.description,
 };
 
 export default function RootLayout({
@@ -21,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="vi"
       className={`${inter.variable} h-full font-sans antialiased`}
       suppressHydrationWarning
     >

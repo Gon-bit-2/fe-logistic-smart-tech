@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import AuthScreen from "@/features/auth/components/AuthScreen";
-import GoogleCallbackHandler from "@/features/auth/components/GoogleCallbackHandler";
+import AuthScreen from "@/features/auth/presentation/screens/AuthScreen";
+import GoogleCallbackHandler from "@/features/auth/presentation/components/GoogleCallbackHandler";
 
 export default function GoogleCallbackPage() {
   return (
@@ -17,3 +17,4 @@ export default function GoogleCallbackPage() {
     </AuthScreen>
   );
 }
+

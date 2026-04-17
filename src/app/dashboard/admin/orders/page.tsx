@@ -1,5 +1,6 @@
-import ShipmentsManagementScreen from "@/features/orders/components/ShipmentsManagementScreen";
+import ShipmentsManagementScreen from "@/features/orders/presentation/screens/ShipmentsManagementScreen";
 
 export default function AdminOrdersPage() {
   return <ShipmentsManagementScreen />;
 }
+

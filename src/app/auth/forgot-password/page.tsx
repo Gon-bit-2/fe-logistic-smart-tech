@@ -1,5 +1,5 @@
-import AuthScreen from "@/features/auth/components/AuthScreen";
-import ForgotPasswordForm from "@/features/auth/components/ForgotPasswordForm";
+import AuthScreen from "@/features/auth/presentation/screens/AuthScreen";
+import ForgotPasswordForm from "@/features/auth/presentation/components/ForgotPasswordForm";
 
 export default function ForgotPasswordPage() {
   return (
@@ -8,3 +8,4 @@ export default function ForgotPasswordPage() {
     </AuthScreen>
   );
 }
+

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import AdminShell from "@/features/admin/components/AdminShell";
+import AdminShell from "@/features/admin/presentation/components/AdminShell";
 
 export default function AdminLayout({
   children,
@@ -8,3 +8,4 @@ export default function AdminLayout({
 }>) {
   return <AdminShell>{children}</AdminShell>;
 }
+

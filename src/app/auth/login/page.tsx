@@ -1,5 +1,5 @@
-import AuthScreen from "@/features/auth/components/AuthScreen";
-import LoginForm from "@/features/auth/components/LoginForm";
+import AuthScreen from "@/features/auth/presentation/screens/AuthScreen";
+import LoginForm from "@/features/auth/presentation/components/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -8,3 +8,4 @@ export default function LoginPage() {
     </AuthScreen>
   );
 }
+
