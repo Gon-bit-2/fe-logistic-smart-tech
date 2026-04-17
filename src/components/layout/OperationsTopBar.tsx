@@ -1,14 +1,11 @@
 import Link from "next/link";
+import { operationsTopBarCopy } from "@/i18n/vi";
 
 type OperationsTopBarProps = Readonly<{
   active?: "dashboard" | "shipments" | "tracking";
 }>;
 
-const items = [
-  { id: "dashboard", href: "/dashboard/admin", label: "Dashboard" },
-  { id: "shipments", href: "/orders/create", label: "Shipments" },
-  { id: "tracking", href: "/tracking", label: "Tracking" },
-] as const;
+const items = operationsTopBarCopy.items;
 
 export default function OperationsTopBar({
   active = "shipments",
@@ -21,7 +18,7 @@ export default function OperationsTopBar({
             href="/"
             className="text-xl font-black tracking-tight text-emerald-900"
           >
-            Precision Logistics
+            {operationsTopBarCopy.brand}
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             {items.map((item) => (

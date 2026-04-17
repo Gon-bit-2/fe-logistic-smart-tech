@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import AuthScreen from "@/features/auth/components/AuthScreen";
-import OtpVerificationForm from "@/features/auth/components/OtpVerificationForm";
+import AuthScreen from "@/features/auth/presentation/screens/AuthScreen";
+import OtpVerificationForm from "@/features/auth/presentation/components/OtpVerificationForm";
 
 export default function OtpPage() {
   return (
@@ -17,3 +17,4 @@ export default function OtpPage() {
     </AuthScreen>
   );
 }
+

@@ -1,7 +1,7 @@
 export function formatCurrency(
   value: number,
   currency = "USD",
-  locale = "en-US",
+  locale = "vi-VN",
 ) {
   return new Intl.NumberFormat(locale, {
     style: "currency",
@@ -12,7 +12,7 @@ export function formatCurrency(
 
 export function formatDate(
   value: Date | number | string,
-  locale = "en-US",
+  locale = "vi-VN",
 ) {
   return new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",

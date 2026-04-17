@@ -1,6 +1,6 @@
 import axios, { AxiosHeaders } from "axios";
 import type { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
-import { clearAuthSession, getAuthSessionSnapshot, setAuthSessionTokens } from "@/store/useAuthStore";
+import { clearAuthSession, getAuthSessionSnapshot, setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
 import type { SessionTokens } from "@/types/common.type";
 import { API_BASE_URL } from "./env";
 import { ApiError, normalizeApiError } from "./errors";
@@ -168,3 +168,4 @@ httpClient.interceptors.response.use(
     }
   },
 );
+

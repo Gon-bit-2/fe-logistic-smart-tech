@@ -3,7 +3,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState, type ReactNode } from "react";
-import { initializeAuthStore } from "@/store/useAuthStore";
+import { initializeAuthStore } from "@/features/auth/presentation/state/auth.store";
 import { createQueryClient } from "@/lib/query-client";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -22,3 +22,4 @@ export function Providers({ children }: { children: ReactNode }) {
     </QueryClientProvider>
   );
 }
+
