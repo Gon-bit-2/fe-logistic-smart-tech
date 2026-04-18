@@ -1,4 +1,5 @@
 import { proofOfDeliveryCopy } from "@/i18n/vi";
+import Image from "next/image";
 
 type ProofOfDeliveryCardProps = {
   podImageUrl: string | null;
@@ -27,14 +28,14 @@ export default function ProofOfDeliveryCard({
       <div className="grid gap-4 md:grid-cols-2">
         <div className="relative overflow-hidden rounded-xl bg-surface-container">
           {podImageUrl ? (
-            <img
+            <Image
               src={podImageUrl}
               alt={proofOfDeliveryCopy.imageAlt}
               className="aspect-video h-full w-full object-cover"
             />
           ) : (
             <>
-              <img
+              <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV2GBNJwQJo5CamIfYGyyJyFgWtHIIMjCjqro1f1MY0SoagytN0yo5v33HTBkvLG4ZRPIOiHXb_YlNRKdXkye-fj-_OCqJ_9f71_R0n-aS71m1kNuNuAW-gr-e3J_Hzdqm0pvlkYdzc3V-w4JNi4sd8Md4-m0Uy7uK-ukP1B2KjdWluNy811y64vRzRbNxnfV6Nwkt06Ly2h1xrw20XhrDOxyUI_nbqTsGHVQKeNbCU81pcc7DEIKiUIALeBqW3POPoRfnf48e--_k"
                 alt={proofOfDeliveryCopy.pendingImageAlt}
                 className="aspect-video h-full w-full object-cover opacity-45 grayscale"

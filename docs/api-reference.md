@@ -29,6 +29,7 @@ Các module đang được import trong `src/app.module.ts`:
 - `payments`
 - `orders`
 - `trips`
+- `analytics`
 
 ## 1. Auth
 
@@ -332,7 +333,19 @@ Lưu ý:
 - Webhook Stripe yêu cầu header `stripe-signature`.
 - App bootstrap đã bật `rawBody`, nên webhook Stripe verify signature bằng payload thô từ request.
 
-## 10. Error format hiện tại
+## 10. Analytics
+
+| Method | Path | Quyền dự kiến | Mục đích | Response chính |
+| ------ | ---- | ------------- | -------- | -------------- |
+| GET | `/analytics/dashboard` | ADMIN | Thống kê tổng quan | `{ totalOrders, totalRevenue, totalDistance, totalCo2Saved, avgDeliveryTime, onTimeDeliveryRate }` |
+| GET | `/analytics/orders` | ADMIN | Thống kê đơn hàng theo khoảng thời gian | `Array<{ period, count, revenue, avgDeliveryTime }>` |
+| GET | `/analytics/emissions` | ADMIN | Thống kê khí thải theo khoảng thời gian | `Array<{ period, co2Emitted, co2Saved, greenTripsCount }>` |
+| GET | `/analytics/fleet-performance` | ADMIN | Thống kê hiệu suất từng phương tiện | `Array<{ vehicleId, licensePlate, totalTrips, totalDistance, efficiency, co2Saved }>` |
+
+**Query parameter (dùng chung cho các endpoint):**
+- `dateRange`: enum `'7d' | '30d' | '90d' | '1y'` (mặc định `'30d'`)
+
+## 11. Error format hiện tại
 
 Backend chưa có 1 error envelope thống nhất, frontend nên chịu được cả 3 dạng:
 
@@ -355,7 +368,7 @@ Ví dụ validation:
 }
 ```
 
-## 11. Runtime notes
+## 12. Runtime notes
 
 - `GET /hubs` chỉ trả hub đang active và chưa soft-delete.
 - `LanguageService` dùng `404` cho not found và `409` cho duplicate create thay vì generic `500`.

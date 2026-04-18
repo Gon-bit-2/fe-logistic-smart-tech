@@ -9,10 +9,7 @@ import { Input } from "@/components/ui/input";
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePublicTrackingQuery } from "@/features/tracking/presentation/hooks/usePublicTrackingQuery";
-import {
-  getTrackingStatusLabel,
-  trackingDetailCopy,
-} from "@/i18n/vi";
+import { getTrackingStatusLabel, trackingDetailCopy } from "@/i18n/vi";
 import { isApiError } from "@/lib/api/errors";
 
 type TrackingDetailScreenProps = Readonly<{
@@ -26,7 +23,8 @@ export default function TrackingDetailScreen({
   const [trackingId, setTrackingId] = useState(trackingCode);
   const trackingQuery = usePublicTrackingQuery(trackingCode);
   const tracking = trackingQuery.data ?? null;
-  const isNotFound = isApiError(trackingQuery.error) && trackingQuery.error.status === 404;
+  const isNotFound =
+    isApiError(trackingQuery.error) && trackingQuery.error.status === 404;
   const queryMessage =
     trackingQuery.error?.message ?? trackingDetailCopy.fallbackError;
 
@@ -38,7 +36,9 @@ export default function TrackingDetailScreen({
           <div className="rounded-xl bg-surface-container-lowest p-2 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 items-center gap-3 px-4">
-                <span className="material-symbols-outlined text-outline">search</span>
+                <span className="material-symbols-outlined text-outline">
+                  search
+                </span>
                 <Input
                   value={trackingId}
                   onChange={(event) => setTrackingId(event.target.value)}
@@ -48,7 +48,7 @@ export default function TrackingDetailScreen({
               </div>
               <Button
                 onClick={() => router.push(`/tracking/${trackingId.trim()}`)}
-                className="h-14 bg-gradient-to-br from-tertiary to-tertiary-container px-8 text-base font-black text-white"
+                className="h-14 bg-linear-to-br from-tertiary to-tertiary-container px-8 text-base font-black text-white"
               >
                 Theo dõi đơn hàng
               </Button>
@@ -86,7 +86,9 @@ export default function TrackingDetailScreen({
                 <p className="mt-1 text-lg font-semibold text-on-surface">
                   {getTrackingStatusLabel(tracking.currentStatus)}
                 </p>
-                <p className="text-sm text-outline">{trackingDetailCopy.currentStatusHint}</p>
+                <p className="text-sm text-outline">
+                  {trackingDetailCopy.currentStatusHint}
+                </p>
               </div>
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
@@ -133,7 +135,10 @@ export default function TrackingDetailScreen({
               >
                 {trackingDetailCopy.retry}
               </Button>
-              <Button variant="outline" onClick={() => router.push("/tracking")}>
+              <Button
+                variant="outline"
+                onClick={() => router.push("/tracking")}
+              >
                 {trackingDetailCopy.searchAnother}
               </Button>
             </div>

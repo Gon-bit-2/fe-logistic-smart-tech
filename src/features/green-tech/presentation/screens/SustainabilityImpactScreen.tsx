@@ -1,6 +1,7 @@
-import { IntegrationPendingState } from "@/components/ui/data-states";
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
 import { sustainabilityScreenCopy } from "@/i18n/vi";
+import CO2Dashboard from "@/features/green-tech/presentation/components/CO2Dashboard";
+import EmissionTimeline from "@/features/green-tech/presentation/components/EmissionTimeline";
 
 export interface SustainabilityImpactScreenProps {
   readonly _unused?: never;
@@ -16,10 +17,11 @@ export default function SustainabilityImpactScreen(
         title={sustainabilityScreenCopy.title}
         description={sustainabilityScreenCopy.description}
       />
-      <IntegrationPendingState
-        title={sustainabilityScreenCopy.pendingTitle}
-        description={sustainabilityScreenCopy.pendingDescription}
-      />
+      
+      <div className="space-y-6">
+        <CO2Dashboard />
+        <EmissionTimeline />
+      </div>
     </div>
   );
 }
