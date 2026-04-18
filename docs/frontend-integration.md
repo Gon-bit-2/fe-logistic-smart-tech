@@ -222,6 +222,7 @@ export function extractApiMessage(error: any): string {
 - Xem và cập nhật order/trip ở các màn vận hành nội bộ
 - Force calculate emission
 - Xem emission log theo trip
+- Xem dashboard thống kê tổng quan (Analytics)
 
 ### Driver / Warehouse
 
@@ -232,12 +233,19 @@ export function extractApiMessage(error: any): string {
 
 ## 8. Những màn có thể tích hợp thêm ngay
 
-Hai nhóm route sau đã được mount vào runtime và có thể tích hợp:
+Ba nhóm route sau đã được mount vào runtime và có thể tích hợp:
 
 - `/orders`
 - `/trips`
+- `/analytics`
 
-Lưu ý: hiện tại hai nhóm này đi qua `Bearer` mặc định và permission check theo `path + method`, nhưng chưa có role decorator chi tiết riêng ở controller.
+Lưu ý: hiện tại các nhóm này đi qua `Bearer` mặc định và permission check theo `path + method`, nhưng chưa có role decorator chi tiết riêng ở controller.
+
+### Kinh nghiệm tích hợp Analytics Dashboard
+
+- Các API `/analytics/*` hỗ trợ query param `dateRange` (`7d`, `30d`, `90d`, `1y`). Frontend nên có một dropdown chọn khoảng thời gian chung và đồng bộ query này tới tất cả các API đang fetch trên màn hình.
+- Dữ liệu từ `/analytics/orders` và `/analytics/emissions` trả về mảng time-series (có trường `period`), được thiết kế để truyền thẳng vào các thư viện biểu đồ như Recharts hoặc Chart.js để hiển thị xu hướng.
+- Dữ liệu từ `/analytics/fleet-performance` trả về mảng theo từng xe, phù hợp cho table dashboard hoặc biểu đồ bar ngang (horizontal bar chart) so sánh hiệu suất giữa các phương tiện.
 
 ## 9. Caveat runtime cần biết
 

@@ -12,3 +12,10 @@ export type PaginatedResult<T> = {
   data: T[];
   totalItems: number;
 };
+
+export type PaginationParams = {
+  page?: number;
+  limit?: number;
+};
+
+export type ApiListResponse<T> = PaginatedResult<T>;

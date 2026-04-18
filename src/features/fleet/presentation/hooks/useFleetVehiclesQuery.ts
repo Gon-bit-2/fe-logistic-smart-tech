@@ -1,14 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { PaginatedResult } from "@/types/common.type";
-import type { FleetVehicleRecord } from "@/features/fleet/domain/types/fleet-operations.types";
-import { listFleetVehiclesRequest } from "@/features/fleet/infrastructure/api/fleet.api";
+import type { ApiListResponse } from "@/types/common.type";
+import type { FleetVehicleRecord, VehicleListParams } from "@/features/fleet/domain/types/fleet-operations.types";
+import { listVehiclesUseCase } from "@/features/fleet/application/use-cases/fleet.use-cases";
 import { ApiError } from "@/lib/api/errors";
 
-export function useFleetVehiclesQuery() {
-  return useQuery<PaginatedResult<FleetVehicleRecord>, ApiError>({
-    queryKey: ["fleet", "vehicles"],
-    queryFn: () => listFleetVehiclesRequest(),
+export function useFleetVehiclesQuery(params?: VehicleListParams) {
+  return useQuery<ApiListResponse<FleetVehicleRecord>, ApiError>({
+    queryKey: ["fleet", "vehicles", params],
+    queryFn: () => listVehiclesUseCase(params),
   });
 }

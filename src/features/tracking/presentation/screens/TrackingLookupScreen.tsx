@@ -22,7 +22,9 @@ export default function TrackingLookupScreen() {
           <div className="rounded-xl bg-surface-container-lowest p-2 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 items-center gap-3 px-4">
-                <span className="material-symbols-outlined text-outline">search</span>
+                <span className="material-symbols-outlined text-outline">
+                  search
+                </span>
                 <Input
                   value={trackingId}
                   onChange={(event) => setTrackingId(event.target.value)}
@@ -38,7 +40,7 @@ export default function TrackingLookupScreen() {
 
                   router.push(`/tracking/${trackingId.trim()}`);
                 }}
-                className="h-14 bg-gradient-to-br from-tertiary to-tertiary-container px-8 text-base font-black text-white"
+                className="h-14 bg-linear-to-br from-tertiary to-tertiary-container px-8 text-base font-black text-white"
               >
                 {trackingLookupCopy.trackButton}
               </Button>

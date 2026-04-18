@@ -147,7 +147,10 @@ export function normalizeApiError(error: unknown): ApiError {
       code: error.code ?? null,
       details: normalized.details ?? responseData,
       issues: normalized.issues,
-      message: normalized.message || getStatusFallbackMessage(status) || fallbackMessage,
+      message:
+        normalized.message ||
+        getStatusFallbackMessage(status) ||
+        fallbackMessage,
       status,
     });
   }

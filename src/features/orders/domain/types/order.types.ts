@@ -1,3 +1,5 @@
+import type { PaginationParams } from "@/types/common.type";
+
 export type OrderStopStatus = "completed" | "current" | "pending";
 export type OrderStatus =
   | "PENDING"
@@ -67,4 +69,13 @@ export type CreateOrderInput = Pick<
   packageDimensions: string;
   declaredValueUsd: number;
   serviceTier: ServiceTier;
+};
+
+export type OrderListParams = PaginationParams & {
+  status?: OrderStatus;
+  search?: string;
+};
+
+export type UpdateOrderStatusInput = {
+  status: OrderStatus;
 };

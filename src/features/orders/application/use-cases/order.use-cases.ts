@@ -3,10 +3,15 @@ import type {
   CreateOrderInput,
   OrderDTO,
   PaymentMethod,
+  OrderListParams,
+  UpdateOrderStatusInput,
 } from "@/features/orders/domain/types/order.types";
 import {
   createOrderRequest,
   getOrderByIdRequest,
+  listOrdersRequest,
+  updateOrderStatusRequest,
+  deleteOrderRequest,
 } from "@/features/orders/infrastructure/api/order.api";
 import {
   findStoredOrder,
@@ -73,5 +78,25 @@ export async function confirmCheckoutUseCase(
     };
 
   return upsertStoredOrder(nextOrder);
+}
+
+export async function listOrdersUseCase(params?: OrderListParams) {
+  assertOrdersApiConfigured();
+  return listOrdersRequest(params);
+}
+
+export async function getOrderDetailUseCase(orderId: string) {
+  assertOrdersApiConfigured();
+  return getOrderByIdRequest(orderId);
+}
+
+export async function updateOrderStatusUseCase(orderId: string, payload: UpdateOrderStatusInput) {
+  assertOrdersApiConfigured();
+  return updateOrderStatusRequest(orderId, payload);
+}
+
+export async function deleteOrderUseCase(orderId: string) {
+  assertOrdersApiConfigured();
+  return deleteOrderRequest(orderId);
 }
 

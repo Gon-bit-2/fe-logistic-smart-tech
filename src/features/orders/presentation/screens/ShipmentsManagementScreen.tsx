@@ -42,7 +42,7 @@ export default function ShipmentsManagementScreen(
   const [renderTimestamp] = useState(() => Date.now());
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const ordersQuery = useOrdersListQuery();
-  const orders = ordersQuery.data?.items ?? [];
+  const orders = ordersQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
   const filteredOrders = orders.filter((order) => {
     const statusLabel = getOrderStatusLabel(order.status);

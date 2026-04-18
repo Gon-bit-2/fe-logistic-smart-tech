@@ -31,7 +31,7 @@ export default function FleetOperationsScreen(
   void _props;
 
   const vehiclesQuery = useFleetVehiclesQuery();
-  const vehicles = vehiclesQuery.data?.items ?? [];
+  const vehicles = vehiclesQuery.data?.data ?? [];
   const totalVehicles = vehicles.length;
   const activeVehicles = vehicles.filter((vehicle) => vehicle.isActive !== false).length;
   const electricVehicles = vehicles.filter(
@@ -183,11 +183,6 @@ export default function FleetOperationsScreen(
           </div>
         </SectionCard>
       ) : null}
-
-      <IntegrationPendingState
-        title={fleetScreenCopy.integrationPendingTitle}
-        description={fleetScreenCopy.integrationPendingDescription}
-      />
     </div>
   );
 }
