@@ -1,3 +1,5 @@
+"use client";
+
 import { Filter } from "lucide-react";
 import { ErrorState, LoadingState } from "@/components/ui/data-states";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";

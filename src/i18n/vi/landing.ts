@@ -1,55 +1,55 @@
 export const heroData = {
-  eyebrow: "Logistics xanh thế hệ mới",
-  primaryCta: "Bắt đầu ngay",
-  secondaryCta: "Xem cách hoạt động",
-  titleLine1: "Tương lai của logistics là",
+  eyebrow: "Logistics Xanh Thế Hệ Mới",
+  primaryCta: "Vào ứng dụng",
+  secondaryCta: "Tìm hiểu thêm",
+  titleLine1: "Giải pháp Logistics",
   titleLine2: "Xanh & Thông minh.",
-  trustedHint: "Dữ liệu vận hành bền bỉ cho chuỗi cung ứng linh hoạt.",
+  trustedHint: "Tối ưu vận hành - Đột phá hiệu suất chuỗi cung ứng.",
   description:
-    "Tối ưu chuỗi cung ứng với điều phối bằng AI và giải pháp giao hàng không phát thải được thiết kế cho thế giới hiện đại.",
+    "Tiên phong ứng dụng trí tuệ nhân tạo (AI) để tối ưu hóa chuỗi cung ứng, hướng đến mục tiêu giao hàng không phát thải và phát triển bền vững.",
 } as const;
 
 export const statBarCopy = {
   description:
-    "Các chỉ số quy mô công khai sẽ được hiển thị lại khi landing page nhận dữ liệu thật từ CMS hoặc API marketing.",
-  title: "Các chỉ số quy mô đang chờ nguồn dữ liệu thật",
+    "Hệ thống vận hành liên tục, đảm bảo thông suốt và đáp ứng mọi nhu cầu khắt khe nhất của khách hàng.",
+  title: "Mạng lưới logistics rộng khắp và đáng tin cậy",
 } as const;
 
 export const socialProofCopy = {
   description:
-    "Danh sách logo đối tác không còn dùng dữ liệu hard-code khi chưa có nguồn nội dung chính thức.",
-  title: "Hồ sơ đối tác đang chờ nội dung xác thực",
+    "Được tin tưởng bởi hàng trăm doanh nghiệp và đối tác chiến lược trong lĩnh vực vận tải và chuỗi cung ứng.",
+  title: "Đối tác chiến lược",
 } as const;
 
 export const featuresSectionCopy = {
-  title: "Những năng lực chính xác cho",
-  titleHighlight: "đội xe thông minh hơn",
+  title: "Giải pháp toàn diện cho",
+  titleHighlight: "đội xe thông minh",
   description:
-    "Công nghệ của chúng tôi thu hẹp khoảng cách giữa hiệu quả logistics và cam kết môi trường.",
+    "Công nghệ của chúng tôi kết nối hoàn hảo giữa hiệu suất logistics vượt trội và các cam kết bảo vệ môi trường.",
   pendingDescription:
-    "Danh sách năng lực, ảnh minh hoạ và feedback thẻ tính năng sẽ được kết nối khi có nguồn nội dung thật.",
-  pendingTitle: "Nội dung tính năng đang chờ tích hợp",
+    "Theo dõi và quản lý lộ trình theo thời gian thực, tự động phân tích dữ liệu để đưa ra quyết định tối ưu nhất.",
+  pendingTitle: "Tối ưu hóa hành trình",
 } as const;
 
 export const sustainabilitySectionCopy = {
-  title: "Logistics không còn",
-  titleHighlight: "dấu chân carbon.",
+  title: "Logistics hướng tới",
+  titleHighlight: "không phát thải carbon.",
   description:
-    "Chúng tôi không chỉ giao hàng mà còn phục hồi giá trị môi trường. Thuật toán thông minh đã tiết kiệm hơn 12.400 tấn CO2 trong năm nay bằng cách loại bỏ các tuyến đường kém hiệu quả.",
+    "Không chỉ là giao hàng, chúng tôi kiến tạo những giá trị xanh. Thuật toán thông minh giúp giảm thiểu hàng ngàn tấn CO2 mỗi năm nhờ việc loại bỏ các tuyến đường không hiệu quả.",
   pendingDescription:
-    "Các số liệu carbon công khai trên landing page sẽ chỉ hiển thị khi có feed dữ liệu marketing hoặc sustainability thật.",
-  pendingTitle: "Số liệu tác động đang chờ dữ liệu thật",
+    "Cam kết minh bạch về các chỉ số phát thải và nỗ lực bảo vệ môi trường trong từng chuyến đi.",
+  pendingTitle: "Chỉ số tác động môi trường",
 } as const;
 
 export const testimonialSectionCopy = {
   description:
-    "Trích dẫn khách hàng và hồ sơ thương hiệu sẽ được hiển thị lại khi có nguồn testimonial được phê duyệt.",
-  title: "Customer stories đang chờ nội dung xác thực",
+    "Những câu chuyện thành công từ các doanh nghiệp đã tối ưu hóa chuỗi cung ứng và giảm thiểu chi phí nhờ giải pháp của chúng tôi.",
+  title: "Khách hàng nói gì về Emerald Logistics",
 } as const;
 
 export const ctaData = {
-  title: "Sẵn sàng tái định nghĩa logistics?",
+  title: "Sẵn sàng số hóa quy trình logistics?",
   description:
-    "Gia nhập hơn 500 doanh nghiệp đang chuyển sang độ chính xác của công nghệ xanh. Trái đất và cả lợi nhuận của bạn sẽ cùng hưởng lợi.",
-  buttonText: "Tham gia cuộc cách mạng xanh",
+    "Đồng hành cùng hơn 500 doanh nghiệp tiên phong ứng dụng công nghệ xanh. Tối ưu chi phí, nâng cao hiệu quả và bảo vệ trái đất.",
+  buttonText: "Đăng nhập hệ thống",
 } as const;

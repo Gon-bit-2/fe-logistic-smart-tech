@@ -63,30 +63,30 @@ export const trackingTimelineCopy = {
 } as const;
 
 export const trackingLookupCopy = {
-  apiDrivenEyebrow: "Kết nối API",
+  apiDrivenEyebrow: "Kết nối hệ thống",
   apiDrivenDescription:
-    "Luồng theo dõi không còn dùng dữ liệu demo. Hãy cung cấp mã theo dõi thực do Orders API hoặc Tracking API trả về.",
-  apiDrivenTitle: "Theo dõi hiện yêu cầu dữ liệu backend trực tiếp",
+    "Hệ thống đang sử dụng dữ liệu trực tuyến. Vui lòng nhập mã theo dõi chính thức từ hệ thống vận hành.",
+  apiDrivenTitle: "Tra cứu đơn hàng trực tuyến",
   inputPlaceholder: "Nhập mã theo dõi",
   title: "Theo dõi hành trình đơn hàng",
   trackButton: "Theo dõi đơn hàng",
 } as const;
 
 export const trackingDetailCopy = {
-  currentStatusHint: "Dòng thời gian công khai trực tiếp",
+  currentStatusHint: "Hành trình đơn hàng công khai",
   errorEyebrow: "Lỗi theo dõi",
-  errorTitle: "Không thể tải dòng thời gian lô hàng",
-  fallbackError: "Hiện không thể truy xuất dữ liệu theo dõi trực tiếp.",
+  errorTitle: "Không thể tải dữ liệu hành trình lô hàng",
+  fallbackError: "Hệ thống đang tạm thời gián đoạn. Vui lòng thử lại sau.",
   helpCenter: "Trung tâm hỗ trợ",
   helpText: "Cần trợ giúp? Truy cập",
   loadingDescription:
-    "Chúng tôi đang lấy dòng thời gian lô hàng công khai mới nhất từ Logistics API.",
+    "Hệ thống đang đồng bộ dữ liệu hành trình mới nhất.",
   loadingEyebrow: "Đang tải",
-  loadingTitle: "Đang tải các sự kiện theo dõi mới nhất",
+  loadingTitle: "Đang tải dữ liệu hành trình mới nhất",
   notFoundEyebrow: "Không tìm thấy",
   notFoundTitle: "Không tìm thấy lô hàng công khai với mã theo dõi này",
   printLabels: "In nhãn",
-  receiverHint: "Dữ liệu theo dõi công khai ẩn các trường nội bộ nhạy cảm.",
+  receiverHint: "Một số thông tin nhạy cảm đã được ẩn để bảo mật.",
   receiverLabel: "Người nhận",
   retry: "Thử lại",
   searchAnother: "Tìm lô hàng khác",
@@ -98,17 +98,17 @@ export const trackingDetailCopy = {
 export const internalTrackingCopy = {
   accessErrorEyebrow: "Lỗi truy cập",
   accessErrorTitle: "Bạn không có quyền xem dòng thời gian nội bộ của đơn hàng này",
-  connectHint: "Kết nối một `orderId` để xem dòng thời gian lô hàng nội bộ.",
+  connectHint: "Vui lòng cung cấp mã đơn hàng (Order ID) để xem chi tiết hành trình vận chuyển nội bộ.",
   currentStatusLabel: "Trạng thái hiện tại",
   dataSourceLabel: "Nguồn dữ liệu",
   dataSourceValue: "API nội bộ",
   driverEyebrow: "Tài xế",
-  fallbackError: "Hiện không thể tải dữ liệu theo dõi nội bộ.",
-  loadingDescription: "Đang tải dòng thời gian theo dõi được bảo vệ từ Logistics API.",
+  fallbackError: "Hệ thống đang tạm thời gián đoạn. Không thể truy xuất dữ liệu vận hành.",
+  loadingDescription: "Đang đồng bộ dữ liệu vận hành nội bộ.",
   loadingEyebrow: "Đang tải",
-  loadingTitle: "Đang tải các sự kiện nội bộ của lô hàng",
+  loadingTitle: "Đang tải dữ liệu hành trình nội bộ",
   missingOrderDescription:
-    "Hãy cung cấp `orderId` trong URL dashboard để tải dòng thời gian nội bộ được bảo vệ. Không gian làm việc này không còn dùng dữ liệu demo.",
+    "Vui lòng truy cập thông qua hệ thống quản lý để xem chi tiết hành trình vận chuyển nội bộ.",
   title: "Không gian thực thi tuyến đường",
   trackingCodeLabel: "Mã theo dõi",
   trackingErrorEyebrow: "Lỗi theo dõi",

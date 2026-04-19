@@ -75,15 +75,15 @@ export const adminScreenCopy = {
   currentEta: "ETA dự kiến",
   customer: "Khách hàng",
   description:
-    "Hiển thị xuyên suốt các lô hàng, doanh thu và hiệu suất carbon trong cùng một ngôn ngữ vận hành gọn nhẹ.",
+    "Quản lý toàn diện các lô hàng, hiệu suất kinh doanh và các chỉ số bảo vệ môi trường trên một giao diện đồng nhất.",
   emptyDescription:
-    "Orders API chưa trả về lô hàng nào để hiển thị trên bảng điều hành nội bộ.",
+    "Hiện chưa có dữ liệu lô hàng nào trong hệ thống.",
   emptyTitle: "Chưa có dữ liệu vận hành",
   integrationPendingDescription:
-    "Bản đồ tuyến, mức tải xe và điều phối kéo-thả chỉ được bật khi backend cung cấp thêm dữ liệu trip và phân công theo thời gian thực.",
+    "Hệ thống bản đồ và điều phối thời gian thực sẽ khả dụng khi có dữ liệu chuyến đi thực tế.",
   integrationPendingTitle: "Phần điều phối trực quan đang chờ tích hợp",
   loadingDescription:
-    "Đang tải dữ liệu vận hành từ Orders API và Vehicles API để dựng bảng điều hành nội bộ.",
+    "Đang tải dữ liệu vận hành...",
   loadingTitle: "Đang tải bảng điều hành",
   metrics: {
     activeOrders: "Đơn hàng đang hoạt động",

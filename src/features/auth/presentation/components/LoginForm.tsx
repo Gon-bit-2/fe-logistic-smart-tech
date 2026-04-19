@@ -17,6 +17,9 @@ type LoginFormProps = {
   mode?: AuthFormMode;
 };
 
+const authInputClass =
+  "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
+
 export default function LoginForm({ mode = "login" }: LoginFormProps) {
   const isRegister = mode === "register";
   const router = useRouter();
@@ -73,9 +76,9 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <header className="space-y-2">
-        <h1 className="text-3xl font-black tracking-tight text-on-surface">
+        <h1 className="text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
           {loginFormCopy.headerTitle}
         </h1>
         <p className="text-sm leading-6 text-on-surface-variant">
@@ -83,10 +86,10 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         </p>
       </header>
 
-      <div className="flex gap-8 border-b border-outline-variant/20">
+      <div className="flex flex-wrap gap-5 border-b border-outline-variant/20 sm:gap-8">
         <Link
           href="/auth/login"
-          className={`pb-4 text-sm font-black tracking-[0.14em] uppercase transition-colors ${
+          className={`pb-4 text-xs font-black tracking-[0.14em] uppercase transition-colors sm:text-sm ${
             isRegister
               ? "text-outline hover:text-primary"
               : "border-b-2 border-primary text-primary"
@@ -96,7 +99,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         </Link>
         <Link
           href="/auth/register"
-          className={`pb-4 text-sm font-black tracking-[0.14em] uppercase transition-colors ${
+          className={`pb-4 text-xs font-black tracking-[0.14em] uppercase transition-colors sm:text-sm ${
             isRegister
               ? "border-b-2 border-primary text-primary"
               : "text-outline hover:text-primary"
@@ -106,7 +109,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         </Link>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
         {isRegister ? (
           <>
             <label className="block space-y-2">
@@ -121,7 +124,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                     fullName: event.target.value,
                   }))
                 }
-                className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+                className={authInputClass}
                 placeholder={loginFormCopy.fullNamePlaceholder}
               />
             </label>
@@ -138,7 +141,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                     organization: event.target.value,
                   }))
                 }
-                className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+                className={authInputClass}
                 placeholder={loginFormCopy.organizationPlaceholder}
               />
             </label>
@@ -152,7 +155,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                 onChange={(event) =>
                   setForm((current) => ({ ...current, phone: event.target.value }))
                 }
-                className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+                className={authInputClass}
                 placeholder={loginFormCopy.phonePlaceholder}
               />
             </label>
@@ -168,14 +171,14 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             onChange={(event) =>
               setForm((current) => ({ ...current, email: event.target.value }))
             }
-            className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+            className={authInputClass}
             placeholder={loginFormCopy.emailPlaceholder}
             type="email"
           />
         </label>
 
         <label className="block space-y-2">
-          <div className="flex items-end justify-between gap-3 px-1">
+          <div className="flex flex-col items-start gap-2 px-1 sm:flex-row sm:items-end sm:justify-between">
             <span className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
               {loginFormCopy.passwordLabel}
             </span>
@@ -190,7 +193,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
             }
-            className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+            className={authInputClass}
             placeholder={loginFormCopy.passwordPlaceholder}
             type="password"
           />
@@ -250,7 +253,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         {loginFormCopy.googleOptions.map((item) => (
           <button
             key={item.label}
@@ -266,7 +269,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                 googleLoginMutation.mutate();
               }
             }}
-            className="rounded-xl border border-outline-variant/12 px-3 py-4 text-center transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-24 rounded-xl border border-outline-variant/12 px-3 py-4 text-center transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="material-symbols-outlined text-on-surface-variant">
               {item.icon}
@@ -285,7 +288,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         <p className="text-center text-[10px] font-medium tracking-[0.14em] text-outline-variant uppercase">
           {loginFormCopy.footerCopyright}
         </p>
-        <div className="flex items-center justify-center gap-6 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
           <Link href="/auth/login">{loginFormCopy.privacyLabel}</Link>
           <Link href="/auth/register">{loginFormCopy.apiDocsLabel}</Link>
           <Link href="/tracking">{loginFormCopy.supportLabel}</Link>

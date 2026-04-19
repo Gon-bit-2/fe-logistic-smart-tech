@@ -29,20 +29,20 @@ export function getOrderStopStatusLabel(value: string) {
 export const serviceTierOptions = [
   {
     accent: "tertiary",
-    description: "Tuyến ưu tiên nhanh nhất với xử lý và điều phối gấp.",
+    description: "Dịch vụ vận chuyển nhanh với mức ưu tiên cao nhất, đảm bảo xử lý và điều phối tức thì.",
     id: "express",
     label: "Giao hàng hoả tốc",
   },
   {
     accent: "primary",
-    description: "Tuyến chia sẻ bền vững, tối ưu để giảm phát thải.",
-    highlight: "CO2 thấp",
+    description: "Giải pháp giao hàng ghép chuyến, tối ưu hóa lộ trình nhằm giảm thiểu khí thải carbon.",
+    highlight: "Ít phát thải CO2",
     id: "eco_green",
     label: "Chuyến ghép xanh",
   },
   {
     accent: "outline",
-    description: "Tốc độ giao cân bằng cho nhu cầu hoàn tất tiêu chuẩn.",
+    description: "Dịch vụ vận chuyển tiêu chuẩn với chi phí hợp lý, đáp ứng nhu cầu giao hàng thông thường.",
     id: "standard",
     label: "Giao hàng tiêu chuẩn",
   },
@@ -64,17 +64,17 @@ export const orderFormCopy = {
   dimensions: "Kích thước (cm)",
   estimatedArrival: "Thời gian dự kiến đến",
   itemDescription: "Mô tả hàng hoá",
-  localMockQuote: "Không dùng báo giá local",
+  localMockQuote: "Chờ lấy báo giá từ hệ thống",
   orderCreated: "Đơn hàng đã được tạo",
   ordersEyebrow: "Đơn hàng",
   pricingSourceDescription:
-    "Báo giá, thuế và mức tiết kiệm xanh hiện lấy trực tiếp từ phản hồi của Orders API.",
+    "Chi phí vận chuyển, các loại thuế phí và mức tiết kiệm carbon được tính toán tự động từ hệ thống.",
   pricingSourceLabel: "Nguồn báo giá",
   receiverName: "Tên người nhận",
   receiverPhone: "Số điện thoại người nhận",
   selectServiceTier: "Chọn gói dịch vụ",
   stepLabels: ["Điểm đi/đến", "Chi tiết", "Dịch vụ"],
-  submitLoading: "Đang gửi...",
+  submitLoading: "Đang xử lý...",
   subtitle: "Thiết lập tuyến đường, hồ sơ kiện hàng và gói dịch vụ.",
   totalQuoted: "tổng báo giá",
   weight: "Khối lượng (kg)",
@@ -82,7 +82,7 @@ export const orderFormCopy = {
 } as const;
 
 export const serviceTierSelectorCopy = {
-  apiQuote: "Báo giá API",
+  apiQuote: "Báo giá tự động",
 } as const;
 
 export const routePreviewCopy = {
@@ -98,7 +98,7 @@ export const routePreviewCopy = {
   pickup: "Điểm lấy",
   pickupMissing: "Chưa thiết lập điểm lấy",
   pricingSourceDescription:
-    "Không còn dùng báo giá local. Phí logistics cuối cùng và các chỉ số xanh phải đến từ phản hồi backend của đơn hàng.",
+    "Hệ thống sẽ cập nhật chi phí vận chuyển chính xác và các chỉ số bảo vệ môi trường sau khi phân tích xong lộ trình.",
   pricingSourceLabel: "Nguồn báo giá",
   routePreview: "Xem trước tuyến đường",
   service: "Dịch vụ",
@@ -122,30 +122,30 @@ export const checkoutCopy = {
   cvcPlaceholder: "123",
   ecoDiscount: "Ưu đãi dịch vụ xanh",
   emptyOrderDescription:
-    "Mở trang thanh toán từ luồng tạo đơn hàng hoặc cung cấp `orderId` hợp lệ trong URL.",
+    "Không tìm thấy đơn hàng cần thanh toán. Vui lòng thử lại từ màn hình quản lý đơn.",
   expiryDate: "Ngày hết hạn",
   expiryPlaceholder: "MM / YY",
   insuranceDescription:
     "Mọi lô hàng đều được bảo hiểm tối đa 500,00 USD cho hư hại hoặc mất mát trong quá trình vận chuyển.",
   insuranceTitle: "Đã bao gồm bảo hiểm",
   loadOrder: "Đang tải đơn hàng để thanh toán...",
-  logisticsFee: "Phí logistics",
+  logisticsFee: "Phí vận chuyển",
   orderSummary: "Tóm tắt đơn hàng",
   payAndConfirmOrder: "Thanh toán và xác nhận đơn",
   paymentDetails: "Chi tiết thanh toán",
-  pendingApiQuote: "Đang chờ báo giá từ API",
+  pendingApiQuote: "Đang chờ báo giá từ hệ thống",
   pricingDescription:
-    "Giá hiện không còn được tạo từ dữ liệu mock local. Backend phải trả về báo giá trước khi đơn hàng có thể hoàn tất thanh toán.",
+    "Hệ thống đang tiến hành lấy báo giá chính thức. Vui lòng chờ trong giây lát.",
   processing: "Đang xử lý...",
-  shippingAndHandling: "Phí vận chuyển và xử lý",
+  shippingAndHandling: "Phí xử lý",
   sustainableChoice: "Lựa chọn bền vững",
   sustainabilityMissing:
-    "Mức tiết kiệm CO2 sẽ hiển thị tại đây khi phản hồi backend của đơn hàng bao gồm các chỉ số bền vững.",
+    "Mức tiết kiệm CO2 cho lô hàng này sẽ được hiển thị sau khi hệ thống xử lý hoàn tất dữ liệu môi trường.",
   sustainabilityValue: (value: number) =>
-    `Lô hàng này ghi nhận tiết kiệm ${value}kg CO2 từ phản hồi backend của đơn hàng.`,
+    `Đơn hàng này giúp giảm thiểu ${value}kg lượng CO2 phát thải vào môi trường.`,
   title: "Thanh toán",
   totalAmount: "Tổng thanh toán",
-  vat: "VAT",
+  vat: "Thuế VAT",
   orderSubtitle: (reference: string) =>
     `Hoàn tất lô hàng ${reference} và xác nhận lịch trình giao nhận của bạn.`,
 } as const;
@@ -198,19 +198,19 @@ export const shipmentsManagementCopy = {
   filterPlaceholder: "Lọc theo mã, xe hoặc tuyến...",
   headings: ["Mã theo dõi", "Tuyến đường", "Mã xe", "Trạng thái", "ETA", ""],
   listEmptyDescription:
-    "Orders API chưa trả về lô hàng nào khớp với bộ lọc hiện tại.",
+    "Không tìm thấy lô hàng nào phù hợp với điều kiện tìm kiếm.",
   listEmptyTitle: "Chưa có lô hàng để hiển thị",
   listErrorDescription:
-    "Không thể tải danh sách lô hàng từ backend. Hãy kiểm tra quyền truy cập hoặc kết nối API.",
+    "Lỗi khi tải danh sách lô hàng. Vui lòng kiểm tra lại kết nối hoặc thử lại sau.",
   listErrorTitle: "Không tải được dữ liệu lô hàng",
   listLoadingDescription:
-    "Đang tải lô hàng từ Orders API để thay thế bảng điều phối hard-code trước đây.",
+    "Đang tải danh sách lô hàng...",
   listLoadingTitle: "Đang tải lô hàng",
   liveMapButton: "Mở bản đồ toàn màn hình",
-  liveMapEyebrow: "Bản đồ mạng lưới trực tiếp",
+  liveMapEyebrow: "Bản đồ mạng lưới trực tuyến",
   mapPendingDescription:
-    "Bản đồ trực tiếp cần dữ liệu trip hoặc route thật từ backend. Khi chưa có contract phù hợp, phần này sẽ không dựng dữ liệu mô phỏng.",
-  mapPendingTitle: "Bản đồ điều phối đang chờ tích hợp",
+    "Bản đồ điều phối theo thời gian thực sẽ hiển thị sau khi hệ thống nhận được dữ liệu lộ trình chính thức.",
+  mapPendingTitle: "Bản đồ điều phối đang chờ kết nối",
   networkEfficiency: "Hiệu suất mạng lưới",
   networkEfficiencyDetail: "Các tuyến tối ưu carbon đang hoạt động",
   summaryLabels: {

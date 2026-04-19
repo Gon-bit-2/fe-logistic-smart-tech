@@ -5,7 +5,7 @@ import { featuresSectionCopy } from "@/i18n/vi";
 
 export default function FeaturesSection() {
   return (
-    <section className="bg-surface px-8 py-32">
+    <section id="features" className="bg-surface px-8 py-32">
       <div className="mx-auto max-w-7xl">
         <div className="mb-20 space-y-4 text-center">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-on-surface">

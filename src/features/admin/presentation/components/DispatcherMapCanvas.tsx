@@ -1,3 +1,5 @@
+"use client";
+
 import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { cn } from "@/lib/utils";

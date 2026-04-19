@@ -6,13 +6,15 @@ export const appMetadata = {
 
 export const navbarCopy = {
   brand: "Emerald Logistics",
-  contactLabel: "Liên hệ",
+  contactLabel: "Hệ thống",
+  loginLabel: "Đăng nhập",
+  registerLabel: "Đăng ký",
   menuLabel: "Menu",
   navItems: [
-    { href: "#", label: "Tính năng" },
-    { href: "#", label: "Giải pháp" },
-    { href: "#", label: "Bền vững" },
-    { href: "#", label: "Giới thiệu" },
+    { href: "#features", label: "Tính năng" },
+    { href: "#solutions", label: "Giải pháp" },
+    { href: "#sustainability", label: "Bền vững" },
+    { href: "#about", label: "Giới thiệu" },
   ],
 } as const;
 
