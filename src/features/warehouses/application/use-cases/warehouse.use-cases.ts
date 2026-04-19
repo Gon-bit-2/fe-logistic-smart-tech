@@ -1,5 +1,5 @@
 import { hasApiBaseUrl } from "@/lib/api/env";
-import { listHubsRequest } from "@/features/fleet/infrastructure/api/hubs.api";
+import { listHubsRequest } from "@/features/warehouses/infrastructure/api/warehouse.api";
 
 export async function listHubsUseCase() {
   if (!hasApiBaseUrl) {

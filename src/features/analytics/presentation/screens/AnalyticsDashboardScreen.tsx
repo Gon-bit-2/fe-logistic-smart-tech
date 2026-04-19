@@ -51,14 +51,7 @@ export default function AnalyticsDashboardScreen(
         }
       />
 
-      {isLoading && (
-        <LoadingState
-          title="Đang tải dữ liệu phân tích"
-          description="Vui lòng chờ trong giây lát..."
-        />
-      )}
-
-      {isError && !isLoading && (
+      {isError && (
         <ErrorState
           title="Lỗi tải dữ liệu"
           description="Không thể kết nối đến máy chủ phân tích."
@@ -118,7 +111,7 @@ export default function AnalyticsDashboardScreen(
                 <table className="w-full text-left text-sm">
                   <thead className="bg-surface-container-low/30 text-on-surface-variant">
                     <tr>
-                      <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Khu vực / Xe</th>
+                      <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Xe</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Số chuyến</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Hiệu suất (%)</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">CO2 (kg)</th>
@@ -128,7 +121,7 @@ export default function AnalyticsDashboardScreen(
                     {fleetQuery.data.map((row) => (
                       <tr key={row.id} className="transition-colors hover:bg-surface-container-low/50">
                         <td className="px-6 py-4 font-bold text-on-surface">
-                          {row.region}
+                          {row.vehicleInfo}
                         </td>
                         <td className="px-6 py-4 text-[0.8rem] text-on-surface-variant">
                           {row.activeOrders}

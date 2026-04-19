@@ -18,7 +18,7 @@ function getStatusFallbackMessage(status: number | null) {
     return "The requested resource was not found.";
   }
 
-  return "Request failed";
+  return "";
 }
 
 function toValidationIssue(value: unknown): ValidationIssue | null {
@@ -89,7 +89,7 @@ function normalizePayloadMessage(payload: unknown): {
   }
 
   if (payload == null) {
-    return { message: "Request failed" };
+    return { message: "" };
   }
 
   return {

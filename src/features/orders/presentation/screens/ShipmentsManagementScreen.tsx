@@ -28,6 +28,8 @@ import {
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/formatters";
 
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+
 export interface ShipmentsManagementScreenProps {
   readonly _unused?: never;
 }

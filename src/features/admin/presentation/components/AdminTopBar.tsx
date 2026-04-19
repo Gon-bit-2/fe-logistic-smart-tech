@@ -64,7 +64,8 @@ export default function AdminTopBar({
             </button>
             <button
               type="button"
-              className="rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
+              disabled
+              className="rounded-full p-2 text-on-surface/30 cursor-not-allowed"
             >
               <Settings2 className="size-[1.125rem]" />
             </button>
@@ -113,19 +114,22 @@ export default function AdminTopBar({
           <div className="flex items-center gap-2 md:gap-3">
             <button
               type="button"
-              className="rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
+              disabled
+              className="rounded-full p-2 text-on-surface/30 cursor-not-allowed"
             >
               <Bell className="size-[1.125rem]" />
             </button>
             <button
               type="button"
-              className="rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
+              disabled
+              className="rounded-full p-2 text-on-surface/30 cursor-not-allowed"
             >
               <Settings2 className="size-[1.125rem]" />
             </button>
             <button
               type="button"
-              className="rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
+              disabled
+              className="rounded-full p-2 text-on-surface/30 cursor-not-allowed"
             >
               <CircleHelp className="size-[1.125rem]" />
             </button>
@@ -162,7 +166,8 @@ export default function AdminTopBar({
         <div className="flex flex-wrap items-center gap-3 md:justify-end">
           <button
             type="button"
-            className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
+            disabled
+            className="relative rounded-full p-2 text-on-surface/30 cursor-not-allowed"
           >
             <Bell className="size-5" />
             <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-surface-container-low" />

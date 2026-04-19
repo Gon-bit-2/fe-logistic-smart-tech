@@ -30,3 +30,8 @@ export const sustainabilityScreenCopy = {
   title: "Tác động bền vững",
   topPercent: "Top 2% nhà cung cấp logistics toàn cầu",
 } as const;
+
+export const co2DashboardCopy = {
+  eyebrow: "Phát thải",
+  title: "Theo dõi lượng CO₂",
+} as const;

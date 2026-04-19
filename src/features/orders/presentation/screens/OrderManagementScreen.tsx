@@ -12,6 +12,8 @@ import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrde
 import { mapOrdersToManagementRows } from "@/features/orders/application/mappers/order-management.mapper";
 import { cn } from "@/lib/utils";
 
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+
 export interface OrderManagementScreenProps {
   readonly _unused?: never;
 }
