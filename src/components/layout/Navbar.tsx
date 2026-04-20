@@ -4,6 +4,7 @@
  */
 import React from "react";
 import Link from "next/link";
+import AppIcon from "@/components/ui/app-icon";
 import { navbarCopy } from "@/i18n/vi";
 
 export default function Navbar() {
@@ -11,7 +12,10 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md">
       <div className="flex justify-between items-center px-8 py-5 max-w-7xl mx-auto">
         <div className="group flex items-center gap-2 text-2xl font-bold tracking-tighter text-white transition-transform duration-300 hover:scale-[1.01]">
-          <span className="material-symbols-outlined text-primary-fixed transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" data-icon="eco">eco</span>
+          <AppIcon
+            name="eco"
+            className="text-primary-fixed transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110"
+          />
           {navbarCopy.brand}
         </div>
         <div className="hidden md:flex items-center gap-8 font-medium text-sm tracking-tight text-white/80">

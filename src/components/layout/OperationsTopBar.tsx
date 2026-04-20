@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AppIcon from "@/components/ui/app-icon";
 import { operationsTopBarCopy } from "@/i18n/vi";
 
 type OperationsTopBarProps = Readonly<{
@@ -40,15 +41,17 @@ export default function OperationsTopBar({
         <div className="flex items-center gap-4">
           <button
             type="button"
+            aria-label="Thông báo"
             className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
           >
-            <span className="material-symbols-outlined">notifications</span>
+            <AppIcon name="notifications" />
           </button>
           <button
             type="button"
+            aria-label="Cài đặt"
             className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
           >
-            <span className="material-symbols-outlined">settings</span>
+            <AppIcon name="settings" />
           </button>
           <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-primary-container bg-emerald-200">
             <img

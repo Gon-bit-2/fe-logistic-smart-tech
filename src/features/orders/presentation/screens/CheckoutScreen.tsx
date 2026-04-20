@@ -5,8 +5,10 @@ import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
+import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
+import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { checkoutCopy } from "@/i18n/vi";
 import { formatCurrency } from "@/utils/formatters";
@@ -87,6 +89,38 @@ export default function CheckoutScreen() {
   const createPaymentIntent = useCreatePaymentIntent();
   const [error, setError] = useState<string | null>(null);
   const clientSecret = createPaymentIntent.data?.clientSecret ?? null;
+  const pricing = order?.pricing;
+  const trackingDestination = order?.trackingCode ?? order?.reference ?? "";
+
+  useEffect(() => {
+    if (
+      paymentMethod === "card" &&
+      orderId &&
+      !clientSecret &&
+      !createPaymentIntent.isPending
+    ) {
+      void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
+        setError(
+          caughtError instanceof Error
+            ? caughtError.message
+            : "Không thể chuẩn bị cổng thanh toán trực tuyến.",
+        );
+      });
+    }
+  }, [clientSecret, createPaymentIntent, orderId, paymentMethod]);
+
+  const stripeOptions = useMemo(
+    () =>
+      clientSecret
+        ? {
+            clientSecret,
+            appearance: {
+              theme: "stripe" as const,
+            },
+          }
+        : null,
+    [clientSecret],
+  );
 
   if (isLoading) {
     return (
@@ -121,39 +155,6 @@ export default function CheckoutScreen() {
       </div>
     );
   }
-
-  const pricing = order.pricing;
-  const trackingDestination = order.trackingCode ?? order.reference;
-
-  useEffect(() => {
-    if (
-      paymentMethod === "card" &&
-      orderId &&
-      !clientSecret &&
-      !createPaymentIntent.isPending
-    ) {
-      void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
-        setError(
-          caughtError instanceof Error
-            ? caughtError.message
-            : "Không thể khởi tạo Stripe payment intent.",
-        );
-      });
-    }
-  }, [clientSecret, createPaymentIntent, orderId, paymentMethod]);
-
-  const stripeOptions = useMemo(
-    () =>
-      clientSecret
-        ? {
-            clientSecret,
-            appearance: {
-              theme: "stripe" as const,
-            },
-          }
-        : null,
-    [clientSecret],
-  );
 
   async function handleCodConfirm() {
     setError(null);
@@ -195,8 +196,8 @@ export default function CheckoutScreen() {
                   ) : (
                     <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
                       {createPaymentIntent.isPending
-                        ? "Đang khởi tạo phiên Stripe..."
-                        : "Thiếu `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` hoặc client secret."}
+                        ? "Đang chuẩn bị cổng thanh toán..."
+                        : "Thanh toán trực tuyến hiện chưa sẵn sàng. Vui lòng thử lại sau hoặc chọn thanh toán khi nhận hàng."}
                     </div>
                   )
                 ) : null}
@@ -272,9 +273,7 @@ export default function CheckoutScreen() {
             </section>
 
             <div className="flex items-center gap-6 rounded-xl bg-surface-container-low p-6">
-              <span className="material-symbols-outlined text-3xl text-tertiary">
-                verified_user
-              </span>
+              <AppIcon name="verified_user" className="text-3xl text-tertiary" />
               <div>
                 <p className="font-bold text-on-surface-variant">
                   {checkoutCopy.insuranceTitle}
@@ -292,9 +291,7 @@ export default function CheckoutScreen() {
                 <h2 className="text-xl font-black tracking-tight text-on-surface">
                   {checkoutCopy.orderSummary}
                 </h2>
-                <span className="material-symbols-outlined text-slate-300">
-                  receipt_long
-                </span>
+                <AppIcon name="receipt_long" className="text-slate-300" />
               </div>
 
               <div className="space-y-4 text-on-surface-variant">
@@ -363,19 +360,14 @@ export default function CheckoutScreen() {
               ) : null}
               {paymentRecord ? (
                 <p className="mt-4 rounded-xl bg-primary/8 px-4 py-3 text-sm text-on-surface">
-                  Trạng thái payment hiện tại: <strong>{paymentRecord.status ?? "PENDING"}</strong>
+                  Trạng thái thanh toán: <strong>{getPaymentStatusLabel(paymentRecord.status)}</strong>
                 </p>
               ) : null}
             </div>
 
             <div className="relative rounded-xl bg-surface-container-high p-6">
               <div className="absolute -right-4 -top-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <span
-                  className="material-symbols-outlined text-primary"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  eco
-                </span>
+                <AppIcon name="eco" className="text-primary" />
               </div>
               <h3 className="mb-2 text-sm font-black text-primary">
                 {checkoutCopy.sustainableChoice}

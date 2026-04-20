@@ -103,7 +103,7 @@ export default function DispatcherFleetStatusPanel({
                     Tải trọng:{" "}
                     {vehicle.capacityWeight
                       ? `${vehicle.capacityWeight}kg`
-                      : "N/A"}
+                      : "Chưa cập nhật"}
                   </p>
                 </div>
                 <div className="text-right flex flex-col items-end">

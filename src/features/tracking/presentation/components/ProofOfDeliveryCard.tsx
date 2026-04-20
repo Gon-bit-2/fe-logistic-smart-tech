@@ -1,3 +1,4 @@
+import AppIcon from "@/components/ui/app-icon";
 import { proofOfDeliveryCopy } from "@/i18n/vi";
 import Image from "next/image";
 
@@ -50,9 +51,10 @@ export default function ProofOfDeliveryCard({
         </div>
         <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-outline-variant bg-surface p-4">
           <div className="text-center">
-            <span className="material-symbols-outlined text-4xl text-outline-variant">
-              {podPackageCondition ? "verified" : "draw"}
-            </span>
+            <AppIcon
+              name={podPackageCondition ? "verified" : "draw"}
+              className="text-4xl text-outline-variant"
+            />
             <p className="mt-2 text-[10px] font-black tracking-[0.14em] text-outline uppercase">
               {podPackageCondition ?? proofOfDeliveryCopy.fallbackCondition}
             </p>

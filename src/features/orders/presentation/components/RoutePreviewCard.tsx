@@ -102,7 +102,7 @@ export default function RoutePreviewCard({ form }: RoutePreviewCardProps) {
               {routePreviewCopy.pricingSourceLabel}
             </span>
             <span className="text-[10px] font-black tracking-[0.14em] text-primary uppercase">
-              Orders API
+              Hệ thống báo giá
             </span>
           </div>
           <p className="mt-2 text-xs leading-5 text-on-surface-variant">

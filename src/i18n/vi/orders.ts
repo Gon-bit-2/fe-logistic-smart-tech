@@ -190,7 +190,7 @@ export const shipmentFilters: ReadonlyArray<ShipmentFilter> = [
 
 export const shipmentsManagementCopy = {
   activeShipmentsSummary: (visibleCount: number, totalCount: number) =>
-    `Hiển thị ${visibleCount} / ${totalCount} lô hàng từ Orders API`,
+    `Hiển thị ${visibleCount} / ${totalCount} lô hàng phù hợp`,
   addShipment: "Thêm lô hàng",
   carbonReport: "Xem báo cáo carbon",
   ecoImpactDescription: "Bạn đã bù đắp 12,4 tấn CO2 trong tuần này.",

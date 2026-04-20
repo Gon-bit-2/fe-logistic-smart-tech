@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
+import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 
 export default function CustomerDashboardPage() {
   const ordersQuery = useOrdersListQuery();
   const latestOrderId = ordersQuery.data?.data[0]?.id ?? null;
   const latestPaymentQuery = usePaymentRecord(latestOrderId);
+  const latestOrderReference = ordersQuery.data?.data[0]?.reference ?? null;
   const summary = useMemo(() => {
     const orders = ordersQuery.data?.data ?? [];
 
@@ -35,7 +37,7 @@ export default function CustomerDashboardPage() {
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="mb-2 text-[20px] font-semibold text-emerald-900">Đơn đã hoàn tất</h2>
           <p className="text-4xl font-bold text-slate-700">{summary.deliveredOrders}</p>
-          <p className="mt-2 text-[12px] font-medium text-slate-500">Theo dữ liệu `/orders`</p>
+          <p className="mt-2 text-[12px] font-medium text-slate-500">Số liệu được cập nhật từ các đơn hàng đã ghi nhận.</p>
         </div>
 
         <div className="relative overflow-hidden rounded-lg border border-emerald-200 bg-white p-6 shadow-sm ring-1 ring-emerald-50">
@@ -47,10 +49,12 @@ export default function CustomerDashboardPage() {
             </div>
           </div>
           <p className="relative z-10 mt-3 text-2xl font-bold text-emerald-500">
-            {latestPaymentQuery.data?.status ?? "Chưa có giao dịch"}
+            {getPaymentStatusLabel(latestPaymentQuery.data?.status)}
           </p>
           <p className="relative z-10 mt-3 text-[14px] leading-relaxed text-slate-600">
-            Đơn gần nhất: {ordersQuery.data?.data[0]?.reference ?? "N/A"}.
+            {latestOrderReference
+              ? `Đơn gần nhất: ${latestOrderReference}.`
+              : "Chưa có đơn hàng gần đây."}
           </p>
         </div>
       </div>
@@ -61,7 +65,7 @@ export default function CustomerDashboardPage() {
           {summary.totalCo2Saved.toFixed(1)} <span className="text-lg font-semibold text-emerald-600">kg</span>
         </p>
         <p className="mt-3 text-[14px] leading-relaxed text-slate-600">
-          Tổng CO₂ tiết kiệm từ các đơn hàng có dữ liệu green-tech đã được backend trả về.
+          Tổng lượng CO₂ ước tính tiết kiệm được từ các đơn hàng đã hoàn thành.
         </p>
         <div className="mt-5 flex gap-3">
           <Link href="/dashboard/customer/orders" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white">

@@ -1,3 +1,4 @@
+import AppIcon from "@/components/ui/app-icon";
 import { authHeroPanelContent } from "@/i18n/vi";
 
 type AuthHeroPanelProps = Readonly<{
@@ -18,7 +19,7 @@ export default function AuthHeroPanel({ variant }: AuthHeroPanelProps) {
 
       <div className="relative z-10 flex items-center gap-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-primary shadow-lg">
-          <span className="material-symbols-outlined">{content.icon}</span>
+          <AppIcon name={content.icon} />
         </div>
         <span className="text-xl font-black tracking-tight text-white">
           {content.brand}
@@ -36,7 +37,7 @@ export default function AuthHeroPanel({ variant }: AuthHeroPanelProps) {
 
       <div className="relative z-10 inline-flex w-fit items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-white backdrop-blur-md">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed/20 text-primary-fixed">
-          <span className="material-symbols-outlined">{content.accentIcon}</span>
+          <AppIcon name={content.accentIcon} />
         </div>
         <div>
           <p className="text-[10px] font-black tracking-[0.18em] uppercase text-white/70">

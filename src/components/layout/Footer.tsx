@@ -3,6 +3,7 @@
  * Website Footer.
  */
 import React from "react";
+import AppIcon from "@/components/ui/app-icon";
 import { footerCopy } from "@/i18n/vi";
 
 export default function Footer() {
@@ -11,7 +12,10 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="group flex items-center gap-2 text-xl font-black text-white uppercase tracking-tighter transition-transform duration-300 hover:scale-[1.01]">
-            <span className="material-symbols-outlined text-primary-fixed transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" data-icon="eco">eco</span>
+            <AppIcon
+              name="eco"
+              className="text-primary-fixed transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110"
+            />
             {footerCopy.brand}
           </div>
           <div className="flex flex-wrap justify-center gap-8 font-medium text-sm uppercase tracking-widest text-white/60">
@@ -32,8 +36,12 @@ export default function Footer() {
             {footerCopy.copyright}
           </div>
           <div className="flex gap-6">
-            <a className="text-white/40 transition-all duration-300 hover:-translate-y-0.5 hover:text-white" href="#"><span className="material-symbols-outlined" data-icon="public">public</span></a>
-            <a className="text-white/40 transition-all duration-300 hover:-translate-y-0.5 hover:text-white" href="#"><span className="material-symbols-outlined" data-icon="share">share</span></a>
+            <a aria-label="Website" className="text-white/40 transition-all duration-300 hover:-translate-y-0.5 hover:text-white" href="#">
+              <AppIcon name="public" />
+            </a>
+            <a aria-label="Chia sẻ" className="text-white/40 transition-all duration-300 hover:-translate-y-0.5 hover:text-white" href="#">
+              <AppIcon name="share" />
+            </a>
           </div>
         </div>
       </div>

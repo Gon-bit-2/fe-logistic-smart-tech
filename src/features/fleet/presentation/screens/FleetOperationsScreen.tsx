@@ -4,7 +4,6 @@ import { Download, Filter, Leaf, Truck, Wrench, Zap } from "lucide-react";
 import {
   EmptyState,
   ErrorState,
-  IntegrationPendingState,
   LoadingState,
 } from "@/components/ui/data-states";
 import {
@@ -16,15 +15,12 @@ import {
 import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
 import { fleetScreenCopy } from "@/i18n/vi";
 import { formatEnumLabel } from "@/utils/formatters";
-
-import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
-
 export interface FleetOperationsScreenProps {
   readonly _unused?: never;
 }
 
 function formatCapacity(weight?: number) {
-  return typeof weight === "number" ? `${weight.toLocaleString("vi-VN")} kg` : "N/A";
+  return typeof weight === "number" ? `${weight.toLocaleString("vi-VN")} kg` : "Chưa cập nhật";
 }
 
 export default function FleetOperationsScreen(
@@ -130,7 +126,7 @@ export default function FleetOperationsScreen(
                 {fleetScreenCopy.vehicleSummaryTitle}
               </h2>
               <p className="mt-2 text-sm text-on-surface/55">
-                Vehicles API hiện là nguồn dữ liệu duy nhất cho màn vận hành đội xe.
+                Dữ liệu đội xe đang được cập nhật trực tiếp từ hệ thống vận hành.
               </p>
             </div>
           </div>
@@ -170,7 +166,7 @@ export default function FleetOperationsScreen(
                       {formatCapacity(vehicle.capacityWeight)}
                     </td>
                     <td className="px-6 py-5 text-sm text-on-surface/65">
-                      {vehicle.hubId ?? "N/A"}
+                      {vehicle.hubId ?? "Chưa phân bổ"}
                     </td>
                     <td className="px-6 py-5">
                       <StatusBadge

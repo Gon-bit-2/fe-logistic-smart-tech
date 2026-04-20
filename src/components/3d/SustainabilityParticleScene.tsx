@@ -61,7 +61,10 @@ function CarbonParticles({
     [],
   );
 
+  const elapsedTimeRef = useRef(0);
+
   useFrame((state, delta) => {
+    elapsedTimeRef.current += delta;
     if (!pointsRef.current) {
       return;
     }
@@ -71,7 +74,7 @@ function CarbonParticles({
       0,
       1,
     );
-    const time = state.clock.elapsedTime;
+    const time = elapsedTimeRef.current;
     const positions = pointsRef.current.geometry.attributes.position
       .array as Float32Array;
     const colors = pointsRef.current.geometry.attributes.color

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { startTransition, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useForgotPasswordMutation } from "@/features/auth/presentation/hooks/useForgotPasswordMutation";
@@ -222,7 +223,7 @@ export default function OtpVerificationForm() {
       ) : null}
 
       <div className="flex items-start gap-4 rounded-xl border border-outline-variant/10 bg-surface-container p-5">
-        <span className="material-symbols-outlined text-secondary">info</span>
+        <AppIcon name="info" className="text-secondary" />
         <div>
           <p className="font-semibold text-on-surface">{otpVerificationCopy.infoTitle}</p>
           <p className="mt-1 text-sm text-on-surface-variant">
@@ -243,7 +244,7 @@ export default function OtpVerificationForm() {
           </Link>
         </div>
         <div className="flex items-center gap-2 text-[10px] font-black tracking-[0.16em] text-on-surface-variant uppercase">
-          <span className="material-symbols-outlined text-sm">lock</span>
+          <AppIcon name="lock" className="text-sm" />
           {otpVerificationCopy.footerSecureSession}
         </div>
       </footer>

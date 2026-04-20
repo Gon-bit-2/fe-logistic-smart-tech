@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import AppIcon from "@/components/ui/app-icon";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
 
 export interface AuthGuardProps {
@@ -23,9 +24,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-on-surface-variant flex items-center gap-3">
-          <span className="material-symbols-outlined animate-spin" data-icon="progress_activity">
-            progress_activity
-          </span>
+          <AppIcon name="progress_activity" className="animate-spin" />
           <span className="text-sm font-medium">Đang xác thực...</span>
         </div>
       </div>

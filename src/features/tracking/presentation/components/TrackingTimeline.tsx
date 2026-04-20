@@ -1,3 +1,4 @@
+import AppIcon from "@/components/ui/app-icon";
 import { getTrackingStepStatusLabel, trackingTimelineCopy } from "@/i18n/vi";
 import { formatDate } from "@/utils/formatters";
 import type { TrackingTimelineItem } from "@/features/tracking/domain/types/tracking.types";
@@ -31,13 +32,16 @@ export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
                     : "bg-surface-container-highest text-outline"
               }`}
             >
-              <span className="material-symbols-outlined text-lg">
-                {stop.status === "completed"
-                  ? "check_circle"
-                  : stop.status === "current"
-                    ? "local_shipping"
-                    : "inventory_2"}
-              </span>
+              <AppIcon
+                name={
+                  stop.status === "completed"
+                    ? "check_circle"
+                    : stop.status === "current"
+                      ? "local_shipping"
+                      : "inventory_2"
+                }
+                className="text-lg"
+              />
             </div>
             <div className={stop.status === "pending" ? "opacity-45" : undefined}>
               <div className="flex items-center gap-3">
@@ -57,9 +61,7 @@ export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
               </p>
               {stop.status === "current" ? (
                 <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2 text-sm text-on-tertiary-container">
-                  <span className="material-symbols-outlined text-base text-tertiary">
-                    info
-                  </span>
+                  <AppIcon name="info" className="text-base text-tertiary" />
                   {trackingTimelineCopy.currentStepHint}
                 </div>
               ) : null}
