@@ -4,6 +4,7 @@ import Link from "next/link";
 import { startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -76,12 +77,12 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         startTransition(() => {
           router.push(getDashboardHrefForRole(extractedUser?.role));
         });
-      } catch (e) {
+      } catch {
         startTransition(() => {
           router.push("/dashboard");
         });
       }
-    } catch (outerError) {
+    } catch {
       // Allow react-query error boundaries to handle this, or let it fail silently as UI handles it
       return;
     }
@@ -189,11 +190,11 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           />
         </label>
 
-        <label className="block space-y-2">
+        <div className="block space-y-2">
           <div className="flex flex-col items-start gap-2 px-1 sm:flex-row sm:items-end sm:justify-between">
-            <span className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+            <label htmlFor="password-input" className="text-[10px] font-black tracking-[0.16em] text-outline uppercase cursor-pointer">
               {loginFormCopy.passwordLabel}
-            </span>
+            </label>
             {!isRegister ? (
               <span className="text-[10px] font-black tracking-[0.16em] text-tertiary uppercase">
                 <Link href="/auth/forgot-password">{loginFormCopy.forgotKeyLabel}</Link>
@@ -201,6 +202,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             ) : null}
           </div>
           <Input
+            id="password-input"
             value={form.password}
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
@@ -209,7 +211,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             placeholder={loginFormCopy.passwordPlaceholder}
             type="password"
           />
-        </label>
+        </div>
 
         <label className="flex items-center gap-3 pt-1">
           <input
@@ -283,9 +285,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             }}
             className="min-h-24 rounded-xl border border-outline-variant/12 px-3 py-4 text-center transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="material-symbols-outlined text-on-surface-variant">
-              {item.icon}
-            </span>
+            <AppIcon name={item.icon} className="text-on-surface-variant" />
             <div className="mt-2 text-[10px] font-black tracking-[0.08em] text-outline uppercase">
               {item.label === loginFormCopy.googleOptions[0].label &&
               googleLoginMutation.isPending

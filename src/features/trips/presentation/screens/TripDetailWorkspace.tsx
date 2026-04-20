@@ -13,6 +13,7 @@ import {
 import { useTripTrackingSocket } from "@/features/tracking/presentation/hooks/useTripTrackingSocket";
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
 import { useTripDetailQuery } from "@/features/trips/presentation/hooks/useTrips";
+import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 
 type TripDetailWorkspaceProps = {
   tripId: string;
@@ -40,10 +41,10 @@ export default function TripDetailWorkspace({
   });
 
   const tracking = trackingQuery.data ?? null;
-  const paymentStatus = paymentQuery.data?.status ?? "N/A";
+  const paymentStatus = getPaymentStatusLabel(paymentQuery.data?.status);
   const latestLocationLabel = useMemo(() => {
     if (!socketState.latestLocation) {
-      return "Chưa có dữ liệu GPS realtime.";
+      return "Chưa có vị trí cập nhật mới.";
     }
 
     return `${socketState.latestLocation.lat.toFixed(5)}, ${socketState.latestLocation.lng.toFixed(5)} • ${new Date(socketState.latestLocation.timestamp).toLocaleString("vi-VN")}`;
@@ -103,7 +104,7 @@ export default function TripDetailWorkspace({
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-primary">
-                Driver Trip
+                Chuyến xe đang xử lý
               </p>
               <h1 className="mt-2 text-4xl font-black tracking-tight text-on-surface">
                 Chuyến #{trip.id} • {trip.vehicleLicensePlate}
@@ -122,7 +123,7 @@ export default function TripDetailWorkspace({
               }}
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white"
             >
-              Push GPS demo
+              Gửi vị trí thử
             </button>
           </div>
 
@@ -152,7 +153,7 @@ export default function TripDetailWorkspace({
               </div>
 
               <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
-                GPS realtime: {latestLocationLabel}
+                Vị trí cập nhật: {latestLocationLabel}
               </div>
 
               {tracking ? (
@@ -169,12 +170,12 @@ export default function TripDetailWorkspace({
                 podImageUrl={tracking?.podImageUrl ?? uploadedImages[0] ?? null}
                 podPackageCondition={tracking?.podPackageCondition ?? packageCondition}
                 recipient={tracking?.recipientName ?? (receiverName || null)}
-                trackingCode={tracking?.trackingCode ?? activeOrder?.trackingCode ?? "N/A"}
+                trackingCode={tracking?.trackingCode ?? activeOrder?.trackingCode ?? "Chưa có mã"}
               />
 
               <section className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6">
                 <h2 className="text-xl font-black tracking-tight text-on-surface">
-                  POD & COD
+                  Biên nhận và thu hộ
                 </h2>
 
                 <label className="space-y-2">
@@ -202,11 +203,11 @@ export default function TripDetailWorkspace({
 
                 <div className="grid gap-3 md:grid-cols-2">
                   <label className="rounded-xl border border-dashed border-outline-variant/25 bg-background px-4 py-4 text-sm font-semibold text-on-surface/70">
-                    Upload 1 ảnh POD
+                    Tải lên 1 ảnh biên nhận
                     <input type="file" accept="image/*" className="mt-3 block" onChange={(event) => void handleSingleUpload(event)} />
                   </label>
                   <label className="rounded-xl border border-dashed border-outline-variant/25 bg-background px-4 py-4 text-sm font-semibold text-on-surface/70">
-                    Upload nhiều ảnh
+                    Tải lên nhiều ảnh
                     <input type="file" accept="image/*" multiple className="mt-3 block" onChange={(event) => void handleMultipleUpload(event)} />
                   </label>
                 </div>
@@ -241,7 +242,7 @@ export default function TripDetailWorkspace({
                       onClick={() => void confirmCodPayment.mutateAsync(orderId)}
                       className="rounded-xl border border-outline-variant/20 px-5 py-3 text-sm font-semibold"
                     >
-                      Confirm COD
+                      Xác nhận thu hộ
                     </button>
                   ) : null}
                 </div>

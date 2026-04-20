@@ -104,7 +104,7 @@ export const otpVerificationCopy = {
   },
   register: {
     description: (destination: string) =>
-      `Chúng tôi đã gửi mã 6 chữ số tới ${destination}. Nhập bên dưới để hoàn tất đăng ký workspace.`,
+      `Chúng tôi đã gửi mã 6 chữ số tới ${destination}. Nhập bên dưới để hoàn tất đăng ký tài khoản.`,
     expiredStatus: "Phiên đăng ký đã hết hạn. Vui lòng yêu cầu OTP mới.",
     help: "Hãy kiểm tra thư rác hoặc xác nhận lại thông tin liên hệ đã dùng khi đăng ký.",
     resendStatus: (email: string) => `Mã mới đã được gửi tới ${email}.`,

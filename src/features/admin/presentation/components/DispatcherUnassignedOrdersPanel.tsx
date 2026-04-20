@@ -45,7 +45,7 @@ export default function DispatcherUnassignedOrdersPanel({
                 </div>
                 <p className="text-sm font-medium text-on-surface truncate">{order.deliveryAddress}</p>
                 <div className="mt-2 text-xs text-on-surface-variant flex items-center justify-between">
-                  <span>Trọng lượng: {order.packageWeightKg ? `${order.packageWeightKg} kg` : "N/A"}</span>
+                  <span>Trọng lượng: {order.packageWeightKg ? `${order.packageWeightKg} kg` : "Chưa cập nhật"}</span>
                 </div>
               </li>
             ))}

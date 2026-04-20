@@ -7,6 +7,7 @@
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -93,9 +94,7 @@ export default function HeroSection() {
             </Link>
           </Button>
           <Button className="hero-anim flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-10 py-7 text-sm font-black tracking-widest text-white uppercase backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
-            <span className="material-symbols-outlined" data-icon="play_circle">
-              play_circle
-            </span>
+            <AppIcon name="play_circle" />
             {heroData.secondaryCta}
           </Button>
         </div>

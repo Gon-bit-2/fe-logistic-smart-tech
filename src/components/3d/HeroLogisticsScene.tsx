@@ -100,8 +100,11 @@ function HeroScene({
     [],
   );
 
+  const elapsedTimeRef = useRef(0);
+
   useFrame((state, delta) => {
-    const time = state.clock.elapsedTime;
+    elapsedTimeRef.current += delta;
+    const time = elapsedTimeRef.current;
     const progress = THREE.MathUtils.clamp(sceneStateRef.current.progress, 0, 1);
 
     if (globeRef.current) {

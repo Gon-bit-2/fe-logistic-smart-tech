@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
+import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackingLookupCopy } from "@/i18n/vi";
@@ -22,9 +23,7 @@ export default function TrackingLookupScreen() {
           <div className="rounded-xl bg-surface-container-lowest p-2 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 items-center gap-3 px-4">
-                <span className="material-symbols-outlined text-outline">
-                  search
-                </span>
+                <AppIcon name="search" className="text-outline" />
                 <Input
                   value={trackingId}
                   onChange={(event) => setTrackingId(event.target.value)}
