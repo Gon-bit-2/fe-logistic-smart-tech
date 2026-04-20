@@ -3,6 +3,7 @@
  * Sticky overlay with blurred backdrop. Contains navigation links and action buttons.
  */
 import React from "react";
+import Link from "next/link";
 import { navbarCopy } from "@/i18n/vi";
 
 export default function Navbar() {
@@ -25,12 +26,12 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-widest text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20">
-            <span className="material-symbols-outlined text-sm transition-transform duration-300 hover:rotate-90" data-icon="menu">menu</span> {navbarCopy.menuLabel}
-          </button>
-          <button className="rounded-lg bg-primary-fixed px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-on-primary-fixed transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95">
-            {navbarCopy.contactLabel}
-          </button>
+          <Link href="/auth/login" className="hidden sm:block text-sm font-bold text-white/80 hover:text-white transition-colors">
+            {navbarCopy.loginLabel}
+          </Link>
+          <Link href="/auth/register" className="rounded-lg bg-primary-fixed px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-on-primary-fixed transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95">
+            {navbarCopy.registerLabel}
+          </Link>
         </div>
       </div>
     </nav>

@@ -5,7 +5,7 @@ import { testimonialSectionCopy } from "@/i18n/vi";
 
 export default function TestimonialSection() {
   return (
-    <section className="px-8 py-32">
+    <section id="about" className="px-8 py-32">
       <div className="mx-auto max-w-4xl">
         <IntegrationPendingState
           title={testimonialSectionCopy.title}

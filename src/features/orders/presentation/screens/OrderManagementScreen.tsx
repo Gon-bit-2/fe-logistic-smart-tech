@@ -1,3 +1,5 @@
+"use client";
+
 import {
   EmptyState,
   ErrorState,
@@ -11,6 +13,8 @@ import { orderManagementCopy, getOrderStatusLabel } from "@/i18n/vi";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { mapOrdersToManagementRows } from "@/features/orders/application/mappers/order-management.mapper";
 import { cn } from "@/lib/utils";
+
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
 
 export interface OrderManagementScreenProps {
   readonly _unused?: never;

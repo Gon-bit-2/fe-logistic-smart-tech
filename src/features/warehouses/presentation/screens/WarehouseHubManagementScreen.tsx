@@ -1,5 +1,16 @@
-import { IntegrationPendingState } from "@/components/ui/data-states";
+"use client";
+
+import { type FormEvent, useState } from "react";
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
+import {
+  useAssignHubStaff,
+  useCreateHub,
+  useDeleteHub,
+  useHubDetailQuery,
+  useHubsQuery,
+  useRemoveHubStaff,
+  useUpdateHub,
+} from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { warehouseHubScreenCopy } from "@/i18n/vi";
 
 export interface WarehouseHubManagementScreenProps {
@@ -10,16 +21,232 @@ export default function WarehouseHubManagementScreen(
   _props: Readonly<WarehouseHubManagementScreenProps>,
 ) {
   void _props;
+  const hubsQuery = useHubsQuery();
+  const [selectedHubId, setSelectedHubId] = useState<string>("");
+  const [staffUserId, setStaffUserId] = useState("");
+  const [form, setForm] = useState({
+    address: "",
+    code: "",
+    latitude: 0,
+    longitude: 0,
+    name: "",
+  });
+  const selectedHubQuery = useHubDetailQuery(selectedHubId, Boolean(selectedHubId));
+  const createHub = useCreateHub();
+  const updateHub = useUpdateHub();
+  const deleteHub = useDeleteHub();
+  const assignHubStaff = useAssignHubStaff();
+  const removeHubStaff = useRemoveHubStaff();
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (selectedHubId) {
+      await updateHub.mutateAsync({
+        hubId: selectedHubId,
+        payload: form,
+      });
+      return;
+    }
+
+    await createHub.mutateAsync(form);
+    setForm({
+      address: "",
+      code: "",
+      latitude: 0,
+      longitude: 0,
+      name: "",
+    });
+  }
+
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow={warehouseHubScreenCopy.readyForInput}
         title={warehouseHubScreenCopy.pageTitle}
       />
-      <IntegrationPendingState
-        title={warehouseHubScreenCopy.pendingTitle}
-        description={warehouseHubScreenCopy.pendingDescription}
-      />
+
+      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <form
+          onSubmit={(event) => void handleSubmit(event)}
+          className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6"
+        >
+          <h2 className="text-xl font-black tracking-tight text-on-surface">
+            {selectedHubId ? "Cập nhật hub" : "Tạo hub mới"}
+          </h2>
+
+          {(["code", "name", "address"] as const).map((key) => (
+            <label key={key} className="space-y-2">
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
+                {key}
+              </span>
+              <input
+                value={String(form[key])}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, [key]: event.target.value }))
+                }
+                className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
+              />
+            </label>
+          ))}
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2">
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
+                Latitude
+              </span>
+              <input
+                type="number"
+                value={form.latitude}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    latitude: Number(event.target.value || 0),
+                  }))
+                }
+                className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
+                Longitude
+              </span>
+              <input
+                type="number"
+                value={form.longitude}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    longitude: Number(event.target.value || 0),
+                  }))
+                }
+                className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
+              />
+            </label>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="submit"
+              className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white"
+            >
+              {selectedHubId ? "Lưu thay đổi" : "Tạo hub"}
+            </button>
+            {selectedHubId ? (
+              <button
+                type="button"
+                onClick={() => void deleteHub.mutateAsync(selectedHubId)}
+                className="rounded-xl bg-destructive/10 px-5 py-3 text-sm font-bold text-destructive"
+              >
+                Xóa hub
+              </button>
+            ) : null}
+          </div>
+        </form>
+
+        <section className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-black tracking-tight text-on-surface">
+              Hub đang hoạt động
+            </h2>
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">
+              {hubsQuery.data?.totalItems ?? 0}
+            </span>
+          </div>
+
+          {hubsQuery.data?.data.map((hub) => (
+            <button
+              key={String(hub.id)}
+              type="button"
+              onClick={() => {
+                setSelectedHubId(String(hub.id));
+                setForm({
+                  address: hub.address,
+                  code: hub.code,
+                  latitude: hub.latitude ?? 0,
+                  longitude: hub.longitude ?? 0,
+                  name: hub.name,
+                });
+              }}
+              className="flex w-full items-center justify-between rounded-xl border border-outline-variant/10 bg-background px-4 py-4 text-left"
+            >
+              <div>
+                <p className="font-bold text-on-surface">{hub.name}</p>
+                <p className="text-xs text-on-surface/55">
+                  {hub.code} • {hub.address}
+                </p>
+              </div>
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-primary">
+                {hub.isActive === false ? "inactive" : "active"}
+              </span>
+            </button>
+          ))}
+
+          {selectedHubQuery.data ? (
+            <div className="rounded-xl border border-outline-variant/10 bg-background p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-black text-on-surface">
+                    Staff của hub
+                  </p>
+                  <p className="text-xs text-on-surface/55">
+                    {selectedHubQuery.data.vehicleCount} phương tiện
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                {selectedHubQuery.data.staff.map((staff) => (
+                  <div
+                    key={staff.id}
+                    className="flex items-center justify-between rounded-lg bg-surface-container-low px-3 py-2"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-on-surface">
+                        {staff.fullName ?? staff.email}
+                      </p>
+                      <p className="text-xs text-on-surface/55">{staff.email}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        void removeHubStaff.mutateAsync({
+                          hubId: selectedHubId,
+                          userId: staff.id,
+                        })
+                      }
+                      className="rounded-lg bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive"
+                    >
+                      Gỡ
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 flex gap-3">
+                <input
+                  value={staffUserId}
+                  onChange={(event) => setStaffUserId(event.target.value)}
+                  className="h-11 flex-1 rounded-xl border border-outline-variant/20 bg-background px-4"
+                  placeholder="Nhập userId để gán staff"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    void assignHubStaff.mutateAsync({
+                      hubId: selectedHubId,
+                      payload: { userId: Number(staffUserId) },
+                    })
+                  }
+                  className="rounded-xl bg-tertiary px-4 py-3 text-sm font-bold text-white"
+                >
+                  Gán staff
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </section>
+      </div>
     </div>
   );
 }

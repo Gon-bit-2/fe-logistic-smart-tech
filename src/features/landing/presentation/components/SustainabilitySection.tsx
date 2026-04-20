@@ -5,7 +5,7 @@ import { sustainabilitySectionCopy } from "@/i18n/vi";
 
 export default function SustainabilitySection() {
   return (
-    <section className="relative overflow-hidden bg-surface-container-low px-8 py-32">
+    <section id="sustainability" className="relative overflow-hidden bg-surface-container-low px-8 py-32">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-20 lg:grid-cols-2">
         <div className="order-2 space-y-10 lg:order-1">
           <h2 className="text-4xl md:text-6xl font-black text-on-surface leading-tight tracking-tighter">

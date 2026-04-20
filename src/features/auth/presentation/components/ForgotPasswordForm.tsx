@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
 import { forgotPasswordCopy } from "@/i18n/vi";
 
+const authInputClass =
+  "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
+
 export default function ForgotPasswordForm() {
   const router = useRouter();
   const requestOtpMutation = useRequestForgotPasswordOtpMutation();
@@ -34,9 +37,9 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <header className="space-y-2">
-          <h1 className="text-3xl font-black tracking-tight text-on-surface">
+        <h1 className="text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
           {forgotPasswordCopy.headerTitle}
         </h1>
         <p className="text-sm leading-6 text-on-surface-variant">
@@ -44,7 +47,7 @@ export default function ForgotPasswordForm() {
         </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
         <label className="block space-y-2">
           <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
             {forgotPasswordCopy.emailLabel}
@@ -54,7 +57,7 @@ export default function ForgotPasswordForm() {
             onChange={(event) =>
               setForm((current) => ({ ...current, email: event.target.value }))
             }
-            className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+            className={authInputClass}
             placeholder={forgotPasswordCopy.emailPlaceholder}
             type="email"
           />
@@ -69,7 +72,7 @@ export default function ForgotPasswordForm() {
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
             }
-            className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+            className={authInputClass}
             placeholder={forgotPasswordCopy.passwordPlaceholder}
             type="password"
           />
@@ -87,7 +90,7 @@ export default function ForgotPasswordForm() {
                 confirmPassword: event.target.value,
               }))
             }
-            className="border-b border-outline-variant/30 pb-3 focus:rounded-lg"
+            className={authInputClass}
             placeholder={forgotPasswordCopy.passwordPlaceholder}
             type="password"
           />
@@ -116,7 +119,7 @@ export default function ForgotPasswordForm() {
         </div>
       ) : null}
 
-      <footer className="flex items-center justify-between border-t border-outline-variant/10 pt-6 text-sm text-on-surface-variant">
+      <footer className="flex flex-col gap-3 border-t border-outline-variant/10 pt-6 text-center text-sm text-on-surface-variant sm:flex-row sm:items-center sm:justify-between sm:text-left">
         <Link href="/auth/login" className="font-semibold text-primary">
           {forgotPasswordCopy.backToLoginLabel}
         </Link>

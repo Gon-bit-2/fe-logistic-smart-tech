@@ -1,3 +1,5 @@
+"use client";
+
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/data-states";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { cn } from "@/lib/utils";

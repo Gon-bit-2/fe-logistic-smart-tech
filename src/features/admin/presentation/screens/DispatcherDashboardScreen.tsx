@@ -14,10 +14,11 @@ import {
   SectionCard,
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
-import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
-import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
+import { useDispatcherMetrics } from "@/features/admin/presentation/hooks/useDispatcherMetrics";
 import { adminScreenCopy, getOrderStatusLabel } from "@/i18n/vi";
 import { formatDate } from "@/utils/formatters";
+
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
 
 export interface DispatcherDashboardScreenProps {
   readonly _unused?: never;
@@ -27,19 +28,7 @@ export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,
 ) {
   void _props;
-  const ordersQuery = useOrdersListQuery();
-  const vehiclesQuery = useFleetVehiclesQuery();
-  const orders = ordersQuery.data?.items ?? [];
-  const vehicles = vehiclesQuery.data?.items ?? [];
-  const metrics = {
-    activeOrders: orders.filter(
-      (order) => order.status !== "DELIVERED" && order.status !== "CANCELLED",
-    ).length,
-    availableVehicles: vehicles.filter((vehicle) => vehicle.isActive !== false).length,
-    electricVehicles: vehicles.filter(
-      (vehicle) => vehicle.fuelType === "ELECTRIC" || vehicle.type === "ELECTRIC_VAN",
-    ).length,
-  };
+  const { metrics, ordersQuery, vehiclesQuery, orders } = useDispatcherMetrics();
 
   if (ordersQuery.isPending && vehiclesQuery.isPending) {
     return (
@@ -132,7 +121,7 @@ export default function DispatcherDashboardScreen(
               </tr>
             </thead>
             <tbody>
-              {orders.slice(0, 5).map((order, index) => (
+              {orders.slice(0, 5).map((order: any, index: number) => (
                 <tr
                   key={order.id}
                   className={index === Math.min(orders.length, 5) - 1 ? "" : "border-b border-outline-variant/10"}

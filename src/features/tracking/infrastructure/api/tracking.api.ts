@@ -1,5 +1,9 @@
 import { httpClient } from "@/lib/api/http-client";
-import type { TrackingTimelineResponse } from "@/features/tracking/domain/types/tracking.types";
+import type {
+  TrackingEventApi,
+  TrackingEventCreateInput,
+  TrackingTimelineResponse,
+} from "@/features/tracking/domain/types/tracking.types";
 import { API_TRACKING_PUBLIC, API_TRACKING_INTERNAL } from "@/utils/apiUrl";
 
 export async function getPublicTracking(trackingCode: string) {
@@ -17,6 +21,11 @@ export async function getInternalTracking(orderId: string) {
     },
   });
 
+  return response.data;
+}
+
+export async function createTrackingEventRequest(payload: TrackingEventCreateInput) {
+  const response = await httpClient.post<TrackingEventApi>(API_TRACKING_INTERNAL, payload);
   return response.data;
 }
 

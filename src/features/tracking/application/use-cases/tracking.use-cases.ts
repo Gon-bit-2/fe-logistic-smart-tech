@@ -1,10 +1,17 @@
 import { hasApiBaseUrl } from "@/lib/api/env";
 import {
+  createTrackingEventRequest,
   getPublicTracking,
   getInternalTracking,
 } from "../../infrastructure/api/tracking.api";
 import { mapTrackingResponseToViewModel } from "../mappers/tracking-view-model.mapper";
 import { ApiError } from "@/lib/api/errors";
+import type { TrackingEventCreateInput } from "@/features/tracking/domain/types/tracking.types";
+import { validateTrackingEventInput } from "@/features/tracking/application/services/tracking-event-validator";
+import {
+  uploadMultiplePodImagesRequest,
+  uploadPodImageRequest,
+} from "@/features/tracking/infrastructure/api/upload.api";
 
 function assertApiConfigured() {
   if (!hasApiBaseUrl) {
@@ -26,4 +33,20 @@ export async function getInternalTrackingUseCase(orderId: string) {
   assertApiConfigured();
   const response = await getInternalTracking(orderId);
   return mapTrackingResponseToViewModel(response);
+}
+
+export async function createTrackingEventUseCase(input: TrackingEventCreateInput) {
+  assertApiConfigured();
+  validateTrackingEventInput(input);
+  return createTrackingEventRequest(input);
+}
+
+export async function uploadPodImageUseCase(file: File) {
+  assertApiConfigured();
+  return uploadPodImageRequest(file);
+}
+
+export async function uploadMultiplePodImagesUseCase(files: ReadonlyArray<File>) {
+  assertApiConfigured();
+  return uploadMultiplePodImagesRequest(files);
 }

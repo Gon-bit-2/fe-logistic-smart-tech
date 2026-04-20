@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import {
@@ -9,6 +10,11 @@ import {
   SustainabilitySection,
   TestimonialSection,
 } from "@/features/landing";
+
+export const metadata: Metadata = {
+  title: "Emerald Logistics | Giao Nhận Bền Vững",
+  description: "Giải pháp logistics xanh và hiệu quả cho doanh nghiệp của bạn.",
+};
 
 export default function Home() {
   return (

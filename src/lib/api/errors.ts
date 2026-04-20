@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ValidationIssue } from "@/types/common.type";
+import type { ApiErrorStatus, ValidationIssue } from "@/types/common.type";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -18,7 +18,7 @@ function getStatusFallbackMessage(status: number | null) {
     return "The requested resource was not found.";
   }
 
-  return "Request failed";
+  return "";
 }
 
 function toValidationIssue(value: unknown): ValidationIssue | null {
@@ -89,7 +89,7 @@ function normalizePayloadMessage(payload: unknown): {
   }
 
   if (payload == null) {
-    return { message: "Request failed" };
+    return { message: "" };
   }
 
   return {
@@ -102,14 +102,14 @@ export class ApiError extends Error {
   code: string | null;
   details?: unknown;
   issues?: ValidationIssue[];
-  status: number | null;
+  status: ApiErrorStatus | null;
 
   constructor(params: {
     code?: string | null;
     details?: unknown;
     issues?: ValidationIssue[];
     message: string;
-    status?: number | null;
+    status?: ApiErrorStatus | null;
   }) {
     super(params.message);
     this.name = "ApiError";
@@ -122,6 +122,36 @@ export class ApiError extends Error {
 
 export function isApiError(error: unknown): error is ApiError {
   return error instanceof ApiError;
+}
+
+export type PermissionAwareApiError = ApiError & {
+  readonly status: 401 | 403;
+};
+
+export function isPermissionAwareApiError(
+  error: unknown,
+): error is PermissionAwareApiError {
+  return isApiError(error) && (error.status === 401 || error.status === 403);
+}
+
+export function isUnauthorizedError(error: unknown): error is ApiError {
+  return isApiError(error) && error.status === 401;
+}
+
+export function isForbiddenError(error: unknown): error is ApiError {
+  return isApiError(error) && error.status === 403;
+}
+
+export function isNotFoundError(error: unknown): error is ApiError {
+  return isApiError(error) && error.status === 404;
+}
+
+export function isConflictError(error: unknown): error is ApiError {
+  return isApiError(error) && error.status === 409;
+}
+
+export function isValidationError(error: unknown): error is ApiError {
+  return isApiError(error) && error.status === 422;
 }
 
 export function normalizeApiError(error: unknown): ApiError {

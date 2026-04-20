@@ -1,0 +1,77 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo } from "react";
+import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
+import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
+
+export default function CustomerDashboardPage() {
+  const ordersQuery = useOrdersListQuery();
+  const latestOrderId = ordersQuery.data?.data[0]?.id ?? null;
+  const latestPaymentQuery = usePaymentRecord(latestOrderId);
+  const summary = useMemo(() => {
+    const orders = ordersQuery.data?.data ?? [];
+
+    return {
+      activeOrders: orders.filter((order) => !["DELIVERED", "CANCELLED"].includes(order.status)).length,
+      deliveredOrders: orders.filter((order) => order.status === "DELIVERED").length,
+      totalCo2Saved: orders.reduce((sum, order) => sum + Number(order.co2SavedKg ?? 0), 0),
+    };
+  }, [ordersQuery.data?.data]);
+
+  return (
+    <div className="mx-auto min-h-[calc(100vh-4rem)] max-w-[1440px] bg-[#F0FDF4] p-6 md:p-8">
+      <h1 className="mb-8 text-[28px] font-bold text-emerald-900">Tổng quan Khách hàng</h1>
+
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-2 text-[20px] font-semibold text-emerald-900">Đơn hàng đang hoạt động</h2>
+          <p className="text-4xl font-bold text-slate-700">{summary.activeOrders}</p>
+          <p className="mt-2 text-[12px] font-medium text-slate-500">
+            Cập nhật lúc: {new Date().toLocaleDateString("vi-VN")}
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-2 text-[20px] font-semibold text-emerald-900">Đơn đã hoàn tất</h2>
+          <p className="text-4xl font-bold text-slate-700">{summary.deliveredOrders}</p>
+          <p className="mt-2 text-[12px] font-medium text-slate-500">Theo dữ liệu `/orders`</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-lg border border-emerald-200 bg-white p-6 shadow-sm ring-1 ring-emerald-50">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-emerald-100 opacity-50 blur-2xl" />
+          <div className="relative z-10 flex items-center justify-between">
+            <h2 className="text-[20px] font-semibold text-emerald-900">Tóm tắt thanh toán</h2>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+              <span className="text-xl" aria-hidden="true">$</span>
+            </div>
+          </div>
+          <p className="relative z-10 mt-3 text-2xl font-bold text-emerald-500">
+            {latestPaymentQuery.data?.status ?? "Chưa có giao dịch"}
+          </p>
+          <p className="relative z-10 mt-3 text-[14px] leading-relaxed text-slate-600">
+            Đơn gần nhất: {ordersQuery.data?.data[0]?.reference ?? "N/A"}.
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-[20px] font-semibold text-emerald-900">Tác động môi trường</h2>
+        <p className="mt-3 text-4xl font-bold text-emerald-500">
+          {summary.totalCo2Saved.toFixed(1)} <span className="text-lg font-semibold text-emerald-600">kg</span>
+        </p>
+        <p className="mt-3 text-[14px] leading-relaxed text-slate-600">
+          Tổng CO₂ tiết kiệm từ các đơn hàng có dữ liệu green-tech đã được backend trả về.
+        </p>
+        <div className="mt-5 flex gap-3">
+          <Link href="/dashboard/customer/orders" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white">
+            Mở lịch sử đơn hàng
+          </Link>
+          <Link href="/orders/create" className="rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700">
+            Tạo đơn mới
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

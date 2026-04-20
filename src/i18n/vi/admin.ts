@@ -1,8 +1,10 @@
 import {
   BarChart3,
   LayoutDashboard,
+  Languages,
   Leaf,
   PackageSearch,
+  Route,
   Truck,
   Warehouse,
 } from "lucide-react";
@@ -18,9 +20,11 @@ export const adminNavItems: ReadonlyArray<AdminNavItem> = [
   { href: "/dashboard/admin", icon: LayoutDashboard, label: "Tổng quan" },
   { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Phân tích" },
   { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Lô hàng" },
+  { href: "/dashboard/admin/trips", icon: Route, label: "Chuyến đi" },
   { href: "/dashboard/admin/fleet", icon: Truck, label: "Đội xe" },
   { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Bền vững" },
   { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Tồn kho" },
+  { href: "/dashboard/admin/language", icon: Languages, label: "Ngôn ngữ" },
 ];
 
 export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
@@ -54,6 +58,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
+  "/dashboard/admin/trips": {
+    initials: "TR",
+    searchPlaceholder: "Tìm chuyến hoặc biển số...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
   "/dashboard/admin/sustainability": {
     initials: "SI",
     searchPlaceholder: "Tìm kiếm theo dõi toàn cục...",
@@ -68,6 +80,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
+  "/dashboard/admin/language": {
+    initials: "LG",
+    searchPlaceholder: "Tìm ngôn ngữ...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
 };
 
 export const adminScreenCopy = {
@@ -75,15 +95,15 @@ export const adminScreenCopy = {
   currentEta: "ETA dự kiến",
   customer: "Khách hàng",
   description:
-    "Hiển thị xuyên suốt các lô hàng, doanh thu và hiệu suất carbon trong cùng một ngôn ngữ vận hành gọn nhẹ.",
+    "Quản lý toàn diện các lô hàng, hiệu suất kinh doanh và các chỉ số bảo vệ môi trường trên một giao diện đồng nhất.",
   emptyDescription:
-    "Orders API chưa trả về lô hàng nào để hiển thị trên bảng điều hành nội bộ.",
+    "Hiện chưa có dữ liệu lô hàng nào trong hệ thống.",
   emptyTitle: "Chưa có dữ liệu vận hành",
   integrationPendingDescription:
-    "Bản đồ tuyến, mức tải xe và điều phối kéo-thả chỉ được bật khi backend cung cấp thêm dữ liệu trip và phân công theo thời gian thực.",
+    "Hệ thống bản đồ và điều phối thời gian thực sẽ khả dụng khi có dữ liệu chuyến đi thực tế.",
   integrationPendingTitle: "Phần điều phối trực quan đang chờ tích hợp",
   loadingDescription:
-    "Đang tải dữ liệu vận hành từ Orders API và Vehicles API để dựng bảng điều hành nội bộ.",
+    "Đang tải dữ liệu vận hành...",
   loadingTitle: "Đang tải bảng điều hành",
   metrics: {
     activeOrders: "Đơn hàng đang hoạt động",

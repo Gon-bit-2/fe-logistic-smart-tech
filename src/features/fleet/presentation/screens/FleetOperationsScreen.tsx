@@ -17,6 +17,8 @@ import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFl
 import { fleetScreenCopy } from "@/i18n/vi";
 import { formatEnumLabel } from "@/utils/formatters";
 
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+
 export interface FleetOperationsScreenProps {
   readonly _unused?: never;
 }

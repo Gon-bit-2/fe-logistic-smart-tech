@@ -18,6 +18,8 @@ import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQu
 import { inventoryScreenCopy } from "@/i18n/vi";
 import { cn } from "@/lib/utils";
 
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+
 export interface InventoryManagementScreenProps {
   readonly _unused?: never;
 }
@@ -29,7 +31,7 @@ export default function InventoryManagementScreen(
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const hubsQuery = useHubsQuery();
-  const hubs = hubsQuery.data?.items ?? [];
+  const hubs = hubsQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
   const filteredHubs = hubs.filter((hub) =>
     [hub.code, hub.name, hub.address].join(" ").toLowerCase().includes(normalizedSearchTerm),

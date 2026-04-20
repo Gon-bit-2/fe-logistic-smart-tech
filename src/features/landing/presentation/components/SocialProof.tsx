@@ -7,7 +7,7 @@ import { socialProofCopy } from "@/i18n/vi";
 
 export default function SocialProof() {
   return (
-    <section className="bg-surface-container-low px-8 py-12">
+    <section id="solutions" className="bg-surface-container-low px-8 py-12">
       <div className="mx-auto max-w-7xl">
         <IntegrationPendingState
           title={socialProofCopy.title}

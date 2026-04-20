@@ -7,7 +7,9 @@ import type {
   OtpChallengeMeta,
   RegisterDraft,
 } from "@/features/auth/domain/types/auth.types";
+import type { AuthUser } from "@/features/auth/domain/types/auth.types";
 import { tokenStorage } from "@/lib/api/token-storage";
+import { extractAuthUserFromToken } from "@/features/auth/application/services/auth-session";
 import type { SessionTokens } from "@/types/common.type";
 
 type AuthState = {
@@ -18,6 +20,7 @@ type AuthState = {
   pendingRegistration: RegisterDraft | null;
   refreshToken: string | null;
   status: AuthStatus;
+  user: AuthUser | null;
 };
 
 type AuthSnapshot = AuthState & {
@@ -40,6 +43,7 @@ const initialState: AuthState = {
   pendingRegistration: null,
   refreshToken: null,
   status: "anonymous",
+  user: null,
 };
 
 let state = initialState;
@@ -78,6 +82,7 @@ const actions = {
       status: computeStatus({
         accessToken: tokens?.accessToken ?? null,
       }),
+      user: tokens?.accessToken ? extractAuthUserFromToken(tokens.accessToken) : null,
     });
   },
 
@@ -87,6 +92,7 @@ const actions = {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       status: "authenticated",
+      user: extractAuthUserFromToken(tokens.accessToken),
     });
   },
 
@@ -125,6 +131,7 @@ const actions = {
       pendingRegistration: null,
       refreshToken: null,
       status: "anonymous",
+      user: null,
     });
   },
 };

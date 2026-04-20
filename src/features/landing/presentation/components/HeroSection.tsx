@@ -6,6 +6,7 @@
  */
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -86,8 +87,10 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
-          <Button className="hero-anim w-full rounded-lg bg-primary-fixed px-10 py-7 text-sm font-black tracking-widest text-on-primary-fixed uppercase shadow-xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95 sm:w-auto">
-            {heroData.primaryCta}
+          <Button asChild className="hero-anim w-full rounded-lg bg-primary-fixed px-10 py-7 text-sm font-black tracking-widest text-on-primary-fixed uppercase shadow-xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95 sm:w-auto">
+            <Link href="/dashboard">
+              {heroData.primaryCta}
+            </Link>
           </Button>
           <Button className="hero-anim flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-10 py-7 text-sm font-black tracking-widest text-white uppercase backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
             <span className="material-symbols-outlined" data-icon="play_circle">

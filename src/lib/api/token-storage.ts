@@ -7,6 +7,16 @@ function isBrowser() {
   return typeof window !== "undefined";
 }
 
+function setCookie(name: string, value: string, maxAgeSeconds = 7 * 24 * 60 * 60) {
+  if (!isBrowser()) return;
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax`;
+}
+
+function removeCookie(name: string) {
+  if (!isBrowser()) return;
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+}
+
 export const tokenStorage = {
   getAccessToken() {
     if (!isBrowser()) {
@@ -45,6 +55,10 @@ export const tokenStorage = {
 
     window.localStorage.setItem(ACCESS_TOKEN_KEY, tokens.accessToken);
     window.localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+    
+    // Set cookies for server-side proxy to read
+    setCookie(ACCESS_TOKEN_KEY, tokens.accessToken);
+    setCookie(REFRESH_TOKEN_KEY, tokens.refreshToken);
   },
 
   clear() {
@@ -54,5 +68,9 @@ export const tokenStorage = {
 
     window.localStorage.removeItem(ACCESS_TOKEN_KEY);
     window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+    
+    // Clear cookies
+    removeCookie(ACCESS_TOKEN_KEY);
+    removeCookie(REFRESH_TOKEN_KEY);
   },
 };

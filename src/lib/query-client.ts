@@ -6,7 +6,7 @@ export const queryClientConfig = {
   staleTime: 60_000,
 } as const;
 
-function shouldRetryQuery(failureCount: number, error: unknown) {
+export function shouldRetryQuery(failureCount: number, error: unknown) {
   if (failureCount >= 1) {
     return false;
   }

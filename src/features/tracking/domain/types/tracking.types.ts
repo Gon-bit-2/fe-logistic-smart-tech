@@ -19,6 +19,27 @@ export type TrackingPod = {
   receiverName?: string;
 };
 
+export type TrackingEventCreateInput = {
+  description?: string;
+  eventType: TrackingEventType;
+  failureReasonCode?: string;
+  latitude?: number;
+  location?: string;
+  longitude?: number;
+  orderId: number;
+  pod?: TrackingPod;
+  source?: string;
+  status?: OrderStatus;
+};
+
+export type TrackingLocationEvent = {
+  driverId: number | string;
+  lat: number;
+  lng: number;
+  timestamp: string;
+  tripId: number;
+};
+
 export type TrackingEventApi = {
   createdAt?: string;
   description?: string;

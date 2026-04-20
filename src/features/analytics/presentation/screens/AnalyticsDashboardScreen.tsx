@@ -1,9 +1,26 @@
-import { Filter } from "lucide-react";
-import { ErrorState, LoadingState } from "@/components/ui/data-states";
+"use client";
+
+import { useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { ErrorState } from "@/components/ui/data-states";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
-import { analyticsFilters, analyticsScreenCopy } from "@/i18n/vi";
+import { analyticsScreenCopy } from "@/i18n/vi";
+import type { AnalyticsDateRange } from "@/features/analytics/domain/types/analytics.types";
 import { useDashboardAnalytics } from "@/features/analytics/presentation/hooks/useDashboardAnalytics";
+import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
 import { useFleetPerformance } from "@/features/analytics/presentation/hooks/useFleetPerformance";
+import { useOrderAnalytics } from "@/features/analytics/presentation/hooks/useOrderAnalytics";
 import { cn } from "@/lib/utils";
 
 export interface AnalyticsDashboardScreenProps {
@@ -14,12 +31,24 @@ export default function AnalyticsDashboardScreen(
   _props: Readonly<AnalyticsDashboardScreenProps>,
 ) {
   void _props;
-  
-  const dashboardQuery = useDashboardAnalytics();
-  const fleetQuery = useFleetPerformance();
+  const [dateRange, setDateRange] = useState<AnalyticsDateRange>("30d");
+  const filterOptions: ReadonlyArray<{ label: string; value: AnalyticsDateRange }> = [
+    { label: "7 ngày", value: "7d" },
+    { label: "30 ngày", value: "30d" },
+    { label: "90 ngày", value: "90d" },
+    { label: "1 năm", value: "1y" },
+  ];
+  const params = { dateRange };
+  const dashboardQuery = useDashboardAnalytics(params);
+  const orderAnalyticsQuery = useOrderAnalytics(params);
+  const emissionQuery = useEmissionAnalytics(params);
+  const fleetQuery = useFleetPerformance(params);
 
-  const isLoading = dashboardQuery.isLoading || fleetQuery.isLoading;
-  const isError = dashboardQuery.isError || fleetQuery.isError;
+  const isError =
+    dashboardQuery.isError ||
+    fleetQuery.isError ||
+    orderAnalyticsQuery.isError ||
+    emissionQuery.isError;
 
   return (
     <div className="space-y-8">
@@ -28,46 +57,33 @@ export default function AnalyticsDashboardScreen(
         description={analyticsScreenCopy.subtitle}
         actions={
           <div className="flex flex-wrap items-center gap-3 rounded-[1.6rem] bg-surface-container-low p-2">
-            {analyticsFilters.map((filter, index) => (
+            {filterOptions.map((filter) => (
               <button
-                key={filter}
+                key={filter.value}
                 type="button"
+                onClick={() => setDateRange(filter.value)}
                 className={
-                  index === 0
+                  dateRange === filter.value
                     ? "rounded-[1.2rem] bg-surface-container-lowest px-5 py-3 text-lg font-black text-primary shadow-[0_16px_32px_-26px_rgba(6,78,59,0.35)]"
                     : "rounded-[1.2rem] px-5 py-3 text-lg font-medium text-on-surface/50 transition-colors hover:text-primary"
                 }
               >
-                {filter}
+                {filter.label}
               </button>
             ))}
-            <button
-              type="button"
-              className="rounded-[1.2rem] p-3 text-on-surface/45 transition-colors hover:bg-surface-container-lowest hover:text-primary"
-            >
-              <Filter className="size-6" />
-            </button>
           </div>
         }
       />
 
-      {isLoading && (
-        <LoadingState
-          title="Đang tải dữ liệu phân tích"
-          description="Vui lòng chờ trong giây lát..."
-        />
-      )}
-
-      {isError && !isLoading && (
+      {isError && (
         <ErrorState
           title="Lỗi tải dữ liệu"
           description="Không thể kết nối đến máy chủ phân tích."
         />
       )}
 
-      {!isLoading && !isError && dashboardQuery.data && fleetQuery.data && (
+      {!isError && dashboardQuery.data && fleetQuery.data ? (
         <div className="space-y-6">
-          {/* KPI Cards */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
             {dashboardQuery.data.map((metric) => (
               <SectionCard key={metric.id} className="p-5">
@@ -95,19 +111,26 @@ export default function AnalyticsDashboardScreen(
             ))}
           </div>
 
-          {/* Charts Placeholder & Fleet Table */}
           <div className="grid gap-5 xl:grid-cols-[1fr_2fr]">
-            <SectionCard className="p-5 flex flex-col justify-center items-center bg-surface-container-low min-h-[300px]">
-              <div className="w-full h-full flex flex-col items-center justify-center opacity-60">
-                <div className="flex items-end gap-2 h-32 mb-4">
-                  <div className="w-8 bg-primary/40 rounded-t-md h-[40%]"></div>
-                  <div className="w-8 bg-primary/60 rounded-t-md h-[70%]"></div>
-                  <div className="w-8 bg-primary/80 rounded-t-md h-[60%]"></div>
-                  <div className="w-8 bg-primary rounded-t-md h-[90%]"></div>
-                  <div className="w-8 bg-primary/50 rounded-t-md h-[50%]"></div>
+            <SectionCard className="min-h-[320px] p-5">
+              <h3 className="font-bold text-on-surface">Xu hướng đơn hàng</h3>
+              {orderAnalyticsQuery.data ? (
+                <div className="mt-4 h-[250px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={orderAnalyticsQuery.data}>
+                      <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.15} />
+                      <XAxis dataKey="period" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="count" stroke="#15803d" name="Số đơn" />
+                      <Line type="monotone" dataKey="revenue" stroke="#0f766e" name="Doanh thu" />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
-                <p className="text-sm font-semibold text-on-surface-variant">Biểu đồ đang được tích hợp...</p>
-              </div>
+              ) : (
+                <p className="mt-4 text-sm text-on-surface/60">Đang chờ dữ liệu xu hướng đơn hàng...</p>
+              )}
             </SectionCard>
 
             <SectionCard className="overflow-hidden">
@@ -118,7 +141,7 @@ export default function AnalyticsDashboardScreen(
                 <table className="w-full text-left text-sm">
                   <thead className="bg-surface-container-low/30 text-on-surface-variant">
                     <tr>
-                      <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Khu vực / Xe</th>
+                      <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Xe</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Số chuyến</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">Hiệu suất (%)</th>
                       <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">CO2 (kg)</th>
@@ -128,7 +151,7 @@ export default function AnalyticsDashboardScreen(
                     {fleetQuery.data.map((row) => (
                       <tr key={row.id} className="transition-colors hover:bg-surface-container-low/50">
                         <td className="px-6 py-4 font-bold text-on-surface">
-                          {row.region}
+                          {row.vehicleInfo}
                         </td>
                         <td className="px-6 py-4 text-[0.8rem] text-on-surface-variant">
                           {row.activeOrders}
@@ -156,8 +179,39 @@ export default function AnalyticsDashboardScreen(
               </div>
             </SectionCard>
           </div>
+
+          {emissionQuery.data ? (
+            <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+              <SectionCard className="min-h-[320px] p-5">
+                <h3 className="font-bold text-on-surface">Khí thải theo thời gian</h3>
+                <div className="mt-4 h-[250px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={emissionQuery.data}>
+                      <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.15} />
+                      <XAxis dataKey="period" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="co2Emitted" fill="#dc2626" name="CO2 phát thải" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="co2Saved" fill="#16a34a" name="CO2 tiết kiệm" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </SectionCard>
+
+              <SectionCard className="p-5">
+                <h3 className="font-bold text-on-surface">Bộ lọc hiện tại</h3>
+                <div className="mt-5 space-y-3 text-sm text-on-surface/65">
+                  <p>Date range: <strong>{dateRange}</strong></p>
+                  <p>Order points: <strong>{orderAnalyticsQuery.data?.length ?? 0}</strong></p>
+                  <p>Emission points: <strong>{emissionQuery.data.length}</strong></p>
+                  <p>Fleet rows: <strong>{fleetQuery.data.length}</strong></p>
+                </div>
+              </SectionCard>
+            </div>
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

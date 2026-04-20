@@ -2,7 +2,7 @@ import type {
   AnalyticsDashboardDTO,
   AnalyticsMetric,
   FleetPerformanceDTO,
-  RegionalPerformanceRow,
+  FleetPerformanceRow,
 } from "@/features/analytics/domain/types/analytics.types";
 
 export function mapDashboardToMetrics(dto: AnalyticsDashboardDTO): AnalyticsMetric[] {
@@ -40,13 +40,12 @@ export function mapDashboardToMetrics(dto: AnalyticsDashboardDTO): AnalyticsMetr
   ];
 }
 
-export function mapFleetToRegionalRows(
+export function mapFleetToPerformanceRows(
   fleetData: FleetPerformanceDTO[],
-): RegionalPerformanceRow[] {
-  // Demo mapping from fleet to regional rows since we are using mock data
+): FleetPerformanceRow[] {
   return fleetData.map((fleet) => ({
     id: fleet.vehicleId,
-    region: `Xe ${fleet.licensePlate}`,
+    vehicleInfo: `Xe ${fleet.licensePlate}`,
     activeOrders: fleet.totalTrips,
     onTimeRate: fleet.efficiency,
     co2Saved: fleet.co2Saved,

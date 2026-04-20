@@ -9,11 +9,10 @@ import {
 } from "@/features/analytics/infrastructure/api/analytics.api";
 
 function assertApiConfigured() {
-  if (!hasApiBaseUrl()) {
+  if (!hasApiBaseUrl) {
     throw new ApiError({
       message: "API is not configured. Please check your environment variables.",
-      statusCode: 503,
-      error: "Service Unavailable",
+      status: 503,
     });
   }
 }

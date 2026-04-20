@@ -1,6 +1,6 @@
 "use client";
 
-import { useHubsQuery } from "@/features/fleet/presentation/hooks/useHubsQuery";
+import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 
 export default function HubMap() {
   const { data, isLoading, isError } = useHubsQuery();
@@ -30,9 +30,9 @@ export default function HubMap() {
                 Node {index + 1}
               </div>
               <div className="mt-3 text-lg font-bold text-on-surface">{hub.name}</div>
-              <div className="text-sm text-on-surface-variant">{hub.location}</div>
+              <div className="text-sm text-on-surface-variant">{hub.address}</div>
               <div className="mt-1 text-xs text-on-surface-variant">
-                {hub.type} • {hub.capacity} sức chứa
+                Mã trạm: {hub.code}
               </div>
             </div>
           ))}

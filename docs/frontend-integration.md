@@ -25,7 +25,27 @@ Authorization: Bearer <accessToken>
 ```
 
 Toàn bộ route private hiện được bảo vệ theo mặc định bằng `Bearer`, trừ các route backend gắn `@isPublic()`.
-Sau bước verify token, backend còn check permission theo `role + path + method`, nên một user đăng nhập hợp lệ vẫn có thể nhận `403` nếu backend chưa seed quyền cho route đó.
+Sau bước verify token, backend còn check permission theo `role + path + method`. Kể từ phiên bản mới, `ResourceAccessGuard` cũng được áp dụng (RLA). Một user đăng nhập hợp lệ vẫn có thể nhận `403` nếu khác quyền sở hữu dữ liệu (Ví dụ truy cập đơn hàng của người khác).
+
+### Đọc thông tin User (Role) ở Client
+
+Payload JWT hiện tại trả về trực tiếp thông tin role của User:
+
+```ts
+export interface AccessTokenPayload {
+  userId: number
+  deviceId: number
+  roleId: number
+  roleName: string // VD: "CUSTOMER", "WAREHOUSE_STAFF"
+  exp: number
+  iat: number
+}
+```
+
+**Khuyến nghị:**
+
+- Frontend nên dùng thư viện như `jwt-decode` để parse trực tiếp `accessToken` và lấy `roleName` phục vụ việc rẽ nhánh UI (hiển thị menu Admin, Customer, v.v) thay vì gọi thêm API.
+- Để lấy chi tiết hơn (như họ tên, email, avatar, hubId, v.v), sử dụng endpoint `GET /auth/profile`.
 
 ### Refresh strategy
 
@@ -258,3 +278,44 @@ Lưu ý: hiện tại các nhóm này đi qua `Bearer` mặc định và permiss
 ## 10. Tài liệu liên quan
 
 - API reference chi tiết: [api-reference.md](./api-reference.md)
+
+
+## 5. WebSockets Integration (Tracking Gateway)
+Để hiển thị thời gian thực vị trí tài xế, Frontend cần kết nối Socket.io với Gateway `/tracking`.
+
+**1. Setup Client**
+```typescript
+import { io } from "socket.io-client";
+
+// Đảm bảo include token vào "auth"
+const socket = io("http://localhost:8386/tracking", {
+  auth: {
+    token: "Bearer <accessToken>"
+  }
+});
+```
+
+**2. Subscribe/Nhận Dữ Liệu (Dành cho Khách Hàng)**
+```typescript
+// Join vào room trip cụ thể
+socket.emit("joinTripTracking", { tripId: 1001 });
+
+// Lắng nghe thay đổi vị trí
+socket.on("locationUpdated", (data) => {
+  console.log("GPS mới từ driver:", data.lat, data.lng);
+});
+
+// Khi rời trang
+socket.emit("leaveTripTracking", { tripId: 1001 });
+```
+
+**3. Publish/Cập nhật vị trí (Dành cho Tài Xế)**
+```typescript
+// Driver update GPS liên tục
+socket.emit("driverLocationUpdate", {
+  tripId: 1001,
+  lat: 10.762622,
+  lng: 106.660172
+});
+```
+

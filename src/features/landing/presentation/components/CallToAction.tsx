@@ -5,6 +5,7 @@
  * Glass CTA staged over the warehouse background from Stitch.
  */
 import React, { useRef } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -95,10 +96,13 @@ export default function CallToAction() {
 
             <div className="pt-8">
               <Button
+                asChild
                 size="lg"
                 className="rounded-lg bg-primary-fixed px-12 py-7 text-lg font-black tracking-widest text-on-primary-fixed uppercase shadow-2xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95"
               >
-                {ctaData.buttonText}
+                <Link href="/dashboard">
+                  {ctaData.buttonText}
+                </Link>
               </Button>
             </div>
           </div>
@@ -107,4 +111,3 @@ export default function CallToAction() {
     </section>
   );
 }
-

@@ -49,9 +49,9 @@ export interface AnalyticsMetric {
   readonly trendValue: string;
 }
 
-export interface RegionalPerformanceRow {
+export interface FleetPerformanceRow {
   readonly id: string;
-  readonly region: string;
+  readonly vehicleInfo: string;
   readonly activeOrders: number;
   readonly onTimeRate: number;
   readonly co2Saved: number;

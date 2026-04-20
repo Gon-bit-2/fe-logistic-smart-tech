@@ -1,10 +1,14 @@
 "use client";
 
-import { useAggregatedEmissions } from "@/features/green-tech/presentation/hooks/useAggregatedEmissions";
+import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
 import { co2DashboardCopy } from "@/i18n/vi";
 
 export default function CO2Dashboard() {
-  const { data, isLoading, isError } = useAggregatedEmissions();
+  const { data, isLoading, isError } = useEmissionAnalytics();
+
+  const totalCo2Emitted = data?.reduce((sum, item) => sum + Number(item.co2Emitted), 0) ?? 0;
+  const totalCo2Saved = data?.reduce((sum, item) => sum + Number(item.co2Saved), 0) ?? 0;
+  const totalGreenTrips = data?.reduce((sum, item) => sum + Number(item.greenTripsCount), 0) ?? 0;
 
   return (
     <section className="rounded-[1.5rem] border border-border bg-card p-6">
@@ -18,7 +22,7 @@ export default function CO2Dashboard() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-on-surface-variant">Đang tính toán tổng lượng phát thải...</p>
+        <p className="text-sm text-on-surface-variant">Đang tải dữ liệu tổng hợp...</p>
       ) : isError ? (
         <p className="text-sm text-error">Lỗi khi tải dữ liệu tổng hợp.</p>
       ) : (
@@ -26,19 +30,19 @@ export default function CO2Dashboard() {
           <div className="rounded-2xl border border-border bg-background px-4 py-5">
             <div className="text-sm text-on-surface-variant">Tổng lượng CO₂ (kg)</div>
             <div className="mt-3 text-3xl font-black tracking-tight text-on-surface">
-              {data?.totalCo2Emitted.toFixed(1)}
+              {totalCo2Emitted.toFixed(1)}
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-background px-4 py-5">
             <div className="text-sm text-on-surface-variant">CO₂ tiết kiệm được (kg)</div>
             <div className="mt-3 text-3xl font-black tracking-tight text-primary">
-              {data?.totalCo2Saved.toFixed(1)}
+              {totalCo2Saved.toFixed(1)}
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-background px-4 py-5">
-            <div className="text-sm text-on-surface-variant">Hiệu suất trung bình (kg/km)</div>
+            <div className="text-sm text-on-surface-variant">Tổng chuyến xanh</div>
             <div className="mt-3 text-3xl font-black tracking-tight text-on-surface">
-              {data?.averageEfficiency.toFixed(2)}
+              {totalGreenTrips}
             </div>
           </div>
         </div>
