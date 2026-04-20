@@ -1,6 +1,6 @@
-import InventoryManagementScreen from "@/features/warehouses/presentation/screens/InventoryManagementScreen";
+import WarehouseHubManagementScreen from "@/features/warehouses/presentation/screens/WarehouseHubManagementScreen";
 
 export default function AdminWarehousesPage() {
-  return <InventoryManagementScreen />;
+  return <WarehouseHubManagementScreen />;
 }
 

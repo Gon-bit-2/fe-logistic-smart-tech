@@ -11,6 +11,17 @@ vi.mock("@/features/orders/presentation/hooks/useCheckout", () => ({
   useCheckout: () => useCheckoutMock(),
 }));
 
+vi.mock("@stripe/stripe-js", () => ({
+  loadStripe: vi.fn(() => null),
+}));
+
+vi.mock("@stripe/react-stripe-js", () => ({
+  Elements: ({ children }: { children: unknown }) => <>{children}</>,
+  PaymentElement: () => <div data-testid="payment-element" />,
+  useElements: () => null,
+  useStripe: () => null,
+}));
+
 describe("CheckoutScreen", () => {
   beforeEach(() => {
     useCheckoutMock.mockReset();
@@ -32,6 +43,7 @@ describe("CheckoutScreen", () => {
       isSubmitting: false,
       loadError: checkoutCopy.emptyOrderDescription,
       error: null,
+      paymentRecord: null,
     });
 
     renderWithProviders(<CheckoutScreen />);
@@ -61,6 +73,7 @@ describe("CheckoutScreen", () => {
       isSubmitting: false,
       loadError: null,
       error: null,
+      paymentRecord: null,
     });
 
     renderWithProviders(<CheckoutScreen />);

@@ -6,21 +6,22 @@ import { emptyOrdersPage, sampleOrdersPage } from "../../../../../tests/fixtures
 import { renderWithProviders } from "@/test/render";
 import CustomerOrdersPage from "./page";
 
-const useListOrdersMock = vi.fn();
+const useOrdersListQueryMock = vi.fn();
 
-vi.mock("@/features/orders/application/use-cases/use-list-orders", () => ({
-  useListOrders: (params?: unknown) => useListOrdersMock(params),
+vi.mock("@/features/orders/presentation/hooks/useOrdersListQuery", () => ({
+  useOrdersListQuery: (params?: unknown) => useOrdersListQueryMock(params),
 }));
 
 describe("CustomerOrdersPage", () => {
   beforeEach(() => {
-    useListOrdersMock.mockReset();
+    useOrdersListQueryMock.mockReset();
   });
 
   it("renders a loading row while orders are being fetched", () => {
-    useListOrdersMock.mockReturnValue({
+    useOrdersListQueryMock.mockReturnValue({
       data: undefined,
       isLoading: true,
+      isPending: true,
       isError: false,
       error: null,
     });
@@ -31,9 +32,10 @@ describe("CustomerOrdersPage", () => {
   });
 
   it("renders an empty state when no orders match the filters", () => {
-    useListOrdersMock.mockReturnValue({
+    useOrdersListQueryMock.mockReturnValue({
       data: emptyOrdersPage,
       isLoading: false,
+      isPending: false,
       isError: false,
       error: null,
     });
@@ -44,9 +46,10 @@ describe("CustomerOrdersPage", () => {
   });
 
   it("renders order rows from the paginated response data", () => {
-    useListOrdersMock.mockReturnValue({
+    useOrdersListQueryMock.mockReturnValue({
       data: sampleOrdersPage,
       isLoading: false,
+      isPending: false,
       isError: false,
       error: null,
     });

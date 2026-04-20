@@ -18,7 +18,7 @@ export async function fetchEmissionRecordsRequest(tripId: string | number) {
 
 export async function calculateEmissionsRequest(data: CalculateEmissionInput) {
   const response = await httpClient.post<EmissionRecord>(
-    API_CALCULATE_EMISSIONS,
+    API_CALCULATE_EMISSIONS(data.tripId),
     data,
   );
   return response.data;

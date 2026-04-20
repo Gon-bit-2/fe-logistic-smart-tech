@@ -1,8 +1,10 @@
 import {
   BarChart3,
   LayoutDashboard,
+  Languages,
   Leaf,
   PackageSearch,
+  Route,
   Truck,
   Warehouse,
 } from "lucide-react";
@@ -18,9 +20,11 @@ export const adminNavItems: ReadonlyArray<AdminNavItem> = [
   { href: "/dashboard/admin", icon: LayoutDashboard, label: "Tổng quan" },
   { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Phân tích" },
   { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Lô hàng" },
+  { href: "/dashboard/admin/trips", icon: Route, label: "Chuyến đi" },
   { href: "/dashboard/admin/fleet", icon: Truck, label: "Đội xe" },
   { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Bền vững" },
   { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Tồn kho" },
+  { href: "/dashboard/admin/language", icon: Languages, label: "Ngôn ngữ" },
 ];
 
 export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
@@ -54,6 +58,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
+  "/dashboard/admin/trips": {
+    initials: "TR",
+    searchPlaceholder: "Tìm chuyến hoặc biển số...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
   "/dashboard/admin/sustainability": {
     initials: "SI",
     searchPlaceholder: "Tìm kiếm theo dõi toàn cục...",
@@ -66,6 +78,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     searchPlaceholder: "Tìm kiếm tồn kho...",
     title: "Trung tâm điều phối",
     topBarVariant: "ecosystem",
+    topTabs: ecosystemTopTabs,
+  },
+  "/dashboard/admin/language": {
+    initials: "LG",
+    searchPlaceholder: "Tìm ngôn ngữ...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
 };

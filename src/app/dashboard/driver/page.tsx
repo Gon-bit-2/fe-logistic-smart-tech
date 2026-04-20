@@ -1,9 +1,5 @@
-import InternalTrackingWorkspace from "@/features/tracking/presentation/screens/InternalTrackingWorkspace";
+import TripsManagementScreen from "@/features/trips/presentation/screens/TripsManagementScreen";
 
-export default async function DriverPage(props: PageProps<"/dashboard/driver">) {
-  const searchParams = await props.searchParams;
-  const orderId =
-    typeof searchParams.orderId === "string" ? searchParams.orderId : undefined;
-
-  return <InternalTrackingWorkspace orderId={orderId} />;
+export default function DriverPage() {
+  return <TripsManagementScreen scope="driver" />;
 }

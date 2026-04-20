@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useGoogleLoginMutation } from "@/features/auth/presentation/hooks/useGoogleLoginMutation";
 import { useLoginMutation } from "@/features/auth/presentation/hooks/useLoginMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
+import { getDashboardHrefForRole } from "@/features/auth/application/services/auth-session";
 import type { AuthFormMode } from "@/features/auth/domain/types/auth.types";
 import { loginFormCopy } from "@/i18n/vi";
 
@@ -61,16 +62,27 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         return;
       }
 
-      await loginMutation.mutateAsync({
+      const tokens = await loginMutation.mutateAsync({
         email: form.email,
         password: form.password,
       });
 
       setStatus(loginFormCopy.loginSuccessStatus);
-      startTransition(() => {
-        router.push("/orders/create");
-      });
-    } catch {
+
+      try {
+        const { extractUserFromToken } = await import("@/lib/utils/jwt");
+        const extractedUser = extractUserFromToken(tokens.accessToken);
+        
+        startTransition(() => {
+          router.push(getDashboardHrefForRole(extractedUser?.role));
+        });
+      } catch (e) {
+        startTransition(() => {
+          router.push("/dashboard");
+        });
+      }
+    } catch (outerError) {
+      // Allow react-query error boundaries to handle this, or let it fail silently as UI handles it
       return;
     }
   }

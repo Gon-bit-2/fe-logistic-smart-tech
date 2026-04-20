@@ -13,7 +13,6 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const { status, isHydrated } = useAuthStore();
 
   useEffect(() => {
-    // Only redirect if the store has finished hydrating and the user is anonymous
     if (isHydrated && status === "anonymous") {
       router.replace("/auth/login");
     }
@@ -33,6 +32,5 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     );
   }
 
-  // User is authenticated, render protected content
   return <>{children}</>;
 }

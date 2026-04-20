@@ -1,92 +1,113 @@
-/**
- * Trang Quản lý Kho (Warehouse Scanner Hub) dành cho nhân viên kho
- * Thiết kế cho Tablet/Mobile, nút lớn, font dễ nhìn. Tuân thủ Design System (design.md).
- */
-'use client';
-import React, { useState } from 'react';
+"use client";
+
+import { type FormEvent, useState } from "react";
+import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 
 export default function WarehouseScannerPage() {
-  const [activeTab, setActiveTab] = useState<'inbound' | 'outbound'>('inbound');
-  const [scannedCode, setScannedCode] = useState('');
+  const [activeTab, setActiveTab] = useState<"inbound" | "outbound">("inbound");
+  const [orderId, setOrderId] = useState("");
+  const [description, setDescription] = useState("");
+  const mutation = useCreateTrackingEvent();
 
-  // Hàm xử lý giả lập submit mã quét
-  const handleScanSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!scannedCode.trim()) return;
-    
-    // TODO: Gửi request lên server cập nhật trạng thái thông qua react-query mutation
-    alert(`Đã ghi nhận ${activeTab === 'inbound' ? 'NHẬP KHO' : 'XUẤT KHO'} cho vận đơn: ${scannedCode}`);
-    setScannedCode(''); // Reset sau khi xử lý
-  };
+  async function handleScanSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    if (!orderId.trim()) {
+      return;
+    }
+
+    await mutation.mutateAsync({
+      description:
+        description ||
+        (activeTab === "inbound"
+          ? "Kiện hàng đã nhập kho"
+          : "Kiện hàng rời kho để giao"),
+      eventType: "STATUS_CHANGE",
+      orderId: Number(orderId),
+      source: "WAREHOUSE_WEB",
+      status: activeTab === "inbound" ? "ARRIVED_AT_HUB" : "OUT_FOR_DELIVERY",
+    });
+
+    setOrderId("");
+    setDescription("");
+  }
 
   return (
-    <div className="p-4 md:p-6 mx-auto min-h-[calc(100vh-4rem)] flex flex-col bg-[#F0FDF4]">
-      <div className="max-w-2xl mx-auto w-full flex flex-col flex-1">
-        <div className="text-center mb-6 pt-4">
+    <div className="mx-auto flex min-h-[calc(100vh-4rem)] flex-col bg-[#F0FDF4] p-4 md:p-6">
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
+        <div className="mb-6 pt-4 text-center">
           <h1 className="text-[28px] font-bold text-emerald-900">Trạm Quét Mã Kho</h1>
-          <p className="text-[14px] text-slate-600 mt-1">Trung tâm phân phối miền Nam</p>
+          <p className="mt-1 text-[14px] text-slate-600">Trung tâm phân phối miền Nam</p>
         </div>
-        
-        {/* Nút chuyển đổi (Tabs) giữa Nhập và Xuất kho */}
-        <div className="flex bg-white p-1.5 rounded-xl mb-6 shadow-sm border border-slate-200">
-          <button 
-            className={`flex-1 py-3 text-center rounded-lg font-semibold text-[16px] transition-all ${
-              activeTab === 'inbound' 
-                ? 'bg-emerald-50 text-emerald-800 shadow-sm ring-1 ring-emerald-200' 
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+
+        <div className="mb-6 flex rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
+          <button
+            className={`flex-1 rounded-lg py-3 text-center text-[16px] font-semibold transition-all ${
+              activeTab === "inbound"
+                ? "bg-emerald-50 text-emerald-800 shadow-sm ring-1 ring-emerald-200"
+                : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
             }`}
-            onClick={() => setActiveTab('inbound')}
+            onClick={() => setActiveTab("inbound")}
           >
             Nhập Kho (Inbound)
           </button>
-          <button 
-            className={`flex-1 py-3 text-center rounded-lg font-semibold text-[16px] transition-all ${
-              activeTab === 'outbound' 
-                ? 'bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-200' 
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+          <button
+            className={`flex-1 rounded-lg py-3 text-center text-[16px] font-semibold transition-all ${
+              activeTab === "outbound"
+                ? "bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-200"
+                : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
             }`}
-            onClick={() => setActiveTab('outbound')}
+            onClick={() => setActiveTab("outbound")}
           >
             Xuất Kho (Outbound)
           </button>
         </div>
 
-        {/* Khu vực thao tác quét mã */}
-        <div className="flex-1 bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center p-6 shadow-sm">
-          <div className="w-48 h-48 md:w-64 md:h-64 bg-[#F0FDF4] rounded-2xl border-2 border-dashed border-emerald-200 flex flex-col items-center justify-center mb-8 relative overflow-hidden">
-            {/* Vạch quét giả lập */}
-            <div className="absolute w-full h-0.5 bg-emerald-500 top-1/2 left-0 shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-pulse"></div>
-            <div className="w-16 h-16 border-4 border-emerald-100 rounded-lg flex items-center justify-center">
-               <span className="text-4xl text-emerald-300 opacity-50" aria-hidden="true">📷</span>
+        <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="relative mb-8 flex h-48 w-48 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-emerald-200 bg-[#F0FDF4] md:h-64 md:w-64">
+            <div className="absolute left-0 top-1/2 h-0.5 w-full animate-pulse bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)]" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-lg border-4 border-emerald-100">
+              <span className="text-4xl text-emerald-300 opacity-50" aria-hidden="true">📷</span>
             </div>
-            <span className="text-[14px] text-emerald-800 mt-4 font-semibold">Hướng Camera Vào Mã</span>
+            <span className="mt-4 text-[14px] font-semibold text-emerald-800">Hướng Camera Vào Mã</span>
           </div>
-          
-          <p className="text-slate-600 mb-6 text-center text-[14px] md:text-[16px] max-w-sm leading-relaxed">
-            Hệ thống sẽ tự động nhận diện mã vạch vận đơn hoặc bạn có thể nhập thủ công bên dưới.
+
+          <p className="mb-6 max-w-sm text-center text-[14px] leading-relaxed text-slate-600 md:text-[16px]">
+            Gửi tracking event thật lên backend theo tab nhập/xuất kho, hoặc nhập thủ công orderId bên dưới.
           </p>
-          
-          {/* Form nhập thủ công */}
-          <form onSubmit={handleScanSubmit} className="w-full max-w-md flex flex-col sm:flex-row gap-4">
-            <input 
-              type="text" 
-              placeholder="Nhập mã vận đơn (VD: ORD-123)..." 
-              className="flex-1 px-4 h-[48px] border border-slate-300 rounded-lg text-[16px] text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono"
-              value={scannedCode}
-              onChange={(e) => setScannedCode(e.target.value)}
+
+          <form onSubmit={(event) => void handleScanSubmit(event)} className="w-full max-w-md space-y-4">
+            <input
+              type="number"
+              placeholder="Nhập orderId..."
+              className="h-[48px] w-full rounded-lg border border-slate-300 px-4 text-[16px] font-mono text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              value={orderId}
+              onChange={(event) => setOrderId(event.target.value)}
               autoFocus
             />
-            <button 
+            <textarea
+              placeholder="Mô tả tùy chọn"
+              className="min-h-28 w-full rounded-lg border border-slate-300 px-4 py-3 text-[14px] text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+            <button
               type="submit"
-              className={`px-8 h-[48px] text-white rounded-lg font-bold text-[16px] shadow-sm transition-colors ${
-                activeTab === 'inbound' 
-                  ? 'bg-emerald-500 hover:bg-emerald-600' 
-                  : 'bg-blue-600 hover:bg-blue-700'
+              className={`h-[48px] w-full rounded-lg text-[16px] font-bold text-white shadow-sm transition-colors ${
+                activeTab === "inbound"
+                  ? "bg-emerald-500 hover:bg-emerald-600"
+                  : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              Xác nhận
+              {mutation.isPending ? "Đang gửi..." : "Xác nhận"}
             </button>
           </form>
+
+          {mutation.error ? (
+            <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+              {mutation.error.message}
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

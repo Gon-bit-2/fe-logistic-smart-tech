@@ -67,7 +67,7 @@ describe("LoginForm", () => {
         email: "ops@emerald.com",
         password: "Secret123",
       });
-      expect(router.push).toHaveBeenCalledWith("/orders/create");
+      expect(router.push).toHaveBeenCalledWith("/dashboard");
     });
   });
 

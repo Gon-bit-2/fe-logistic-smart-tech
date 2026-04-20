@@ -1,4 +1,6 @@
-export const sampleOrder = {
+import type { OrderDTO } from "@/features/orders/domain/types/order.types";
+
+export const sampleOrder: OrderDTO = {
   id: "ord-001",
   reference: "ELG-2026-0001",
   customerName: "Công ty Logistics Xanh",

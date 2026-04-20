@@ -1,9 +1,13 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
+import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { checkoutCopy } from "@/i18n/vi";
 import { formatCurrency } from "@/utils/formatters";
 
@@ -13,19 +17,76 @@ function formatPricingValue(value?: number) {
     : checkoutCopy.pendingApiQuote;
 }
 
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? process.env.NODE_ENV === "test"
+    ? null
+    : loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null;
+
+type StripePaymentFormProps = {
+  onError: (message: string | null) => void;
+  onSuccess: () => void;
+};
+
+function StripePaymentForm({
+  onError,
+  onSuccess,
+}: Readonly<StripePaymentFormProps>) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit() {
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    onError(null);
+
+    const result = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required",
+    });
+
+    if (result.error) {
+      onError(result.error.message ?? "Không thể xác nhận thanh toán.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    onSuccess();
+    setIsSubmitting(false);
+  }
+
+  return (
+    <div className="space-y-4">
+      <PaymentElement />
+      <Button
+        onClick={handleSubmit}
+        className="h-14 w-full bg-gradient-to-br from-tertiary to-tertiary-container text-base font-black text-white"
+      >
+        {isSubmitting ? checkoutCopy.processing : checkoutCopy.payAndConfirmOrder}
+      </Button>
+    </div>
+  );
+}
+
 export default function CheckoutScreen() {
+  const router = useRouter();
   const {
     order,
+    orderId,
     paymentMethod,
     setPaymentMethod,
-    cardState,
-    updateCardState,
     confirmCheckout,
     isLoading,
-    isSubmitting,
     loadError,
-    error,
+    paymentRecord,
   } = useCheckout();
+  const createPaymentIntent = useCreatePaymentIntent();
+  const [error, setError] = useState<string | null>(null);
+  const clientSecret = createPaymentIntent.data?.clientSecret ?? null;
 
   if (isLoading) {
     return (
@@ -62,6 +123,42 @@ export default function CheckoutScreen() {
   }
 
   const pricing = order.pricing;
+  const trackingDestination = order.trackingCode ?? order.reference;
+
+  useEffect(() => {
+    if (
+      paymentMethod === "card" &&
+      orderId &&
+      !clientSecret &&
+      !createPaymentIntent.isPending
+    ) {
+      void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
+        setError(
+          caughtError instanceof Error
+            ? caughtError.message
+            : "Không thể khởi tạo Stripe payment intent.",
+        );
+      });
+    }
+  }, [clientSecret, createPaymentIntent, orderId, paymentMethod]);
+
+  const stripeOptions = useMemo(
+    () =>
+      clientSecret
+        ? {
+            clientSecret,
+            appearance: {
+              theme: "stripe" as const,
+            },
+          }
+        : null,
+    [clientSecret],
+  );
+
+  async function handleCodConfirm() {
+    setError(null);
+    await confirmCheckout();
+  }
 
   return (
     <div className="min-h-screen bg-surface">
@@ -88,49 +185,20 @@ export default function CheckoutScreen() {
 
               <div className="space-y-6">
                 {paymentMethod === "card" ? (
-                  <>
-                    <label className="block space-y-2">
-                      <span className="ml-1 text-xs font-black tracking-[0.14em] text-slate-500 uppercase">
-                          {checkoutCopy.cardNumber}
-                      </span>
-                      <Input
-                        value={cardState.cardNumber}
-                        onChange={(event) =>
-                          updateCardState({ cardNumber: event.target.value })
-                        }
-                        className="border-b border-outline-variant/20 pb-4 focus:rounded-lg"
-                        placeholder={checkoutCopy.cardNumberPlaceholder}
+                  stripePromise && stripeOptions ? (
+                    <Elements stripe={stripePromise} options={stripeOptions}>
+                      <StripePaymentForm
+                        onError={setError}
+                        onSuccess={() => router.push(`/tracking/${trackingDestination}`)}
                       />
-                    </label>
-
-                    <div className="grid gap-8 md:grid-cols-2">
-                      <label className="block space-y-2">
-                        <span className="ml-1 text-xs font-black tracking-[0.14em] text-slate-500 uppercase">
-                          {checkoutCopy.expiryDate}
-                        </span>
-                        <Input
-                          value={cardState.expiryDate}
-                          onChange={(event) =>
-                            updateCardState({ expiryDate: event.target.value })
-                          }
-                          className="border-b border-outline-variant/20 pb-4 focus:rounded-lg"
-                          placeholder={checkoutCopy.expiryPlaceholder}
-                        />
-                      </label>
-
-                      <label className="block space-y-2">
-                        <span className="ml-1 text-xs font-black tracking-[0.14em] text-slate-500 uppercase">
-                          {checkoutCopy.cvc}
-                        </span>
-                        <Input
-                          value={cardState.cvc}
-                          onChange={(event) => updateCardState({ cvc: event.target.value })}
-                          className="border-b border-outline-variant/20 pb-4 focus:rounded-lg"
-                          placeholder={checkoutCopy.cvcPlaceholder}
-                        />
-                      </label>
+                    </Elements>
+                  ) : (
+                    <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
+                      {createPaymentIntent.isPending
+                        ? "Đang khởi tạo phiên Stripe..."
+                        : "Thiếu `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` hoặc client secret."}
                     </div>
-                  </>
+                  )
                 ) : null}
 
                 <div className="space-y-4 border-t border-outline-variant/10 pt-8">
@@ -279,20 +347,23 @@ export default function CheckoutScreen() {
                 ) : null}
               </div>
 
-              <Button
-                onClick={confirmCheckout}
-                className="h-14 w-full bg-gradient-to-br from-tertiary to-tertiary-container text-base font-black text-white"
-              >
-                {isSubmitting
-                  ? checkoutCopy.processing
-                  : paymentMethod === "cash_on_delivery"
-                    ? checkoutCopy.confirmCodOrder
-                    : checkoutCopy.payAndConfirmOrder}
-              </Button>
+              {paymentMethod === "cash_on_delivery" ? (
+                <Button
+                  onClick={() => void handleCodConfirm()}
+                  className="h-14 w-full bg-gradient-to-br from-tertiary to-tertiary-container text-base font-black text-white"
+                >
+                  {checkoutCopy.confirmCodOrder}
+                </Button>
+              ) : null}
 
               {error ? (
                 <p className="mt-4 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   {error}
+                </p>
+              ) : null}
+              {paymentRecord ? (
+                <p className="mt-4 rounded-xl bg-primary/8 px-4 py-3 text-sm text-on-surface">
+                  Trạng thái payment hiện tại: <strong>{paymentRecord.status ?? "PENDING"}</strong>
                 </p>
               ) : null}
             </div>

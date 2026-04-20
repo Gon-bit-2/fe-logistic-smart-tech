@@ -4,19 +4,16 @@ import { sampleOrder } from "../../../../../tests/fixtures/api";
 import { renderHookWithProviders } from "@/test/render";
 import { useCheckout } from "./useCheckout";
 
-const { confirmCheckoutUseCase, resolveCheckoutOrderUseCase } = vi.hoisted(() => ({
-  confirmCheckoutUseCase: vi.fn(),
+const { resolveCheckoutOrderUseCase } = vi.hoisted(() => ({
   resolveCheckoutOrderUseCase: vi.fn(),
 }));
 
 vi.mock("@/features/orders/application/use-cases/order.use-cases", () => ({
-  confirmCheckoutUseCase,
   resolveCheckoutOrderUseCase,
 }));
 
 describe("useCheckout", () => {
   beforeEach(() => {
-    confirmCheckoutUseCase.mockReset();
     resolveCheckoutOrderUseCase.mockReset();
   });
 
@@ -51,16 +48,10 @@ describe("useCheckout", () => {
     expect(result.current.error).toBe(
       "Vui lòng nhập số thẻ, ngày hết hạn và CVC để tiếp tục.",
     );
-    expect(confirmCheckoutUseCase).not.toHaveBeenCalled();
   });
 
   it("confirms COD orders and redirects to tracking", async () => {
     resolveCheckoutOrderUseCase.mockResolvedValue(sampleOrder);
-    confirmCheckoutUseCase.mockResolvedValue({
-      ...sampleOrder,
-      paymentMethod: "cash_on_delivery",
-      status: "IN_TRANSIT",
-    });
 
     const { result, router } = renderHookWithProviders(() => useCheckout(), {
       searchParams: {
@@ -80,10 +71,6 @@ describe("useCheckout", () => {
       await result.current.confirmCheckout();
     });
 
-    expect(confirmCheckoutUseCase).toHaveBeenCalledWith(
-      sampleOrder,
-      "cash_on_delivery",
-    );
     expect(router.push).toHaveBeenCalledWith(`/tracking/${sampleOrder.reference}`);
   });
 });

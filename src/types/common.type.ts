@@ -3,6 +3,8 @@ export type ValidationIssue = {
   path?: string;
 };
 
+export type ApiErrorStatus = 401 | 403 | 404 | 409 | 422 | number;
+
 export type SessionTokens = {
   accessToken: string;
   refreshToken: string;

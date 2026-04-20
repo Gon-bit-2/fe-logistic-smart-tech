@@ -1,5 +1,6 @@
 import type {
   AuthLoginInput,
+  AuthProfileDto,
   ForgotPasswordInput,
   GoogleLoginLinkResponse,
   MessageResponse,
@@ -56,6 +57,11 @@ export async function forgotPassword(input: ForgotPasswordInput) {
 
 export async function login(input: AuthLoginInput) {
   const response = await httpClient.post<SessionTokens>("/auth/login", input);
+  return response.data;
+}
+
+export async function getProfile() {
+  const response = await httpClient.get<AuthProfileDto>("/auth/profile");
   return response.data;
 }
 
