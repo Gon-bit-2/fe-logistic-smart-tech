@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
+import { formatDate } from "@/utils/formatters";
 
 export default function CustomerOrdersPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,7 +62,7 @@ export default function CustomerOrdersPage() {
                   <tr key={order.id} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
                     <td className="p-4 text-[14px] font-medium text-emerald-700">{order.reference}</td>
                     <td className="p-4 text-[14px] text-slate-700">
-                      {new Date(order.estimatedArrival).toLocaleString("vi-VN")}
+                      {formatDate(order.estimatedArrival)}
                     </td>
                     <td className="p-4 text-[14px] font-semibold text-slate-700">{order.status}</td>
                     <td className="p-4 text-[14px] text-slate-700">

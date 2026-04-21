@@ -1,6 +1,8 @@
 "use client";
 
-import { Download, Filter, Leaf, Truck, Wrench, Zap } from "lucide-react";
+import { Download, Filter, Leaf, Truck, Wrench, Zap, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   EmptyState,
   ErrorState,
@@ -15,12 +17,15 @@ import {
 import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
 import { fleetScreenCopy } from "@/i18n/vi";
 import { formatEnumLabel } from "@/utils/formatters";
+import { getVehicleCardDetails } from "./vehicle-helper";
 export interface FleetOperationsScreenProps {
   readonly _unused?: never;
 }
 
 function formatCapacity(weight?: number) {
-  return typeof weight === "number" ? `${weight.toLocaleString("vi-VN")} kg` : "Chưa cập nhật";
+  return typeof weight === "number"
+    ? `${weight.toLocaleString("vi-VN")} kg`
+    : "Chưa cập nhật";
 }
 
 export default function FleetOperationsScreen(
@@ -31,9 +36,12 @@ export default function FleetOperationsScreen(
   const vehiclesQuery = useFleetVehiclesQuery();
   const vehicles = vehiclesQuery.data?.data ?? [];
   const totalVehicles = vehicles.length;
-  const activeVehicles = vehicles.filter((vehicle) => vehicle.isActive !== false).length;
+  const activeVehicles = vehicles.filter(
+    (vehicle) => vehicle.isActive !== false,
+  ).length;
   const electricVehicles = vehicles.filter(
-    (vehicle) => vehicle.fuelType === "ELECTRIC" || vehicle.type === "ELECTRIC_VAN",
+    (vehicle) =>
+      vehicle.fuelType === "ELECTRIC" || vehicle.type === "ELECTRIC_VAN",
   ).length;
   const electricShare = totalVehicles
     ? `${Math.round((electricVehicles / totalVehicles) * 100)}%`
@@ -91,7 +99,9 @@ export default function FleetOperationsScreen(
               <p className="text-xl font-black uppercase tracking-[0.24em] text-white/70">
                 {fleetScreenCopy.evPercentage}
               </p>
-              <p className="mt-5 text-6xl font-black tracking-tight">{electricShare}</p>
+              <p className="mt-5 text-6xl font-black tracking-tight">
+                {electricShare}
+              </p>
             </div>
           </div>
         </SectionCard>
@@ -111,14 +121,18 @@ export default function FleetOperationsScreen(
         />
       ) : null}
 
-      {!vehiclesQuery.isLoading && !vehiclesQuery.isError && vehicles.length === 0 ? (
+      {!vehiclesQuery.isLoading &&
+      !vehiclesQuery.isError &&
+      vehicles.length === 0 ? (
         <EmptyState
           title={fleetScreenCopy.vehicleEmptyTitle}
           description={fleetScreenCopy.vehicleEmptyDescription}
         />
       ) : null}
 
-      {!vehiclesQuery.isLoading && !vehiclesQuery.isError && vehicles.length > 0 ? (
+      {!vehiclesQuery.isLoading &&
+      !vehiclesQuery.isError &&
+      vehicles.length > 0 ? (
         <SectionCard className="overflow-hidden">
           <div className="flex items-center justify-between border-b border-outline-variant/12 px-8 py-6">
             <div>
@@ -126,7 +140,8 @@ export default function FleetOperationsScreen(
                 {fleetScreenCopy.vehicleSummaryTitle}
               </h2>
               <p className="mt-2 text-sm text-on-surface/55">
-                Dữ liệu đội xe đang được cập nhật trực tiếp từ hệ thống vận hành.
+                Dữ liệu đội xe đang được cập nhật trực tiếp từ hệ thống vận
+                hành.
               </p>
             </div>
           </div>
@@ -135,23 +150,32 @@ export default function FleetOperationsScreen(
             <table className="min-w-full">
               <thead>
                 <tr className="bg-surface-container-low">
-                  {["Biển số", "Loại xe", "Nhiên liệu", "Tải trọng", "Hub", "Trạng thái"].map(
-                    (heading) => (
-                      <th
-                        key={heading}
-                        className="px-6 py-4 text-left text-[0.65rem] font-black uppercase tracking-[0.18em] text-on-surface/40"
-                      >
-                        {heading}
-                      </th>
-                    ),
-                  )}
+                  {[
+                    "Biển số",
+                    "Loại xe",
+                    "Nhiên liệu",
+                    "Tải trọng",
+                    "Hub",
+                    "Trạng thái",
+                  ].map((heading) => (
+                    <th
+                      key={heading}
+                      className="px-6 py-4 text-left text-[0.65rem] font-black uppercase tracking-[0.18em] text-on-surface/40"
+                    >
+                      {heading}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {vehicles.map((vehicle, index) => (
                   <tr
                     key={String(vehicle.id)}
-                    className={index === vehicles.length - 1 ? "" : "border-b border-outline-variant/10"}
+                    className={
+                      index === vehicles.length - 1
+                        ? ""
+                        : "border-b border-outline-variant/10"
+                    }
                   >
                     <td className="px-6 py-5 text-sm font-bold text-on-surface">
                       {vehicle.licensePlate}
@@ -170,7 +194,11 @@ export default function FleetOperationsScreen(
                     </td>
                     <td className="px-6 py-5">
                       <StatusBadge
-                        label={vehicle.isActive === false ? "Ngừng hoạt động" : "Đang hoạt động"}
+                        label={
+                          vehicle.isActive === false
+                            ? "Ngừng hoạt động"
+                            : "Đang hoạt động"
+                        }
                         tone={vehicle.isActive === false ? "neutral" : "green"}
                       />
                     </td>
@@ -184,4 +212,3 @@ export default function FleetOperationsScreen(
     </div>
   );
 }
-

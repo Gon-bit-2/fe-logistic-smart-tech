@@ -62,3 +62,27 @@ export type AutoDispatchResult = {
   jobId?: string;
   message: string;
 };
+
+export type ManualTripInput = {
+  hubId: number | string;
+  vehicleId: number | string;
+  driverId?: number | string;
+  orderIds: (string | number)[];
+  note?: string;
+};
+
+export type AssignVehicleInput = {
+  vehicleId: number | string;
+  driverId?: number | string;
+};
+
+export type AssignOrdersInput = {
+  orderIds: (string | number)[];
+};
+
+export type ManualTripResult = {
+  success: boolean;
+  message?: string;
+  trip?: TripApiDto;
+  addedOrders?: (string | number)[];
+};

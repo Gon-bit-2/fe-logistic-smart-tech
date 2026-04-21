@@ -14,6 +14,20 @@ const ROLE_REDIRECTS: Record<UserRole, string> = {
   warehouse_staff: "/dashboard/warehouse",
 };
 
+const NOTIFICATION_REDIRECTS: Record<UserRole, string> = {
+  admin: "/dashboard/admin/notifications",
+  customer: "/dashboard/customer/notifications",
+  driver: "/dashboard/driver/notifications",
+  warehouse_staff: "/dashboard/warehouse/notifications",
+};
+
+const ROLE_REQUEST_REDIRECTS: Record<UserRole, string> = {
+  admin: "/dashboard/admin/role-requests",
+  customer: "/dashboard/customer/roles",
+  driver: "/dashboard/driver/roles",
+  warehouse_staff: "/dashboard/warehouse/roles",
+};
+
 function base64UrlToUtf8(value: string): string {
   const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
 
@@ -61,6 +75,14 @@ export function normalizeUserRole(
 
 export function getDashboardHrefForRole(role?: UserRole | null): string {
   return role ? ROLE_REDIRECTS[role] : "/dashboard/customer";
+}
+
+export function getNotificationsHrefForRole(role?: UserRole | null): string {
+  return role ? NOTIFICATION_REDIRECTS[role] : "/dashboard/customer/notifications";
+}
+
+export function getRoleRequestHrefForRole(role?: UserRole | null): string {
+  return role ? ROLE_REQUEST_REDIRECTS[role] : "/dashboard/customer/roles";
 }
 
 export function decodeAccessTokenPayload(

@@ -3,6 +3,8 @@
  * Tuân thủ Design System: bg-[#F0FDF4], typography Inter, border-slate-200.
  */
 import React from 'react';
+import Link from "next/link";
+import { Bell, ShieldCheck } from "lucide-react";
 
 export default function CustomerSettingsPage() {
   return (
@@ -65,6 +67,44 @@ export default function CustomerSettingsPage() {
                 </div>
               </li>
             </ul>
+          </section>
+
+          <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+              <div className="flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <Bell className="size-5" />
+                </div>
+                <div>
+                  <h2 className="text-[20px] font-semibold text-emerald-900">Notifications</h2>
+                  <p className="text-[14px] text-slate-600 mt-1">Mở inbox để xem cập nhật phê duyệt và thông báo vận hành.</p>
+                </div>
+              </div>
+              <Link
+                href="/dashboard/customer/notifications"
+                className="mt-5 inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white"
+              >
+                Mở inbox
+              </Link>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+              <div className="flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <ShieldCheck className="size-5" />
+                </div>
+                <div>
+                  <h2 className="text-[20px] font-semibold text-emerald-900">Role Requests</h2>
+                  <p className="text-[14px] text-slate-600 mt-1">Quản lý yêu cầu trở thành tài xế hoặc nhân viên kho.</p>
+                </div>
+              </div>
+              <Link
+                href="/dashboard/customer/roles"
+                className="mt-5 inline-flex rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700"
+              >
+                Mở role center
+              </Link>
+            </div>
           </section>
         </div>
       </div>

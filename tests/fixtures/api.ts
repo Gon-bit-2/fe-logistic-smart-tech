@@ -140,3 +140,38 @@ export const sampleVehicleList = {
   ],
   totalItems: 1,
 };
+
+export const sampleNotificationsPage = {
+  data: [
+    {
+      id: 12,
+      title: "Cập nhật role request",
+      content: "Yêu cầu của bạn đang chờ duyệt.",
+      isRead: false,
+      createdAt: "2026-04-20T09:00:00.000Z",
+      payload: {
+        roleRequestId: 12,
+        targetRoleName: "DRIVER",
+        status: "PENDING",
+      },
+    },
+  ],
+  totalItems: 1,
+};
+
+export const sampleRoleRequestsPage = {
+  data: [
+    {
+      id: 88,
+      targetRoleName: "WAREHOUSE_STAFF",
+      status: "PENDING",
+      reason: "Tôi muốn phụ trách xử lý hàng tại hub.",
+      createdAt: "2026-04-20T09:00:00.000Z",
+      user: {
+        id: 7,
+        fullName: "Nguyen Van B",
+      },
+    },
+  ],
+  totalItems: 1,
+};

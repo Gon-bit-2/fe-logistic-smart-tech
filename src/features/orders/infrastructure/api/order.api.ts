@@ -1,12 +1,14 @@
 import { httpClient } from "@/lib/api/http-client";
 import type { PaginatedResult } from "@/types/common.type";
 import type {
+  CreateOrderApiInput,
   CreateOrderInput,
   OrderApiDto,
   OrderDTO,
   OrderListParams,
   UpdateOrderStatusInput,
 } from "@/features/orders/domain/types/order.types";
+import { mapCreateOrderInputToApiPayload } from "@/features/orders/application/mappers/create-order-request.mapper";
 import { mapOrderApiToViewModel } from "@/features/orders/application/mappers/order.mapper";
 import { API_ORDERS, API_ORDER_DETAIL, API_ORDER_STATUS } from "@/utils/apiUrl";
 
@@ -21,9 +23,10 @@ function hasOrderEnvelope(
 }
 
 export async function createOrderRequest(payload: CreateOrderInput) {
+  const apiPayload: CreateOrderApiInput = mapCreateOrderInputToApiPayload(payload);
   const response = await httpClient.post<OrderApiDto | CreateOrderResponse>(
     API_ORDERS,
-    payload,
+    apiPayload,
   );
   if (hasOrderEnvelope(response.data)) {
     return mapOrderApiToViewModel(response.data.order);
@@ -55,4 +58,3 @@ export async function deleteOrderRequest(orderId: string) {
   const response = await httpClient.delete<OrderApiDto>(API_ORDER_DETAIL(orderId));
   return mapOrderApiToViewModel(response.data);
 }
-

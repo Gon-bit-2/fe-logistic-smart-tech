@@ -1,11 +1,11 @@
 "use client";
 
+import { useMemo } from "react";
 import { Bolt, Truck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   EmptyState,
   ErrorState,
-  IntegrationPendingState,
   LoadingState,
 } from "@/components/ui/data-states";
 import {
@@ -18,7 +18,11 @@ import { useDispatcherMetrics } from "@/features/admin/presentation/hooks/useDis
 import { adminScreenCopy, getOrderStatusLabel } from "@/i18n/vi";
 import { formatDate } from "@/utils/formatters";
 
-import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+import DispatcherMapCanvas from "@/features/admin/presentation/components/DispatcherMapCanvas";
+import DispatcherUnassignedOrdersPanel from "@/features/admin/presentation/components/DispatcherUnassignedOrdersPanel";
+import DispatcherFleetStatusPanel from "@/features/admin/presentation/components/DispatcherFleetStatusPanel";
+import { useDispatcherSocket } from "@/features/admin/presentation/hooks/useDispatcherSocket";
+import { useTripsQuery } from "@/features/trips/presentation/hooks/useTrips";
 
 export interface DispatcherDashboardScreenProps {
   readonly _unused?: never;
@@ -28,7 +32,20 @@ export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,
 ) {
   void _props;
-  const { metrics, ordersQuery, vehiclesQuery, orders } = useDispatcherMetrics();
+  const tripsQuery = useTripsQuery();
+  const activeTripIds = useMemo(
+    () =>
+      (tripsQuery.data?.data ?? [])
+        .filter((trip) => trip.status === "ASSIGNED" || trip.status === "IN_TRANSIT")
+        .map((trip) => Number(trip.id) || trip.id),
+    [tripsQuery.data?.data],
+  );
+
+  // Initialize real-time socket connection for dispatch view
+  useDispatcherSocket(activeTripIds);
+
+  const { metrics, ordersQuery, vehiclesQuery, orders } =
+    useDispatcherMetrics();
 
   if (ordersQuery.isPending && vehiclesQuery.isPending) {
     return (
@@ -53,103 +70,123 @@ export default function DispatcherDashboardScreen(
     );
   }
 
-  if (!orders.length) {
-    return (
-      <EmptyState
-        title={adminScreenCopy.emptyTitle}
-        description={adminScreenCopy.emptyDescription}
-      />
-    );
-  }
-
   return (
-    <div className="space-y-8">
-      <PageHeader title={adminScreenCopy.title} description={adminScreenCopy.description} />
+    <div className="space-y-6">
+      <PageHeader
+        title={adminScreenCopy.title}
+        description={adminScreenCopy.description}
+      />
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3">
         <MetricCard
-          icon={<Zap className="size-8" />}
+          icon={<Zap className="size-6 text-[#064E3B]" />}
           label={adminScreenCopy.metrics.activeOrders}
           value={String(metrics.activeOrders)}
         />
         <MetricCard
-          icon={<Truck className="size-8" />}
+          icon={<Truck className="size-6 text-[#064E3B]" />}
           label={adminScreenCopy.metrics.availableVehicles}
           value={String(metrics.availableVehicles)}
         />
         <MetricCard
-          icon={<Bolt className="size-8" />}
+          icon={<Bolt className="size-6 text-[#064E3B]" />}
           label={adminScreenCopy.metrics.electricVehicles}
           value={String(metrics.electricVehicles)}
         />
       </div>
 
-      <IntegrationPendingState
-        title={adminScreenCopy.integrationPendingTitle}
-        description={adminScreenCopy.integrationPendingDescription}
-      />
+      {/* Main Dispatch Area */}
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="lg:col-span-8 flex flex-col gap-6">
+          {/* Dispatch Map */}
+          <SectionCard className="p-0 overflow-hidden h-[400px]">
+            <DispatcherMapCanvas />
+          </SectionCard>
 
-      <SectionCard className="overflow-hidden">
-        <div className="flex items-center justify-between border-b border-outline-variant/15 px-8 py-7">
-          <h2 className="text-[2rem] font-black tracking-tight text-on-surface">
-            {adminScreenCopy.recentOrders}
-          </h2>
-          <Button asChild variant="outline">
-            <a href="/dashboard/admin/orders">{adminScreenCopy.viewAll}</a>
-          </Button>
+          {/* Active Fleet View */}
+          <SectionCard className="flex-1 min-h-[300px] p-0">
+            <DispatcherFleetStatusPanel />
+          </SectionCard>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-surface-container-low text-left">
-                <th className="px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-on-surface/40">
-                  {adminScreenCopy.trackingId}
-                </th>
-                <th className="px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-on-surface/40">
-                  {adminScreenCopy.customer}
-                </th>
-                <th className="px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-on-surface/40">
-                  Trạng thái
-                </th>
-                <th className="px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-on-surface/40">
-                  {adminScreenCopy.currentEta}
-                </th>
-                <th className="px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-on-surface/40">
-                  {adminScreenCopy.actions}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.slice(0, 5).map((order: any, index: number) => (
-                <tr
-                  key={order.id}
-                  className={index === Math.min(orders.length, 5) - 1 ? "" : "border-b border-outline-variant/10"}
-                >
-                  <td className="px-8 py-7 font-mono text-lg font-black text-primary">
-                    {order.reference}
-                  </td>
-                  <td className="px-8 py-7 text-lg font-semibold text-on-surface">
-                    {order.customerName}
-                  </td>
-                  <td className="px-8 py-7">
-                    <StatusBadge label={getOrderStatusLabel(order.status)} tone="neutral" />
-                  </td>
-                  <td className="px-8 py-7 text-base text-on-surface/65">
-                    {formatDate(order.estimatedArrival)}
-                  </td>
-                  <td className="px-8 py-7">
-                    <Button asChild size="sm" variant="outline">
-                      <a href={`/tracking/${order.reference}`}>Theo dõi</a>
-                    </Button>
-                  </td>
+        {/* Unassigned pending orders with assignment flow */}
+        <div className="lg:col-span-4 h-full">
+          <SectionCard className="h-full p-0">
+            <DispatcherUnassignedOrdersPanel />
+          </SectionCard>
+        </div>
+      </div>
+
+      {orders.length > 0 ? (
+        <SectionCard className="overflow-hidden p-0">
+          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5 bg-white">
+            <h2 className="text-xl font-semibold tracking-tight text-[#064E3B]">
+              {adminScreenCopy.recentOrders}
+            </h2>
+            <Button asChild variant="outline" size="sm">
+              <a href="/dashboard/admin/orders">{adminScreenCopy.viewAll}</a>
+            </Button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="px-6 py-4 font-semibold text-slate-600">
+                    {adminScreenCopy.trackingId}
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-slate-600">
+                    {adminScreenCopy.customer}
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-slate-600">
+                    Trạng thái
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-slate-600">
+                    {adminScreenCopy.currentEta}
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-slate-600">
+                    {adminScreenCopy.actions}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </SectionCard>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {orders.slice(0, 5).map((order: any) => (
+                  <tr
+                    key={order.id}
+                    className="hover:bg-slate-50 transition-colors bg-white"
+                  >
+                    <td className="px-6 py-4 font-mono font-medium text-[#10B981]">
+                      {order.reference}
+                    </td>
+                    <td className="px-6 py-4 font-medium text-slate-900">
+                      {order.customerName}
+                    </td>
+                    <td className="px-6 py-4">
+                      <StatusBadge
+                        label={getOrderStatusLabel(order.status)}
+                        tone="neutral"
+                      />
+                    </td>
+                    <td className="px-6 py-4 text-slate-500">
+                      {formatDate(order.estimatedArrival)}
+                    </td>
+                    <td className="px-6 py-4">
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="outline"
+                        className="h-8"
+                      >
+                        <a href={`/tracking/${order.reference}`}>Theo dõi</a>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </SectionCard>
+      ) : null}
     </div>
   );
 }
-

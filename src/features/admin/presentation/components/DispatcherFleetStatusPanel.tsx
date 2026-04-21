@@ -26,23 +26,18 @@ export default function DispatcherFleetStatusPanel({
     ).length || 0;
 
   return (
-    <div
-      className={cn(
-        "rounded-[1rem] bg-surface-container-lowest p-6 shadow-[0_24px_48px_-24px_rgba(6,78,59,0.16)] flex flex-col h-full",
-        className,
-      )}
-    >
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <h3 className="text-lg font-black text-on-surface">
+    <div className={cn("flex flex-col h-full bg-white", className)}>
+      <div className="mb-4 p-5 pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <h3 className="text-base font-semibold text-[#064E3B]">
           Trạng thái đội xe
         </h3>
         {!isLoading && !isError && (
-          <div className="flex gap-2 text-xs">
-            <span className="bg-primary/10 text-primary px-2 py-1 rounded-md font-bold">
+          <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-wider">
+            <span className="bg-[#D1FAE5] text-[#065F46] px-2 py-1 rounded font-bold">
               {totalVehicles} Xe Online
             </span>
             {evCount > 0 && (
-              <span className="bg-green-100 text-green-700 px-2 py-1 rounded-md font-bold">
+              <span className="bg-[#10B981]/10 text-[#10B981] px-2 py-1 rounded font-bold">
                 {evCount} EV
               </span>
             )}
@@ -50,7 +45,7 @@ export default function DispatcherFleetStatusPanel({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto p-5 pt-0">
         {isLoading && (
           <LoadingState
             title="Đang tải..."
@@ -78,28 +73,28 @@ export default function DispatcherFleetStatusPanel({
           />
         )}
         {!isLoading && !isError && data?.data && data.data.length > 0 && (
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {data.data.map((vehicle) => (
               <li
                 key={vehicle.id}
-                className="rounded-lg border border-outline-variant/20 p-3 hover:bg-surface-container-low/50 transition-colors flex items-center justify-between"
+                className="rounded border border-slate-100 p-3 hover:bg-slate-50 transition-colors flex items-center justify-between"
               >
-                <div>
+                <div className="flex flex-col">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-sm font-bold text-on-surface">
+                    <span className="font-mono text-sm font-bold text-slate-800">
                       {vehicle.licensePlate}
                     </span>
                     {(vehicle.fuelType === "ELECTRIC" ||
                       vehicle.type === "ELECTRIC_VAN") && (
                       <span
-                        className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-sm font-bold uppercase"
+                        className="text-[10px] bg-[#10B981]/10 text-[#10B981] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider"
                         title="Xe điện"
                       >
                         EV
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-on-surface-variant font-medium">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     Tải trọng:{" "}
                     {vehicle.capacityWeight
                       ? `${vehicle.capacityWeight}kg`
@@ -107,11 +102,11 @@ export default function DispatcherFleetStatusPanel({
                   </p>
                 </div>
                 <div className="text-right flex flex-col items-end">
-                  <span className="text-xs font-semibold bg-primary-container text-on-primary-container px-2 py-1 rounded-md mb-1">
+                  <span className="text-[10px] font-bold bg-[#D1FAE5] text-[#065F46] px-2 py-0.5 rounded uppercase tracking-wider mb-1">
                     Đang rảnh
                   </span>
-                  <span className="text-[10px] text-on-surface-variant">
-                    {vehicle.type}
+                  <span className="text-[10px] text-slate-400 capitalize">
+                    {vehicle.type.replace(/_/g, " ").toLowerCase()}
                   </span>
                 </div>
               </li>

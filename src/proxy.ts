@@ -5,6 +5,7 @@ import {
   getDashboardHrefForRole,
   normalizeUserRole,
 } from "@/features/auth/application/services/auth-session";
+import { ROUTE_PERMISSIONS } from "@/features/auth/domain/constants/rbac.config";
 
 const ACCESS_TOKEN_KEY = "emerald-logistics.access-token";
 const PROTECTED_PATHS = ["/checkout", "/dashboard", "/orders/create"] as const;
@@ -41,22 +42,22 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(getDashboardHrefForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/dashboard/admin") && role !== "admin") {
+  if (pathname.startsWith("/dashboard/admin") && !ROUTE_PERMISSIONS.ADMIN.includes(role)) {
     return NextResponse.redirect(new URL(getDashboardHrefForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/dashboard/driver") && !["admin", "driver"].includes(role)) {
+  if (pathname.startsWith("/dashboard/driver") && !ROUTE_PERMISSIONS.DRIVER.includes(role)) {
     return NextResponse.redirect(new URL(getDashboardHrefForRole(role), request.url));
   }
 
   if (
     pathname.startsWith("/dashboard/warehouse") &&
-    !["admin", "warehouse_staff"].includes(role)
+    !ROUTE_PERMISSIONS.WAREHOUSE.includes(role)
   ) {
     return NextResponse.redirect(new URL(getDashboardHrefForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/dashboard/customer") && role === "admin") {
+  if (pathname.startsWith("/dashboard/customer") && !ROUTE_PERMISSIONS.CUSTOMER.includes(role)) {
     return NextResponse.redirect(new URL(getDashboardHrefForRole(role), request.url));
   }
 

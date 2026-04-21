@@ -30,6 +30,24 @@ const sampleFleetPerformance = [
   },
 ];
 
+const sampleOrderAnalytics = [
+  {
+    avgDeliveryTime: 18,
+    count: 12,
+    period: "2026-W16",
+    revenue: 500000000,
+  },
+];
+
+const sampleEmissionAnalytics = [
+  {
+    co2Emitted: 320,
+    co2Saved: 124,
+    greenTripsCount: 8,
+    period: "2026-W16",
+  },
+];
+
 const sampleVehicleResponse = {
   data: [
     {
@@ -42,6 +60,25 @@ const sampleVehicleResponse = {
   ],
   totalItems: 1,
 };
+
+function createMockAccessToken(role: "admin" | "customer" = "customer") {
+  const roleId = role === "admin" ? 1 : 2;
+  const payload = {
+    deviceId: 1,
+    exp: 4_102_444_800,
+    iat: 1_712_678_400,
+    roleId,
+    roleName: role,
+    userId: role === "admin" ? 1 : 2,
+  };
+  const encodedPayload = Buffer.from(JSON.stringify(payload))
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+
+  return `header.${encodedPayload}.signature`;
+}
 
 async function fulfillJson(route: Route, status: number, body: unknown) {
   await route.fulfill({
@@ -64,7 +101,7 @@ export async function registerMockApiRoutes(page: Page) {
 
     if (method === "POST" && pathname === "/auth/login") {
       return fulfillJson(route, 200, {
-        accessToken: "mock-access-token",
+        accessToken: createMockAccessToken("customer"),
         refreshToken: "mock-refresh-token",
       });
     }
@@ -83,7 +120,7 @@ export async function registerMockApiRoutes(page: Page) {
 
     if (method === "POST" && pathname === "/auth/refresh-token") {
       return fulfillJson(route, 200, {
-        accessToken: "mock-access-token-refreshed",
+        accessToken: createMockAccessToken("customer"),
         refreshToken: "mock-refresh-token-refreshed",
       });
     }
@@ -132,25 +169,38 @@ export async function registerMockApiRoutes(page: Page) {
       return fulfillJson(route, 200, sampleFleetPerformance);
     }
 
+    if (method === "GET" && pathname === "/analytics/orders") {
+      return fulfillJson(route, 200, sampleOrderAnalytics);
+    }
+
+    if (method === "GET" && pathname === "/analytics/emissions") {
+      return fulfillJson(route, 200, sampleEmissionAnalytics);
+    }
+
     return fulfillJson(route, 404, {
       message: `Unhandled mock route: ${method} ${pathname}`,
     });
   });
 }
 
-export async function seedAuthenticatedSession(page: Page) {
+export async function seedAuthenticatedSession(
+  page: Page,
+  role: "admin" | "customer" = "customer",
+) {
+  const accessToken = createMockAccessToken(role);
+
   await page.context().addCookies([
     {
       name: accessTokenKey,
-      value: "mock-access-token",
+      value: accessToken,
       url: appBaseUrl,
     },
   ]);
   await page.addInitScript(
-    ({ accessTokenKey, refreshTokenKey }) => {
-      window.localStorage.setItem(accessTokenKey, "mock-access-token");
+    ({ accessToken, accessTokenKey, refreshTokenKey }) => {
+      window.localStorage.setItem(accessTokenKey, accessToken);
       window.localStorage.setItem(refreshTokenKey, "mock-refresh-token");
     },
-    { accessTokenKey, refreshTokenKey },
+    { accessToken, accessTokenKey, refreshTokenKey },
   );
 }

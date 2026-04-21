@@ -1,16 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Bell, ShieldCheck } from "lucide-react";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import { formatDateOnly } from "@/utils/formatters";
 
 export default function CustomerDashboardPage() {
   const ordersQuery = useOrdersListQuery();
   const latestOrderId = ordersQuery.data?.data[0]?.id ?? null;
   const latestPaymentQuery = usePaymentRecord(latestOrderId);
   const latestOrderReference = ordersQuery.data?.data[0]?.reference ?? null;
+  const [updatedAtLabel, setUpdatedAtLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    setUpdatedAtLabel(formatDateOnly(new Date()));
+  }, []);
+
   const summary = useMemo(() => {
     const orders = ordersQuery.data?.data ?? [];
 
@@ -30,7 +38,7 @@ export default function CustomerDashboardPage() {
           <h2 className="mb-2 text-[20px] font-semibold text-emerald-900">Đơn hàng đang hoạt động</h2>
           <p className="text-4xl font-bold text-slate-700">{summary.activeOrders}</p>
           <p className="mt-2 text-[12px] font-medium text-slate-500">
-            Cập nhật lúc: {new Date().toLocaleDateString("vi-VN")}
+            Cập nhật lúc: {updatedAtLabel ?? "--"}
           </p>
         </div>
 
@@ -73,6 +81,44 @@ export default function CustomerDashboardPage() {
           </Link>
           <Link href="/orders/create" className="rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700">
             Tạo đơn mới
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <Bell className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-[20px] font-semibold text-emerald-900">Notification Inbox</h2>
+              <p className="mt-1 text-[14px] text-slate-600">Theo dõi cập nhật phê duyệt và các thông báo hệ thống.</p>
+            </div>
+          </div>
+          <Link
+            href="/dashboard/customer/notifications"
+            className="mt-5 inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white"
+          >
+            Mở inbox
+          </Link>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <ShieldCheck className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-[20px] font-semibold text-emerald-900">Role Requests</h2>
+              <p className="mt-1 text-[14px] text-slate-600">Đăng ký trở thành tài xế hoặc nhân viên kho trực tiếp từ dashboard.</p>
+            </div>
+          </div>
+          <Link
+            href="/dashboard/customer/roles"
+            className="mt-5 inline-flex rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700"
+          >
+            Mở role center
           </Link>
         </div>
       </div>

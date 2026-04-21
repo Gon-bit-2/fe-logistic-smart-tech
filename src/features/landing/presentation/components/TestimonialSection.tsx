@@ -1,5 +1,3 @@
-"use client";
-
 import { IntegrationPendingState } from "@/components/ui/data-states";
 import { testimonialSectionCopy } from "@/i18n/vi";
 
@@ -15,4 +13,3 @@ export default function TestimonialSection() {
     </section>
   );
 }
-

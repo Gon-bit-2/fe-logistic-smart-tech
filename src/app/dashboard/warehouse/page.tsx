@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { type FormEvent, useState } from "react";
+import { Bell, ShieldCheck } from "lucide-react";
 import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 
 export default function WarehouseScannerPage() {
@@ -38,6 +40,40 @@ export default function WarehouseScannerPage() {
         <div className="mb-6 pt-4 text-center">
           <h1 className="text-[28px] font-bold text-emerald-900">Trạm Quét Mã Kho</h1>
           <p className="mt-1 text-[14px] text-slate-600">Trung tâm phân phối miền Nam</p>
+        </div>
+
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Link
+            href="/dashboard/warehouse/notifications"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-colors hover:border-emerald-200 hover:bg-emerald-50/40"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                <Bell className="size-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-emerald-900">Notifications</p>
+                <p className="text-xs text-slate-600">Mở inbox phê duyệt và vận hành</p>
+              </div>
+            </div>
+            <span className="text-sm font-bold text-emerald-700">Mở</span>
+          </Link>
+
+          <Link
+            href="/dashboard/warehouse/roles"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-colors hover:border-emerald-200 hover:bg-emerald-50/40"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                <ShieldCheck className="size-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-emerald-900">Role Requests</p>
+                <p className="text-xs text-slate-600">Đăng ký và theo dõi yêu cầu vai trò</p>
+              </div>
+            </div>
+            <span className="text-sm font-bold text-emerald-700">Mở</span>
+          </Link>
         </div>
 
         <div className="mb-6 flex rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">

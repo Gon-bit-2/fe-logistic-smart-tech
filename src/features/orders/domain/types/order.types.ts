@@ -28,22 +28,51 @@ export type OrderApiDto = {
     phone?: string | null;
   } | null;
   customerName?: string | null;
+  currentHubId?: number | null;
+  currentTripId?: number | null;
   declaredValueUsd?: number | null;
   deliveryAddress?: string | null;
+  estimatedCo2Saved?: number | null;
   estimatedArrival?: string | null;
   id: number | string;
   itemDescription?: string | null;
+  items?: OrderApiItemDto[] | null;
   paymentMethod?: PaymentMethod | string | null;
   pickupAddress?: string | null;
   pricing?: OrderApiPricing | null;
+  preferredDeliveryTimeEnd?: string | null;
+  preferredDeliveryTimeStart?: string | null;
   receiverName?: string | null;
+  receiverAddress?: string | null;
+  receiverLat?: number | null;
+  receiverLng?: number | null;
   receiverPhone?: string | null;
   reference?: string | null;
+  senderAddress?: string | null;
+  senderLat?: number | null;
+  senderLng?: number | null;
+  senderName?: string | null;
+  senderPhone?: string | null;
+  serviceType?: string | null;
+  shippingFee?: number | null;
   serviceTier?: ServiceTier | string | null;
   status?: OrderStatus | string | null;
   stops?: OrderStop[] | null;
   trackingCode?: string | null;
+  totalVolume?: number | null;
+  totalWeight?: number | null;
   updatedAt?: string | null;
+};
+
+export type OrderApiItemDto = {
+  height?: number | null;
+  id?: number | string | null;
+  length?: number | null;
+  name?: string | null;
+  orderId?: number | string | null;
+  quantity?: number | null;
+  weight?: number | null;
+  width?: number | null;
 };
 
 export type OrderPricing = {
@@ -105,6 +134,30 @@ export type CreateOrderInput = Pick<
   packageDimensions: string;
   declaredValueUsd: number;
   serviceTier: ServiceTier;
+};
+
+export type CreateOrderApiInput = {
+  items: Array<{
+    height?: number;
+    length?: number;
+    name: string;
+    quantity: number;
+    weight: number;
+    width?: number;
+  }>;
+  preferredDeliveryTimeEnd?: string;
+  preferredDeliveryTimeStart?: string;
+  receiverAddress: string;
+  receiverLat: number;
+  receiverLng: number;
+  receiverName: string;
+  receiverPhone: string;
+  senderAddress: string;
+  senderLat: number;
+  senderLng: number;
+  senderName: string;
+  senderPhone: string;
+  serviceType?: "ECO_GREEN" | "EXPRESS" | "STANDARD";
 };
 
 export type OrderListParams = PaginationParams & {

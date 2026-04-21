@@ -24,7 +24,8 @@ export const API_ORDER_DETAIL = (id: string | number) => `/orders/${id}`;
 export const API_ORDER_STATUS = (id: string | number) => `/orders/${id}/status`;
 
 // tracking api endpoints
-export const API_TRACKING_PUBLIC = (trackingCode: string) => `/tracking-events/public/${encodeURIComponent(trackingCode)}`;
+export const API_TRACKING_PUBLIC = (trackingCode: string) =>
+  `/tracking-events/public/${encodeURIComponent(trackingCode)}`;
 export const API_TRACKING_INTERNAL = "/tracking-events";
 export const API_TRACKING_NAMESPACE = "/tracking";
 
@@ -49,7 +50,8 @@ export const API_ANALYTICS_FLEET_PERFORMANCE = "/analytics/fleet-performance";
 // hubs api endpoints
 export const API_HUBS = "/hubs";
 export const API_HUB_DETAIL = (id: string | number) => `/hubs/${id}`;
-export const API_HUB_ASSIGN_STAFF = (id: string | number) => `/hubs/${id}/staff`;
+export const API_HUB_ASSIGN_STAFF = (id: string | number) =>
+  `/hubs/${id}/staff`;
 export const API_HUB_REMOVE_STAFF = (
   hubId: string | number,
   userId: string | number,
@@ -57,5 +59,24 @@ export const API_HUB_REMOVE_STAFF = (
 
 // language api endpoints
 export const API_LANGUAGE = "/language";
-export const API_LANGUAGE_DETAIL = (languageId: string) => `/language/${languageId}`;
+export const API_LANGUAGE_DETAIL = (languageId: string) =>
+  `/language/${languageId}`;
 
+export const API_TRIP_MANUAL = "/trips/manual";
+export const API_TRIP_VEHICLE = (id: string | number) => `/trips/${id}/vehicle`;
+export const API_TRIP_ORDERS = (id: string | number) => `/trips/${id}/orders`;
+
+// notifications api endpoints
+export const API_NOTIFICATIONS = "/notifications";
+export const API_NOTIFICATIONS_UNREAD_COUNT = "/notifications/unread-count";
+export const API_NOTIFICATIONS_MARK_READ = (id: string | number) =>
+  `/notifications/${id}/read`;
+export const API_NOTIFICATIONS_MARK_ALL_READ = "/notifications/read-all";
+
+// role requests api endpoints
+export const API_ROLE_REQUESTS = "/role-requests";
+export const API_ROLE_REQUESTS_ME = "/role-requests/me";
+export const API_ROLE_REQUESTS_APPROVE = (id: string | number) =>
+  `/role-requests/${id}/approve`;
+export const API_ROLE_REQUESTS_REJECT = (id: string | number) =>
+  `/role-requests/${id}/reject`;

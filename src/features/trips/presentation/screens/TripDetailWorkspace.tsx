@@ -14,6 +14,7 @@ import { useTripTrackingSocket } from "@/features/tracking/presentation/hooks/us
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
 import { useTripDetailQuery } from "@/features/trips/presentation/hooks/useTrips";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import { formatDate } from "@/utils/formatters";
 
 type TripDetailWorkspaceProps = {
   tripId: string;
@@ -47,7 +48,7 @@ export default function TripDetailWorkspace({
       return "Chưa có vị trí cập nhật mới.";
     }
 
-    return `${socketState.latestLocation.lat.toFixed(5)}, ${socketState.latestLocation.lng.toFixed(5)} • ${new Date(socketState.latestLocation.timestamp).toLocaleString("vi-VN")}`;
+    return `${socketState.latestLocation.lat.toFixed(5)}, ${socketState.latestLocation.lng.toFixed(5)} • ${formatDate(socketState.latestLocation.timestamp)}`;
   }, [socketState.latestLocation]);
 
   async function handleSingleUpload(event: ChangeEvent<HTMLInputElement>) {

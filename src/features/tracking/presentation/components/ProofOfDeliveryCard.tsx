@@ -32,6 +32,8 @@ export default function ProofOfDeliveryCard({
             <Image
               src={podImageUrl}
               alt={proofOfDeliveryCopy.imageAlt}
+              width={640}
+              height={360}
               className="aspect-video h-full w-full object-cover"
             />
           ) : (
@@ -39,6 +41,8 @@ export default function ProofOfDeliveryCard({
               <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV2GBNJwQJo5CamIfYGyyJyFgWtHIIMjCjqro1f1MY0SoagytN0yo5v33HTBkvLG4ZRPIOiHXb_YlNRKdXkye-fj-_OCqJ_9f71_R0n-aS71m1kNuNuAW-gr-e3J_Hzdqm0pvlkYdzc3V-w4JNi4sd8Md4-m0Uy7uK-ukP1B2KjdWluNy811y64vRzRbNxnfV6Nwkt06Ly2h1xrw20XhrDOxyUI_nbqTsGHVQKeNbCU81pcc7DEIKiUIALeBqW3POPoRfnf48e--_k"
                 alt={proofOfDeliveryCopy.pendingImageAlt}
+                width={640}
+                height={360}
                 className="aspect-video h-full w-full object-cover opacity-45 grayscale"
               />
               <div className="absolute inset-0 flex items-center justify-center">

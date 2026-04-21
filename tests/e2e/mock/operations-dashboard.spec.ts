@@ -2,13 +2,13 @@ import { expect, test } from "@playwright/test";
 import { registerMockApiRoutes, seedAuthenticatedSession } from "./mock-api";
 
 test.beforeEach(async ({ page }) => {
-  await seedAuthenticatedSession(page);
   await registerMockApiRoutes(page);
 });
 
 test("creates an order, confirms COD checkout, and lands on tracking detail", async ({
   page,
 }) => {
+  await seedAuthenticatedSession(page, "customer");
   await page.goto("/orders/create");
 
   await page.getByRole("textbox", { name: "Khách hàng" }).fill("Công ty Emerald");
@@ -28,6 +28,7 @@ test("creates an order, confirms COD checkout, and lands on tracking detail", as
 test("renders admin and customer dashboards with mocked backend data", async ({
   page,
 }) => {
+  await seedAuthenticatedSession(page, "admin");
   await page.goto("/dashboard/admin");
   await expect(page.getByText("Trung tâm điều hành vận hành thông minh")).toBeVisible();
   await expect(page.getByText("ELG-2026-0001")).toBeVisible();
@@ -36,6 +37,7 @@ test("renders admin and customer dashboards with mocked backend data", async ({
   await expect(page.getByText("Hiệu suất Đội xe")).toBeVisible();
   await expect(page.getByText("Xe 51A-12345")).toBeVisible();
 
+  await seedAuthenticatedSession(page, "customer");
   await page.goto("/dashboard/customer/orders");
   await expect(page.getByText("Lịch sử Đơn hàng")).toBeVisible();
   await expect(page.getByText("ELG-2026-0001")).toBeVisible();

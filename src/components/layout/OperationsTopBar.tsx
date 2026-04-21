@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import AppIcon from "@/components/ui/app-icon";
 import { operationsTopBarCopy } from "@/i18n/vi";
+import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
 
 type OperationsTopBarProps = Readonly<{
   active?: "dashboard" | "shipments" | "tracking";
@@ -11,6 +14,8 @@ const items = operationsTopBarCopy.items;
 export default function OperationsTopBar({
   active = "shipments",
 }: OperationsTopBarProps) {
+  const { logout } = useAuth();
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/30 bg-emerald-50/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 md:px-8">
@@ -60,6 +65,14 @@ export default function OperationsTopBar({
               className="h-full w-full object-cover"
             />
           </div>
+          <button
+            type="button"
+            aria-label="Đăng xuất"
+            onClick={() => void logout()}
+            className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
+          >
+            <AppIcon name="logout" />
+          </button>
         </div>
       </div>
     </header>

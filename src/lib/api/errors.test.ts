@@ -96,6 +96,23 @@ describe("errors utility", () => {
         expect(normalized.status).toBe(400);
       });
 
+      it("should replace machine permission codes with a readable fallback", () => {
+        const error = new AxiosError("Forbidden", "ERR_BAD_REQUEST", undefined, undefined, {
+          status: 403,
+          data: {
+            message: "Error.Forbidden",
+          },
+          statusText: "Forbidden",
+          headers: {},
+          config: { headers: new AxiosHeaders() },
+        });
+        const normalized = normalizeApiError(error);
+        expect(normalized.status).toBe(403);
+        expect(normalized.message).toBe(
+          "You do not have permission to perform this action.",
+        );
+      });
+
       it("should extract array of issues from response data", () => {
         const error = new AxiosError("Bad Request", "ERR_BAD_REQUEST", undefined, undefined, {
           status: 422,
