@@ -3,7 +3,6 @@ import type {
   CreateOrderInput,
   OrderDTO,
   OrderQuoteResponse,
-  PaymentMethod,
   OrderListParams,
   UpdateOrderStatusInput,
 } from "@/features/orders/domain/types/order.types";
@@ -16,8 +15,6 @@ import {
   deleteOrderRequest,
 } from "@/features/orders/infrastructure/api/order.api";
 import {
-  findStoredOrder,
-  patchStoredOrder,
   upsertStoredOrder,
 } from "@/features/orders/infrastructure/storage/order-session.storage";
 
@@ -46,45 +43,14 @@ export async function resolveCheckoutOrderUseCase(params: {
   orderId: string | null;
   reference: string | null;
 }) {
-  const lookupKey = params.orderId ?? params.reference;
-
-  if (!lookupKey) {
-    throw new Error("Thiếu `orderId` trong URL thanh toán.");
-  }
-
-  const storedOrder = findStoredOrder(lookupKey);
-
-  if (storedOrder) {
-    return storedOrder;
-  }
-
   if (!params.orderId) {
-    throw new Error(
-      "Không tìm thấy đơn hàng trong phiên trình duyệt hiện tại. Hãy mở checkout từ luồng tạo đơn hoặc cung cấp `orderId`.",
-    );
+    throw new Error("Thiếu `orderId` trong URL thanh toán.");
   }
 
   assertOrdersApiConfigured();
 
   const order = await getOrderByIdRequest(params.orderId);
   return upsertStoredOrder(order);
-}
-
-export async function confirmCheckoutUseCase(
-  order: OrderDTO,
-  paymentMethod: PaymentMethod,
-) {
-  const nextOrder =
-    patchStoredOrder(order.id, {
-      paymentMethod,
-      status: "IN_TRANSIT",
-    }) ?? {
-      ...order,
-      paymentMethod,
-      status: "IN_TRANSIT",
-    };
-
-  return upsertStoredOrder(nextOrder);
 }
 
 export async function listOrdersUseCase(params?: OrderListParams) {

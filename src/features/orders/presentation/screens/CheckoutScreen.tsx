@@ -91,16 +91,7 @@ export default function CheckoutScreen({
   showTopBar = true,
 }: CheckoutScreenProps) {
   const router = useRouter();
-  const {
-    order,
-    orderId,
-    paymentMethod,
-    setPaymentMethod,
-    confirmCheckout,
-    isLoading,
-    loadError,
-    paymentRecord,
-  } = useCheckout();
+  const { order, orderId, isLoading, loadError, paymentRecord } = useCheckout();
   const createPaymentIntent = useCreatePaymentIntent();
   const [error, setError] = useState<string | null>(null);
   const autoIntentAttemptRef = useRef<string | null>(null);
@@ -108,20 +99,24 @@ export default function CheckoutScreen({
   const pricing = order?.pricing;
   const normalizedGatewayAmount = createPaymentIntent.data?.amount;
   const trackingDestination = order?.trackingCode ?? order?.reference ?? "";
+  const effectivePaymentRecord = paymentRecord ?? order?.payment ?? null;
+  const paymentMethod = effectivePaymentRecord?.method ?? "STRIPE";
+  const isPaymentCompleted = effectivePaymentRecord?.status === "COMPLETED";
+  const isCodPayment = paymentMethod === "COD";
   const paymentAttemptKey = [
     orderId ?? "missing-order",
-    paymentMethod,
     pricing?.currency ?? "missing-currency",
     pricing?.total ?? "missing-total",
+    effectivePaymentRecord?.status ?? "missing-status",
   ].join(":");
 
   useEffect(() => {
-    if (paymentMethod !== "card") {
+    if (!order || !orderId || isPaymentCompleted || isCodPayment) {
       autoIntentAttemptRef.current = null;
       return;
     }
 
-    if (!orderId || clientSecret || createPaymentIntent.isPending) {
+    if (clientSecret || createPaymentIntent.isPending) {
       return;
     }
 
@@ -139,18 +134,22 @@ export default function CheckoutScreen({
           : "Không thể chuẩn bị cổng thanh toán trực tuyến.",
       );
     });
-  }, [clientSecret, createPaymentIntent, orderId, paymentAttemptKey, paymentMethod, pricing]);
+  }, [
+    clientSecret,
+    createPaymentIntent,
+    isCodPayment,
+    isPaymentCompleted,
+    order,
+    orderId,
+    paymentAttemptKey,
+    pricing,
+  ]);
 
   useEffect(() => {
-    if (
-      paymentMethod === "card" &&
-      orderId &&
-      clientSecret &&
-      autoIntentAttemptRef.current !== paymentAttemptKey
-    ) {
+    if (orderId && clientSecret && autoIntentAttemptRef.current !== paymentAttemptKey) {
       autoIntentAttemptRef.current = paymentAttemptKey;
     }
-  }, [clientSecret, orderId, paymentAttemptKey, paymentMethod]);
+  }, [clientSecret, orderId, paymentAttemptKey]);
 
   const stripeOptions = useMemo(
     () =>
@@ -201,11 +200,6 @@ export default function CheckoutScreen({
     );
   }
 
-  async function handleCodConfirm() {
-    setError(null);
-    await confirmCheckout();
-  }
-
   return (
     <div className="min-h-screen bg-surface">
       {showTopBar ? <OperationsTopBar active="shipments" /> : null}
@@ -230,91 +224,40 @@ export default function CheckoutScreen({
               </div>
 
               <div className="space-y-6">
-                {paymentMethod === "card" ? (
-                  stripePromise && stripeOptions ? (
-                    <Elements stripe={stripePromise} options={stripeOptions}>
-                      <StripePaymentForm
-                        onError={setError}
-                        onSuccess={() => router.push(`/tracking/${trackingDestination}`)}
-                      />
-                    </Elements>
-                  ) : (
-                    <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
-                      {!stripePublishableKey
-                        ? "Stripe chưa được cấu hình trên frontend. Hãy thiết lập NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
-                        : createPaymentIntent.isPending
-                        ? "Đang chuẩn bị cổng thanh toán..."
-                        : "Thanh toán trực tuyến hiện chưa sẵn sàng. Vui lòng thử lại sau hoặc chọn thanh toán khi nhận hàng."}
-                    </div>
-                  )
-                ) : null}
+                {isPaymentCompleted ? (
+                  <div className="rounded-xl bg-primary/8 p-4 text-sm text-on-surface">
+                    Đơn hàng này đã được thanh toán. Bạn có thể quay lại trang theo dõi để xem trạng thái giao nhận.
+                  </div>
+                ) : isCodPayment ? (
+                  <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
+                    Đơn hàng này đang được xử lý theo phương thức COD ở luồng vận hành, customer checkout không hỗ trợ chuyển đổi sang thanh toán online.
+                  </div>
+                ) : stripePromise && stripeOptions ? (
+                  <Elements stripe={stripePromise} options={stripeOptions}>
+                    <StripePaymentForm
+                      onError={setError}
+                      onSuccess={() => router.push(`/tracking/${trackingDestination}`)}
+                    />
+                  </Elements>
+                ) : (
+                  <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
+                    {!stripePublishableKey
+                      ? "Stripe chưa được cấu hình trên frontend. Hãy thiết lập NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
+                      : createPaymentIntent.isPending
+                      ? "Đang chuẩn bị cổng thanh toán..."
+                      : !orderId
+                      ? "Không tìm thấy orderId hợp lệ để khởi tạo thanh toán."
+                      : "Thanh toán trực tuyến hiện chưa sẵn sàng. Vui lòng thử lại sau."}
+                  </div>
+                )}
 
-                <div className="space-y-4 border-t border-outline-variant/10 pt-8">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("card")}
-                    className={`flex w-full items-center gap-4 rounded-lg p-4 text-left transition ${
-                      paymentMethod === "card"
-                        ? "bg-surface-container-low"
-                        : "hover:bg-surface-container-low"
-                    }`}
-                  >
-                    <div
-                      className={`relative h-5 w-5 rounded-full border-2 ${
-                        paymentMethod === "card"
-                          ? "border-primary"
-                          : "border-outline-variant"
-                      }`}
-                    >
-                      <div
-                        className={`absolute inset-1 rounded-full bg-primary transition ${
-                          paymentMethod === "card" ? "scale-100" : "scale-0"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-on-surface">
-                        {checkoutCopy.cardPayment}
-                      </p>
-                      <p className="text-sm text-slate-500">
-                        {checkoutCopy.cardPaymentDescription}
-                      </p>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("cash_on_delivery")}
-                    className={`flex w-full items-center gap-4 rounded-lg p-4 text-left transition ${
-                      paymentMethod === "cash_on_delivery"
-                        ? "bg-surface-container-low"
-                        : "hover:bg-surface-container-low"
-                    }`}
-                  >
-                    <div
-                      className={`relative h-5 w-5 rounded-full border-2 ${
-                        paymentMethod === "cash_on_delivery"
-                          ? "border-primary"
-                          : "border-outline-variant"
-                      }`}
-                    >
-                      <div
-                        className={`absolute inset-1 rounded-full bg-primary transition ${
-                          paymentMethod === "cash_on_delivery"
-                            ? "scale-100"
-                            : "scale-0"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-on-surface">
-                        {checkoutCopy.cashOnDelivery}
-                      </p>
-                      <p className="text-sm text-slate-500">
-                        {checkoutCopy.cashOnDeliveryDescription}
-                      </p>
-                    </div>
-                  </button>
+                <div className="rounded-xl border border-outline-variant/10 bg-surface-container-low p-4">
+                  <p className="font-semibold text-on-surface">
+                    {checkoutCopy.cardPayment}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {checkoutCopy.cardPaymentDescription}
+                  </p>
                 </div>
               </div>
             </section>
@@ -393,23 +336,14 @@ export default function CheckoutScreen({
                 ) : null}
               </div>
 
-              {paymentMethod === "cash_on_delivery" ? (
-                <Button
-                  onClick={() => void handleCodConfirm()}
-                  className="h-14 w-full bg-gradient-to-br from-tertiary to-tertiary-container text-base font-black text-white"
-                >
-                  {checkoutCopy.confirmCodOrder}
-                </Button>
-              ) : null}
-
               {error ? (
                 <p className="mt-4 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   {error}
                 </p>
               ) : null}
-              {paymentRecord ? (
+              {effectivePaymentRecord ? (
                 <p className="mt-4 rounded-xl bg-primary/8 px-4 py-3 text-sm text-on-surface">
-                  Trạng thái thanh toán: <strong>{getPaymentStatusLabel(paymentRecord.status)}</strong>
+                  Trạng thái thanh toán: <strong>{getPaymentStatusLabel(effectivePaymentRecord.status)}</strong>
                 </p>
               ) : null}
             </div>

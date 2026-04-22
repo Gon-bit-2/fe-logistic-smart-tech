@@ -4,9 +4,9 @@ import type {
   OrderPricing,
   OrderStatus,
   OrderViewModel,
-  PaymentMethod,
   ServiceTier,
 } from "@/features/orders/domain/types/order.types";
+import { mapPaymentApiToRecord } from "@/features/payments/application/mappers/payment.mapper";
 
 function normalizeOrderStatus(value?: string | null): OrderStatus {
   switch (value) {
@@ -39,16 +39,6 @@ function normalizeServiceTier(value?: string | null): ServiceTier | undefined {
 
   if (value === "ECO_GREEN") {
     return "eco_green";
-  }
-
-  return undefined;
-}
-
-function normalizePaymentMethod(
-  value?: string | null,
-): PaymentMethod | undefined {
-  if (value === "card" || value === "cash_on_delivery") {
-    return value;
   }
 
   return undefined;
@@ -134,6 +124,14 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
     payload.customer?.fullName?.trim() ||
     payload.customer?.email?.trim() ||
     "Khách hàng";
+  const payment = mapPaymentApiToRecord(
+    payload.payment ??
+      (payload.paymentMethod
+        ? {
+            method: payload.paymentMethod,
+          }
+        : null),
+  );
 
   return {
     co2SavedKg:
@@ -171,7 +169,7 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
     itemDescription: payload.itemDescription ?? mapItemDescription(payload.items),
     packageDimensions: mapDimensions(payload.items),
     packageWeightKg: mapPackageWeight(payload),
-    paymentMethod: normalizePaymentMethod(payload.paymentMethod),
+    payment,
     pickupAddress: payload.pickupAddress ?? payload.senderAddress ?? "Đang cập nhật",
     pricing: mapPricing(payload.pricing, payload.shippingFee),
     receiverName: payload.receiverName ?? undefined,

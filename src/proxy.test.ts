@@ -30,6 +30,18 @@ function createRequest(pathname: string, accessToken?: string) {
 }
 
 describe("proxy", () => {
+  it("rewrites the legacy Google callback path to the flat callback page", () => {
+    const request = createRequest(
+      "/auth/google/callback?accessToken=test-access&refreshToken=test-refresh",
+    );
+
+    const response = proxy(request);
+
+    expect(response.headers.get("x-middleware-rewrite")).toBe(
+      "http://localhost/auth/google-callback?accessToken=test-access&refreshToken=test-refresh",
+    );
+  });
+
   it("lets admins access other dashboard workspaces", () => {
     const request = createRequest(
       "/dashboard/driver",
@@ -72,5 +84,16 @@ describe("proxy", () => {
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBe("http://localhost/dashboard/customer");
+  });
+
+  it("redirects drivers away from customer checkout routes", () => {
+    const request = createRequest(
+      "/checkout?orderId=21",
+      createAccessToken("driver", 3),
+    );
+
+    const response = proxy(request);
+
+    expect(response.headers.get("location")).toBe("http://localhost/dashboard/driver");
   });
 });

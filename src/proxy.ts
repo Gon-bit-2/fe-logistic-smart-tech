@@ -58,6 +58,14 @@ function redirectToPath(request: NextRequest, destination: string) {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === "/auth/google/callback") {
+    const callbackUrl = new URL("/auth/google-callback", request.url);
+    request.nextUrl.searchParams.forEach((value, key) => {
+      callbackUrl.searchParams.set(key, value);
+    });
+    return NextResponse.rewrite(callbackUrl);
+  }
+
   if (!isProtectedPath(pathname)) {
     return NextResponse.next();
   }

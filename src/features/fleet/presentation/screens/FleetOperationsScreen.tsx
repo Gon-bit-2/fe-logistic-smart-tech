@@ -54,7 +54,7 @@ export default function FleetOperationsScreen(
         title={fleetScreenCopy.title}
         actions={
           <>
-            <button
+            {/* <button
               type="button"
               className="inline-flex items-center gap-3 rounded-[1.35rem] bg-surface-container-lowest px-6 py-4 text-lg font-bold text-on-surface/65 shadow-[0_16px_32px_-24px_rgba(6,78,59,0.32)]"
             >
@@ -67,7 +67,7 @@ export default function FleetOperationsScreen(
             >
               <Download className="size-5" />
               {fleetScreenCopy.exportReport}
-            </button>
+            </button> */}
           </>
         }
       />

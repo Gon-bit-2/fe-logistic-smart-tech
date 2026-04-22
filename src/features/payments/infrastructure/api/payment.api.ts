@@ -1,9 +1,11 @@
 import { httpClient } from "@/lib/api/http-client";
 import type {
+  PaymentApiDto,
   CodConfirmResponse,
   PaymentIntentResponse,
   PaymentRecordDto,
 } from "@/features/payments/domain/types/payment.types";
+import { mapPaymentApiToRecord } from "@/features/payments/application/mappers/payment.mapper";
 import {
   API_PAYMENT_COD_CONFIRM,
   API_PAYMENT_CREATE_INTENT,
@@ -24,10 +26,10 @@ export async function createPaymentIntentRequest(orderId: string) {
 }
 
 export async function getPaymentByOrderRequest(orderId: string) {
-  const response = await httpClient.get<PaymentRecordDto | null>(
+  const response = await httpClient.get<PaymentApiDto | null>(
     API_PAYMENT_ORDER(orderId),
   );
-  return response.data;
+  return mapPaymentApiToRecord(response.data);
 }
 
 export async function confirmCodPaymentRequest(orderId: string) {

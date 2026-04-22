@@ -249,17 +249,6 @@ export default function OrderForm({
 
       <form className="space-y-8" onSubmit={handleSubmit}>
         <div className="grid gap-6 md:grid-cols-2">
-          <label className="space-y-2 md:col-span-2">
-            <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.customer}
-            </span>
-            <Input
-              value={form.customerName}
-              onChange={(event) => updateField("customerName", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
-            />
-          </label>
-
           <AddressAutocompleteField
             label={orderFormCopy.pickupAddress}
             value={form.pickup}
@@ -358,21 +347,6 @@ export default function OrderForm({
             <Input
               value={form.packageDimensions}
               onChange={(event) => updateField("packageDimensions", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
-            />
-          </label>
-
-          <label className="space-y-2">
-            <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.declaredValue}
-            </span>
-            <Input
-              type="number"
-              min="0"
-              value={form.declaredValueUsd}
-              onChange={(event) =>
-                updateField("declaredValueUsd", Number(event.target.value || 0))
-              }
               className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
             />
           </label>

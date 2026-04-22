@@ -119,7 +119,7 @@ export function mapCreateOrderInputToApiPayload(
     senderAddress: pickup.address,
     senderLat: pickup.latitude,
     senderLng: pickup.longitude,
-    senderName: input.contactName.trim() || input.customerName.trim() || "Người gửi",
+    senderName: input.contactName.trim() || "Người gửi",
     senderPhone: input.contactPhone.trim() || "0000000000",
     serviceType: mapServiceTier(input.serviceTier),
   };

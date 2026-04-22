@@ -34,28 +34,47 @@ function hasOrderEnvelope(
   return typeof payload === "object" && payload !== null && "order" in payload;
 }
 
+function formatDistanceText(distanceMeters: number) {
+  if (!Number.isFinite(distanceMeters) || distanceMeters <= 0) {
+    return "Đang cập nhật";
+  }
+
+  return `${(distanceMeters / 1000).toFixed(1)} km`;
+}
+
 function mapOrderRoute(route: OrderRouteApi): OrderRoute {
+  const distanceMeters = Number(route.distanceMeters ?? 0);
+  const durationSeconds = Number(route.durationSeconds ?? 0);
+
   return {
-    distanceMeters: Number(route.distance?.value ?? 0),
-    distanceText: route.distance?.text?.trim() || "Đang cập nhật",
-    durationSeconds: Number(route.duration?.value ?? 0),
-    durationText: route.duration?.text?.trim() || "Đang cập nhật",
-    polyline: route.overview_polyline?.points?.trim() || null,
+    distanceMeters,
+    distanceText: formatDistanceText(distanceMeters),
+    durationSeconds,
+    durationText: "",
+    polyline: route.polyline?.trim() || null,
   };
 }
 
 function mapOrderQuoteResponse(payload: OrderQuoteApiResponse): OrderQuoteResponse {
+  const distanceMeters = Number(payload.distanceMeters ?? 0);
+  const durationSeconds = Number(payload.durationSeconds ?? 0);
+  const primaryRoute = mapOrderRoute({
+    distanceMeters,
+    durationSeconds,
+    polyline: payload.polyline ?? null,
+  });
+
   return {
     quote: {
       currency: "VND",
-      distanceKm: Number(payload.quote?.distance ?? 0),
-      durationSeconds: Number(payload.quote?.duration ?? 0),
-      estimatedCo2Saved: Number(payload.quote?.estimatedCo2Saved ?? 0),
-      shippingFee: Number(payload.quote?.shippingFee ?? 0),
-      totalVolume: Number(payload.quote?.totalVolume ?? 0),
-      totalWeight: Number(payload.quote?.totalWeight ?? 0),
+      distanceKm: distanceMeters / 1000,
+      durationSeconds,
+      estimatedCo2Saved: Number(payload.estimatedCo2Saved ?? 0),
+      shippingFee: Number(payload.shippingFee ?? 0),
+      totalVolume: 0,
+      totalWeight: 0,
     },
-    routes: (payload.routes ?? []).map(mapOrderRoute),
+    routes: [primaryRoute],
   };
 }
 
