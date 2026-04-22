@@ -1,5 +1,5 @@
-import NotificationInboxScreen from "@/features/notifications/presentation/screens/NotificationInboxScreen";
+import { redirect } from "next/navigation";
 
 export default function CustomerNotificationsPage() {
-  return <NotificationInboxScreen />;
+  redirect("/dashboard/customer?notifications=1");
 }

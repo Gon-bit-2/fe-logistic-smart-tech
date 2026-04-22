@@ -53,20 +53,6 @@ export default function OperationsTopBar({
           </button>
           <button
             type="button"
-            aria-label="Cài đặt"
-            className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
-          >
-            <AppIcon name="settings" />
-          </button>
-          <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-primary-container bg-emerald-200">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr-t0qCmrp6_R_f8FcP-WFCh-7DTEOqwrUUnajkyofTG5tjqTMcwR-fKmIsuD1TFc0xp3WtZ-YDnxmNdFkrHTbmMG8jYUREuR70UJjMzqT_2NC0Yrm_lnhiS5VW3aBiyHwNpYaBzw1H8Fv_QCxF5nwRkFg35JOsEmhe080OAzcRZ8IBHqseK7UODesoRd5p8cJKk-pQQaHwKeYDB7tn5DftiRz19jYFWyuOFzKfrCkeCGQdBYBM2gRcaDTCw7OA1rceab6Tv_--wRG"
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <button
-            type="button"
             aria-label="Đăng xuất"
             onClick={() => void logout()}
             className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"

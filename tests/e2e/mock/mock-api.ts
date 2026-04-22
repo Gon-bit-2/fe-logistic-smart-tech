@@ -129,6 +129,26 @@ export async function registerMockApiRoutes(page: Page) {
       return fulfillJson(route, 200, sampleOrdersPage);
     }
 
+    if (method === "POST" && pathname === "/orders/quote") {
+      return fulfillJson(route, 200, {
+        quote: {
+          totalWeight: 0.6,
+          totalVolume: 0.006,
+          shippingFee: 42500,
+          estimatedCo2Saved: 0.0625,
+          distance: 5.2,
+          duration: 1200,
+        },
+        routes: [
+          {
+            distance: { text: "5.2 km", value: 5200 },
+            duration: { text: "20 mins", value: 1200 },
+            overview_polyline: { points: "_p~iF~ps|U_ulLnnqC_mqNvxq`@" },
+          },
+        ],
+      });
+    }
+
     if (method === "POST" && pathname === "/orders") {
       const payload = JSON.parse(request.postData() ?? "{}");
       return fulfillJson(route, 200, {
@@ -138,6 +158,47 @@ export async function registerMockApiRoutes(page: Page) {
           id: sampleOrder.id,
           reference: sampleOrder.reference,
           status: "PENDING",
+        },
+      });
+    }
+
+    if (method === "GET" && pathname === "/maps/places/autocomplete") {
+      const input = url.searchParams.get("input") ?? "";
+      return fulfillJson(route, 200, {
+        predictions: [
+          {
+            description: input.includes("123")
+              ? "123 Nguyễn Văn Linh, Quận 7"
+              : "456 Điện Biên Phủ, Bình Thạnh",
+            place_id: input.includes("123") ? "pickup-place" : "delivery-place",
+            structured_formatting: {
+              main_text: input.includes("123")
+                ? "123 Nguyễn Văn Linh"
+                : "456 Điện Biên Phủ",
+              secondary_text: input.includes("123")
+                ? "Quận 7, TP HCM"
+                : "Bình Thạnh, TP HCM",
+            },
+          },
+        ],
+      });
+    }
+
+    if (method === "GET" && pathname === "/maps/places/detail") {
+      const placeId = url.searchParams.get("placeid");
+      return fulfillJson(route, 200, {
+        result: {
+          formatted_address:
+            placeId === "pickup-place"
+              ? "123 Nguyễn Văn Linh, Quận 7"
+              : "456 Điện Biên Phủ, Bình Thạnh",
+          geometry: {
+            location: {
+              lat: placeId === "pickup-place" ? 10.728851 : 10.80035,
+              lng: placeId === "pickup-place" ? 106.721659 : 106.71482,
+            },
+          },
+          place_id: placeId,
         },
       });
     }

@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 import { useAutoDispatch, useTripsQuery, useUpdateTripStatus } from "@/features/trips/presentation/hooks/useTrips";
+import {
+  getTripStatusLabel,
+  getTripStatusTone,
+} from "@/features/trips/presentation/lib/trip-status";
+import { StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
 
 type TripsManagementScreenProps = {
   scope: "admin" | "driver";
@@ -88,23 +93,29 @@ export default function TripsManagementScreen({
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">
-                    {trip.status}
-                  </span>
-                  {scope === "admin" ? (
+                  <StatusBadge
+                    label={getTripStatusLabel(trip.status)}
+                    tone={getTripStatusTone(trip.status)}
+                  />
+                  {trip.status === "PENDING" ? (
                     <>
                       <button
                         type="button"
                         onClick={() =>
                           void updateTripStatus.mutateAsync({
-                            payload: { status: "IN_TRANSIT" },
+                            payload: { status: "IN_PROGRESS" },
                             tripId: trip.id,
                           })
                         }
-                        className="rounded-lg border border-outline-variant/20 px-3 py-2 text-xs font-semibold"
+                        disabled={updateTripStatus.isPending}
+                        className="rounded-lg border border-outline-variant/20 px-3 py-2 text-xs font-semibold disabled:opacity-50"
                       >
-                        Mark in transit
+                        Bắt đầu chuyến
                       </button>
+                    </>
+                  ) : null}
+                  {trip.status === "IN_PROGRESS" ? (
+                    <>
                       <button
                         type="button"
                         onClick={() =>
@@ -113,7 +124,8 @@ export default function TripsManagementScreen({
                             tripId: trip.id,
                           })
                         }
-                        className="rounded-lg border border-outline-variant/20 px-3 py-2 text-xs font-semibold"
+                        disabled={updateTripStatus.isPending}
+                        className="rounded-lg border border-outline-variant/20 px-3 py-2 text-xs font-semibold disabled:opacity-50"
                       >
                         Hoàn tất
                       </button>

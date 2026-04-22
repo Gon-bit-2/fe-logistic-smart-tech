@@ -16,7 +16,7 @@ const ROLE_REDIRECTS: Record<UserRole, string> = {
 
 const NOTIFICATION_REDIRECTS: Record<UserRole, string> = {
   admin: "/dashboard/admin/notifications",
-  customer: "/dashboard/customer/notifications",
+  customer: "/dashboard/customer?notifications=1",
   driver: "/dashboard/driver/notifications",
   warehouse_staff: "/dashboard/warehouse/notifications",
 };
@@ -26,6 +26,13 @@ const ROLE_REQUEST_REDIRECTS: Record<UserRole, string> = {
   customer: "/dashboard/customer/roles",
   driver: "/dashboard/driver/roles",
   warehouse_staff: "/dashboard/warehouse/roles",
+};
+
+const PROFILE_REDIRECTS: Record<UserRole, string> = {
+  admin: "/dashboard/admin",
+  customer: "/dashboard/customer/settings",
+  driver: "/dashboard/driver",
+  warehouse_staff: "/dashboard/warehouse",
 };
 
 function base64UrlToUtf8(value: string): string {
@@ -78,11 +85,15 @@ export function getDashboardHrefForRole(role?: UserRole | null): string {
 }
 
 export function getNotificationsHrefForRole(role?: UserRole | null): string {
-  return role ? NOTIFICATION_REDIRECTS[role] : "/dashboard/customer/notifications";
+  return role ? NOTIFICATION_REDIRECTS[role] : "/dashboard/customer?notifications=1";
 }
 
 export function getRoleRequestHrefForRole(role?: UserRole | null): string {
   return role ? ROLE_REQUEST_REDIRECTS[role] : "/dashboard/customer/roles";
+}
+
+export function getProfileHrefForRole(role?: UserRole | null): string {
+  return role ? PROFILE_REDIRECTS[role] : "/dashboard/customer/settings";
 }
 
 export function decodeAccessTokenPayload(
@@ -132,7 +143,7 @@ export function toAuthProfile(dto: AuthProfileDto): AuthProfile {
     .join("") || "NA";
 
   return {
-    avatarUrl: dto.avatarUrl ?? null,
+    avatarUrl: dto.avatar ?? dto.avatarUrl ?? null,
     email: dto.email,
     fullName,
     hubId: dto.hubId ?? null,

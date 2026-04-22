@@ -11,6 +11,8 @@ export const API_VEHICLE_DETAIL = (id: string | number) => `/vehicles/${id}`;
 export const API_TRIPS = "/trips";
 export const API_TRIP_DETAIL = (id: string | number) => `/trips/${id}`;
 export const API_TRIP_STATUS = (id: string | number) => `/trips/${id}/status`;
+export const API_TRIP_OPTIMIZE_ROUTE = (id: string | number) =>
+  `/trips/${id}/optimize-route`;
 export const API_TRIP_CANCEL_ORDER = (
   tripId: string | number,
   orderId: string | number,
@@ -20,8 +22,13 @@ export const API_TRIP_AUTO_DISPATCH_ALL = "/trips/auto-dispatch/all";
 
 // orders api endpoints
 export const API_ORDERS = "/orders";
+export const API_ORDER_QUOTE = "/orders/quote";
 export const API_ORDER_DETAIL = (id: string | number) => `/orders/${id}`;
 export const API_ORDER_STATUS = (id: string | number) => `/orders/${id}/status`;
+
+// maps api endpoints
+export const API_MAPS_PLACES_AUTOCOMPLETE = "/maps/places/autocomplete";
+export const API_MAPS_PLACE_DETAIL = "/maps/places/detail";
 
 // tracking api endpoints
 export const API_TRACKING_PUBLIC = (trackingCode: string) =>

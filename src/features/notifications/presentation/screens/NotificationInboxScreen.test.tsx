@@ -42,7 +42,7 @@ describe("NotificationInboxScreen", () => {
             content: "Yêu cầu của bạn đang chờ duyệt.",
             createdAt: "2026-04-20T09:00:00.000Z",
             isRead: false,
-            ctaHref: "/dashboard/customer/roles",
+            ctaHref: "/role-requests",
             ctaLabel: "Mở trung tâm role",
           },
         ],
@@ -59,7 +59,7 @@ describe("NotificationInboxScreen", () => {
     expect(screen.getByText("Cập nhật role request")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Mở trung tâm role" })).toHaveAttribute(
       "href",
-      "/dashboard/customer/roles",
+      "/role-requests",
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Đánh dấu đã đọc" }));

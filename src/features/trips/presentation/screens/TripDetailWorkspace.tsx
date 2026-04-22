@@ -14,11 +14,48 @@ import { useTripTrackingSocket } from "@/features/tracking/presentation/hooks/us
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
 import { useTripDetailQuery } from "@/features/trips/presentation/hooks/useTrips";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import type { OrderStatus } from "@/features/orders/domain/types/order.types";
+import type { TrackingPackageCondition } from "@/features/tracking/domain/types/tracking.types";
+import { getOrderStatusLabel } from "@/i18n/vi";
 import { formatDate } from "@/utils/formatters";
 
 type TripDetailWorkspaceProps = {
   tripId: string;
 };
+
+const TERMINAL_ORDER_STATUSES = new Set<OrderStatus>(["DELIVERED", "CANCELLED"]);
+
+function getNextOrderStatus(status?: OrderStatus | string | null): OrderStatus | null {
+  switch (status) {
+    case "ASSIGNED":
+      return "PICKED_UP";
+    case "PICKED_UP":
+    case "ARRIVED_AT_HUB":
+      return "IN_TRANSIT";
+    case "IN_TRANSIT":
+      return "OUT_FOR_DELIVERY";
+    case "OUT_FOR_DELIVERY":
+      return "DELIVERED";
+    default:
+      return null;
+  }
+}
+
+function getNextOrderActionLabel(status?: OrderStatus | string | null) {
+  switch (status) {
+    case "ASSIGNED":
+      return "Xác nhận đã lấy hàng";
+    case "PICKED_UP":
+    case "ARRIVED_AT_HUB":
+      return "Bắt đầu vận chuyển";
+    case "IN_TRANSIT":
+      return "Chuyển sang giao hàng";
+    case "OUT_FOR_DELIVERY":
+      return "Xác nhận đã giao";
+    default:
+      return null;
+  }
+}
 
 export default function TripDetailWorkspace({
   tripId,
@@ -26,7 +63,14 @@ export default function TripDetailWorkspace({
   const router = useRouter();
   const tripQuery = useTripDetailQuery(tripId);
   const trip = tripQuery.data ?? null;
-  const activeOrder = trip?.orders[0];
+  const activeOrder = useMemo(() => {
+    const orders = trip?.orders ?? [];
+    return (
+      orders.find((order) => !TERMINAL_ORDER_STATUSES.has(order.status)) ??
+      orders[0] ??
+      null
+    );
+  }, [trip?.orders]);
   const orderId = activeOrder?.orderId ?? "";
   const trackingQuery = useInternalTrackingQuery(orderId, Boolean(orderId));
   const paymentQuery = usePaymentRecord(orderId || null);
@@ -35,7 +79,8 @@ export default function TripDetailWorkspace({
   const uploadPodImage = useUploadPodImage();
   const uploadMultiplePodImages = useUploadMultiplePodImages();
   const [receiverName, setReceiverName] = useState("");
-  const [packageCondition, setPackageCondition] = useState("INTACT");
+  const [packageCondition, setPackageCondition] =
+    useState<TrackingPackageCondition>("INTACT");
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const socketState = useTripTrackingSocket({
     tripId: Number(trip?.id ?? 0) || null,
@@ -43,6 +88,15 @@ export default function TripDetailWorkspace({
 
   const tracking = trackingQuery.data ?? null;
   const paymentStatus = getPaymentStatusLabel(paymentQuery.data?.status);
+  const currentOrderStatus = (tracking?.currentStatus ??
+    activeOrder?.status ??
+    null) as OrderStatus | null;
+  const nextOrderStatus = getNextOrderStatus(currentOrderStatus);
+  const nextOrderActionLabel = getNextOrderActionLabel(currentOrderStatus);
+  const canConfirmDelivered =
+    nextOrderStatus === "DELIVERED" &&
+    receiverName.trim().length > 0 &&
+    uploadedImages.length > 0;
   const latestLocationLabel = useMemo(() => {
     if (!socketState.latestLocation) {
       return "Chưa có vị trí cập nhật mới.";
@@ -78,21 +132,26 @@ export default function TripDetailWorkspace({
     event.target.value = "";
   }
 
-  async function handleDelivered() {
-    if (!orderId) {
+  async function handleStatusChange(status: OrderStatus) {
+    if (!orderId || status !== nextOrderStatus) {
       return;
     }
+
+    createTrackingEvent.reset();
 
     await createTrackingEvent.mutateAsync({
       eventType: "STATUS_CHANGE",
       orderId: Number(orderId),
-      pod: {
-        images: uploadedImages.map((url) => ({ type: "PACKAGE", url })),
-        packageCondition,
-        receiverName,
-      },
-      source: "WEB_APP",
-      status: "DELIVERED",
+      pod:
+        status === "DELIVERED"
+          ? {
+              images: uploadedImages.map((url) => ({ type: "PACKAGE", url })),
+              packageCondition,
+              receiverName: receiverName.trim(),
+            }
+          : undefined,
+      source: "DRIVER_APP",
+      status,
     });
 
     router.refresh();
@@ -144,6 +203,11 @@ export default function TripDetailWorkspace({
                   <p className="mt-2 text-lg font-bold text-on-surface">
                     {activeOrder?.reference ?? "Chưa có"}
                   </p>
+                  {currentOrderStatus ? (
+                    <p className="mt-1 text-sm text-on-surface/60">
+                      {getOrderStatusLabel(currentOrderStatus)}
+                    </p>
+                  ) : null}
                 </div>
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
@@ -195,11 +259,15 @@ export default function TripDetailWorkspace({
                   <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
                     Tình trạng kiện hàng
                   </span>
-                  <input
+                  <select
                     value={packageCondition}
                     onChange={(event) => setPackageCondition(event.target.value)}
                     className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
-                  />
+                  >
+                    <option value="INTACT">Nguyên vẹn</option>
+                    <option value="DAMAGED">Hư hỏng</option>
+                    <option value="PARTIAL">Giao thiếu một phần</option>
+                  </select>
                 </label>
 
                 <div className="grid gap-3 md:grid-cols-2">
@@ -230,13 +298,21 @@ export default function TripDetailWorkspace({
                 ) : null}
 
                 <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => void handleDelivered()}
-                    className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white"
-                  >
-                    Xác nhận đã giao
-                  </button>
+                  {nextOrderStatus && nextOrderActionLabel ? (
+                    <button
+                      type="button"
+                      onClick={() => void handleStatusChange(nextOrderStatus)}
+                      disabled={
+                        createTrackingEvent.isPending ||
+                        (nextOrderStatus === "DELIVERED" && !canConfirmDelivered)
+                      }
+                      className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
+                    >
+                      {createTrackingEvent.isPending
+                        ? "Đang cập nhật..."
+                        : nextOrderActionLabel}
+                    </button>
+                  ) : null}
                   {orderId ? (
                     <button
                       type="button"
@@ -247,6 +323,18 @@ export default function TripDetailWorkspace({
                     </button>
                   ) : null}
                 </div>
+
+                {nextOrderStatus === "DELIVERED" && !canConfirmDelivered ? (
+                  <p className="text-sm text-amber-700">
+                    Cần nhập tên người nhận và tải lên ít nhất 1 ảnh POD trước khi xác nhận giao thành công.
+                  </p>
+                ) : null}
+
+                {createTrackingEvent.error ? (
+                  <p className="text-sm text-red-600">
+                    {createTrackingEvent.error.message}
+                  </p>
+                ) : null}
               </section>
             </div>
           </section>

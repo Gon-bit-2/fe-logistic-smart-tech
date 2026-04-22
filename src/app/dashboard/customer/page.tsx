@@ -76,7 +76,7 @@ export default function CustomerDashboardPage() {
           Tổng lượng CO₂ ước tính tiết kiệm được từ các đơn hàng đã hoàn thành.
         </p>
         <div className="mt-5 flex gap-3">
-          <Link href="/dashboard/customer/orders" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white">
+          <Link href="/orders" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white">
             Mở lịch sử đơn hàng
           </Link>
           <Link href="/orders/create" className="rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700">
@@ -97,7 +97,7 @@ export default function CustomerDashboardPage() {
             </div>
           </div>
           <Link
-            href="/dashboard/customer/notifications"
+            href="/dashboard/customer?notifications=1"
             className="mt-5 inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white"
           >
             Mở inbox

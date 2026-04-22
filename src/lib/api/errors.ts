@@ -175,6 +175,8 @@ export function normalizeApiError(error: unknown): ApiError {
     const fallbackMessage =
       error.code === "ERR_NETWORK"
         ? "Network request failed"
+        : error.code === "ECONNABORTED"
+          ? "Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD."
         : error.message || getStatusFallbackMessage(status);
 
     return new ApiError({

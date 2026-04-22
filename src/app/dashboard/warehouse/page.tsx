@@ -26,7 +26,7 @@ export default function WarehouseScannerPage() {
           : "Kiện hàng rời kho để giao"),
       eventType: "STATUS_CHANGE",
       orderId: Number(orderId),
-      source: "WAREHOUSE_WEB",
+      source: "HUB_SCANNER",
       status: activeTab === "inbound" ? "ARRIVED_AT_HUB" : "OUT_FOR_DELIVERY",
     });
 

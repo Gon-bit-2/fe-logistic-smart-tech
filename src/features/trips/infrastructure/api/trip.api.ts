@@ -7,6 +7,7 @@ import type {
   AutoDispatchResult,
   ManualTripInput,
   ManualTripResult,
+  OptimizeTripRouteResult,
   TripApiDto,
   TripListParams,
   UpdateTripStatusInput,
@@ -17,6 +18,7 @@ import {
   API_TRIP_AUTO_DISPATCH_ALL,
   API_TRIP_CANCEL_ORDER,
   API_TRIP_DETAIL,
+  API_TRIP_OPTIMIZE_ROUTE,
   API_TRIPS,
   API_TRIP_STATUS,
   API_TRIP_MANUAL,
@@ -51,6 +53,14 @@ export async function updateTripStatusRequest(
     payload,
   );
   return mapTripApiToViewModel(response.data);
+}
+
+export async function optimizeTripRouteRequest(tripId: string | number) {
+  const response = await httpClient.post<OptimizeTripRouteResult>(
+    API_TRIP_OPTIMIZE_ROUTE(tripId),
+  );
+
+  return response.data;
 }
 
 export async function cancelTripOrderRequest(tripId: string, orderId: string) {

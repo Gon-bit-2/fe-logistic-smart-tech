@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AutoDispatchInput,
+  OptimizeTripRouteResult,
   TripListParams,
   TripViewModel,
   UpdateTripStatusInput,
@@ -11,6 +12,7 @@ import {
   autoDispatchUseCase,
   getTripDetailUseCase,
   listTripsUseCase,
+  optimizeTripRouteUseCase,
   updateTripStatusUseCase,
 } from "@/features/trips/application/use-cases/trip.use-cases";
 import type { PaginatedResult } from "@/types/common.type";
@@ -56,5 +58,11 @@ export function useUpdateTripStatus() {
 export function useAutoDispatch() {
   return useMutation({
     mutationFn: (payload?: AutoDispatchInput) => autoDispatchUseCase(payload),
+  });
+}
+
+export function useOptimizeTripRoute() {
+  return useMutation<OptimizeTripRouteResult, ApiError, string | number>({
+    mutationFn: (tripId) => optimizeTripRouteUseCase(tripId),
   });
 }

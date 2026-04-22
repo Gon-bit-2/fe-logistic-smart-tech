@@ -1,4 +1,7 @@
 import type {
+  AddressBookEntryDto,
+  AddressBookListResponse,
+  AddressBookUpsertInput,
   AuthLoginInput,
   AuthProfileDto,
   ForgotPasswordInput,
@@ -6,6 +9,7 @@ import type {
   MessageResponse,
   RegisterWithOtpInput,
   RequestRegisterOtpInput,
+  UpdateAuthProfileInput,
   VerificationCodeType,
 } from "@/features/auth/domain/types/auth.types";
 import { httpClient } from "@/lib/api/http-client";
@@ -65,6 +69,31 @@ export async function getProfile() {
   return response.data;
 }
 
+export async function updateProfile(input: UpdateAuthProfileInput) {
+  const response = await httpClient.patch<AuthProfileDto>("/auth/profile", input);
+  return response.data;
+}
+
+export async function getAddressBook() {
+  const response = await httpClient.get<AddressBookListResponse>("/auth/address-book");
+  return response.data;
+}
+
+export async function createAddressBook(input: AddressBookUpsertInput) {
+  const response = await httpClient.post<AddressBookEntryDto>("/auth/address-book", input);
+  return response.data;
+}
+
+export async function updateAddressBook(id: number, input: AddressBookUpsertInput) {
+  const response = await httpClient.patch<AddressBookEntryDto>(`/auth/address-book/${id}`, input);
+  return response.data;
+}
+
+export async function deleteAddressBook(id: number) {
+  const response = await httpClient.delete<MessageResponse>(`/auth/address-book/${id}`);
+  return response.data;
+}
+
 export async function logout(refreshToken: string) {
   const response = await httpClient.post<MessageResponse>("/auth/logout", {
     refreshToken,
@@ -83,4 +112,3 @@ export async function getGoogleLoginLink() {
 
   return response.data;
 }
-

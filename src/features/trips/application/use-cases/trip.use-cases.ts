@@ -10,6 +10,7 @@ import {
   cancelTripOrderRequest,
   getTripByIdRequest,
   listTripsRequest,
+  optimizeTripRouteRequest,
   updateTripStatusRequest,
 } from "@/features/trips/infrastructure/api/trip.api";
 
@@ -38,6 +39,11 @@ export async function updateTripStatusUseCase(
 ) {
   assertApiConfigured();
   return updateTripStatusRequest(tripId, payload);
+}
+
+export async function optimizeTripRouteUseCase(tripId: string | number) {
+  assertApiConfigured();
+  return optimizeTripRouteRequest(tripId);
 }
 
 export async function cancelTripOrderUseCase(tripId: string, orderId: string) {

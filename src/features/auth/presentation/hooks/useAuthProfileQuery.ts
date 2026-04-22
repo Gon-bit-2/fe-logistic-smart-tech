@@ -6,7 +6,7 @@ import type { AuthProfile } from "@/features/auth/domain/types/auth.types";
 import { getProfile } from "@/features/auth/infrastructure/api/auth.api";
 import { ApiError } from "@/lib/api/errors";
 
-const authProfileQueryKey = ["auth", "profile"] as const;
+export const authProfileQueryKey = ["auth", "profile"] as const;
 
 export function useAuthProfileQuery(enabled = true) {
   return useQuery<AuthProfile, ApiError>({

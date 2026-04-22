@@ -68,6 +68,13 @@ describe("errors utility", () => {
         expect(normalized.code).toBe("ERR_NETWORK");
       });
 
+      it("should map request timeouts to a readable message", () => {
+        const error = new AxiosError("timeout of 15000ms exceeded", "ECONNABORTED");
+        const normalized = normalizeApiError(error);
+        expect(normalized.message).toBe("Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD.");
+        expect(normalized.code).toBe("ECONNABORTED");
+      });
+
       it("should handle 401 Unauthorized", () => {
         const error = new AxiosError("Request failed with status code 401", "ERR_BAD_REQUEST", undefined, undefined, {
           status: 401,

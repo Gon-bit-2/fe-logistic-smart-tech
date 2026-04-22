@@ -16,8 +16,13 @@ import { notificationKeys } from "@/features/notifications/presentation/state/no
 import { ApiError } from "@/lib/api/errors";
 import type { PaginatedResult } from "@/types/common.type";
 
-export function useNotificationsQuery(role: UserRole, params?: NotificationListParams) {
+export function useNotificationsQuery(
+  role: UserRole,
+  params?: NotificationListParams,
+  enabled = true,
+) {
   return useQuery<PaginatedResult<NotificationViewModel>, ApiError>({
+    enabled,
     queryFn: () => listNotificationsUseCase(role, params),
     queryKey: notificationKeys.list(params),
   });

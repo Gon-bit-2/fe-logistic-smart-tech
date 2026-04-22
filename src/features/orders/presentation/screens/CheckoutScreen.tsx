@@ -1,34 +1,47 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
+import type { OrderPricing } from "@/features/orders/domain/types/order.types";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { checkoutCopy } from "@/i18n/vi";
+import { normalizePublicEnvValue } from "@/lib/api/env";
 import { formatCurrency } from "@/utils/formatters";
 
-function formatPricingValue(value?: number) {
+function formatPricingValue(
+  value?: number,
+  currency?: OrderPricing["currency"],
+) {
   return typeof value === "number"
-    ? formatCurrency(value)
+    ? formatCurrency(value, currency ?? "USD")
     : checkoutCopy.pendingApiQuote;
 }
 
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+const stripePublishableKey = normalizePublicEnvValue(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+);
+
+const stripePromise = stripePublishableKey
   ? process.env.NODE_ENV === "test"
     ? null
-    : loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+    : loadStripe(stripePublishableKey)
   : null;
 
 type StripePaymentFormProps = {
   onError: (message: string | null) => void;
   onSuccess: () => void;
 };
+
+type CheckoutScreenProps = Readonly<{
+  showTopBar?: boolean;
+}>;
 
 function StripePaymentForm({
   onError,
@@ -74,7 +87,9 @@ function StripePaymentForm({
   );
 }
 
-export default function CheckoutScreen() {
+export default function CheckoutScreen({
+  showTopBar = true,
+}: CheckoutScreenProps) {
   const router = useRouter();
   const {
     order,
@@ -88,26 +103,54 @@ export default function CheckoutScreen() {
   } = useCheckout();
   const createPaymentIntent = useCreatePaymentIntent();
   const [error, setError] = useState<string | null>(null);
+  const autoIntentAttemptRef = useRef<string | null>(null);
   const clientSecret = createPaymentIntent.data?.clientSecret ?? null;
   const pricing = order?.pricing;
+  const normalizedGatewayAmount = createPaymentIntent.data?.amount;
   const trackingDestination = order?.trackingCode ?? order?.reference ?? "";
+  const paymentAttemptKey = [
+    orderId ?? "missing-order",
+    paymentMethod,
+    pricing?.currency ?? "missing-currency",
+    pricing?.total ?? "missing-total",
+  ].join(":");
+
+  useEffect(() => {
+    if (paymentMethod !== "card") {
+      autoIntentAttemptRef.current = null;
+      return;
+    }
+
+    if (!orderId || clientSecret || createPaymentIntent.isPending) {
+      return;
+    }
+
+    if (autoIntentAttemptRef.current === paymentAttemptKey) {
+      return;
+    }
+
+    autoIntentAttemptRef.current = paymentAttemptKey;
+    setError(null);
+
+    void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Không thể chuẩn bị cổng thanh toán trực tuyến.",
+      );
+    });
+  }, [clientSecret, createPaymentIntent, orderId, paymentAttemptKey, paymentMethod, pricing]);
 
   useEffect(() => {
     if (
       paymentMethod === "card" &&
       orderId &&
-      !clientSecret &&
-      !createPaymentIntent.isPending
+      clientSecret &&
+      autoIntentAttemptRef.current !== paymentAttemptKey
     ) {
-      void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
-        setError(
-          caughtError instanceof Error
-            ? caughtError.message
-            : "Không thể chuẩn bị cổng thanh toán trực tuyến.",
-        );
-      });
+      autoIntentAttemptRef.current = paymentAttemptKey;
     }
-  }, [clientSecret, createPaymentIntent, orderId, paymentMethod]);
+  }, [clientSecret, orderId, paymentAttemptKey, paymentMethod]);
 
   const stripeOptions = useMemo(
     () =>
@@ -121,11 +164,13 @@ export default function CheckoutScreen() {
         : null,
     [clientSecret],
   );
+  const totalAmount = normalizedGatewayAmount ?? pricing?.total;
+  const totalCurrency = pricing?.currency ?? (normalizedGatewayAmount != null ? "VND" : undefined);
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-surface">
-        <OperationsTopBar active="shipments" />
+        {showTopBar ? <OperationsTopBar active="shipments" /> : null}
         <main className="mx-auto max-w-5xl px-6 py-12 md:px-8">
           <div className="rounded-xl bg-surface-container-lowest p-8 text-on-surface shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             {checkoutCopy.loadOrder}
@@ -138,7 +183,7 @@ export default function CheckoutScreen() {
   if (!order) {
     return (
       <div className="min-h-screen bg-surface">
-        <OperationsTopBar active="shipments" />
+        {showTopBar ? <OperationsTopBar active="shipments" /> : null}
         <main className="mx-auto max-w-5xl px-6 py-12 md:px-8">
           <div className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
@@ -163,7 +208,7 @@ export default function CheckoutScreen() {
 
   return (
     <div className="min-h-screen bg-surface">
-      <OperationsTopBar active="shipments" />
+      {showTopBar ? <OperationsTopBar active="shipments" /> : null}
       <main className="mx-auto max-w-7xl px-6 py-10 md:px-8">
         <div className="mb-12">
           <h1 className="text-[2.75rem] font-black tracking-tight text-on-surface">
@@ -195,7 +240,9 @@ export default function CheckoutScreen() {
                     </Elements>
                   ) : (
                     <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
-                      {createPaymentIntent.isPending
+                      {!stripePublishableKey
+                        ? "Stripe chưa được cấu hình trên frontend. Hãy thiết lập NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
+                        : createPaymentIntent.isPending
                         ? "Đang chuẩn bị cổng thanh toán..."
                         : "Thanh toán trực tuyến hiện chưa sẵn sàng. Vui lòng thử lại sau hoặc chọn thanh toán khi nhận hàng."}
                     </div>
@@ -298,13 +345,13 @@ export default function CheckoutScreen() {
                 <div className="flex justify-between">
                   <span>{checkoutCopy.logisticsFee}</span>
                   <span className="font-medium">
-                    {formatPricingValue(pricing?.logisticsFee)}
+                    {formatPricingValue(pricing?.logisticsFee, pricing?.currency)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>{checkoutCopy.shippingAndHandling}</span>
                   <span className="font-medium">
-                    {formatPricingValue(pricing?.handlingFee)}
+                    {formatPricingValue(pricing?.handlingFee, pricing?.currency)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between rounded-lg bg-primary/10 px-3 py-2">
@@ -313,13 +360,15 @@ export default function CheckoutScreen() {
                   </span>
                   <span className="font-black text-primary">
                     {typeof pricing?.ecoDiscount === "number"
-                      ? `-${formatCurrency(pricing.ecoDiscount)}`
+                      ? `-${formatCurrency(pricing.ecoDiscount, pricing.currency)}`
                       : checkoutCopy.pendingApiQuote}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>{checkoutCopy.vat}</span>
-                  <span className="font-medium">{formatPricingValue(pricing?.vat)}</span>
+                  <span className="font-medium">
+                    {formatPricingValue(pricing?.vat, pricing?.currency)}
+                  </span>
                 </div>
               </div>
 
@@ -330,11 +379,11 @@ export default function CheckoutScreen() {
                       {checkoutCopy.totalAmount}
                     </p>
                     <p className="mt-1 text-3xl font-black tracking-tight text-on-surface">
-                      {formatPricingValue(pricing?.total)}
+                      {formatPricingValue(totalAmount, totalCurrency)}
                     </p>
                   </div>
                   <span className="rounded-full bg-secondary-container px-3 py-1 text-[10px] font-black tracking-[0.12em] text-on-secondary-container uppercase">
-                    {pricing?.currency ?? checkoutCopy.awaitingQuote}
+                    {totalCurrency ?? checkoutCopy.awaitingQuote}
                   </span>
                 </div>
                 {!pricing ? (

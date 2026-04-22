@@ -7,6 +7,7 @@ export * from "@/i18n/vi/greenTech";
 export * from "@/i18n/vi/landing";
 export * from "@/i18n/vi/notifications";
 export * from "@/i18n/vi/orders";
+export * from "@/i18n/vi/profile";
 export * from "@/i18n/vi/roleRequests";
 export * from "@/i18n/vi/tracking";
 export * from "@/i18n/vi/warehouses";

@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { Truck, Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useTripsQuery } from "@/features/trips/presentation/hooks/useTrips";
+import {
+  getTripStatusLabel,
+  getTripStatusTone,
+} from "@/features/trips/presentation/lib/trip-status";
 
 export default function WarehouseTripsPage() {
   const [search, setSearch] = useState("");
@@ -59,9 +63,8 @@ export default function WarehouseTripsPage() {
             }}
           >
             <option value="">Tất cả trạng thái</option>
-            <option value="PLANNED">Đã lên lịch</option>
-            <option value="ASSIGNED">Đã phân công</option>
-            <option value="IN_TRANSIT">Đang di chuyển</option>
+            <option value="PENDING">Chờ khởi hành</option>
+            <option value="IN_PROGRESS">Đang vận chuyển</option>
             <option value="COMPLETED">Đã hoàn thành</option>
             <option value="CANCELLED">Đã hủy</option>
           </select>
@@ -130,11 +133,11 @@ export default function WarehouseTripsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-                            ${trip.status === "COMPLETED" ? "bg-emerald-100 text-emerald-800" : 
-                              trip.status === "CANCELLED" ? "bg-red-100 text-red-800" :
-                              trip.status === "IN_TRANSIT" ? "bg-blue-100 text-blue-800" :
+                            ${getTripStatusTone(trip.status) === "green" ? "bg-emerald-100 text-emerald-800" : 
+                              getTripStatusTone(trip.status) === "red" ? "bg-red-100 text-red-800" :
+                              getTripStatusTone(trip.status) === "blue" ? "bg-blue-100 text-blue-800" :
                               "bg-amber-100 text-amber-800"}`}>
-                            {trip.status}
+                            {getTripStatusLabel(trip.status)}
                           </span>
                         </td>
                       </tr>

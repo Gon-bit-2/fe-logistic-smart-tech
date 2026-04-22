@@ -147,12 +147,20 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
     contactName: payload.contactName ?? payload.senderName ?? undefined,
     contactPhone: payload.contactPhone ?? payload.senderPhone ?? undefined,
     customerName,
+    currentHubId:
+      payload.currentHubId != null ? Number(payload.currentHubId) : undefined,
+    currentTripId:
+      payload.currentTripId != null ? Number(payload.currentTripId) : undefined,
     declaredValueUsd:
       payload.declaredValueUsd != null
         ? Number(payload.declaredValueUsd)
         : undefined,
     deliveryAddress:
       payload.deliveryAddress ?? payload.receiverAddress ?? "Đang cập nhật",
+    receiverLat:
+      payload.receiverLat != null ? Number(payload.receiverLat) : undefined,
+    receiverLng:
+      payload.receiverLng != null ? Number(payload.receiverLng) : undefined,
     estimatedArrival:
       payload.preferredDeliveryTimeEnd ??
       payload.estimatedArrival ??
@@ -170,6 +178,8 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
     receiverPhone: payload.receiverPhone ?? undefined,
     reference,
     serviceTier: normalizeServiceTier(payload.serviceTier ?? payload.serviceType),
+    senderLat: payload.senderLat != null ? Number(payload.senderLat) : undefined,
+    senderLng: payload.senderLng != null ? Number(payload.senderLng) : undefined,
     status: normalizeOrderStatus(payload.status),
     stops: payload.stops ?? [],
     trackingCode: payload.trackingCode ?? undefined,

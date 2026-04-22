@@ -1,49 +1,10 @@
 import type {
   CreateOrderApiInput,
   CreateOrderInput,
+  OrderQuoteRequest,
+  ResolvedOrderAddressInput,
   ServiceTier,
 } from "@/features/orders/domain/types/order.types";
-
-type Coordinates = {
-  lat: number;
-  lng: number;
-};
-
-const SENDER_BASE_COORDINATES: Coordinates = {
-  lat: 10.776889,
-  lng: 106.700806,
-};
-
-const RECEIVER_BASE_COORDINATES: Coordinates = {
-  lat: 10.773118,
-  lng: 106.698299,
-};
-
-function hashText(value: string) {
-  let hash = 0;
-
-  for (const character of value) {
-    hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
-  }
-
-  return hash;
-}
-
-function withAddressOffset(address: string, fallback: Coordinates): Coordinates {
-  const normalizedAddress = address.trim().toLowerCase();
-
-  if (!normalizedAddress) {
-    return fallback;
-  }
-
-  const latOffset = ((hashText(`${normalizedAddress}:lat`) % 2000) - 1000) / 100_000;
-  const lngOffset = ((hashText(`${normalizedAddress}:lng`) % 2000) - 1000) / 100_000;
-
-  return {
-    lat: Number((fallback.lat + latOffset).toFixed(6)),
-    lng: Number((fallback.lng + lngOffset).toFixed(6)),
-  };
-}
 
 function mapServiceTier(value: ServiceTier): CreateOrderApiInput["serviceType"] {
   if (value === "express") {
@@ -95,40 +56,71 @@ function toPreferredDeliveryWindow(value: string) {
   };
 }
 
+function requireResolvedAddress(address: ResolvedOrderAddressInput, fieldName: string) {
+  if (
+    !address.isResolved ||
+    typeof address.latitude !== "number" ||
+    typeof address.longitude !== "number" ||
+    !address.address.trim() ||
+    !address.placeId?.trim()
+  ) {
+    throw new Error(`${fieldName} chưa được chọn từ gợi ý địa chỉ hợp lệ.`);
+  }
+
+  return {
+    address: address.address.trim(),
+    latitude: address.latitude,
+    longitude: address.longitude,
+    placeId: address.placeId.trim(),
+  };
+}
+
+function mapItems(input: CreateOrderInput) {
+  return [
+    {
+      ...parseDimensions(input.packageDimensions),
+      name: input.itemDescription.trim() || "Kiện hàng",
+      quantity: 1,
+      weight: Number(input.packageWeightKg || 0),
+    },
+  ];
+}
+
+export function mapCreateOrderInputToQuotePayload(
+  input: CreateOrderInput,
+): OrderQuoteRequest {
+  const pickup = requireResolvedAddress(input.pickup, "Địa chỉ lấy hàng");
+  const delivery = requireResolvedAddress(input.delivery, "Địa chỉ giao hàng");
+
+  return {
+    items: mapItems(input),
+    receiverLat: delivery.latitude,
+    receiverLng: delivery.longitude,
+    senderLat: pickup.latitude,
+    senderLng: pickup.longitude,
+    serviceType: mapServiceTier(input.serviceTier),
+  };
+}
+
 export function mapCreateOrderInputToApiPayload(
   input: CreateOrderInput,
 ): CreateOrderApiInput {
-  const senderCoordinates = withAddressOffset(
-    input.pickupAddress,
-    SENDER_BASE_COORDINATES,
-  );
-  const receiverCoordinates = withAddressOffset(
-    input.deliveryAddress,
-    RECEIVER_BASE_COORDINATES,
-  );
-  const itemName = input.itemDescription?.trim() || "Kiện hàng";
-  const itemWeight = Number(input.packageWeightKg || 0);
+  const pickup = requireResolvedAddress(input.pickup, "Địa chỉ lấy hàng");
+  const delivery = requireResolvedAddress(input.delivery, "Địa chỉ giao hàng");
 
   return {
-    items: [
-      {
-        ...parseDimensions(input.packageDimensions),
-        name: itemName,
-        quantity: 1,
-        weight: itemWeight,
-      },
-    ],
+    items: mapItems(input),
     ...toPreferredDeliveryWindow(input.estimatedArrival),
-    receiverAddress: input.deliveryAddress.trim(),
-    receiverLat: receiverCoordinates.lat,
-    receiverLng: receiverCoordinates.lng,
-    receiverName: input.receiverName?.trim() || "Người nhận",
-    receiverPhone: input.receiverPhone?.trim() || "0000000000",
-    senderAddress: input.pickupAddress.trim(),
-    senderLat: senderCoordinates.lat,
-    senderLng: senderCoordinates.lng,
-    senderName: input.contactName?.trim() || input.customerName.trim() || "Người gửi",
-    senderPhone: input.contactPhone?.trim() || "0000000000",
+    receiverAddress: delivery.address,
+    receiverLat: delivery.latitude,
+    receiverLng: delivery.longitude,
+    receiverName: input.receiverName.trim() || "Người nhận",
+    receiverPhone: input.receiverPhone.trim() || "0000000000",
+    senderAddress: pickup.address,
+    senderLat: pickup.latitude,
+    senderLng: pickup.longitude,
+    senderName: input.contactName.trim() || input.customerName.trim() || "Người gửi",
+    senderPhone: input.contactPhone.trim() || "0000000000",
     serviceType: mapServiceTier(input.serviceTier),
   };
 }

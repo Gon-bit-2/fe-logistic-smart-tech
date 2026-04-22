@@ -17,6 +17,7 @@ import {
 import { useDispatcherMetrics } from "@/features/admin/presentation/hooks/useDispatcherMetrics";
 import { adminScreenCopy, getOrderStatusLabel } from "@/i18n/vi";
 import { formatDate } from "@/utils/formatters";
+import { isActiveTripStatus } from "@/features/trips/presentation/lib/trip-status";
 
 import DispatcherMapCanvas from "@/features/admin/presentation/components/DispatcherMapCanvas";
 import DispatcherUnassignedOrdersPanel from "@/features/admin/presentation/components/DispatcherUnassignedOrdersPanel";
@@ -36,7 +37,7 @@ export default function DispatcherDashboardScreen(
   const activeTripIds = useMemo(
     () =>
       (tripsQuery.data?.data ?? [])
-        .filter((trip) => trip.status === "ASSIGNED" || trip.status === "IN_TRANSIT")
+        .filter((trip) => isActiveTripStatus(trip.status))
         .map((trip) => Number(trip.id) || trip.id),
     [tripsQuery.data?.data],
   );

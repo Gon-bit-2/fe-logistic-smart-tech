@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import ProfileQuickAccess from "@/features/profile/presentation/components/ProfileQuickAccess";
 import { Providers } from "./providers";
 import "./globals.css";
 import { appMetadata } from "@/i18n/vi";
@@ -74,7 +75,10 @@ export default function RootLayout({
             })();
           `}
         </Script>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ProfileQuickAccess />
+        </Providers>
       </body>
     </html>
   );
