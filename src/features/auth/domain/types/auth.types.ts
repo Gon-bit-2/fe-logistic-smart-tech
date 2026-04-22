@@ -59,6 +59,12 @@ export type MessageResponse = {
   message: string;
 };
 
+export type UpdateAuthProfileInput = {
+  avatar?: string | null;
+  fullName?: string;
+  phone?: string;
+};
+
 export const ROLE_ID_MAP: Record<number, UserRole> = {
   1: "admin",
   2: "customer",
@@ -82,6 +88,7 @@ export type AuthUser = {
 };
 
 export type AuthProfileDto = {
+  avatar?: string | null;
   avatarUrl?: string | null;
   email: string;
   fullName?: string | null;
@@ -90,6 +97,35 @@ export type AuthProfileDto = {
   phone?: string | null;
   roleId: number;
   roleName?: string | null;
+};
+
+export type AddressBookEntryDto = {
+  address: string;
+  contactName: string;
+  createdAt: string;
+  deletedAt?: string | null;
+  id: number;
+  isDefault: boolean;
+  label?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  phone: string;
+  updatedAt: string;
+  userId: number;
+};
+
+export type AddressBookListResponse = {
+  data: AddressBookEntryDto[];
+};
+
+export type AddressBookUpsertInput = {
+  address?: string;
+  contactName?: string;
+  isDefault?: boolean;
+  label?: string;
+  latitude?: number;
+  longitude?: number;
+  phone?: string;
 };
 
 export type AuthProfile = {

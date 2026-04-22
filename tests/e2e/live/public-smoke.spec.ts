@@ -9,7 +9,9 @@ test("backend health endpoint is reachable", async ({ request }) => {
 
 test("public landing and tracking pages render against the real app", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Tương lai của logistics là/i })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Giải pháp Logistics Xanh & Thông minh/i }),
+  ).toBeVisible();
 
   await page.goto("/tracking");
   await expect(page.getByText("Theo dõi hành trình đơn hàng")).toBeVisible();

@@ -1,4 +1,18 @@
-import type { CreateOrderInput } from "@/features/orders/domain/types/order.types";
+import type {
+  CreateOrderInput,
+  ResolvedOrderAddressInput,
+} from "@/features/orders/domain/types/order.types";
+
+export function createEmptyResolvedOrderAddress(): ResolvedOrderAddressInput {
+  return {
+    address: "",
+    isResolved: false,
+    latitude: null,
+    longitude: null,
+    placeId: null,
+    query: "",
+  };
+}
 
 export function createEmptyOrderInput(): CreateOrderInput {
   return {
@@ -6,15 +20,14 @@ export function createEmptyOrderInput(): CreateOrderInput {
     contactPhone: "",
     customerName: "",
     declaredValueUsd: 0,
-    deliveryAddress: "",
+    delivery: createEmptyResolvedOrderAddress(),
     estimatedArrival: "",
     itemDescription: "",
     packageDimensions: "",
     packageWeightKg: 0,
-    pickupAddress: "",
+    pickup: createEmptyResolvedOrderAddress(),
     receiverName: "",
     receiverPhone: "",
     serviceTier: "standard",
   };
 }
-

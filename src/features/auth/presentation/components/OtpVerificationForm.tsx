@@ -33,26 +33,30 @@ export default function OtpVerificationForm() {
   const resendOtpMutation = useRequestRegisterOtpMutation();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [digits, setDigits] = useState<string[]>(getInitialDigits);
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const expiresAtMs = otpChallengeMeta
     ? new Date(otpChallengeMeta.expiresAt).getTime()
     : null;
   const secondsLeft = expiresAtMs
-    ? Math.max(0, Math.floor((expiresAtMs - now) / 1000))
+    ? now === null
+      ? null
+      : Math.max(0, Math.floor((expiresAtMs - now) / 1000))
     : 0;
 
   useEffect(() => {
-    if (!otpChallengeMeta || secondsLeft <= 0) {
+    if (!otpChallengeMeta || !expiresAtMs) {
       return;
     }
+
+    setNow(Date.now());
 
     const interval = window.setInterval(() => {
       setNow(Date.now());
     }, 1000);
 
     return () => window.clearInterval(interval);
-  }, [otpChallengeMeta, secondsLeft]);
+  }, [expiresAtMs, otpChallengeMeta]);
 
   function setDigit(index: number, value: string) {
     const nextValue = value.replace(/\D/g, "").slice(-1);
@@ -200,12 +204,12 @@ export default function OtpVerificationForm() {
         <button
           type="button"
           onClick={handleResend}
-          disabled={secondsLeft > 0 || resendMutation.isPending || !pendingDraft}
+          disabled={(secondsLeft ?? 0) > 0 || resendMutation.isPending || !pendingDraft}
           className="ml-2 inline-flex items-center gap-2 font-black text-primary disabled:text-outline"
         >
           {otpVerificationCopy.resendLabel}
           <span className="rounded-full bg-surface-container-high px-2 py-0.5 text-[10px] font-black tracking-[0.08em] text-on-surface-variant uppercase">
-            00:{secondsLeft.toString().padStart(2, "0")}
+            00:{secondsLeft === null ? "--" : secondsLeft.toString().padStart(2, "0")}
           </span>
         </button>
       </div>
@@ -251,4 +255,3 @@ export default function OtpVerificationForm() {
     </div>
   );
 }
-

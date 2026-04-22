@@ -13,6 +13,7 @@ import { orderManagementCopy, getOrderStatusLabel } from "@/i18n/vi";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { mapOrdersToManagementRows } from "@/features/orders/application/mappers/order-management.mapper";
 import { cn } from "@/lib/utils";
+import { formatDateOnly } from "@/utils/formatters";
 
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
 
@@ -117,7 +118,7 @@ export default function OrderManagementScreen(
                         {row.route}
                       </td>
                       <td className="px-6 py-4 text-[0.8rem] text-on-surface-variant">
-                        {new Date(row.date).toLocaleDateString("vi-VN")}
+                        {formatDateOnly(row.date)}
                       </td>
                       <td className="px-6 py-4">
                         <span

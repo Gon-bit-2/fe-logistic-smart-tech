@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import {
   ArrowRight,
   Boxes,
@@ -41,11 +41,16 @@ export default function ShipmentsManagementScreen(
 
   const [activeFilter, setActiveFilter] = useState(shipmentFilters[0]?.label ?? "Tất cả lô hàng");
   const [searchTerm, setSearchTerm] = useState("");
-  const [renderTimestamp] = useState(() => Date.now());
+  const [renderTimestamp, setRenderTimestamp] = useState<number | null>(null);
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const ordersQuery = useOrdersListQuery();
   const orders = ordersQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
+
+  useEffect(() => {
+    setRenderTimestamp(Date.now());
+  }, []);
+
   const filteredOrders = orders.filter((order) => {
     const statusLabel = getOrderStatusLabel(order.status);
     const matchesFilter =
@@ -53,7 +58,7 @@ export default function ShipmentsManagementScreen(
         ? true
         : activeFilter === "Đang hoạt động"
           ? order.status !== "DELIVERED" && order.status !== "CANCELLED"
-          : order.estimatedArrival
+          : order.estimatedArrival && renderTimestamp !== null
             ? order.status !== "DELIVERED" &&
               new Date(order.estimatedArrival).getTime() < renderTimestamp
             : false;
@@ -362,4 +367,3 @@ export default function ShipmentsManagementScreen(
     </div>
   );
 }
-

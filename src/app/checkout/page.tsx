@@ -1,19 +1,19 @@
 import { Suspense } from "react";
 import CheckoutScreen from "@/features/orders/presentation/screens/CheckoutScreen";
-import AuthGuard from "@/features/auth/presentation/components/AuthGuard";
+import CustomerShell from "@/components/layout/CustomerShell";
 
 export default function CheckoutPage() {
   return (
-    <AuthGuard>
+    <CustomerShell>
       <Suspense
         fallback={
-          <div className="min-h-screen bg-surface px-6 py-12 text-on-surface">
+          <div className="mx-auto max-w-5xl px-6 py-12 text-on-surface md:px-8">
             Loading checkout...
           </div>
         }
       >
-        <CheckoutScreen />
+        <CheckoutScreen showTopBar={false} />
       </Suspense>
-    </AuthGuard>
+    </CustomerShell>
   );
 }

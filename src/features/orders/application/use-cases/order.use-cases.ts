@@ -2,6 +2,7 @@ import { hasApiBaseUrl } from "@/lib/api/env";
 import type {
   CreateOrderInput,
   OrderDTO,
+  OrderQuoteResponse,
   PaymentMethod,
   OrderListParams,
   UpdateOrderStatusInput,
@@ -9,6 +10,7 @@ import type {
 import {
   createOrderRequest,
   getOrderByIdRequest,
+  getOrderQuoteRequest,
   listOrdersRequest,
   updateOrderStatusRequest,
   deleteOrderRequest,
@@ -33,6 +35,11 @@ export async function createOrderUseCase(input: CreateOrderInput) {
 
   const order = await createOrderRequest(input);
   return upsertStoredOrder(order);
+}
+
+export async function getOrderQuoteUseCase(input: CreateOrderInput): Promise<OrderQuoteResponse> {
+  assertOrdersApiConfigured();
+  return getOrderQuoteRequest(input);
 }
 
 export async function resolveCheckoutOrderUseCase(params: {
@@ -99,4 +106,3 @@ export async function deleteOrderUseCase(orderId: string) {
   assertOrdersApiConfigured();
   return deleteOrderRequest(orderId);
 }
-

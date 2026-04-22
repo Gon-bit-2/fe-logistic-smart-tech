@@ -58,12 +58,18 @@ export type AppIconProps = ComponentPropsWithoutRef<"svg"> & {
   readonly name: AppIconName | string;
 };
 
+function resolveIcon(name: string): LucideIcon {
+  return Object.prototype.hasOwnProperty.call(ICONS, name)
+    ? ICONS[name as AppIconName]
+    : CircleHelp;
+}
+
 export default function AppIcon({
   name,
   className,
   ...props
 }: Readonly<AppIconProps>) {
-  const Icon = ICONS[name] ?? CircleHelp;
+  const Icon = resolveIcon(name);
 
   return (
     <Icon

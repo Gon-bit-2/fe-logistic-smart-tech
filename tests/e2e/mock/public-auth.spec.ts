@@ -8,7 +8,9 @@ test.beforeEach(async ({ page }) => {
 test("loads the landing page and uses operations navigation", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: /Tương lai của logistics là/i })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Giải pháp Logistics Xanh & Thông minh/i }),
+  ).toBeVisible();
 
   await page.goto("/tracking");
   await page.getByRole("link", { name: "Precision Logistics" }).click();
@@ -21,17 +23,17 @@ test("logs in and redirects to order creation", async ({ page }) => {
 
   await page.getByLabel("Email tổ chức").fill("ops@emerald.com");
   await page.locator("input[type='password']").fill("Secret123");
-  await page.getByRole("button", { name: "Truy cập Fleet Command" }).click();
+  await page.getByRole("button", { name: "Truy cập hệ thống" }).click();
 
-  await expect(page).toHaveURL(/\/orders\/create$/);
-  await expect(page.getByText("Tạo đơn hàng mới")).toBeVisible();
+  await expect(page).toHaveURL(/\/dashboard\/customer$/);
+  await expect(page.getByText("Tổng quan Khách hàng")).toBeVisible();
 });
 
 test("completes register and forgot-password OTP flows", async ({ page }) => {
   await page.goto("/auth/register");
-  await page.getByPlaceholder("Marcus Thorne").fill("Nguyen Van A");
-  await page.getByPlaceholder("Sustainable Goods Co.").fill("Emerald Ops");
-  await page.getByPlaceholder("+84 900 111 222").fill("0909000000");
+  await page.getByPlaceholder("Nguyễn Văn A").fill("Nguyen Van A");
+  await page.getByPlaceholder("Công ty Cổ phần ABC").fill("Emerald Ops");
+  await page.getByPlaceholder("0900 111 222").fill("0909000000");
   await page.getByLabel("Email tổ chức").fill("register@emerald.com");
   await page.locator("input[type='password']").fill("Secret123");
   await page.getByRole("button", { name: "Đăng ký và tiếp tục" }).click();
@@ -47,7 +49,7 @@ test("completes register and forgot-password OTP flows", async ({ page }) => {
   await page.getByLabel("Email tổ chức").fill("reset@emerald.com");
   await page.locator("input[type='password']").first().fill("NewSecret123");
   await page.locator("input[type='password']").nth(1).fill("NewSecret123");
-  await page.getByRole("button", { name: "Gửi mã đặt lại" }).click();
+  await page.getByRole("button", { name: "Gửi mã xác thực" }).click();
 
   await expect(page).toHaveURL(/\/auth\/otp\?mode=forgot-password$/);
   for (let index = 0; index < 6; index += 1) {

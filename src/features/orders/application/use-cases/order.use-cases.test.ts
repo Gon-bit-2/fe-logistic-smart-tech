@@ -13,6 +13,7 @@ describe("order.use-cases", () => {
     vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
       listOrdersRequest: vi.fn(),
       createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
       getOrderByIdRequest: vi.fn(),
       updateOrderStatusRequest: vi.fn(),
       deleteOrderRequest: vi.fn(),
@@ -40,6 +41,7 @@ describe("order.use-cases", () => {
     vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
       listOrdersRequest: vi.fn().mockResolvedValue(sampleOrdersPage),
       createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
       getOrderByIdRequest,
       updateOrderStatusRequest: vi.fn(),
       deleteOrderRequest: vi.fn(),
@@ -72,6 +74,7 @@ describe("order.use-cases", () => {
     vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
       listOrdersRequest: vi.fn().mockResolvedValue(sampleOrdersPage),
       createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
       getOrderByIdRequest,
       updateOrderStatusRequest: vi.fn(),
       deleteOrderRequest: vi.fn(),
@@ -103,6 +106,7 @@ describe("order.use-cases", () => {
     vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
       listOrdersRequest: vi.fn().mockResolvedValue(sampleOrdersPage),
       createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
       getOrderByIdRequest: vi.fn(),
       updateOrderStatusRequest: vi.fn(),
       deleteOrderRequest: vi.fn(),

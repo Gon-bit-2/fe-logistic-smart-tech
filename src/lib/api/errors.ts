@@ -21,6 +21,10 @@ function getStatusFallbackMessage(status: number | null) {
   return "";
 }
 
+function looksLikeMachineStatusMessage(message: string) {
+  return /^Error\.[A-Za-z]+(?:\.[A-Za-z]+)*$/.test(message.trim());
+}
+
 function toValidationIssue(value: unknown): ValidationIssue | null {
   if (typeof value === "string") {
     return { message: value };
@@ -171,6 +175,8 @@ export function normalizeApiError(error: unknown): ApiError {
     const fallbackMessage =
       error.code === "ERR_NETWORK"
         ? "Network request failed"
+        : error.code === "ECONNABORTED"
+          ? "Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD."
         : error.message || getStatusFallbackMessage(status);
 
     return new ApiError({
@@ -178,7 +184,11 @@ export function normalizeApiError(error: unknown): ApiError {
       details: normalized.details ?? responseData,
       issues: normalized.issues,
       message:
-        normalized.message ||
+        ((looksLikeMachineStatusMessage(normalized.message) ||
+          normalized.message.trim().length === 0) &&
+        getStatusFallbackMessage(status)
+          ? getStatusFallbackMessage(status)
+          : normalized.message) ||
         getStatusFallbackMessage(status) ||
         fallbackMessage,
       status,

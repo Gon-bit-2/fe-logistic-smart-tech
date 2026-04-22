@@ -4,7 +4,7 @@ export interface TripRecord {
   id: string | number;
   vehicleId: string | number;
   driverId: string | number;
-  status: "PLANNED" | "IN_TRANSIT" | "COMPLETED" | "CANCELLED" | string;
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | string;
   distanceKm: number;
   cargoWeight: number;
   createdAt: string;

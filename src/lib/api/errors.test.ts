@@ -68,6 +68,13 @@ describe("errors utility", () => {
         expect(normalized.code).toBe("ERR_NETWORK");
       });
 
+      it("should map request timeouts to a readable message", () => {
+        const error = new AxiosError("timeout of 15000ms exceeded", "ECONNABORTED");
+        const normalized = normalizeApiError(error);
+        expect(normalized.message).toBe("Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD.");
+        expect(normalized.code).toBe("ECONNABORTED");
+      });
+
       it("should handle 401 Unauthorized", () => {
         const error = new AxiosError("Request failed with status code 401", "ERR_BAD_REQUEST", undefined, undefined, {
           status: 401,
@@ -94,6 +101,23 @@ describe("errors utility", () => {
         const normalized = normalizeApiError(error);
         expect(normalized.message).toBe("Custom validation error from backend");
         expect(normalized.status).toBe(400);
+      });
+
+      it("should replace machine permission codes with a readable fallback", () => {
+        const error = new AxiosError("Forbidden", "ERR_BAD_REQUEST", undefined, undefined, {
+          status: 403,
+          data: {
+            message: "Error.Forbidden",
+          },
+          statusText: "Forbidden",
+          headers: {},
+          config: { headers: new AxiosHeaders() },
+        });
+        const normalized = normalizeApiError(error);
+        expect(normalized.status).toBe(403);
+        expect(normalized.message).toBe(
+          "You do not have permission to perform this action.",
+        );
       });
 
       it("should extract array of issues from response data", () => {

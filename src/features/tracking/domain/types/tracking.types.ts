@@ -8,27 +8,47 @@ export type TrackingEventType =
   | "EXCEPTION"
   | "ETA_UPDATE";
 
+export type TrackingEventSource =
+  | "DRIVER_APP"
+  | "HUB_SCANNER"
+  | "SYSTEM"
+  | "ADMIN_PORTAL"
+  | "CUSTOMER_APP";
+
+export type TrackingPackageCondition = "INTACT" | "DAMAGED" | "PARTIAL";
+
+export type TrackingProofImageType =
+  | "PACKAGE"
+  | "SIGNATURE"
+  | "DELIVERY_LOCATION"
+  | "DAMAGE_EVIDENCE"
+  | "FAILED_ATTEMPT";
+
 export type TrackingPodImage = {
-  type?: string;
+  type?: TrackingProofImageType;
   url: string;
 };
 
 export type TrackingPod = {
   images?: TrackingPodImage[];
-  packageCondition?: string;
+  deliveryNote?: string;
+  packageCondition?: TrackingPackageCondition;
   receiverName?: string;
+  receiverRelation?: string;
 };
 
 export type TrackingEventCreateInput = {
+  attemptNumber?: number;
   description?: string;
   eventType: TrackingEventType;
   failureReasonCode?: string;
   latitude?: number;
   location?: string;
   longitude?: number;
+  occurredAt?: Date | string;
   orderId: number;
   pod?: TrackingPod;
-  source?: string;
+  source: TrackingEventSource;
   status?: OrderStatus;
 };
 
@@ -51,7 +71,7 @@ export type TrackingEventApi = {
   location?: string;
   longitude?: number | null;
   pod?: TrackingPod;
-  source?: string;
+  source?: TrackingEventSource;
   status?: OrderStatus | string;
 };
 
@@ -80,4 +100,3 @@ export type TrackingDetailViewModel = {
   recipientName: string | null;
   trackingCode: string;
 };
-

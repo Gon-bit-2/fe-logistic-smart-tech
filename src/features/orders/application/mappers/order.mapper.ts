@@ -1,4 +1,5 @@
 import type {
+  OrderApiItemDto,
   OrderApiDto,
   OrderPricing,
   OrderStatus,
@@ -28,6 +29,18 @@ function normalizeServiceTier(value?: string | null): ServiceTier | undefined {
     return value;
   }
 
+  if (value === "EXPRESS") {
+    return "express";
+  }
+
+  if (value === "STANDARD") {
+    return "standard";
+  }
+
+  if (value === "ECO_GREEN") {
+    return "eco_green";
+  }
+
   return undefined;
 }
 
@@ -41,11 +54,65 @@ function normalizePaymentMethod(
   return undefined;
 }
 
+function mapDimensions(items?: OrderApiItemDto[] | null) {
+  const firstItem = items?.[0];
+
+  if (
+    !firstItem ||
+    firstItem.length == null ||
+    firstItem.width == null ||
+    firstItem.height == null
+  ) {
+    return undefined;
+  }
+
+  return `${firstItem.length}x${firstItem.width}x${firstItem.height}`;
+}
+
+function mapItemDescription(items?: OrderApiItemDto[] | null) {
+  if (!items || items.length === 0) {
+    return undefined;
+  }
+
+  return items
+    .map((item) => item.name?.trim())
+    .filter(Boolean)
+    .join(", ");
+}
+
+function mapPackageWeight(payload: OrderApiDto) {
+  if (payload.totalWeight != null) {
+    return Number(payload.totalWeight);
+  }
+
+  if (!payload.items?.length) {
+    return undefined;
+  }
+
+  return payload.items.reduce((sum, item) => {
+    const quantity = Number(item.quantity ?? 0);
+    const weight = Number(item.weight ?? 0);
+    return sum + quantity * weight;
+  }, 0);
+}
+
 function mapPricing(
   pricing?: OrderApiDto["pricing"],
+  shippingFee?: number | null,
 ): OrderPricing | undefined {
   if (!pricing) {
-    return undefined;
+    if (shippingFee == null) {
+      return undefined;
+    }
+
+    return {
+      currency: "VND",
+      ecoDiscount: 0,
+      handlingFee: 0,
+      logisticsFee: Number(shippingFee),
+      total: Number(shippingFee),
+      vat: 0,
+    };
   }
 
   return {
@@ -63,6 +130,7 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
   const reference = payload.reference ?? payload.trackingCode ?? `ORD-${id}`;
   const customerName =
     payload.customerName?.trim() ||
+    payload.senderName?.trim() ||
     payload.customer?.fullName?.trim() ||
     payload.customer?.email?.trim() ||
     "Khách hàng";
@@ -73,31 +141,45 @@ export function mapOrderApiToViewModel(payload: OrderApiDto): OrderViewModel {
         ? Number(payload.co2SavedKg)
         : payload.co2Saved != null
           ? Number(payload.co2Saved)
+          : payload.estimatedCo2Saved != null
+            ? Number(payload.estimatedCo2Saved)
           : undefined,
-    contactName: payload.contactName ?? undefined,
-    contactPhone: payload.contactPhone ?? undefined,
+    contactName: payload.contactName ?? payload.senderName ?? undefined,
+    contactPhone: payload.contactPhone ?? payload.senderPhone ?? undefined,
     customerName,
+    currentHubId:
+      payload.currentHubId != null ? Number(payload.currentHubId) : undefined,
+    currentTripId:
+      payload.currentTripId != null ? Number(payload.currentTripId) : undefined,
     declaredValueUsd:
       payload.declaredValueUsd != null
         ? Number(payload.declaredValueUsd)
         : undefined,
-    deliveryAddress: payload.deliveryAddress ?? "Đang cập nhật",
+    deliveryAddress:
+      payload.deliveryAddress ?? payload.receiverAddress ?? "Đang cập nhật",
+    receiverLat:
+      payload.receiverLat != null ? Number(payload.receiverLat) : undefined,
+    receiverLng:
+      payload.receiverLng != null ? Number(payload.receiverLng) : undefined,
     estimatedArrival:
+      payload.preferredDeliveryTimeEnd ??
       payload.estimatedArrival ??
       payload.updatedAt ??
       payload.createdAt ??
       new Date().toISOString(),
     id,
-    itemDescription: payload.itemDescription ?? undefined,
-    packageDimensions: undefined,
-    packageWeightKg: undefined,
+    itemDescription: payload.itemDescription ?? mapItemDescription(payload.items),
+    packageDimensions: mapDimensions(payload.items),
+    packageWeightKg: mapPackageWeight(payload),
     paymentMethod: normalizePaymentMethod(payload.paymentMethod),
-    pickupAddress: payload.pickupAddress ?? "Đang cập nhật",
-    pricing: mapPricing(payload.pricing),
+    pickupAddress: payload.pickupAddress ?? payload.senderAddress ?? "Đang cập nhật",
+    pricing: mapPricing(payload.pricing, payload.shippingFee),
     receiverName: payload.receiverName ?? undefined,
     receiverPhone: payload.receiverPhone ?? undefined,
     reference,
-    serviceTier: normalizeServiceTier(payload.serviceTier),
+    serviceTier: normalizeServiceTier(payload.serviceTier ?? payload.serviceType),
+    senderLat: payload.senderLat != null ? Number(payload.senderLat) : undefined,
+    senderLng: payload.senderLng != null ? Number(payload.senderLng) : undefined,
     status: normalizeOrderStatus(payload.status),
     stops: payload.stops ?? [],
     trackingCode: payload.trackingCode ?? undefined,

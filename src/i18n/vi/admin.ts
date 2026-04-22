@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  ClipboardCheck,
   LayoutDashboard,
   Languages,
   Leaf,
@@ -13,17 +14,18 @@ import type { AdminNavItem, AdminShellConfig } from "@/features/admin/domain/typ
 const ecosystemTopTabs = [
   { href: "/dashboard/admin", label: "Bảng điều khiển" },
   { href: "/dashboard/admin/orders", label: "Lô hàng" },
-  { href: "/dashboard/admin/warehouses", label: "Tồn kho" },
+  { href: "/dashboard/admin/warehouses", label: "Kho hàng" },
 ] as const;
 
 export const adminNavItems: ReadonlyArray<AdminNavItem> = [
   { href: "/dashboard/admin", icon: LayoutDashboard, label: "Tổng quan" },
   { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Phân tích" },
+  { href: "/dashboard/admin/role-requests", icon: ClipboardCheck, label: "Role Requests" },
   { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Lô hàng" },
   { href: "/dashboard/admin/trips", icon: Route, label: "Chuyến đi" },
   { href: "/dashboard/admin/fleet", icon: Truck, label: "Đội xe" },
   { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Bền vững" },
-  { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Tồn kho" },
+  { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Kho hàng" },
   { href: "/dashboard/admin/language", icon: Languages, label: "Ngôn ngữ" },
 ];
 
@@ -66,6 +68,22 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
+  "/dashboard/admin/notifications": {
+    initials: "NT",
+    searchPlaceholder: "Tìm notification...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
+  "/dashboard/admin/role-requests": {
+    initials: "RR",
+    searchPlaceholder: "Tìm role request...",
+    supportLabel: "Hỗ trợ",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
   "/dashboard/admin/sustainability": {
     initials: "SI",
     searchPlaceholder: "Tìm kiếm theo dõi toàn cục...",
@@ -75,7 +93,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
   },
   "/dashboard/admin/warehouses": {
     initials: "IH",
-    searchPlaceholder: "Tìm kiếm tồn kho...",
+    searchPlaceholder: "Tìm kiếm kho hàng...",
     title: "Trung tâm điều phối",
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,

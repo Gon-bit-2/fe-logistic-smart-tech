@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { MoreVertical, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MetricTrend } from "@/features/admin/domain/types/admin.types";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export interface SectionCardProps {
   readonly className?: string;
@@ -13,14 +14,14 @@ export function SectionCard({
   children,
 }: Readonly<SectionCardProps>) {
   return (
-    <section
+    <Card
       className={cn(
-        "rounded-[1.75rem] bg-surface-container-lowest shadow-[0_24px_60px_-24px_rgba(6,78,59,0.24)] ring-1 ring-white/80",
+        "rounded-lg bg-white p-6 shadow-sm border-slate-200",
         className,
       )}
     >
       {children}
-    </section>
+    </Card>
   );
 }
 
@@ -45,12 +46,12 @@ export function PageHeader({
             {eyebrow}
           </p>
         ) : null}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-black tracking-tight text-on-surface md:text-5xl">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight text-[#064E3B]">
             {title}
           </h1>
           {description ? (
-            <p className="max-w-4xl text-lg leading-9 text-on-surface/70">
+            <p className="max-w-4xl text-sm leading-relaxed text-[#334155]">
               {description}
             </p>
           ) : null}
@@ -82,27 +83,37 @@ export function MetricCard({
 }: Readonly<MetricCardProps>) {
   const accentStyles =
     accent === "blue"
-      ? "bg-tertiary-fixed text-tertiary"
+      ? "bg-blue-100 text-blue-700"
       : accent === "dark"
-        ? "bg-primary text-white"
-        : "bg-primary-fixed/40 text-primary";
+        ? "bg-[#064E3B] text-white"
+        : "bg-[#D1FAE5] text-[#065F46]";
 
   return (
-    <SectionCard className={cn("p-7", className)}>
-      <div className="flex items-start justify-between gap-6">
-        <div className={cn("rounded-[1.35rem] p-4", accentStyles)}>{icon}</div>
-        {trend ? <TrendPill label={trend.label} tone={trend.tone} /> : null}
-      </div>
-      <div className="mt-7 space-y-2">
-        <p className="text-xs font-black uppercase tracking-[0.24em] text-on-surface/35">
-          {label}
-        </p>
-        <p className="text-4xl font-black tracking-tight text-on-surface">{value}</p>
-        {detail ? (
-          <p className="text-lg leading-8 text-on-surface/55">{detail}</p>
+    <Card className={cn("p-6 rounded-lg", className)}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className={cn("rounded-lg p-3", accentStyles)}>{icon}</div>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">
+              {label}
+            </p>
+            <p className="text-3xl font-bold tracking-tight text-[#064E3B]">
+              {value}
+            </p>
+          </div>
+        </div>
+        {trend ? (
+          <div className="self-start">
+            <TrendPill label={trend.label} tone={trend.tone} />
+          </div>
         ) : null}
       </div>
-    </SectionCard>
+      {detail ? (
+        <div className="mt-4 border-t border-slate-100 pt-4">
+          <p className="text-sm text-slate-500">{detail}</p>
+        </div>
+      ) : null}
+    </Card>
   );
 }
 
@@ -114,20 +125,25 @@ export interface TrendPillProps {
 export function TrendPill({ label, tone }: Readonly<TrendPillProps>) {
   const styles =
     tone === "positive"
-      ? "bg-primary-fixed/35 text-primary"
+      ? "bg-[#D1FAE5] text-[#065F46]"
       : tone === "informative"
-        ? "bg-tertiary-fixed/80 text-tertiary"
-        : "bg-surface-container-low text-on-surface/60";
-  const Icon = tone === "positive" ? TrendingUp : tone === "informative" ? TrendingDown : null;
+        ? "bg-blue-100 text-blue-700"
+        : "bg-slate-100 text-slate-600";
+  const Icon =
+    tone === "positive"
+      ? TrendingUp
+      : tone === "informative"
+        ? TrendingDown
+        : null;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black",
+        "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold",
         styles,
       )}
     >
-      {Icon ? <Icon className="size-4" /> : null}
+      {Icon ? <Icon className="size-3.5" /> : null}
       {label}
     </span>
   );
@@ -188,7 +204,9 @@ export function BarChartCard({
   data,
   legend,
 }: Readonly<BarChartCardProps>) {
-  const maxValue = Math.max(...data.flatMap((item) => [item.value, item.compareValue ?? 0]));
+  const maxValue = Math.max(
+    ...data.flatMap((item) => [item.value, item.compareValue ?? 0]),
+  );
 
   return (
     <SectionCard className="p-8">
@@ -198,17 +216,24 @@ export function BarChartCard({
             {title}
           </h2>
           {description ? (
-            <p className="text-lg leading-8 text-on-surface/55">{description}</p>
+            <p className="text-lg leading-8 text-on-surface/55">
+              {description}
+            </p>
           ) : null}
         </div>
         {legend ? (
           <div className="flex flex-wrap items-center gap-6">
             {legend.map((item) => (
-              <div key={item.label} className="flex items-center gap-3 text-sm font-black uppercase tracking-[0.18em] text-on-surface/70">
+              <div
+                key={item.label}
+                className="flex items-center gap-3 text-sm font-black uppercase tracking-[0.18em] text-on-surface/70"
+              >
                 <span
                   className={cn(
                     "h-2.5 w-9 rounded-full",
-                    item.tone === "green" ? "bg-primary" : "bg-tertiary-container",
+                    item.tone === "green"
+                      ? "bg-primary"
+                      : "bg-tertiary-container",
                   )}
                 />
                 {item.label}
@@ -269,7 +294,9 @@ export function ProgressListCard({
               {eyebrow}
             </p>
           ) : null}
-          <h2 className="text-[2rem] font-black tracking-tight text-on-surface">{title}</h2>
+          <h2 className="text-[2rem] font-black tracking-tight text-on-surface">
+            {title}
+          </h2>
         </div>
         <button
           type="button"
@@ -283,7 +310,9 @@ export function ProgressListCard({
         {items.map((item) => (
           <div key={item.label} className="space-y-3">
             <div className="flex items-end justify-between gap-4">
-              <p className="text-xl font-semibold text-on-surface">{item.label}</p>
+              <p className="text-xl font-semibold text-on-surface">
+                {item.label}
+              </p>
               <p className="text-[2rem] font-black tracking-tight text-on-surface/65">
                 {item.value}
               </p>
@@ -320,11 +349,15 @@ export function DonutChartCard({
 }: Readonly<DonutChartCardProps>) {
   return (
     <SectionCard className="p-8">
-      <h2 className="text-[2rem] font-black tracking-tight text-on-surface">{title}</h2>
+      <h2 className="text-[2rem] font-black tracking-tight text-on-surface">
+        {title}
+      </h2>
       <div className="mt-10 flex justify-center">
         <div className="relative flex size-72 items-center justify-center rounded-full bg-[conic-gradient(var(--color-primary)_0_43%,#16c28f_43%_60%,#cdd8e8_60%_100%)]">
           <div className="flex size-56 flex-col items-center justify-center rounded-full bg-surface-container-lowest">
-            <p className="text-6xl font-black tracking-tight text-on-surface">{value}</p>
+            <p className="text-6xl font-black tracking-tight text-on-surface">
+              {value}
+            </p>
             <p className="mt-2 text-xs font-black uppercase tracking-[0.28em] text-on-surface/35">
               {subtitle}
             </p>
@@ -347,11 +380,12 @@ export function DonutChartCard({
             <p className="text-xs font-black uppercase tracking-[0.24em] text-on-surface/35">
               {item.label}
             </p>
-            <p className="mt-3 text-4xl font-black tracking-tight text-on-surface">{item.value}</p>
+            <p className="mt-3 text-4xl font-black tracking-tight text-on-surface">
+              {item.value}
+            </p>
           </div>
         ))}
       </div>
     </SectionCard>
   );
 }
-

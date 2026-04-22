@@ -1,5 +1,3 @@
-"use client";
-
 import { IntegrationPendingState } from "@/components/ui/data-states";
 import { statBarCopy } from "@/i18n/vi";
 
@@ -16,4 +14,3 @@ export default function StatBar() {
     </section>
   );
 }
-

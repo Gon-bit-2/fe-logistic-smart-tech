@@ -32,21 +32,27 @@ export default function ProofOfDeliveryCard({
             <Image
               src={podImageUrl}
               alt={proofOfDeliveryCopy.imageAlt}
+              width={640}
+              height={360}
               className="aspect-video h-full w-full object-cover"
             />
           ) : (
-            <>
-              <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV2GBNJwQJo5CamIfYGyyJyFgWtHIIMjCjqro1f1MY0SoagytN0yo5v33HTBkvLG4ZRPIOiHXb_YlNRKdXkye-fj-_OCqJ_9f71_R0n-aS71m1kNuNuAW-gr-e3J_Hzdqm0pvlkYdzc3V-w4JNi4sd8Md4-m0Uy7uK-ukP1B2KjdWluNy811y64vRzRbNxnfV6Nwkt06Ly2h1xrw20XhrDOxyUI_nbqTsGHVQKeNbCU81pcc7DEIKiUIALeBqW3POPoRfnf48e--_k"
-                alt={proofOfDeliveryCopy.pendingImageAlt}
-                className="aspect-video h-full w-full object-cover opacity-45 grayscale"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black tracking-[0.14em] text-outline uppercase">
+            <div className="flex aspect-video min-h-56 items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.18),_transparent_55%),linear-gradient(135deg,_rgba(236,253,245,0.96),_rgba(209,250,229,0.84))] p-6">
+              <div className="flex max-w-56 flex-col items-center text-center">
+                <div className="flex size-16 items-center justify-center rounded-full bg-white/90 shadow-[0_14px_28px_-18px_rgba(6,78,59,0.42)]">
+                  <AppIcon
+                    name="photo_camera"
+                    className="text-[34px] text-outline-variant"
+                  />
+                </div>
+                <div className="mt-4 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black tracking-[0.14em] text-outline uppercase">
                   {proofOfDeliveryCopy.pendingCapture}
                 </div>
+                <p className="mt-3 text-sm font-medium text-on-surface-variant">
+                  {proofOfDeliveryCopy.pendingImageAlt}
+                </p>
               </div>
-            </>
+            </div>
           )}
         </div>
         <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-outline-variant bg-surface p-4">

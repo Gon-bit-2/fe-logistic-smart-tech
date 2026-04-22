@@ -1,5 +1,3 @@
-"use client";
-
 import { IntegrationPendingState } from "@/components/ui/data-states";
 import { featuresSectionCopy } from "@/i18n/vi";
 
@@ -24,4 +22,3 @@ export default function FeaturesSection() {
     </section>
   );
 }
-

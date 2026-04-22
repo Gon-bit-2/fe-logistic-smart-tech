@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Bell, CircleHelp, Search, Settings2 } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
+import { getNotificationsHrefForRole } from "@/features/auth/application/services/auth-session";
+import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
+import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
 import { adminTopBarCopy } from "@/i18n/vi";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +18,10 @@ export default function AdminTopBar({
   config,
   pathname,
 }: Readonly<AdminTopBarProps>) {
+  const { user } = useAuthSession();
+  const unreadQuery = useUnreadNotificationsCount(Boolean(user));
+  const unreadCount = unreadQuery.data?.totalUnread ?? 0;
+  const notificationsHref = getNotificationsHrefForRole(user?.role);
   const showSearch = config.topBarVariant !== "warehouse";
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
@@ -55,13 +64,17 @@ export default function AdminTopBar({
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <button
-              type="button"
+            <Link
+              href={notificationsHref}
               className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
             >
               <Bell className="size-[1.125rem]" />
-              <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-surface-container-low" />
-            </button>
+              {unreadCount > 0 ? (
+                <span className="absolute right-0.5 top-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[0.62rem] font-black text-white ring-2 ring-surface-container-low">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              ) : null}
+            </Link>
             <button
               type="button"
               disabled
@@ -112,13 +125,17 @@ export default function AdminTopBar({
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
-            <button
-              type="button"
-              disabled
-              className="rounded-full p-2 text-on-surface/30 cursor-not-allowed"
+            <Link
+              href={notificationsHref}
+              className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
             >
               <Bell className="size-[1.125rem]" />
-            </button>
+              {unreadCount > 0 ? (
+                <span className="absolute right-0.5 top-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[0.62rem] font-black text-white ring-2 ring-surface-container-low">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              ) : null}
+            </Link>
             <button
               type="button"
               disabled
@@ -164,14 +181,17 @@ export default function AdminTopBar({
         </div>
 
         <div className="flex flex-wrap items-center gap-3 md:justify-end">
-          <button
-            type="button"
-            disabled
-            className="relative rounded-full p-2 text-on-surface/30 cursor-not-allowed"
+          <Link
+            href={notificationsHref}
+            className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
           >
             <Bell className="size-5" />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-surface-container-low" />
-          </button>
+            {unreadCount > 0 ? (
+              <span className="absolute right-0.5 top-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[0.62rem] font-black text-white ring-2 ring-surface-container-low">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            ) : null}
+          </Link>
           <button
             type="button"
             className="rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
@@ -202,4 +222,3 @@ export default function AdminTopBar({
     </header>
   );
 }
-

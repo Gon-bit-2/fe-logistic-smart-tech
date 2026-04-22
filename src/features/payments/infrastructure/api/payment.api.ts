@@ -10,9 +10,15 @@ import {
   API_PAYMENT_ORDER,
 } from "@/utils/apiUrl";
 
+const PAYMENT_INTENT_TIMEOUT_MS = 15000;
+
 export async function createPaymentIntentRequest(orderId: string) {
   const response = await httpClient.post<PaymentIntentResponse>(
     API_PAYMENT_CREATE_INTENT(orderId),
+    undefined,
+    {
+      timeout: PAYMENT_INTENT_TIMEOUT_MS,
+    },
   );
   return response.data;
 }

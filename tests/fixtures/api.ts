@@ -5,9 +5,15 @@ export const sampleOrder: OrderDTO = {
   reference: "ELG-2026-0001",
   customerName: "Công ty Logistics Xanh",
   pickupAddress: "123 Nguyễn Văn Linh, Quận 7",
+  senderLat: 10.728851,
+  senderLng: 106.721659,
   deliveryAddress: "456 Điện Biên Phủ, Bình Thạnh",
+  receiverLat: 10.80035,
+  receiverLng: 106.71482,
   estimatedArrival: "2026-04-20T10:00:00.000Z",
   co2SavedKg: 18.4,
+  currentHubId: 3,
+  currentTripId: 9,
   status: "IN_TRANSIT",
   contactName: "Lan",
   contactPhone: "0909000001",
@@ -136,6 +142,41 @@ export const sampleVehicleList = {
       type: "ELECTRIC_VAN",
       fuelType: "ELECTRIC",
       isActive: true,
+    },
+  ],
+  totalItems: 1,
+};
+
+export const sampleNotificationsPage = {
+  data: [
+    {
+      id: 12,
+      title: "Cập nhật role request",
+      content: "Yêu cầu của bạn đang chờ duyệt.",
+      isRead: false,
+      createdAt: "2026-04-20T09:00:00.000Z",
+      payload: {
+        roleRequestId: 12,
+        targetRoleName: "DRIVER",
+        status: "PENDING",
+      },
+    },
+  ],
+  totalItems: 1,
+};
+
+export const sampleRoleRequestsPage = {
+  data: [
+    {
+      id: 88,
+      targetRoleName: "WAREHOUSE_STAFF",
+      status: "PENDING",
+      reason: "Tôi muốn phụ trách xử lý hàng tại hub.",
+      createdAt: "2026-04-20T09:00:00.000Z",
+      user: {
+        id: 7,
+        fullName: "Nguyen Van B",
+      },
     },
   ],
   totalItems: 1,

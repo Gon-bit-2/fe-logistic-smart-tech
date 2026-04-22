@@ -11,7 +11,7 @@
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e:mock": "playwright test tests/e2e/mock",
-    "test:e2e:live": "playwright test tests/e2e/live",
+    "test:e2e:live": "playwright test tests/e2e/live --workers=1",
     "test:all": "npm run build && npm run test:unit && npm run test:e2e:mock && npm run test:e2e:live"
   },
   "dependencies": {
@@ -21,6 +21,7 @@
     "@stripe/react-stripe-js": "^6.2.0",
     "@stripe/stripe-js": "^9.2.0",
     "@tanstack/react-query": "^5.99.0",
+    "@vis.gl/react-google-maps": "^1.8.3",
     "axios": "^1.15.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

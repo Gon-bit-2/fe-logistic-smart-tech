@@ -55,6 +55,11 @@ export const serviceTierOptions = [
 }[];
 
 export const orderFormCopy = {
+  addressAutocompleteEmpty: "Không tìm thấy gợi ý phù hợp.",
+  addressAutocompleteHint: "Nhập tối thiểu 2 ký tự và chọn một địa chỉ từ danh sách gợi ý.",
+  addressAutocompleteLoading: "Đang tìm địa chỉ...",
+  addressAutocompleteRequired: "Vui lòng chọn một địa chỉ từ gợi ý.",
+  addressSelected: "Đã chốt tọa độ",
   contactName: "Tên liên hệ",
   contactPhone: "Số điện thoại liên hệ",
   createTitle: "Tạo đơn hàng mới",
@@ -72,8 +77,11 @@ export const orderFormCopy = {
   pricingSourceLabel: "Nguồn báo giá",
   receiverName: "Tên người nhận",
   receiverPhone: "Số điện thoại người nhận",
+  resolvingAddress: "Đang lấy tọa độ...",
   selectServiceTier: "Chọn gói dịch vụ",
   stepLabels: ["Điểm đi/đến", "Chi tiết", "Dịch vụ"],
+  submitDisabledAddress: "Chọn đủ địa chỉ từ autocomplete để tiếp tục.",
+  submitDisabledQuote: "Hệ thống cần báo giá thành công trước khi tạo đơn.",
   submitLoading: "Đang xử lý...",
   subtitle: "Thiết lập tuyến đường, hồ sơ kiện hàng và gói dịch vụ.",
   totalQuoted: "tổng báo giá",
@@ -86,15 +94,21 @@ export const serviceTierSelectorCopy = {
 } as const;
 
 export const routePreviewCopy = {
+  distance: "Khoảng cách",
   declaredValue: "Giá trị khai báo",
   delivery: "Điểm giao",
   deliveryMissing: "Chưa thiết lập điểm giao",
   dimensions: "Kích thước",
   draftSummary: "Tóm tắt bản nháp",
+  duration: "Thời lượng",
   eta: "ETA",
   newShipment: "Lô hàng mới",
   pending: "Đang chờ",
   pendingQuote: "Chờ báo giá",
+  quoteError: "Không lấy được báo giá",
+  quotePendingDescription:
+    "Bản xem trước tuyến đường sẽ xuất hiện sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
+  quoteReady: "Đã nhận báo giá",
   pickup: "Điểm lấy",
   pickupMissing: "Chưa thiết lập điểm lấy",
   pricingSourceDescription:
@@ -102,6 +116,7 @@ export const routePreviewCopy = {
   pricingSourceLabel: "Nguồn báo giá",
   routePreview: "Xem trước tuyến đường",
   service: "Dịch vụ",
+  shippingFee: "Cước vận chuyển",
   weight: "Khối lượng",
 } as const;
 

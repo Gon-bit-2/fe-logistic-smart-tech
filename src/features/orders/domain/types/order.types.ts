@@ -28,22 +28,51 @@ export type OrderApiDto = {
     phone?: string | null;
   } | null;
   customerName?: string | null;
+  currentHubId?: number | null;
+  currentTripId?: number | null;
   declaredValueUsd?: number | null;
   deliveryAddress?: string | null;
+  estimatedCo2Saved?: number | null;
   estimatedArrival?: string | null;
   id: number | string;
   itemDescription?: string | null;
+  items?: OrderApiItemDto[] | null;
   paymentMethod?: PaymentMethod | string | null;
   pickupAddress?: string | null;
   pricing?: OrderApiPricing | null;
+  preferredDeliveryTimeEnd?: string | null;
+  preferredDeliveryTimeStart?: string | null;
   receiverName?: string | null;
+  receiverAddress?: string | null;
+  receiverLat?: number | null;
+  receiverLng?: number | null;
   receiverPhone?: string | null;
   reference?: string | null;
+  senderAddress?: string | null;
+  senderLat?: number | null;
+  senderLng?: number | null;
+  senderName?: string | null;
+  senderPhone?: string | null;
+  serviceType?: string | null;
+  shippingFee?: number | null;
   serviceTier?: ServiceTier | string | null;
   status?: OrderStatus | string | null;
   stops?: OrderStop[] | null;
   trackingCode?: string | null;
+  totalVolume?: number | null;
+  totalWeight?: number | null;
   updatedAt?: string | null;
+};
+
+export type OrderApiItemDto = {
+  height?: number | null;
+  id?: number | string | null;
+  length?: number | null;
+  name?: string | null;
+  orderId?: number | string | null;
+  quantity?: number | null;
+  weight?: number | null;
+  width?: number | null;
 };
 
 export type OrderPricing = {
@@ -69,9 +98,15 @@ export type OrderViewModel = {
   customerName: string;
   trackingCode?: string;
   pickupAddress: string;
+  senderLat?: number | null;
+  senderLng?: number | null;
   deliveryAddress: string;
+  receiverLat?: number | null;
+  receiverLng?: number | null;
   estimatedArrival: string;
   co2SavedKg?: number;
+  currentHubId?: number | null;
+  currentTripId?: number | null;
   status: OrderStatus;
   contactName?: string;
   contactPhone?: string;
@@ -89,22 +124,107 @@ export type OrderViewModel = {
 
 export type OrderDTO = OrderViewModel;
 
-export type CreateOrderInput = Pick<
-  OrderDTO,
-  | "customerName"
-  | "pickupAddress"
-  | "deliveryAddress"
-  | "estimatedArrival"
-  | "contactName"
-  | "contactPhone"
-  | "receiverName"
-  | "receiverPhone"
-  | "itemDescription"
-> & {
+export type ResolvedOrderAddressInput = {
+  address: string;
+  isResolved: boolean;
+  latitude: number | null;
+  longitude: number | null;
+  placeId: string | null;
+  query: string;
+};
+
+export type CreateOrderInput = {
+  contactName: string;
+  contactPhone: string;
+  customerName: string;
+  delivery: ResolvedOrderAddressInput;
+  estimatedArrival: string;
+  itemDescription: string;
   packageWeightKg: number;
   packageDimensions: string;
+  pickup: ResolvedOrderAddressInput;
   declaredValueUsd: number;
+  receiverName: string;
+  receiverPhone: string;
   serviceTier: ServiceTier;
+};
+
+export type CreateOrderApiInput = {
+  items: Array<{
+    height?: number;
+    length?: number;
+    name: string;
+    quantity: number;
+    weight: number;
+    width?: number;
+  }>;
+  preferredDeliveryTimeEnd?: string;
+  preferredDeliveryTimeStart?: string;
+  receiverAddress: string;
+  receiverLat: number;
+  receiverLng: number;
+  receiverName: string;
+  receiverPhone: string;
+  senderAddress: string;
+  senderLat: number;
+  senderLng: number;
+  senderName: string;
+  senderPhone: string;
+  serviceType?: "ECO_GREEN" | "EXPRESS" | "STANDARD";
+};
+
+export type OrderQuoteRequest = Pick<
+  CreateOrderApiInput,
+  "items" | "receiverLat" | "receiverLng" | "senderLat" | "senderLng" | "serviceType"
+>;
+
+export type OrderQuote = {
+  currency: "VND";
+  distanceKm: number;
+  durationSeconds: number;
+  estimatedCo2Saved: number;
+  shippingFee: number;
+  totalVolume: number;
+  totalWeight: number;
+};
+
+export type OrderRouteApi = {
+  distance?: {
+    text?: string | null;
+    value?: number | null;
+  } | null;
+  duration?: {
+    text?: string | null;
+    value?: number | null;
+  } | null;
+  overview_polyline?: {
+    points?: string | null;
+  } | null;
+};
+
+export type OrderRoute = {
+  distanceMeters: number;
+  distanceText: string;
+  durationSeconds: number;
+  durationText: string;
+  polyline: string | null;
+};
+
+export type OrderQuoteResponse = {
+  quote: OrderQuote;
+  routes: OrderRoute[];
+};
+
+export type OrderQuoteApiResponse = {
+  quote?: {
+    distance?: number | null;
+    duration?: number | null;
+    estimatedCo2Saved?: number | null;
+    shippingFee?: number | null;
+    totalVolume?: number | null;
+    totalWeight?: number | null;
+  } | null;
+  routes?: OrderRouteApi[] | null;
 };
 
 export type OrderListParams = PaginationParams & {

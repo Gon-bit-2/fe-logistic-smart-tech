@@ -1,5 +1,3 @@
-"use client";
-
 import { IntegrationPendingState } from "@/components/ui/data-states";
 import { sustainabilitySectionCopy } from "@/i18n/vi";
 
@@ -31,4 +29,3 @@ export default function SustainabilitySection() {
     </section>
   );
 }
-
