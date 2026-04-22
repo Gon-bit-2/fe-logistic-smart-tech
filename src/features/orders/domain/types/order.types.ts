@@ -1,4 +1,8 @@
 import type { PaginationParams } from "@/types/common.type";
+import type {
+  PaymentApiDto,
+  PaymentRecordDto,
+} from "@/features/payments/domain/types/payment.types";
 
 export type OrderStopStatus = "completed" | "current" | "pending";
 export type OrderStatus =
@@ -11,7 +15,6 @@ export type OrderStatus =
   | "DELIVERED"
   | "CANCELLED";
 export type ServiceTier = "express" | "eco_green" | "standard";
-export type PaymentMethod = "card" | "cash_on_delivery";
 
 export type OrderApiPricing = Partial<OrderPricing>;
 
@@ -37,7 +40,8 @@ export type OrderApiDto = {
   id: number | string;
   itemDescription?: string | null;
   items?: OrderApiItemDto[] | null;
-  paymentMethod?: PaymentMethod | string | null;
+  payment?: PaymentApiDto | null;
+  paymentMethod?: string | null;
   pickupAddress?: string | null;
   pricing?: OrderApiPricing | null;
   preferredDeliveryTimeEnd?: string | null;
@@ -116,7 +120,7 @@ export type OrderViewModel = {
   packageDimensions?: string;
   declaredValueUsd?: number;
   serviceTier?: ServiceTier;
-  paymentMethod?: PaymentMethod;
+  payment?: PaymentRecordDto | null;
   itemDescription?: string;
   pricing?: OrderPricing;
   stops: OrderStop[];
@@ -189,17 +193,9 @@ export type OrderQuote = {
 };
 
 export type OrderRouteApi = {
-  distance?: {
-    text?: string | null;
-    value?: number | null;
-  } | null;
-  duration?: {
-    text?: string | null;
-    value?: number | null;
-  } | null;
-  overview_polyline?: {
-    points?: string | null;
-  } | null;
+  distanceMeters?: number | null;
+  durationSeconds?: number | null;
+  polyline?: string | null;
 };
 
 export type OrderRoute = {
@@ -216,15 +212,13 @@ export type OrderQuoteResponse = {
 };
 
 export type OrderQuoteApiResponse = {
-  quote?: {
-    distance?: number | null;
-    duration?: number | null;
-    estimatedCo2Saved?: number | null;
-    shippingFee?: number | null;
-    totalVolume?: number | null;
-    totalWeight?: number | null;
-  } | null;
-  routes?: OrderRouteApi[] | null;
+  currency?: "VND" | "USD" | string | null;
+  distanceMeters?: number | null;
+  durationSeconds?: number | null;
+  estimatedCo2Saved?: number | null;
+  polyline?: string | null;
+  serviceType?: string | null;
+  shippingFee?: number | null;
 };
 
 export type OrderListParams = PaginationParams & {

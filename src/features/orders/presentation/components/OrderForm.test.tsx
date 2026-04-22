@@ -80,10 +80,6 @@ describe("OrderForm", () => {
       <OrderForm onSubmitSuccess={onSubmitSuccess} quoteState={quoteState} />,
     );
 
-    fireEvent.change(screen.getByLabelText(orderFormCopy.customer), {
-      target: { value: "Công ty Emerald" },
-    });
-
     const pickupInput = screen.getByLabelText(orderFormCopy.pickupAddress);
     fireEvent.focus(pickupInput);
     fireEvent.change(pickupInput, {
@@ -131,7 +127,6 @@ describe("OrderForm", () => {
         expect.objectContaining({
           contactName: "Lan",
           contactPhone: "0909000001",
-          customerName: "Công ty Emerald",
           delivery: expect.objectContaining({
             address: "456 Điện Biên Phủ, Bình Thạnh",
             isResolved: true,

@@ -119,7 +119,7 @@ export default function RoutePreviewCard({
               {routePreviewCopy.draftSummary}
             </p>
             <h2 className="mt-2 text-xl font-black tracking-tight text-on-surface">
-              {form.customerName || routePreviewCopy.newShipment}
+              {form.contactName || form.receiverName || routePreviewCopy.newShipment}
             </h2>
           </div>
           <Badge>{quoteState.isRefreshing ? routePreviewCopy.pendingQuote : service.label}</Badge>
@@ -138,14 +138,6 @@ export default function RoutePreviewCard({
             <span>{routePreviewCopy.dimensions}</span>
             <span className="font-semibold text-on-surface">
               {form.packageDimensions || routePreviewCopy.pending}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span>{routePreviewCopy.declaredValue}</span>
-            <span className="font-semibold text-on-surface">
-              {form.declaredValueUsd > 0
-                ? formatCurrency(form.declaredValueUsd)
-                : routePreviewCopy.pending}
             </span>
           </div>
           <div className="flex justify-between">

@@ -1,35 +1,49 @@
-import { act, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
+import { QueryClient } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleOrder } from "../../../../../tests/fixtures/api";
 import { renderHookWithProviders } from "@/test/render";
 import { useCheckout } from "./useCheckout";
 
-const { resolveCheckoutOrderUseCase } = vi.hoisted(() => ({
+const { resolveCheckoutOrderUseCase, usePaymentRecord } = vi.hoisted(() => ({
   resolveCheckoutOrderUseCase: vi.fn(),
+  usePaymentRecord: vi.fn(),
 }));
 
 vi.mock("@/features/orders/application/use-cases/order.use-cases", () => ({
   resolveCheckoutOrderUseCase,
 }));
 
+vi.mock("@/features/payments/presentation/hooks/usePaymentIntent", () => ({
+  usePaymentRecord,
+}));
+
 describe("useCheckout", () => {
   beforeEach(() => {
     resolveCheckoutOrderUseCase.mockReset();
+    usePaymentRecord.mockReset();
+    usePaymentRecord.mockReturnValue({
+      data: null,
+      error: null,
+      isPending: false,
+    });
   });
 
-  it("reports an error when no order is available in the URL", async () => {
+  it("does not fetch when checkout URL has no order context", () => {
     const { result } = renderHookWithProviders(() => useCheckout());
 
-    await act(async () => {
-      await result.current.confirmCheckout();
-    });
-
-    expect(result.current.error).toBe("Không thể tải đơn hàng để thanh toán.");
+    expect(result.current.order).toBeNull();
+    expect(result.current.loadError).toBeNull();
     expect(resolveCheckoutOrderUseCase).not.toHaveBeenCalled();
   });
 
-  it("requires card fields before confirming card payments", async () => {
+  it("loads the checkout order and payment record from their respective queries", async () => {
     resolveCheckoutOrderUseCase.mockResolvedValue(sampleOrder);
+    usePaymentRecord.mockReturnValue({
+      data: sampleOrder.payment,
+      error: null,
+      isPending: false,
+    });
 
     const { result } = renderHookWithProviders(() => useCheckout(), {
       searchParams: {
@@ -41,36 +55,29 @@ describe("useCheckout", () => {
       expect(result.current.order?.id).toBe(sampleOrder.id);
     });
 
-    await act(async () => {
-      await result.current.confirmCheckout();
-    });
-
-    expect(result.current.error).toBe(
-      "Vui lòng nhập số thẻ, ngày hết hạn và CVC để tiếp tục.",
-    );
+    expect(result.current.paymentRecord).toEqual(sampleOrder.payment);
+    expect(usePaymentRecord).toHaveBeenCalledWith(sampleOrder.id);
   });
 
-  it("confirms COD orders and redirects to tracking", async () => {
-    resolveCheckoutOrderUseCase.mockResolvedValue(sampleOrder);
+  it("surfaces checkout load errors from the order query", async () => {
+    resolveCheckoutOrderUseCase.mockRejectedValue(new Error("Không tải được order"));
 
-    const { result, router } = renderHookWithProviders(() => useCheckout(), {
+    const { result } = renderHookWithProviders(() => useCheckout(), {
+      queryClient: new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
+      }),
       searchParams: {
         orderId: sampleOrder.id,
       },
     });
 
     await waitFor(() => {
-      expect(result.current.order?.id).toBe(sampleOrder.id);
+      expect(result.current.loadError).toBe("Không tải được order");
     });
-
-    act(() => {
-      result.current.setPaymentMethod("cash_on_delivery");
-    });
-
-    await act(async () => {
-      await result.current.confirmCheckout();
-    });
-
-    expect(router.push).toHaveBeenCalledWith(`/tracking/${sampleOrder.reference}`);
+    expect(result.current.order).toBeNull();
   });
 });

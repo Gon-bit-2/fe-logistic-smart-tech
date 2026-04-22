@@ -1,4 +1,5 @@
 export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED";
+export type PaymentMethodCode = "STRIPE" | "COD";
 
 export type PaymentIntentResponse = {
   amount: number;
@@ -6,10 +7,20 @@ export type PaymentIntentResponse = {
   transactionId: string;
 };
 
+export type PaymentApiDto = {
+  amount?: number | string | null;
+  method?: PaymentMethodCode | string | null;
+  orderId?: number | string | null;
+  paidAt?: string | null;
+  status?: PaymentStatus | string | null;
+  transactionId?: string | null;
+};
+
 export type PaymentRecordDto = {
   amount?: number | null;
-  orderId?: number | string | null;
-  paymentMethod?: string | null;
+  method?: PaymentMethodCode | string | null;
+  orderId?: string | null;
+  paidAt?: string | null;
   status?: PaymentStatus | string | null;
   transactionId?: string | null;
 };

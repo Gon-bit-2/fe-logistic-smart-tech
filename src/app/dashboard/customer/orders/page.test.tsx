@@ -58,5 +58,43 @@ describe("CustomerOrdersPage", () => {
 
     expect(screen.getByText(sampleOrdersPage.data[0].reference)).toBeInTheDocument();
     expect(screen.getByText(sampleOrdersPage.data[0].status)).toBeInTheDocument();
+    expect(screen.getByText("Stripe • Chờ thanh toán")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Thanh toán" })).toBeInTheDocument();
+  });
+
+  it("hides the payment CTA for COD or completed orders", () => {
+    useOrdersListQueryMock.mockReturnValue({
+      data: {
+        data: [
+          {
+            ...sampleOrdersPage.data[0],
+            payment: {
+              ...sampleOrdersPage.data[0].payment,
+              method: "COD",
+              status: "PENDING",
+            },
+          },
+          {
+            ...sampleOrdersPage.data[0],
+            id: "order-completed",
+            reference: "ELG-2026-PAID",
+            payment: {
+              ...sampleOrdersPage.data[0].payment,
+              method: "STRIPE",
+              status: "COMPLETED",
+            },
+          },
+        ],
+        totalItems: 2,
+      },
+      isLoading: false,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+
+    renderWithProviders(<CustomerOrdersPage />);
+
+    expect(screen.queryByRole("link", { name: "Thanh toán" })).not.toBeInTheDocument();
   });
 });

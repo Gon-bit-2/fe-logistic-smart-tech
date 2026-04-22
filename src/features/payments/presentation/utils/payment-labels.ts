@@ -5,10 +5,23 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
   REFUNDED: "Đã hoàn tiền",
 };
 
+const PAYMENT_METHOD_LABELS: Record<string, string> = {
+  COD: "COD",
+  STRIPE: "Stripe",
+};
+
 export function getPaymentStatusLabel(status?: string | null) {
   if (!status) {
     return "Chưa có thanh toán";
   }
 
   return PAYMENT_STATUS_LABELS[status] ?? status;
+}
+
+export function getPaymentMethodLabel(method?: string | null) {
+  if (!method) {
+    return null;
+  }
+
+  return PAYMENT_METHOD_LABELS[method] ?? method;
 }

@@ -17,14 +17,16 @@ export function useCreateTrackingEvent() {
     mutationFn: (payload: TrackingEventCreateInput) =>
       createTrackingEventUseCase(payload),
     onSuccess: (_data, variables) => {
-      if (variables.status) {
+      const nextStatus = variables.status;
+
+      if (nextStatus) {
         queryClient.setQueryData<TrackingDetailViewModel | undefined>(
           trackingKeys.internalTimeline(String(variables.orderId)),
           (current) =>
             current
               ? {
                   ...current,
-                  currentStatus: variables.status,
+                  currentStatus: nextStatus,
                   podImageUrl:
                     variables.pod?.images?.[0]?.url ?? current.podImageUrl,
                   podPackageCondition:

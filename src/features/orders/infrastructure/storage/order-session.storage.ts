@@ -1,7 +1,16 @@
 import type { OrderDTO } from "@/features/orders/domain/types/order.types";
 
 const STORAGE_KEY = "emerald-logistics-recent-orders";
+const LEGACY_LOCAL_STORAGE_KEY = STORAGE_KEY;
 const recentOrders = new Map<string, OrderDTO>();
+
+function getSessionStorage() {
+  return window.sessionStorage;
+}
+
+function getLegacyStorage() {
+  return window.localStorage;
+}
 
 function isBrowser() {
   return typeof window !== "undefined";
@@ -13,7 +22,9 @@ function syncFromStorage() {
   }
 
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw =
+      getSessionStorage().getItem(STORAGE_KEY) ??
+      getLegacyStorage().getItem(LEGACY_LOCAL_STORAGE_KEY);
 
     if (!raw) {
       return;
@@ -24,8 +35,12 @@ function syncFromStorage() {
     parsed.forEach((order) => {
       recentOrders.set(order.id, order);
     });
+
+    getSessionStorage().setItem(STORAGE_KEY, raw);
+    getLegacyStorage().removeItem(LEGACY_LOCAL_STORAGE_KEY);
   } catch {
-    window.localStorage.removeItem(STORAGE_KEY);
+    getSessionStorage().removeItem(STORAGE_KEY);
+    getLegacyStorage().removeItem(LEGACY_LOCAL_STORAGE_KEY);
   }
 }
 
@@ -34,10 +49,11 @@ function persistToStorage() {
     return;
   }
 
-  window.localStorage.setItem(
+  getSessionStorage().setItem(
     STORAGE_KEY,
     JSON.stringify(Array.from(recentOrders.values())),
   );
+  getLegacyStorage().removeItem(LEGACY_LOCAL_STORAGE_KEY);
 }
 
 export function getStoredOrders() {
@@ -63,19 +79,3 @@ export function findStoredOrder(orderId: string) {
     null
   );
 }
-
-export function patchStoredOrder(orderId: string, patch: Partial<OrderDTO>) {
-  syncFromStorage();
-
-  const current = findStoredOrder(orderId);
-
-  if (!current) {
-    return null;
-  }
-
-  const nextOrder = { ...current, ...patch };
-  recentOrders.set(nextOrder.id, nextOrder);
-  persistToStorage();
-  return nextOrder;
-}
-

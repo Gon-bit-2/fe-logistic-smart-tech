@@ -1,31 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Bell, ShieldCheck } from "lucide-react";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
-import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
-import { formatDateOnly } from "@/utils/formatters";
 
 export default function CustomerDashboardPage() {
   const ordersQuery = useOrdersListQuery();
-  const latestOrderId = ordersQuery.data?.data[0]?.id ?? null;
-  const latestPaymentQuery = usePaymentRecord(latestOrderId);
-  const latestOrderReference = ordersQuery.data?.data[0]?.reference ?? null;
-  const [updatedAtLabel, setUpdatedAtLabel] = useState<string | null>(null);
-
-  useEffect(() => {
-    setUpdatedAtLabel(formatDateOnly(new Date()));
-  }, []);
+  const latestOrder = ordersQuery.data?.data[0] ?? null;
 
   const summary = useMemo(() => {
     const orders = ordersQuery.data?.data ?? [];
+    const deliveredOrders = orders.filter((order) => order.status === "DELIVERED");
 
     return {
       activeOrders: orders.filter((order) => !["DELIVERED", "CANCELLED"].includes(order.status)).length,
-      deliveredOrders: orders.filter((order) => order.status === "DELIVERED").length,
-      totalCo2Saved: orders.reduce((sum, order) => sum + Number(order.co2SavedKg ?? 0), 0),
+      deliveredOrders: deliveredOrders.length,
+      totalCo2Saved: deliveredOrders.reduce((sum, order) => sum + Number(order.co2SavedKg ?? 0), 0),
     };
   }, [ordersQuery.data?.data]);
 
@@ -37,9 +29,7 @@ export default function CustomerDashboardPage() {
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="mb-2 text-[20px] font-semibold text-emerald-900">Đơn hàng đang hoạt động</h2>
           <p className="text-4xl font-bold text-slate-700">{summary.activeOrders}</p>
-          <p className="mt-2 text-[12px] font-medium text-slate-500">
-            Cập nhật lúc: {updatedAtLabel ?? "--"}
-          </p>
+          <p className="mt-2 text-[12px] font-medium text-slate-500">Theo dữ liệu đơn hàng hiện có.</p>
         </div>
 
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -57,11 +47,11 @@ export default function CustomerDashboardPage() {
             </div>
           </div>
           <p className="relative z-10 mt-3 text-2xl font-bold text-emerald-500">
-            {getPaymentStatusLabel(latestPaymentQuery.data?.status)}
+            {getPaymentStatusLabel(latestOrder?.payment?.status)}
           </p>
           <p className="relative z-10 mt-3 text-[14px] leading-relaxed text-slate-600">
-            {latestOrderReference
-              ? `Đơn gần nhất: ${latestOrderReference}.`
+            {latestOrder?.reference
+              ? `Đơn gần nhất: ${latestOrder.reference}.`
               : "Chưa có đơn hàng gần đây."}
           </p>
         </div>

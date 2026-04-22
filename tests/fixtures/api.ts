@@ -23,7 +23,14 @@ export const sampleOrder: OrderDTO = {
   packageDimensions: "40x30x20",
   declaredValueUsd: 150,
   serviceTier: "eco_green",
-  paymentMethod: "cash_on_delivery",
+  payment: {
+    amount: 137.5,
+    method: "STRIPE",
+    orderId: "ord-001",
+    paidAt: null,
+    status: "PENDING",
+    transactionId: "pi_001",
+  },
   itemDescription: "Thiết bị điện tử",
   pricing: {
     logisticsFee: 120,

@@ -19,8 +19,6 @@ describe("order.use-cases", () => {
       deleteOrderRequest: vi.fn(),
     }));
     vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
-      findStoredOrder: vi.fn(),
-      patchStoredOrder: vi.fn(),
       upsertStoredOrder: vi.fn(),
     }));
 
@@ -31,9 +29,11 @@ describe("order.use-cases", () => {
     );
   });
 
-  it("returns an order from browser storage before calling the backend", async () => {
-    const getOrderByIdRequest = vi.fn();
-    const findStoredOrder = vi.fn().mockReturnValue(sampleOrder);
+  it("prefers the backend order detail when orderId is available", async () => {
+    const getOrderByIdRequest = vi.fn().mockResolvedValue({
+      ...sampleOrder,
+      status: "PENDING",
+    });
 
     vi.doMock("@/lib/api/env", () => ({
       hasApiBaseUrl: true,
@@ -47,8 +47,6 @@ describe("order.use-cases", () => {
       deleteOrderRequest: vi.fn(),
     }));
     vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
-      findStoredOrder,
-      patchStoredOrder: vi.fn(),
       upsertStoredOrder: vi.fn((order) => order),
     }));
 
@@ -59,9 +57,11 @@ describe("order.use-cases", () => {
         orderId: sampleOrder.id,
         reference: null,
       }),
-    ).resolves.toEqual(sampleOrder);
-    expect(findStoredOrder).toHaveBeenCalledWith(sampleOrder.id);
-    expect(getOrderByIdRequest).not.toHaveBeenCalled();
+    ).resolves.toMatchObject({
+      id: sampleOrder.id,
+      status: "PENDING",
+    });
+    expect(getOrderByIdRequest).toHaveBeenCalledWith(sampleOrder.id);
   });
 
   it("fetches an order from the backend when storage does not contain it", async () => {
@@ -80,8 +80,6 @@ describe("order.use-cases", () => {
       deleteOrderRequest: vi.fn(),
     }));
     vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
-      findStoredOrder: vi.fn().mockReturnValue(null),
-      patchStoredOrder: vi.fn(),
       upsertStoredOrder,
     }));
 
@@ -97,8 +95,8 @@ describe("order.use-cases", () => {
     expect(upsertStoredOrder).toHaveBeenCalledWith(sampleOrder);
   });
 
-  it("confirms checkout locally and persists the patched order", async () => {
-    const upsertStoredOrder = vi.fn((order) => order);
+  it("surfaces the backend error when order detail cannot be loaded", async () => {
+    const getOrderByIdRequest = vi.fn().mockRejectedValue(new Error("Network down"));
 
     vi.doMock("@/lib/api/env", () => ({
       hasApiBaseUrl: true,
@@ -107,28 +105,21 @@ describe("order.use-cases", () => {
       listOrdersRequest: vi.fn().mockResolvedValue(sampleOrdersPage),
       createOrderRequest: vi.fn(),
       getOrderQuoteRequest: vi.fn(),
-      getOrderByIdRequest: vi.fn(),
+      getOrderByIdRequest,
       updateOrderStatusRequest: vi.fn(),
       deleteOrderRequest: vi.fn(),
     }));
     vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
-      findStoredOrder: vi.fn().mockReturnValue(sampleOrder),
-      patchStoredOrder: vi.fn().mockReturnValue({
-        ...sampleOrder,
-        status: "IN_TRANSIT",
-        paymentMethod: "cash_on_delivery",
-      }),
-      upsertStoredOrder,
+      upsertStoredOrder: vi.fn((order) => order),
     }));
 
-    const { confirmCheckoutUseCase } = await import("./order.use-cases");
+    const { resolveCheckoutOrderUseCase } = await import("./order.use-cases");
 
     await expect(
-      confirmCheckoutUseCase(sampleOrder, "cash_on_delivery"),
-    ).resolves.toMatchObject({
-      status: "IN_TRANSIT",
-      paymentMethod: "cash_on_delivery",
-    });
-    expect(upsertStoredOrder).toHaveBeenCalled();
+      resolveCheckoutOrderUseCase({
+        orderId: sampleOrder.id,
+        reference: null,
+      }),
+    ).rejects.toThrow("Network down");
   });
 });

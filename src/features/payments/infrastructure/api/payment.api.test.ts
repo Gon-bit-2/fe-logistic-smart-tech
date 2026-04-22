@@ -37,4 +37,28 @@ describe("payment.api", () => {
       }),
     );
   });
+
+  it("maps payment records using the backend `method` field", async () => {
+    get.mockResolvedValue({
+      data: {
+        amount: "42500",
+        method: "STRIPE",
+        orderId: 21,
+        paidAt: null,
+        status: "PENDING",
+        transactionId: "pi_123",
+      },
+    });
+
+    const { getPaymentByOrderRequest } = await import("./payment.api");
+
+    await expect(getPaymentByOrderRequest("21")).resolves.toEqual({
+      amount: 42500,
+      method: "STRIPE",
+      orderId: "21",
+      paidAt: null,
+      status: "PENDING",
+      transactionId: "pi_123",
+    });
+  });
 });

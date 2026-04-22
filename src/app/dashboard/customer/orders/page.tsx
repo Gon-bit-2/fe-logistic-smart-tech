@@ -4,7 +4,44 @@ import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
+import {
+  getPaymentMethodLabel,
+  getPaymentStatusLabel,
+} from "@/features/payments/presentation/utils/payment-labels";
 import { formatDate } from "@/utils/formatters";
+
+function formatOrderPaymentLabel(method?: string | null, status?: string | null) {
+  if (!method && !status) {
+    return "Chưa có thanh toán";
+  }
+
+  const methodLabel = getPaymentMethodLabel(method);
+  const statusLabel = getPaymentStatusLabel(status);
+
+  return methodLabel ? `${methodLabel} • ${statusLabel}` : statusLabel;
+}
+
+function canOpenOnlineCheckout(order: {
+  payment?: {
+    method?: string | null;
+    status?: string | null;
+  } | null;
+  status: OrderStatus;
+}) {
+  if (order.status === "CANCELLED") {
+    return false;
+  }
+
+  if (order.payment?.method === "COD") {
+    return false;
+  }
+
+  if (order.payment?.status === "COMPLETED") {
+    return false;
+  }
+
+  return true;
+}
 
 export default function CustomerOrdersPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,7 +103,7 @@ export default function CustomerOrdersPage() {
                     </td>
                     <td className="p-4 text-[14px] font-semibold text-slate-700">{order.status}</td>
                     <td className="p-4 text-[14px] text-slate-700">
-                      {order.paymentMethod ?? "Chưa chọn"}
+                      {formatOrderPaymentLabel(order.payment?.method, order.payment?.status)}
                     </td>
                     <td className="p-4 text-[14px]">
                       <div className="flex gap-2">
@@ -76,12 +113,14 @@ export default function CustomerOrdersPage() {
                         >
                           Theo dõi
                         </Link>
-                        <Link
-                          href={`/checkout?orderId=${order.id}`}
-                          className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
-                        >
-                          Thanh toán
-                        </Link>
+                        {canOpenOnlineCheckout(order) ? (
+                          <Link
+                            href={`/checkout?orderId=${order.id}`}
+                            className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                          >
+                            Thanh toán
+                          </Link>
+                        ) : null}
                       </div>
                     </td>
                   </tr>
