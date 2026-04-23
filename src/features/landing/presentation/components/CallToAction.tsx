@@ -1,12 +1,11 @@
 "use client";
 
-/**
- * CallToAction component
- * Glass CTA staged over the warehouse background from Stitch.
- */
 import React, { useRef } from "react";
 import Link from "next/link";
+import { ArrowRight, CheckCircle2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -16,45 +15,61 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function CallToAction() {
   const sectionRef = useRef<HTMLElement>(null);
-  const backgroundRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(contentRef.current, {
-        y: 50,
-        opacity: 0,
-        scale: 0.95,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-        },
-      });
-
-      const parallaxTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      if (backgroundRef.current) {
-        parallaxTimeline.to(
-          backgroundRef.current,
-          { yPercent: -8, scale: 1.06, ease: "none" },
-          0,
-        );
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
       }
 
-      if (contentRef.current) {
-        parallaxTimeline.to(
-          contentRef.current,
-          { yPercent: -6, ease: "none" },
-          0,
+      gsap.from("[data-cta-reveal]", {
+        duration: 0.95,
+        ease: "power3.out",
+        opacity: 0,
+        stagger: 0.14,
+        y: 40,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          once: true,
+          start: "top 72%",
+        },
+      });
+
+      if (gridRef.current) {
+        gsap.to(gridRef.current, {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      if (panelRef.current) {
+        gsap.fromTo(
+          panelRef.current,
+          {
+            rotateX: 8,
+            scale: 0.96,
+            y: 24,
+          },
+          {
+            duration: 1.1,
+            ease: "power3.out",
+            rotateX: 0,
+            scale: 1,
+            y: 0,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              once: true,
+              start: "top 74%",
+            },
+          },
         );
       }
     },
@@ -62,48 +77,113 @@ export default function CallToAction() {
   );
 
   return (
-    <section ref={sectionRef} className="px-8 pb-32">
+    <section ref={sectionRef} className="px-6 pb-32 md:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="relative isolate flex h-[640px] items-center justify-center overflow-hidden rounded-[2rem] bg-[#051710]">
+        <div className="relative isolate overflow-hidden rounded-[2.4rem] bg-[#041711] px-6 py-8 shadow-[0_55px_130px_-58px_rgba(3,20,15,0.86)] md:px-10 md:py-10">
           <div
-            ref={backgroundRef}
-            className="absolute inset-[-4%] will-change-transform"
+            ref={gridRef}
+            className="absolute inset-0 opacity-70"
             style={{
-              background:
-                "radial-gradient(circle at top, rgba(111,251,190,0.16), transparent 30%), linear-gradient(135deg, rgba(1,24,18,0.88), rgba(5,47,36,0.94) 55%, rgba(10,77,55,0.82))",
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+              backgroundPosition: "center",
+              backgroundSize: "48px 48px",
             }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(111,251,190,0.16),transparent_34%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,19,14,0.22),rgba(3,19,14,0.36)_28%,rgba(2,16,12,0.7)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,16,12,0.58),rgba(2,16,12,0.12)_40%,rgba(2,16,12,0.44)_100%)]" />
-          <div className="pointer-events-none absolute left-[8%] top-[12%] h-48 w-48 rounded-full bg-primary-fixed/8 blur-3xl" />
-          <div className="pointer-events-none absolute right-[9%] bottom-[10%] h-56 w-56 rounded-full bg-emerald-400/8 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(111,251,190,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(5,173,112,0.24),transparent_28%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(4,23,17,0.84),rgba(6,40,29,0.92)_60%,rgba(4,27,20,0.88))]" />
 
-          <div
-            ref={contentRef}
-            className="relative z-10 max-w-3xl rounded-[1.75rem] border border-white/15 bg-white/8 px-6 py-12 text-center shadow-[0_40px_120px_-42px_rgba(0,0,0,0.75)] backdrop-blur-md sm:px-10 md:px-16"
-          >
-            <div className="mx-auto mb-5 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-black tracking-[0.32em] text-primary-fixed uppercase">
-              Build A Lower-Carbon Network
+          <div className="relative grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="flex flex-col justify-between gap-8">
+              <div data-cta-reveal className="max-w-xl space-y-5">
+                <Badge className="bg-white/8 px-3 py-1 text-[11px] font-bold tracking-[0.26em] uppercase text-primary-fixed">
+                  {ctaData.eyebrow}
+                </Badge>
+                <h2 className="text-4xl font-black tracking-tight text-white md:text-6xl">
+                  {ctaData.title}
+                </h2>
+                <p className="text-lg leading-8 text-white/74">
+                  {ctaData.description}
+                </p>
+              </div>
+
+              <div className="grid gap-3" data-cta-reveal>
+                {ctaData.supportPoints.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 rounded-[1.35rem] border border-white/10 bg-white/6 px-4 py-3 text-white/84 backdrop-blur-sm"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary-fixed" />
+                    <p className="text-sm leading-7">{item}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <h2 className="text-4xl font-black tracking-tight text-white drop-shadow-lg md:text-6xl">
-              {ctaData.title}
-            </h2>
-            <p className="mt-6 text-xl leading-relaxed text-white/88 drop-shadow-md">
-              {ctaData.description}
-            </p>
-
-            <div className="pt-8">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-lg bg-primary-fixed px-12 py-7 text-lg font-black tracking-widest text-on-primary-fixed uppercase shadow-2xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95"
+            <div
+              ref={panelRef}
+              className="[perspective:1600px]"
+            >
+              <Card
+                data-cta-reveal
+                className="relative overflow-hidden border border-white/12 bg-white/8 py-0 text-white shadow-[0_30px_120px_-48px_rgba(0,0,0,0.78)] backdrop-blur-xl"
               >
-                <Link href="/dashboard">
-                  {ctaData.buttonText}
-                </Link>
-              </Button>
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_32%,transparent)]" />
+                <CardContent className="relative p-6 md:p-8">
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    {ctaData.trustStats.map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="rounded-[1.4rem] border border-white/10 bg-[#0d2c21] px-4 py-4"
+                      >
+                        <div className="text-3xl font-black tracking-tight text-primary-fixed">
+                          {stat.value}
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-white/68">
+                          {stat.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 rounded-[1.8rem] border border-white/12 bg-[#0d2f23]/92 p-6">
+                    <p className="text-xs font-black tracking-[0.28em] text-primary-fixed uppercase">
+                      Launch with Emerald
+                    </p>
+                    <h3 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
+                      Vận hành xanh, nhìn rõ dữ liệu, mở rộng nhanh hơn.
+                    </h3>
+                    <p className="mt-4 max-w-2xl text-base leading-8 text-white/74">
+                      Một nền tảng cho điều phối, minh bạch phát thải và tối ưu chi phí thay vì chắp vá nhiều công cụ rời rạc.
+                    </p>
+
+                    <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+                      <Button
+                        asChild
+                        size="lg"
+                        className="h-13 rounded-xl bg-primary-fixed px-7 text-sm font-black tracking-[0.22em] text-on-primary-fixed uppercase hover:bg-primary-fixed hover:brightness-110"
+                      >
+                        <Link href="/dashboard">
+                          {ctaData.buttonText}
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </Button>
+
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="h-13 rounded-xl border-white/15 bg-white/6 px-7 text-sm font-black tracking-[0.22em] text-white uppercase hover:bg-white/12"
+                      >
+                        <Link href="#features">
+                          <Play className="h-4 w-4 fill-current" />
+                          {ctaData.secondaryButtonText}
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
