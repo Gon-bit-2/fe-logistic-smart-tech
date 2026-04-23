@@ -224,6 +224,7 @@ export type OrderQuoteApiResponse = {
 export type OrderListParams = PaginationParams & {
   status?: OrderStatus;
   search?: string;
+  trackingCode?: string;
 };
 
 export type UpdateOrderStatusInput = {

@@ -122,4 +122,65 @@ describe("order.use-cases", () => {
       }),
     ).rejects.toThrow("Network down");
   });
+
+  it("resolves a single order by exact tracking code", async () => {
+    const listOrdersRequest = vi.fn().mockResolvedValue({
+      data: [sampleOrder],
+      totalItems: 1,
+    });
+
+    vi.doMock("@/lib/api/env", () => ({
+      hasApiBaseUrl: true,
+    }));
+    vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
+      listOrdersRequest,
+      createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
+      getOrderByIdRequest: vi.fn(),
+      updateOrderStatusRequest: vi.fn(),
+      deleteOrderRequest: vi.fn(),
+    }));
+    vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
+      upsertStoredOrder: vi.fn((order) => order),
+    }));
+
+    const { resolveOrderByTrackingCodeUseCase } = await import("./order.use-cases");
+
+    await expect(
+      resolveOrderByTrackingCodeUseCase("  GT-ORD-20260003  "),
+    ).resolves.toEqual(sampleOrder);
+    expect(listOrdersRequest).toHaveBeenCalledWith({
+      limit: 2,
+      page: 1,
+      trackingCode: "GT-ORD-20260003",
+    });
+  });
+
+  it("throws when tracking lookup returns no order", async () => {
+    const listOrdersRequest = vi.fn().mockResolvedValue({
+      data: [],
+      totalItems: 0,
+    });
+
+    vi.doMock("@/lib/api/env", () => ({
+      hasApiBaseUrl: true,
+    }));
+    vi.doMock("@/features/orders/infrastructure/api/order.api", () => ({
+      listOrdersRequest,
+      createOrderRequest: vi.fn(),
+      getOrderQuoteRequest: vi.fn(),
+      getOrderByIdRequest: vi.fn(),
+      updateOrderStatusRequest: vi.fn(),
+      deleteOrderRequest: vi.fn(),
+    }));
+    vi.doMock("@/features/orders/infrastructure/storage/order-session.storage", () => ({
+      upsertStoredOrder: vi.fn((order) => order),
+    }));
+
+    const { resolveOrderByTrackingCodeUseCase } = await import("./order.use-cases");
+
+    await expect(resolveOrderByTrackingCodeUseCase("MISSING")).rejects.toThrow(
+      "Không tìm thấy đơn hàng với mã MISSING.",
+    );
+  });
 });

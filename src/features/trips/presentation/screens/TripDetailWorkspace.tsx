@@ -23,7 +23,9 @@ type TripDetailWorkspaceProps = {
   tripId: string;
 };
 
-const TERMINAL_ORDER_STATUSES = new Set<OrderStatus>(["DELIVERED", "CANCELLED"]);
+function isTerminalOrderStatus(status?: OrderStatus | string | null) {
+  return status === "DELIVERED" || status === "CANCELLED";
+}
 
 function getNextOrderStatus(status?: OrderStatus | string | null): OrderStatus | null {
   switch (status) {
@@ -66,7 +68,7 @@ export default function TripDetailWorkspace({
   const activeOrder = useMemo(() => {
     const orders = trip?.orders ?? [];
     return (
-      orders.find((order) => !TERMINAL_ORDER_STATUSES.has(order.status)) ??
+      orders.find((order) => !isTerminalOrderStatus(order.status)) ??
       orders[0] ??
       null
     );
@@ -261,7 +263,9 @@ export default function TripDetailWorkspace({
                   </span>
                   <select
                     value={packageCondition}
-                    onChange={(event) => setPackageCondition(event.target.value)}
+                    onChange={(event) =>
+                      setPackageCondition(event.target.value as TrackingPackageCondition)
+                    }
                     className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
                   >
                     <option value="INTACT">Nguyên vẹn</option>

@@ -20,7 +20,7 @@ export const navbarCopy = {
 
 export const footerCopy = {
   brand: "Emerald Logistics",
-  copyright: "© 2024 Emerald Logistics. Chính xác trong từng nhịp vận hành.",
+  copyright: "© 2026 Emerald Logistics. Chính xác trong từng nhịp vận hành.",
   links: [
     { href: "#", label: "Chính sách bảo mật" },
     { href: "#", label: "Điều khoản dịch vụ" },
