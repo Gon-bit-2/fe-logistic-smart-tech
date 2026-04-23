@@ -42,7 +42,9 @@ describe("ProfileQuickAccess", () => {
 
     renderWithProviders(<ProfileQuickAccess />, { pathname: "/" });
 
-    expect(screen.queryByLabelText("Mở hồ sơ người dùng")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Mở hồ sơ người dùng"),
+    ).not.toBeInTheDocument();
   });
 
   it("hides on customer workspace routes that already have a top bar", () => {
@@ -52,7 +54,9 @@ describe("ProfileQuickAccess", () => {
       pathname: "/dashboard/customer/orders",
     });
 
-    expect(screen.queryByLabelText("Mở hồ sơ người dùng")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Mở hồ sơ người dùng"),
+    ).not.toBeInTheDocument();
   });
 
   it("shows the profile link on other authenticated pages", () => {
@@ -64,7 +68,7 @@ describe("ProfileQuickAccess", () => {
 
     expect(screen.getByLabelText("Mở hồ sơ người dùng")).toHaveAttribute(
       "href",
-      "/dashboard/customer/settings",
+      "/profile",
     );
     expect(screen.getByText("Cong ty Emerald")).toBeInTheDocument();
   });

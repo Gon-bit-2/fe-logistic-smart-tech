@@ -25,12 +25,12 @@ const CUSTOMER_ROOT_PATHS = [
   "/profile",
   "/role-requests",
 ] as const;
-const CUSTOMER_ROOT_REDIRECTS = {
-  "/notifications": "/dashboard/customer?notifications=1",
-  "/orders": "/dashboard/customer/orders",
-  "/overview": "/dashboard/customer",
-  "/profile": "/dashboard/customer/settings",
-  "/role-requests": "/dashboard/customer/roles",
+
+const CUSTOMER_DASHBOARD_REDIRECTS = {
+  "/dashboard/customer": "/overview",
+  "/dashboard/customer/orders": "/orders",
+  "/dashboard/customer/settings": "/profile",
+  "/dashboard/customer/roles": "/role-requests",
 } as const;
 
 function isProtectedPath(pathname: string) {
@@ -41,14 +41,17 @@ function isCustomerRootPath(pathname: string) {
   return CUSTOMER_ROOT_PATHS.some((path) => pathname.startsWith(path));
 }
 
-function getCustomerRootRedirect(pathname: string) {
-  const normalizedPath = pathname.endsWith("/") && pathname.length > 1
-    ? pathname.slice(0, -1)
-    : pathname;
+function getCustomerDashboardRedirect(pathname: string) {
+  const normalizedPath =
+    pathname.endsWith("/") && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
 
-  return CUSTOMER_ROOT_REDIRECTS[
-    normalizedPath as keyof typeof CUSTOMER_ROOT_REDIRECTS
-  ] ?? null;
+  return (
+    CUSTOMER_DASHBOARD_REDIRECTS[
+      normalizedPath as keyof typeof CUSTOMER_DASHBOARD_REDIRECTS
+    ] ?? null
+  );
 }
 
 function redirectToPath(request: NextRequest, destination: string) {
@@ -91,21 +94,24 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const customerRootRedirect = getCustomerRootRedirect(pathname);
+  const customerDashboardRedirect = getCustomerDashboardRedirect(pathname);
 
-  if (customerRootRedirect) {
+  if (customerDashboardRedirect) {
     if (!ROUTE_PERMISSIONS.CUSTOMER.includes(role)) {
       return redirectToPath(request, getDashboardHrefForRole(role));
     }
 
-    const targetUrl = new URL(customerRootRedirect, request.url);
+    const targetUrl = new URL(customerDashboardRedirect, request.url);
     request.nextUrl.searchParams.forEach((value, key) => {
       targetUrl.searchParams.set(key, value);
     });
     return NextResponse.redirect(targetUrl);
   }
 
-  if (isCustomerRootPath(pathname) && !ROUTE_PERMISSIONS.CUSTOMER.includes(role)) {
+  if (
+    isCustomerRootPath(pathname) &&
+    !ROUTE_PERMISSIONS.CUSTOMER.includes(role)
+  ) {
     return redirectToPath(request, getDashboardHrefForRole(role));
   }
 
@@ -113,11 +119,17 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith("/dashboard/admin") && !ROUTE_PERMISSIONS.ADMIN.includes(role)) {
+  if (
+    pathname.startsWith("/dashboard/admin") &&
+    !ROUTE_PERMISSIONS.ADMIN.includes(role)
+  ) {
     return redirectToPath(request, getDashboardHrefForRole(role));
   }
 
-  if (pathname.startsWith("/dashboard/driver") && !ROUTE_PERMISSIONS.DRIVER.includes(role)) {
+  if (
+    pathname.startsWith("/dashboard/driver") &&
+    !ROUTE_PERMISSIONS.DRIVER.includes(role)
+  ) {
     return redirectToPath(request, getDashboardHrefForRole(role));
   }
 
@@ -128,7 +140,10 @@ export function proxy(request: NextRequest) {
     return redirectToPath(request, getDashboardHrefForRole(role));
   }
 
-  if (pathname.startsWith("/dashboard/customer") && !ROUTE_PERMISSIONS.CUSTOMER.includes(role)) {
+  if (
+    pathname.startsWith("/dashboard/customer") &&
+    !ROUTE_PERMISSIONS.CUSTOMER.includes(role)
+  ) {
     return redirectToPath(request, getDashboardHrefForRole(role));
   }
 

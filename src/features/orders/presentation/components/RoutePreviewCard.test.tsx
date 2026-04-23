@@ -1,11 +1,83 @@
-import { screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEmptyOrderInput } from "@/features/orders/domain/value-objects/order-form";
 import { renderWithProviders } from "@/test/render";
-import RoutePreviewCard from "./RoutePreviewCard";
+
+const markerInstances: Array<{
+  addTo: ReturnType<typeof vi.fn>;
+  remove: ReturnType<typeof vi.fn>;
+  setLngLat: ReturnType<typeof vi.fn>;
+}> = [];
+
+vi.mock("next/script", async () => {
+  const React = await import("react");
+
+  return {
+    default: ({
+      onReady,
+    }: {
+      onReady?: () => void;
+    }) => {
+      React.useEffect(() => {
+        onReady?.();
+      }, [onReady]);
+
+      return null;
+    },
+  };
+});
+
+function installGoongMock() {
+  markerInstances.length = 0;
+
+  (window as Window & { goongjs?: unknown }).goongjs = {
+    accessToken: "",
+    Map: class {
+      addControl = vi.fn();
+      addLayer = vi.fn();
+      addSource = vi.fn();
+      easeTo = vi.fn();
+      fitBounds = vi.fn();
+      getLayer = vi.fn(() => undefined);
+      getSource = vi.fn(() => undefined);
+      on = vi.fn();
+      remove = vi.fn();
+      removeLayer = vi.fn();
+      removeSource = vi.fn();
+      resize = vi.fn();
+    },
+    Marker: class {
+      addTo = vi.fn(function (this: typeof markerInstances[number]) {
+        return this;
+      });
+      remove = vi.fn();
+      setLngLat = vi.fn(function (this: typeof markerInstances[number]) {
+        return this;
+      });
+
+      constructor() {
+        markerInstances.push(this);
+      }
+    },
+    NavigationControl: class {},
+  };
+}
 
 describe("RoutePreviewCard", () => {
-  it("renders the backend quote values and resolved addresses", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.stubEnv("NEXT_PUBLIC_GOONG_MAPS_TILES_KEY", "test-goong-tile-key");
+    installGoongMock();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    delete (window as Window & { goongjs?: unknown }).goongjs;
+  });
+
+  it("renders the Goong map with backend quote values and resolved addresses", async () => {
+    const { default: RoutePreviewCard } = await import("./RoutePreviewCard");
+
     const form = {
       ...createEmptyOrderInput(),
       customerName: "Công ty Emerald",
@@ -66,10 +138,83 @@ describe("RoutePreviewCard", () => {
       />,
     );
 
+    await waitFor(() => {
+      expect(screen.getByTestId("order-route-map")).toBeInTheDocument();
+      expect(markerInstances).toHaveLength(2);
+    });
+
     expect(screen.getByText("123 Nguyễn Văn Linh, Quận 7")).toBeInTheDocument();
     expect(screen.getByText("456 Điện Biên Phủ, Bình Thạnh")).toBeInTheDocument();
     expect(screen.getByText(/42.500/)).toBeInTheDocument();
     expect(screen.getByText("5.2 km")).toBeInTheDocument();
     expect(screen.getByText("20 mins")).toBeInTheDocument();
+  });
+
+  it("keeps the live map visible with markers before route polyline is available", async () => {
+    const { default: RoutePreviewCard } = await import("./RoutePreviewCard");
+
+    const form = {
+      ...createEmptyOrderInput(),
+      delivery: {
+        address: "456 Điện Biên Phủ, Bình Thạnh",
+        isResolved: true,
+        latitude: 10.80035,
+        longitude: 106.71482,
+        placeId: "delivery-place",
+        query: "456 Điện Biên Phủ, Bình Thạnh",
+      },
+      packageWeightKg: 12,
+      pickup: {
+        address: "123 Nguyễn Văn Linh, Quận 7",
+        isResolved: true,
+        latitude: 10.728851,
+        longitude: 106.721659,
+        placeId: "pickup-place",
+        query: "123 Nguyễn Văn Linh, Quận 7",
+      },
+    };
+
+    renderWithProviders(
+      <RoutePreviewCard
+        form={form}
+        quoteState={{
+          canRequestQuote: true,
+          canSubmit: false,
+          error: null,
+          isLoading: false,
+          isRefreshing: false,
+          quote: null,
+        }}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("order-route-map")).toBeInTheDocument();
+      expect(markerInstances).toHaveLength(2);
+    });
+
+    expect(screen.getByText(/Bản đồ đang hiển thị các điểm dừng thực tế/i)).toBeInTheDocument();
+  });
+
+  it("shows the pending map message when no address has been resolved", async () => {
+    const { default: RoutePreviewCard } = await import("./RoutePreviewCard");
+
+    renderWithProviders(
+      <RoutePreviewCard
+        form={createEmptyOrderInput()}
+        quoteState={{
+          canRequestQuote: false,
+          canSubmit: false,
+          error: null,
+          isLoading: false,
+          isRefreshing: false,
+          quote: null,
+        }}
+      />,
+    );
+
+    expect(
+      screen.getByText(/Bản đồ thật sẽ hiển thị sau khi bạn chốt đủ địa chỉ/i),
+    ).toBeInTheDocument();
   });
 });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { startTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parseGoogleCallbackParams } from "@/features/auth/application/services/auth.utils";
+import { exchangeGoogleSession } from "@/features/auth/infrastructure/api/auth.api";
 import { setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
 import { googleCallbackCopy } from "@/i18n/vi";
 
@@ -13,11 +14,10 @@ export default function GoogleCallbackHandler() {
   const callbackParams = parseGoogleCallbackParams(searchParams);
   const isError =
     Boolean(callbackParams.errorMessage) ||
-    !callbackParams.accessToken ||
-    !callbackParams.refreshToken;
+    !callbackParams.sessionToken;
   const message = callbackParams.errorMessage
     ? callbackParams.errorMessage
-    : !callbackParams.accessToken || !callbackParams.refreshToken
+    : !callbackParams.sessionToken
       ? googleCallbackCopy.incompleteSession
       : googleCallbackCopy.loginSuccess;
 
@@ -26,23 +26,40 @@ export default function GoogleCallbackHandler() {
       return;
     }
 
-    const accessToken = callbackParams.accessToken;
-    const refreshToken = callbackParams.refreshToken;
+    const sessionToken = callbackParams.sessionToken;
 
-    if (!accessToken || !refreshToken) {
+    if (!sessionToken) {
       return;
     }
 
-    setAuthSessionTokens({
-      accessToken,
-      refreshToken,
-    });
-    startTransition(() => {
-      router.replace("/orders/create");
-    });
+    let isCancelled = false;
+
+    void exchangeGoogleSession(sessionToken)
+      .then((tokens) => {
+        if (isCancelled) {
+          return;
+        }
+
+        setAuthSessionTokens(tokens);
+        startTransition(() => {
+          router.replace("/orders/create");
+        });
+      })
+      .catch(() => {
+        if (isCancelled) {
+          return;
+        }
+
+        startTransition(() => {
+          router.replace("/auth/login?error=google-session-expired");
+        });
+      });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [
-    callbackParams.accessToken,
-    callbackParams.refreshToken,
+    callbackParams.sessionToken,
     isError,
     router,
   ]);
@@ -79,4 +96,3 @@ export default function GoogleCallbackHandler() {
     </div>
   );
 }
-

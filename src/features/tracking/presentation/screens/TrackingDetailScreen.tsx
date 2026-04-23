@@ -7,27 +7,121 @@ import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
+import { useResolvedTrackingOrder } from "@/features/orders/presentation/hooks/useResolvedTrackingOrder";
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePublicTrackingQuery } from "@/features/tracking/presentation/hooks/usePublicTrackingQuery";
 import { getTrackingStatusLabel, trackingDetailCopy } from "@/i18n/vi";
-import { isApiError } from "@/lib/api/errors";
+import { ApiError, isApiError } from "@/lib/api/errors";
 
 type TrackingDetailScreenProps = Readonly<{
   trackingCode: string;
 }>;
+
+function canOpenOnlineCheckout(order: {
+  payment?: {
+    method?: string | null;
+    status?: string | null;
+  } | null;
+  status: string;
+}) {
+  if (order.status === "CANCELLED") {
+    return false;
+  }
+
+  if (order.payment?.method === "COD") {
+    return false;
+  }
+
+  if (order.payment?.status === "COMPLETED") {
+    return false;
+  }
+
+  return true;
+}
+
+function canCustomerCancel(order: { status: string }) {
+  return order.status === "PENDING" || order.status === "ASSIGNED";
+}
 
 export default function TrackingDetailScreen({
   trackingCode,
 }: TrackingDetailScreenProps) {
   const router = useRouter();
   const [trackingId, setTrackingId] = useState(trackingCode);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const trackingQuery = usePublicTrackingQuery(trackingCode);
+  const resolvedOrderQuery = useResolvedTrackingOrder(trackingCode);
+  const cancelOrderMutation = useCancelOrder();
   const tracking = trackingQuery.data ?? null;
+  const resolvedOrder = resolvedOrderQuery.data ?? null;
   const isNotFound =
     isApiError(trackingQuery.error) && trackingQuery.error.status === 404;
   const queryMessage =
     trackingQuery.error?.message ?? trackingDetailCopy.fallbackError;
+  const isCustomerOrderUnavailable =
+    resolvedOrderQuery.error instanceof ApiError &&
+    [401, 403, 404].includes(resolvedOrderQuery.error.status);
+
+  async function handleCancelOrder() {
+    if (!resolvedOrder) {
+      return;
+    }
+
+    const didConfirm = window.confirm(trackingDetailCopy.cancelConfirm);
+
+    if (!didConfirm) {
+      return;
+    }
+
+    setActionError(null);
+    setActionSuccess(null);
+
+    try {
+      await cancelOrderMutation.mutateAsync(resolvedOrder.id);
+      setActionSuccess(trackingDetailCopy.cancelSuccess);
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : trackingDetailCopy.cancelError,
+      );
+    }
+  }
+
+  async function handleShareTracking() {
+    const shareUrl = `${window.location.origin}/tracking/${trackingCode.trim()}`;
+    const sharePayload = {
+      title: trackingDetailCopy.shareTitle,
+      text: trackingDetailCopy.shareText(trackingCode.trim()),
+      url: shareUrl,
+    };
+
+    setActionError(null);
+    setActionSuccess(null);
+
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share(sharePayload);
+        setActionSuccess(trackingDetailCopy.shareSuccess);
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        setActionSuccess(trackingDetailCopy.copySuccess);
+        return;
+      }
+
+      throw new Error(trackingDetailCopy.shareUnavailable);
+    } catch (error) {
+      setActionError(
+        error instanceof Error ? error.message : trackingDetailCopy.shareUnavailable,
+      );
+    }
+  }
 
   return (
     <div className="min-h-screen bg-surface">
@@ -102,6 +196,69 @@ export default function TrackingDetailScreen({
               </div>
             </div>
 
+            {resolvedOrder && !isCustomerOrderUnavailable ? (
+              <div className="border-b border-outline-variant/10 bg-white px-8 py-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="space-y-2">
+                    {canOpenOnlineCheckout(resolvedOrder) ? (
+                      <>
+                        <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
+                          {trackingDetailCopy.paymentPendingEyebrow}
+                        </p>
+                        <p className="text-sm font-semibold text-on-surface">
+                          {trackingDetailCopy.paymentPendingTitle}
+                        </p>
+                        <p className="text-sm text-on-surface-variant">
+                          {trackingDetailCopy.paymentPendingDescription}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+                          {trackingDetailCopy.customerActionsEyebrow}
+                        </p>
+                        <p className="text-sm text-on-surface-variant">
+                          {trackingDetailCopy.customerActionsDescription}
+                        </p>
+                      </>
+                    )}
+                    {actionSuccess ? (
+                      <p className="rounded-xl bg-primary/8 px-4 py-3 text-sm text-on-surface">
+                        {actionSuccess}
+                      </p>
+                    ) : null}
+                    {actionError ? (
+                      <p className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                        {actionError}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    {canOpenOnlineCheckout(resolvedOrder) ? (
+                      <Link
+                        href={`/checkout?orderId=${resolvedOrder.id}`}
+                        className="inline-flex h-11 items-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
+                      >
+                        {trackingDetailCopy.payNow}
+                      </Link>
+                    ) : null}
+                    {canCustomerCancel(resolvedOrder) ? (
+                      <Button
+                        variant="outline"
+                        className="font-semibold"
+                        disabled={cancelOrderMutation.isPending}
+                        onClick={() => void handleCancelOrder()}
+                      >
+                        {cancelOrderMutation.isPending
+                          ? trackingDetailCopy.cancelling
+                          : trackingDetailCopy.cancelOrder}
+                      </Button>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
             <div className="grid gap-8 p-8 md:p-10 xl:grid-cols-[1.15fr_0.85fr]">
               <TrackingTimeline stops={tracking.events} />
               <ProofOfDeliveryCard
@@ -157,7 +314,11 @@ export default function TrackingDetailScreen({
               <AppIcon name="print" className="text-base" />
               {trackingDetailCopy.printLabels}
             </Button>
-            <Button variant="outline" className="font-semibold">
+            <Button
+              variant="outline"
+              className="font-semibold"
+              onClick={() => void handleShareTracking()}
+            >
               <AppIcon name="share" className="text-base" />
               {trackingDetailCopy.shareTracking}
             </Button>

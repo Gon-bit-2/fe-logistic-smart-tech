@@ -73,6 +73,15 @@ export const trackingLookupCopy = {
 } as const;
 
 export const trackingDetailCopy = {
+  cancelConfirm: "Bạn có chắc chắn muốn hủy đơn hàng này không?",
+  cancelError: "Không thể hủy đơn hàng vào lúc này.",
+  cancelOrder: "Hủy đơn",
+  cancelSuccess: "Đơn hàng đã được hủy thành công.",
+  cancelling: "Đang hủy...",
+  copySuccess: "Đã sao chép liên kết theo dõi.",
+  customerActionsDescription:
+    "Bạn có thể tiếp tục thanh toán, hủy đơn ở giai đoạn sớm hoặc chia sẻ liên kết theo dõi.",
+  customerActionsEyebrow: "Thao tác khách hàng",
   currentStatusHint: "Hành trình đơn hàng công khai",
   errorEyebrow: "Lỗi theo dõi",
   errorTitle: "Không thể tải dữ liệu hành trình lô hàng",
@@ -86,11 +95,21 @@ export const trackingDetailCopy = {
   notFoundEyebrow: "Không tìm thấy",
   notFoundTitle: "Không tìm thấy lô hàng công khai với mã theo dõi này",
   printLabels: "In nhãn",
+  paymentPendingDescription:
+    "Đơn hàng này đang chờ thanh toán trực tuyến. Hoàn tất thanh toán để kích hoạt luồng xử lý tiếp theo.",
+  paymentPendingEyebrow: "Thanh toán",
+  paymentPendingTitle: "Đơn hàng đang chờ thanh toán",
+  payNow: "Thanh toán ngay",
   receiverHint: "Một số thông tin nhạy cảm đã được ẩn để bảo mật.",
   receiverLabel: "Người nhận",
   retry: "Thử lại",
   searchAnother: "Tìm lô hàng khác",
+  shareSuccess: "Đã mở luồng chia sẻ mã theo dõi.",
+  shareText: (trackingCode: string) =>
+    `Theo dõi đơn hàng ${trackingCode} tại liên kết này.`,
   shareTracking: "Chia sẻ theo dõi",
+  shareTitle: "Chia sẻ mã theo dõi",
+  shareUnavailable: "Không thể chia sẻ liên kết theo dõi trên thiết bị hiện tại.",
   supportSuffix: "hoặc liên hệ hỗ trợ 24/7.",
   trackingCodeLabel: "Mã theo dõi",
 } as const;

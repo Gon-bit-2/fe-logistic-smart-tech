@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import CustomerShell from "@/components/layout/CustomerShell";
 
-export default function CustomerRoutesLayout({
+export default function CustomerLayout({
   children,
 }: Readonly<{
   children: ReactNode;

@@ -55,9 +55,7 @@ export function parseGoogleCallbackParams(
   searchParams: SearchParamsLike,
 ): GoogleCallbackParams {
   return {
-    accessToken: searchParams.get("accessToken"),
     errorMessage: searchParams.get("errorMessage"),
-    refreshToken: searchParams.get("refreshToken"),
+    sessionToken: searchParams.get("sessionToken"),
   };
 }
-

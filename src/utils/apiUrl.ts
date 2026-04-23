@@ -24,6 +24,7 @@ export const API_TRIP_AUTO_DISPATCH_ALL = "/trips/auto-dispatch/all";
 export const API_ORDERS = "/orders";
 export const API_ORDER_QUOTE = "/orders/quote";
 export const API_ORDER_DETAIL = (id: string | number) => `/orders/${id}`;
+export const API_ORDER_CANCEL = (id: string | number) => `/orders/${id}/cancel`;
 export const API_ORDER_STATUS = (id: string | number) => `/orders/${id}/status`;
 
 // maps api endpoints

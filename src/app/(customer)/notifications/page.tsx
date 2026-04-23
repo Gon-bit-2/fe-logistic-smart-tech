@@ -1,5 +1,1 @@
-import { redirect } from "next/navigation";
-
-export default function CustomerNotificationsRoute() {
-  redirect("/dashboard/customer?notifications=1");
-}
+export { default } from "@/app/customer/notifications/page";

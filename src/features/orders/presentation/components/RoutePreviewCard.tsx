@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { getServiceTierOption } from "@/features/orders/domain/value-objects/service-tier.catalog";
 import type { CreateOrderInput } from "@/features/orders/domain/types/order.types";
+import OrderRouteMap from "@/features/orders/presentation/components/OrderRouteMap";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
-import { toPreviewPath } from "@/features/orders/presentation/lib/polyline";
 import { routePreviewCopy } from "@/i18n/vi";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 
@@ -48,7 +48,26 @@ export default function RoutePreviewCard({
 }: RoutePreviewCardProps) {
   const service = getServiceTierOption(form.serviceTier);
   const primaryRoute = quoteState.quote?.routes[0] ?? null;
-  const routePath = primaryRoute?.polyline ? toPreviewPath(primaryRoute.polyline) : "";
+  const pickup =
+    form.pickup.isResolved &&
+    typeof form.pickup.latitude === "number" &&
+    typeof form.pickup.longitude === "number"
+      ? {
+          label: form.pickup.address || routePreviewCopy.pickup,
+          lat: form.pickup.latitude,
+          lng: form.pickup.longitude,
+        }
+      : null;
+  const delivery =
+    form.delivery.isResolved &&
+    typeof form.delivery.latitude === "number" &&
+    typeof form.delivery.longitude === "number"
+      ? {
+          label: form.delivery.address || routePreviewCopy.delivery,
+          lat: form.delivery.latitude,
+          lng: form.delivery.longitude,
+        }
+      : null;
 
   return (
     <div className="space-y-6">
@@ -56,37 +75,13 @@ export default function RoutePreviewCard({
         <div className="relative aspect-[4/3] overflow-hidden bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.18),transparent_60%),linear-gradient(135deg,#052e16,#064e3b_42%,#0f766e)]">
           <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:40px_40px]" />
           <div className="absolute inset-0">
-            {routePath ? (
-              <svg
-                aria-hidden="true"
-                className="h-full w-full"
-                viewBox="0 0 520 320"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d={routePath}
-                  fill="none"
-                  stroke="rgba(255,255,255,0.22)"
-                  strokeWidth="18"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d={routePath}
-                  fill="none"
-                  stroke="#6ee7b7"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <div className="flex h-full items-center justify-center px-10 text-center text-sm text-white/80">
-                {quoteState.error
-                  ? routePreviewCopy.quoteError
-                  : routePreviewCopy.quotePendingDescription}
-              </div>
-            )}
+            <OrderRouteMap
+              pickup={pickup}
+              delivery={delivery}
+              polyline={primaryRoute?.polyline ?? null}
+              isLoadingRoute={quoteState.isLoading || quoteState.isRefreshing}
+              error={quoteState.error}
+            />
           </div>
           <div className="absolute left-6 top-6 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-black tracking-[0.18em] text-white uppercase backdrop-blur">
             {routePreviewCopy.routePreview}

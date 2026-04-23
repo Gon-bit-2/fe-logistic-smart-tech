@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const post = vi.fn();
 const get = vi.fn();
 const put = vi.fn();
+const patch = vi.fn();
 const del = vi.fn();
 
 vi.mock("@/lib/api/http-client", () => ({
   httpClient: {
     delete: del,
     get,
+    patch,
     post,
     put,
   },
@@ -18,6 +20,7 @@ describe("order.api", () => {
   beforeEach(() => {
     del.mockReset();
     get.mockReset();
+    patch.mockReset();
     post.mockReset();
     put.mockReset();
   });
@@ -87,5 +90,53 @@ describe("order.api", () => {
         },
       ],
     });
+    expect(post).toHaveBeenCalledWith(
+      "/orders/quote",
+      expect.objectContaining({
+        receiverAddress: "456 Dien Bien Phu",
+        receiverLat: 10.773118,
+        receiverLng: 106.698299,
+        receiverName: "Minh",
+        receiverPhone: "0909000002",
+        senderAddress: "123 Nguyen Van Linh",
+        senderLat: 10.776889,
+        senderLng: 106.700806,
+        senderName: "Lan",
+        senderPhone: "0909000001",
+        serviceType: "ECO_GREEN",
+      }),
+    );
+  });
+
+  it("calls the dedicated cancel endpoint and maps the cancelled order", async () => {
+    patch.mockResolvedValue({
+      data: {
+        id: 21,
+        payment: {
+          amount: 42500,
+          method: "STRIPE",
+          orderId: 21,
+          paidAt: null,
+          status: "PENDING",
+          transactionId: "pi_123",
+        },
+        receiverAddress: "456 Dien Bien Phu",
+        reference: "ELG-2026-0001",
+        senderAddress: "123 Nguyen Van Linh",
+        status: "CANCELLED",
+        trackingCode: "GT-ORD-20260003",
+      },
+    });
+
+    const { cancelOrderRequest } = await import("./order.api");
+
+    await expect(cancelOrderRequest("21")).resolves.toEqual(
+      expect.objectContaining({
+        id: "21",
+        status: "CANCELLED",
+        trackingCode: "GT-ORD-20260003",
+      }),
+    );
+    expect(patch).toHaveBeenCalledWith("/orders/21/cancel");
   });
 });

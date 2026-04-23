@@ -5,6 +5,7 @@ import { proxy } from "./proxy";
 function createAccessToken(roleName: string, roleId: number) {
   const payload = Buffer.from(
     JSON.stringify({
+      exp: Math.floor(Date.now() / 1000) + 60 * 60,
       roleId,
       roleName,
       userId: 1,
@@ -32,13 +33,13 @@ function createRequest(pathname: string, accessToken?: string) {
 describe("proxy", () => {
   it("rewrites the legacy Google callback path to the flat callback page", () => {
     const request = createRequest(
-      "/auth/google/callback?accessToken=test-access&refreshToken=test-refresh",
+      "/auth/google/callback?sessionToken=test-session-token",
     );
 
     const response = proxy(request);
 
     expect(response.headers.get("x-middleware-rewrite")).toBe(
-      "http://localhost/auth/google-callback?accessToken=test-access&refreshToken=test-refresh",
+      "http://localhost/auth/google-callback?sessionToken=test-session-token",
     );
   });
 
@@ -54,10 +55,7 @@ describe("proxy", () => {
   });
 
   it("lets admins access customer root routes without forcing a customer redirect", () => {
-    const request = createRequest(
-      "/orders",
-      createAccessToken("admin", 1),
-    );
+    const request = createRequest("/orders", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
@@ -65,14 +63,13 @@ describe("proxy", () => {
   });
 
   it("still redirects dashboard root to the admin workspace", () => {
-    const request = createRequest(
-      "/dashboard",
-      createAccessToken("admin", 1),
-    );
+    const request = createRequest("/dashboard", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/admin");
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/dashboard/admin",
+    );
   });
 
   it("redirects non-admin users away from restricted dashboard workspaces", () => {
@@ -83,7 +80,7 @@ describe("proxy", () => {
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/customer");
+    expect(response.headers.get("location")).toBe("http://localhost/overview");
   });
 
   it("redirects drivers away from customer checkout routes", () => {
@@ -94,6 +91,8 @@ describe("proxy", () => {
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/driver");
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/dashboard/driver",
+    );
   });
 });

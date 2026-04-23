@@ -61,11 +61,7 @@ describe("http-client", () => {
 
   it("injects the access token into outgoing requests", async () => {
     const httpClientMock = createAxiosInstance();
-    const refreshClientMock = createAxiosInstance();
-    const create = vi
-      .fn()
-      .mockReturnValueOnce(httpClientMock)
-      .mockReturnValueOnce(refreshClientMock);
+    const create = vi.fn().mockReturnValue(httpClientMock);
 
     vi.doMock("axios", () => ({
       default: {
@@ -83,9 +79,11 @@ describe("http-client", () => {
       clearAuthSession: vi.fn(),
       getAuthSessionSnapshot: vi.fn(() => ({
         accessToken: "access-token",
-        refreshToken: "refresh-token",
       })),
       setAuthSessionTokens: vi.fn(),
+    }));
+    vi.doMock("@/lib/api/session-client", () => ({
+      restoreSession: vi.fn(),
     }));
 
     const { httpClient } = await import("./http-client");
@@ -100,26 +98,18 @@ describe("http-client", () => {
 
   it("refreshes the session and retries the failed request on 401", async () => {
     const httpClientMock = createAxiosInstance();
-    const refreshClientMock = createAxiosInstance();
-    const create = vi
-      .fn()
-      .mockReturnValueOnce(httpClientMock)
-      .mockReturnValueOnce(refreshClientMock);
+    const create = vi.fn().mockReturnValue(httpClientMock);
     const clearAuthSession = vi.fn();
     const getAuthSessionSnapshot = vi.fn(() => ({
       accessToken: null,
-      refreshToken: "refresh-token",
     }));
     const setAuthSessionTokens = vi.fn();
+    const restoreSession = vi.fn().mockResolvedValue({
+      accessToken: "new-access-token",
+    });
 
     httpClientMock.mockResolvedValue({
       data: { ok: true },
-    });
-    refreshClientMock.post.mockResolvedValue({
-      data: {
-        accessToken: "new-access-token",
-        refreshToken: "new-refresh-token",
-      },
     });
 
     vi.doMock("axios", () => ({
@@ -138,6 +128,9 @@ describe("http-client", () => {
       clearAuthSession,
       getAuthSessionSnapshot,
       setAuthSessionTokens,
+    }));
+    vi.doMock("@/lib/api/session-client", () => ({
+      restoreSession,
     }));
 
     const { httpClient } = await import("./http-client");
@@ -166,12 +159,9 @@ describe("http-client", () => {
       data: { ok: true },
     });
 
-    expect(refreshClientMock.post).toHaveBeenCalledWith("/auth/refresh-token", {
-      refreshToken: "refresh-token",
-    });
+    expect(restoreSession).toHaveBeenCalledTimes(1);
     expect(setAuthSessionTokens).toHaveBeenCalledWith({
       accessToken: "new-access-token",
-      refreshToken: "new-refresh-token",
     });
     expect(clearAuthSession).not.toHaveBeenCalled();
     expect(httpClientMock).toHaveBeenCalledTimes(1);
