@@ -121,12 +121,16 @@ export const routePreviewCopy = {
   draftSummary: "Tóm tắt bản nháp",
   duration: "Thời lượng",
   eta: "ETA",
+  mapLoadingDescription: "Đang đồng bộ tuyến đường thật từ hệ thống bản đồ.",
+  mapMarkerOnlyDescription: "Đã chốt địa chỉ. Bản đồ đang hiển thị các điểm dừng thực tế.",
+  mapPendingDescription:
+    "Bản đồ thật sẽ hiển thị sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
   newShipment: "Lô hàng mới",
   pending: "Đang chờ",
   pendingQuote: "Chờ báo giá",
   quoteError: "Không lấy được báo giá",
   quotePendingDescription:
-    "Bản xem trước tuyến đường sẽ xuất hiện sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
+    "Bản đồ tuyến đường thật sẽ xuất hiện sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
   quoteReady: "Đã nhận báo giá",
   pickup: "Điểm lấy",
   pickupMissing: "Chưa thiết lập điểm lấy",

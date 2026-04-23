@@ -91,11 +91,43 @@ describe("create-order request mappers", () => {
           width: 30,
         },
       ],
+      receiverAddress: "456 Điện Biên Phủ",
       receiverLat: 10.773118,
       receiverLng: 106.698299,
+      receiverName: "Minh",
+      receiverPhone: "0909000002",
+      senderAddress: "123 Nguyễn Văn Linh",
       senderLat: 10.776889,
       senderLng: 106.700806,
+      senderName: "Lan",
+      senderPhone: "0909000001",
       serviceType: "STANDARD",
+    });
+  });
+
+  it("uses the same safe fallback contact fields for quote validation as create-order", () => {
+    const payload = mapCreateOrderInputToQuotePayload({
+      contactName: "",
+      contactPhone: "",
+      customerName: "Công ty Emerald",
+      declaredValueUsd: 0,
+      delivery: createResolvedAddress("456 Điện Biên Phủ", "delivery-place", 10.773118, 106.698299),
+      estimatedArrival: "",
+      itemDescription: "",
+      packageDimensions: "",
+      packageWeightKg: 2,
+      paymentMethod: "STRIPE",
+      pickup: createResolvedAddress("123 Nguyễn Văn Linh", "pickup-place", 10.776889, 106.700806),
+      receiverName: "",
+      receiverPhone: "",
+      serviceTier: "standard",
+    });
+
+    expect(payload).toMatchObject({
+      receiverName: "Người nhận",
+      receiverPhone: "0000000000",
+      senderName: "Người gửi",
+      senderPhone: "0000000000",
     });
   });
 

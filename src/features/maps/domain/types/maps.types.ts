@@ -26,3 +26,22 @@ export type MapPlaceDetail = {
 export type MapPlaceDetailResponse = {
   result?: MapPlaceDetail | null;
 };
+
+export type BackendMapAutocompleteItem = {
+  description?: string | null;
+  mainText?: string | null;
+  placeId?: string | null;
+  secondaryText?: string | null;
+};
+
+export type BackendMapAutocompleteResponse = {
+  data?: BackendMapAutocompleteItem[] | null;
+};
+
+export type BackendMapPlaceDetailResponse = {
+  formattedAddress?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  name?: string | null;
+  placeId?: string | null;
+};

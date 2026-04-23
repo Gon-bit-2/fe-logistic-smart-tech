@@ -18,6 +18,7 @@ import {
 } from "@/features/orders/application/mappers/create-order-request.mapper";
 import { mapOrderApiToViewModel } from "@/features/orders/application/mappers/order.mapper";
 import {
+  API_ORDER_CANCEL,
   API_ORDERS,
   API_ORDER_DETAIL,
   API_ORDER_QUOTE,
@@ -98,6 +99,11 @@ export async function getOrderQuoteRequest(payload: CreateOrderInput) {
 
 export async function getOrderByIdRequest(orderId: string) {
   const response = await httpClient.get<OrderApiDto>(API_ORDER_DETAIL(orderId));
+  return mapOrderApiToViewModel(response.data);
+}
+
+export async function cancelOrderRequest(orderId: string) {
+  const response = await httpClient.patch<OrderApiDto>(API_ORDER_CANCEL(orderId));
   return mapOrderApiToViewModel(response.data);
 }
 

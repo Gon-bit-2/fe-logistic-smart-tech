@@ -7,6 +7,7 @@ import type {
   UpdateOrderStatusInput,
 } from "@/features/orders/domain/types/order.types";
 import {
+  cancelOrderRequest,
   createOrderRequest,
   getOrderByIdRequest,
   getOrderQuoteRequest,
@@ -87,6 +88,11 @@ export async function resolveOrderByTrackingCodeUseCase(trackingCode: string) {
 export async function getOrderDetailUseCase(orderId: string) {
   assertOrdersApiConfigured();
   return getOrderByIdRequest(orderId);
+}
+
+export async function cancelOrderUseCase(orderId: string) {
+  assertOrdersApiConfigured();
+  return cancelOrderRequest(orderId);
 }
 
 export async function updateOrderStatusUseCase(orderId: string, payload: UpdateOrderStatusInput) {

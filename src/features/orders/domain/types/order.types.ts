@@ -180,10 +180,7 @@ export type CreateOrderApiInput = {
   serviceType?: "ECO_GREEN" | "EXPRESS" | "STANDARD";
 };
 
-export type OrderQuoteRequest = Pick<
-  CreateOrderApiInput,
-  "items" | "receiverLat" | "receiverLng" | "senderLat" | "senderLng" | "serviceType"
->;
+export type OrderQuoteRequest = Omit<CreateOrderApiInput, "paymentMethod">;
 
 export type OrderQuote = {
   currency: "VND";

@@ -4,4 +4,6 @@ export const orderKeys = {
   all: ["orders"] as const,
   list: (params?: OrderListParams) => [...orderKeys.all, "list", params] as const,
   detail: (id: string) => [...orderKeys.all, "detail", id] as const,
+  trackingLookup: (trackingCode: string) =>
+    [...orderKeys.all, "tracking-lookup", trackingCode] as const,
 };

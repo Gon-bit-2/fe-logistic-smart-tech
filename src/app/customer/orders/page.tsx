@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
+import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import {
   getPaymentMethodLabel,
@@ -43,18 +44,60 @@ function canOpenOnlineCheckout(order: {
   return true;
 }
 
+function canCancelOrder(order: {
+  status: OrderStatus;
+}) {
+  return order.status === "PENDING" || order.status === "ASSIGNED";
+}
+
 export default function CustomerOrdersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "">("");
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const deferredSearch = useDeferredValue(searchTerm);
+  const cancelOrderMutation = useCancelOrder();
   const ordersQuery = useOrdersListQuery({
     search: deferredSearch || undefined,
     status: statusFilter || undefined,
   });
 
+  async function handleCancelOrder(orderId: string) {
+    const didConfirm = window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?");
+
+    if (!didConfirm) {
+      return;
+    }
+
+    setActionError(null);
+    setActionSuccess(null);
+
+    try {
+      await cancelOrderMutation.mutateAsync(orderId);
+      setActionSuccess("Đơn hàng đã được hủy thành công.");
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Không thể hủy đơn hàng vào lúc này.",
+      );
+    }
+  }
+
   return (
     <div className="mx-auto min-h-[calc(100vh-4rem)] max-w-[1440px] bg-[#F0FDF4] p-6 md:p-8">
       <h1 className="mb-6 text-[28px] font-bold text-emerald-900">Lịch sử Đơn hàng</h1>
+
+      {actionSuccess ? (
+        <div className="mb-4 rounded-lg bg-emerald-100 px-4 py-3 text-sm text-emerald-900">
+          {actionSuccess}
+        </div>
+      ) : null}
+      {actionError ? (
+        <div className="mb-4 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-700">
+          {actionError}
+        </div>
+      ) : null}
 
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white p-6">
@@ -120,6 +163,16 @@ export default function CustomerOrdersPage() {
                           >
                             Thanh toán
                           </Link>
+                        ) : null}
+                        {canCancelOrder(order) ? (
+                          <button
+                            type="button"
+                            className="font-medium text-red-600 hover:text-red-800 hover:underline"
+                            disabled={cancelOrderMutation.isPending}
+                            onClick={() => void handleCancelOrder(order.id)}
+                          >
+                            {cancelOrderMutation.isPending ? "Đang hủy..." : "Hủy đơn"}
+                          </button>
                         ) : null}
                       </div>
                     </td>

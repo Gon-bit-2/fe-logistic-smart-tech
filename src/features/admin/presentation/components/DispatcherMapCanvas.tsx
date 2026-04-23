@@ -3,57 +3,23 @@
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
+import {
+  ensureGoongCssLoaded,
+  getGoongGlobal,
+  getGoongMapsErrorMessage,
+  GOONG_GL_JS_SRC,
+  GOONG_MAPS_TILES_KEY,
+  GOONG_MAP_STYLE,
+  type GoongCoordinate as Coordinate,
+  type GoongMap,
+  type GoongMarker,
+  toGoongBounds,
+} from "@/features/maps/presentation/lib/goong";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_CENTER = { lat: 10.7769, lng: 106.7009 };
-const GOONG_GL_JS_SRC =
-  "https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js";
-const GOONG_GL_CSS_HREF =
-  "https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css";
-const GOONG_MAP_STYLE = "https://tiles.goong.io/assets/goong_map_web.json";
-const GOONG_MAPS_TILES_KEY = process.env.NEXT_PUBLIC_GOONG_MAPS_TILES_KEY;
-
-type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
-type GoongMap = {
-  addControl: (control: unknown, position?: string) => void;
-  easeTo?: (options: { center: [number, number]; duration?: number; zoom?: number }) => void;
-  fitBounds?: (
-    bounds: [[number, number], [number, number]],
-    options?: { duration?: number; maxZoom?: number; padding?: number },
-  ) => void;
-  on?: (event: string, listener: (event: unknown) => void) => void;
-  remove: () => void;
-  resize: () => void;
-};
-
-type GoongMarker = {
-  addTo: (map: GoongMap) => GoongMarker;
-  remove: () => void;
-  setLngLat: (lngLat: [number, number]) => GoongMarker;
-};
-
-type GoongGlobal = {
-  accessToken: string;
-  Map: new (options: {
-    attributionControl?: boolean;
-    center: [number, number];
-    container: HTMLElement;
-    style: string;
-    zoom: number;
-  }) => GoongMap;
-  Marker: new (options?: { color?: string; scale?: number }) => GoongMarker;
-  NavigationControl: new (options?: {
-    showCompass?: boolean;
-    showZoom?: boolean;
-    visualizePitch?: boolean;
-  }) => unknown;
-};
 
 export interface DispatcherMapCanvasProps {
   readonly className?: string;
@@ -79,53 +45,6 @@ function MapFallback({
       <p className="max-w-md text-sm leading-6 text-slate-500">{description}</p>
     </div>
   );
-}
-
-function ensureGoongCssLoaded() {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  if (document.getElementById("goong-gl-css")) {
-    return;
-  }
-
-  const link = document.createElement("link");
-  link.id = "goong-gl-css";
-  link.rel = "stylesheet";
-  link.href = GOONG_GL_CSS_HREF;
-  document.head.appendChild(link);
-}
-
-function getGoongGlobal() {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  return (window as Window & { goongjs?: GoongGlobal }).goongjs ?? null;
-}
-
-function getGoongMapsErrorMessage(error: unknown) {
-  if (typeof error === "object" && error !== null && "error" in error) {
-    return getGoongMapsErrorMessage((error as { error?: unknown }).error);
-  }
-
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "string"
-        ? error
-        : "Không thể tải Goong map.";
-
-  if (message.includes("401") || message.includes("403")) {
-    return "Goong map tiles key không hợp lệ hoặc domain hiện tại chưa được whitelist đúng trong Goong.";
-  }
-
-  if (message.includes("429")) {
-    return "Goong map đang bị giới hạn lượt tải. Hãy kiểm tra quota của map tiles key.";
-  }
-
-  return message;
 }
 
 export default function DispatcherMapCanvas({
@@ -253,20 +172,16 @@ export default function DispatcherMapCanvas({
 
     map.resize();
     if (mapPoints.length > 1 && map.fitBounds) {
-      const latitudes = mapPoints.map((point) => point.lat);
-      const longitudes = mapPoints.map((point) => point.lng);
-      map.fitBounds(
-        [
-          [Math.min(...longitudes), Math.min(...latitudes)],
-          [Math.max(...longitudes), Math.max(...latitudes)],
-        ],
-        {
+      const bounds = toGoongBounds(mapPoints);
+
+      if (bounds) {
+        map.fitBounds(bounds, {
           duration: 600,
           maxZoom: 12,
           padding: 48,
-        },
-      );
-      return;
+        });
+        return;
+      }
     }
 
     map.easeTo?.({

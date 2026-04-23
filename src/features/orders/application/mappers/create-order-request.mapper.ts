@@ -89,17 +89,10 @@ function mapItems(input: CreateOrderInput) {
 export function mapCreateOrderInputToQuotePayload(
   input: CreateOrderInput,
 ): OrderQuoteRequest {
-  const pickup = requireResolvedAddress(input.pickup, "Địa chỉ lấy hàng");
-  const delivery = requireResolvedAddress(input.delivery, "Địa chỉ giao hàng");
+  const payload = mapCreateOrderInputToApiPayload(input);
+  const { paymentMethod: _paymentMethod, ...quotePayload } = payload;
 
-  return {
-    items: mapItems(input),
-    receiverLat: delivery.latitude,
-    receiverLng: delivery.longitude,
-    senderLat: pickup.latitude,
-    senderLng: pickup.longitude,
-    serviceType: mapServiceTier(input.serviceTier),
-  };
+  return quotePayload;
 }
 
 export function mapCreateOrderInputToApiPayload(
