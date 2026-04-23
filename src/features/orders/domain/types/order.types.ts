@@ -15,6 +15,7 @@ export type OrderStatus =
   | "DELIVERED"
   | "CANCELLED";
 export type ServiceTier = "express" | "eco_green" | "standard";
+export type OrderPaymentMethod = "STRIPE" | "COD";
 
 export type OrderApiPricing = Partial<OrderPricing>;
 
@@ -146,6 +147,7 @@ export type CreateOrderInput = {
   itemDescription: string;
   packageWeightKg: number;
   packageDimensions: string;
+  paymentMethod: OrderPaymentMethod;
   pickup: ResolvedOrderAddressInput;
   declaredValueUsd: number;
   receiverName: string;
@@ -162,6 +164,7 @@ export type CreateOrderApiInput = {
     weight: number;
     width?: number;
   }>;
+  paymentMethod: OrderPaymentMethod;
   preferredDeliveryTimeEnd?: string;
   preferredDeliveryTimeStart?: string;
   receiverAddress: string;

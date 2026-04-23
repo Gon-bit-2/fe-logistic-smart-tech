@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { createEmptyOrderInput } from "@/features/orders/domain/value-objects/order-form";
 import type {
   CreateOrderInput,
+  OrderPaymentMethod,
   OrderDTO,
   ResolvedOrderAddressInput,
   ServiceTier,
@@ -14,7 +15,7 @@ import ServiceTierSelector from "@/features/orders/presentation/components/Servi
 import { useResolvedAddressField } from "@/features/orders/presentation/hooks/useResolvedAddressField";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
 import { useCreateOrder } from "@/features/orders/presentation/hooks/useCreateOrder";
-import { orderFormCopy } from "@/i18n/vi";
+import { orderFormCopy, paymentMethodOptions } from "@/i18n/vi";
 import { formatCurrency } from "@/utils/formatters";
 
 type OrderFormProps = Readonly<{
@@ -371,6 +372,37 @@ export default function OrderForm({
             value={form.serviceTier}
             onChange={(nextValue: ServiceTier) => updateField("serviceTier", nextValue)}
           />
+        </div>
+
+        <div className="space-y-4">
+          <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
+            {orderFormCopy.selectPaymentMethod}
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            {paymentMethodOptions.map((option) => {
+              const isActive = form.paymentMethod === option.id;
+
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() =>
+                    updateField("paymentMethod", option.id as OrderPaymentMethod)
+                  }
+                  className={`rounded-2xl border p-5 text-left transition ${
+                    isActive
+                      ? "border-primary bg-primary/8 shadow-[0_20px_40px_-20px_rgba(6,78,59,0.35)]"
+                      : "border-outline-variant/20 bg-surface hover:border-primary/35"
+                  }`}
+                >
+                  <p className="text-sm font-black text-on-surface">{option.label}</p>
+                  <p className="mt-2 text-sm leading-6 text-on-surface-variant">
+                    {option.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="rounded-xl bg-surface-container-low px-4 py-4">

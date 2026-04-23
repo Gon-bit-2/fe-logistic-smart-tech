@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -229,8 +230,14 @@ export default function CheckoutScreen({
                     Đơn hàng này đã được thanh toán. Bạn có thể quay lại trang theo dõi để xem trạng thái giao nhận.
                   </div>
                 ) : isCodPayment ? (
-                  <div className="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
-                    Đơn hàng này đang được xử lý theo phương thức COD ở luồng vận hành, customer checkout không hỗ trợ chuyển đổi sang thanh toán online.
+                  <div className="space-y-4 rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
+                    <p>{checkoutCopy.redirectToCodTracking}</p>
+                    <Link
+                      href={`/tracking/${trackingDestination}`}
+                      className="inline-flex h-11 items-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
+                    >
+                      {checkoutCopy.codTrackingCta}
+                    </Link>
                   </div>
                 ) : stripePromise && stripeOptions ? (
                   <Elements stripe={stripePromise} options={stripeOptions}>

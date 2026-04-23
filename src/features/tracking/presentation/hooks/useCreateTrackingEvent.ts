@@ -42,6 +42,9 @@ export function useCreateTrackingEvent() {
         queryKey: trackingKeys.internalTimeline(String(variables.orderId)),
       });
       queryClient.invalidateQueries({
+        queryKey: ["payments", "order", String(variables.orderId)],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["trips"],
       });
     },
