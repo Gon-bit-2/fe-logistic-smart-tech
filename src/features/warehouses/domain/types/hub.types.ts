@@ -6,6 +6,7 @@ export interface HubRecord {
   readonly latitude?: number;
   readonly longitude?: number;
   readonly isActive?: boolean;
+  readonly imageUrl?: string | null; // URL ảnh đại diện kho (Cloudinary)
 }
 
 export interface HubStaffRecord {
@@ -28,6 +29,7 @@ export type HubUpsertInput = {
   latitude?: number;
   longitude?: number;
   name: string;
+  imageUrl?: string; // URL ảnh đại diện kho (optional)
 };
 
 export type AssignHubStaffInput = {

@@ -21,6 +21,7 @@ export interface FleetVehicleRecord {
   readonly emissionRatePerKm?: number;
   readonly hubId?: number | string | null;
   readonly isActive?: boolean;
+  readonly imageUrl?: string | null; // URL ảnh đại diện xe (Cloudinary)
 }
 
 export type CreateVehicleInput = {
@@ -31,6 +32,7 @@ export type CreateVehicleInput = {
   capacityVolume?: number;
   emissionRatePerKm?: number;
   hubId?: number | string | null;
+  imageUrl?: string; // URL ảnh đại diện xe (optional)
 };
 
 export type UpdateVehicleInput = Partial<CreateVehicleInput> & {
