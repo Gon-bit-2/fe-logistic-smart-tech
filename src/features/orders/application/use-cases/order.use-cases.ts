@@ -58,6 +58,32 @@ export async function listOrdersUseCase(params?: OrderListParams) {
   return listOrdersRequest(params);
 }
 
+export async function resolveOrderByTrackingCodeUseCase(trackingCode: string) {
+  assertOrdersApiConfigured();
+
+  const normalizedTrackingCode = trackingCode.trim();
+
+  if (!normalizedTrackingCode) {
+    throw new Error("Thiếu mã theo dõi để tra cứu kiện hàng.");
+  }
+
+  const response = await listOrdersRequest({
+    limit: 2,
+    page: 1,
+    trackingCode: normalizedTrackingCode,
+  });
+
+  if (response.data.length === 0) {
+    throw new Error(`Không tìm thấy đơn hàng với mã ${normalizedTrackingCode}.`);
+  }
+
+  if (response.data.length > 1) {
+    throw new Error(`Hệ thống trả về nhiều đơn cho mã ${normalizedTrackingCode}.`);
+  }
+
+  return response.data[0];
+}
+
 export async function getOrderDetailUseCase(orderId: string) {
   assertOrdersApiConfigured();
   return getOrderByIdRequest(orderId);

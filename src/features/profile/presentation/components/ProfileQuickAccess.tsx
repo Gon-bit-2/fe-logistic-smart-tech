@@ -17,6 +17,7 @@ import { formatEnumLabel } from "@/utils/formatters";
 function shouldHideQuickAccess(pathname: string) {
   return (
     pathname.startsWith("/dashboard/customer") ||
+    pathname.startsWith("/dashboard/warehouse") ||
     pathname.startsWith("/overview") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/profile") ||
