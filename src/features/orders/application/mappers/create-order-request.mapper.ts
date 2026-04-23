@@ -110,6 +110,7 @@ export function mapCreateOrderInputToApiPayload(
 
   return {
     items: mapItems(input),
+    paymentMethod: input.paymentMethod,
     ...toPreferredDeliveryWindow(input.estimatedArrival),
     receiverAddress: delivery.address,
     receiverLat: delivery.latitude,

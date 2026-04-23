@@ -135,6 +135,7 @@ describe("OrderForm", () => {
             placeId: "delivery-place",
           }),
           packageWeightKg: 25,
+          paymentMethod: "STRIPE",
           pickup: expect.objectContaining({
             address: "123 Nguyễn Văn Linh, Quận 7",
             isResolved: true,

@@ -4,7 +4,7 @@ import { type ChangeEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
-import { useConfirmCodPayment, usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
+import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 import {
   useUploadMultiplePodImages,
@@ -43,7 +43,10 @@ function getNextOrderStatus(status?: OrderStatus | string | null): OrderStatus |
   }
 }
 
-function getNextOrderActionLabel(status?: OrderStatus | string | null) {
+function getNextOrderActionLabel(
+  status?: OrderStatus | string | null,
+  paymentMethod?: string | null,
+) {
   switch (status) {
     case "ASSIGNED":
       return "Xác nhận đã lấy hàng";
@@ -53,7 +56,9 @@ function getNextOrderActionLabel(status?: OrderStatus | string | null) {
     case "IN_TRANSIT":
       return "Chuyển sang giao hàng";
     case "OUT_FOR_DELIVERY":
-      return "Xác nhận đã giao";
+      return paymentMethod === "COD"
+        ? "Xác nhận đã giao và thu COD"
+        : "Xác nhận đã giao";
     default:
       return null;
   }
@@ -77,7 +82,6 @@ export default function TripDetailWorkspace({
   const trackingQuery = useInternalTrackingQuery(orderId, Boolean(orderId));
   const paymentQuery = usePaymentRecord(orderId || null);
   const createTrackingEvent = useCreateTrackingEvent();
-  const confirmCodPayment = useConfirmCodPayment();
   const uploadPodImage = useUploadPodImage();
   const uploadMultiplePodImages = useUploadMultiplePodImages();
   const [receiverName, setReceiverName] = useState("");
@@ -90,11 +94,15 @@ export default function TripDetailWorkspace({
 
   const tracking = trackingQuery.data ?? null;
   const paymentStatus = getPaymentStatusLabel(paymentQuery.data?.status);
+  const paymentMethod = paymentQuery.data?.method ?? null;
   const currentOrderStatus = (tracking?.currentStatus ??
     activeOrder?.status ??
     null) as OrderStatus | null;
   const nextOrderStatus = getNextOrderStatus(currentOrderStatus);
-  const nextOrderActionLabel = getNextOrderActionLabel(currentOrderStatus);
+  const nextOrderActionLabel = getNextOrderActionLabel(
+    currentOrderStatus,
+    paymentMethod,
+  );
   const canConfirmDelivered =
     nextOrderStatus === "DELIVERED" &&
     receiverName.trim().length > 0 &&
@@ -315,15 +323,6 @@ export default function TripDetailWorkspace({
                       {createTrackingEvent.isPending
                         ? "Đang cập nhật..."
                         : nextOrderActionLabel}
-                    </button>
-                  ) : null}
-                  {orderId ? (
-                    <button
-                      type="button"
-                      onClick={() => void confirmCodPayment.mutateAsync(orderId)}
-                      className="rounded-xl border border-outline-variant/20 px-5 py-3 text-sm font-semibold"
-                    >
-                      Xác nhận thu hộ
                     </button>
                   ) : null}
                 </div>

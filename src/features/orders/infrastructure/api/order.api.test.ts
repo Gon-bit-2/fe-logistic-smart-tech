@@ -53,6 +53,7 @@ describe("order.api", () => {
       itemDescription: "Thiet bi dien tu",
       packageDimensions: "40x30x20",
       packageWeightKg: 25,
+      paymentMethod: "STRIPE",
       pickup: {
         address: "123 Nguyen Van Linh",
         isResolved: true,

@@ -166,10 +166,9 @@ describe("CheckoutScreen", () => {
     renderWithProviders(<CheckoutScreen />);
 
     await waitFor(() =>
-      expect(
-        screen.getByText(/customer checkout không hỗ trợ chuyển đổi sang thanh toán online/i),
-      ).toBeInTheDocument(),
+      expect(screen.getByText(checkoutCopy.redirectToCodTracking)).toBeInTheDocument(),
     );
+    expect(screen.getByRole("link", { name: checkoutCopy.codTrackingCta })).toBeInTheDocument();
     expect(mutateAsync).not.toHaveBeenCalled();
   });
 });

@@ -1,4 +1,4 @@
-import type { ServiceTier } from "@/features/orders/domain/types/order.types";
+import type { OrderPaymentMethod, ServiceTier } from "@/features/orders/domain/types/order.types";
 import type { ShipmentFilter } from "@/features/orders/domain/types/shipments-management.types";
 
 export const ORDER_STATUS_LABELS: Record<string, string> = {
@@ -72,6 +72,7 @@ export const orderFormCopy = {
   localMockQuote: "Chờ lấy báo giá từ hệ thống",
   orderCreated: "Đơn hàng đã được tạo",
   ordersEyebrow: "Đơn hàng",
+  paymentMethod: "Phương thức thanh toán",
   pricingSourceDescription:
     "Chi phí vận chuyển, các loại thuế phí và mức tiết kiệm carbon được tính toán tự động từ hệ thống.",
   pricingSourceLabel: "Nguồn báo giá",
@@ -79,6 +80,7 @@ export const orderFormCopy = {
   receiverPhone: "Số điện thoại người nhận",
   resolvingAddress: "Đang lấy tọa độ...",
   selectServiceTier: "Chọn gói dịch vụ",
+  selectPaymentMethod: "Chọn phương thức thanh toán",
   stepLabels: ["Điểm đi/đến", "Chi tiết", "Dịch vụ"],
   submitDisabledAddress: "Chọn đủ địa chỉ từ autocomplete để tiếp tục.",
   submitDisabledQuote: "Hệ thống cần báo giá thành công trước khi tạo đơn.",
@@ -88,6 +90,23 @@ export const orderFormCopy = {
   weight: "Khối lượng (kg)",
   pickupAddress: "Địa chỉ lấy hàng",
 } as const;
+
+export const paymentMethodOptions = [
+  {
+    description: "Thanh toán online ngay sau khi tạo đơn để đưa lô hàng vào luồng xử lý nhanh.",
+    id: "STRIPE",
+    label: "Thanh toán online",
+  },
+  {
+    description: "Tài xế thu tiền mặt khi giao thành công và hệ thống sẽ đối soát COD nội bộ.",
+    id: "COD",
+    label: "COD khi nhận hàng",
+  },
+] as const satisfies readonly {
+  description: string;
+  id: OrderPaymentMethod;
+  label: string;
+}[];
 
 export const serviceTierSelectorCopy = {
   apiQuote: "Báo giá tự động",
@@ -127,6 +146,7 @@ export const checkoutCopy = {
   cardPayment: "Thanh toán bằng thẻ",
   cardPaymentDescription:
     "Thanh toán an toàn ngay bây giờ để lô hàng được giải phóng tức thì.",
+  codTrackingCta: "Theo dõi đơn hàng",
   cashOnDelivery: "Thanh toán khi nhận hàng",
   cashOnDeliveryDescription:
     "Thanh toán khi kiện hàng đến điểm nhận cuối cùng.",
@@ -152,6 +172,8 @@ export const checkoutCopy = {
   pricingDescription:
     "Hệ thống đang tiến hành lấy báo giá chính thức. Vui lòng chờ trong giây lát.",
   processing: "Đang xử lý...",
+  redirectToCodTracking:
+    "Đơn hàng này dùng COD. Theo dõi tiến trình giao nhận và thu hộ từ màn hình tracking.",
   shippingAndHandling: "Phí xử lý",
   sustainableChoice: "Lựa chọn bền vững",
   sustainabilityMissing:

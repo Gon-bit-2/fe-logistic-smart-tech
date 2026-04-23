@@ -25,6 +25,7 @@ export function createEmptyOrderInput(): CreateOrderInput {
     itemDescription: "",
     packageDimensions: "",
     packageWeightKg: 0,
+    paymentMethod: "STRIPE",
     pickup: createEmptyResolvedOrderAddress(),
     receiverName: "",
     receiverPhone: "",

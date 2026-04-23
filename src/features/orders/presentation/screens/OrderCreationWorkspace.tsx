@@ -25,6 +25,11 @@ export default function OrderCreationWorkspace({
   const quoteState = useOrderQuote(form);
 
   function handleSubmitSuccess(order: OrderDTO) {
+    if (order.payment?.method === "COD") {
+      router.push(`/tracking/${order.trackingCode ?? order.reference}`);
+      return;
+    }
+
     router.push(`/checkout?orderId=${order.id}`);
   }
 
