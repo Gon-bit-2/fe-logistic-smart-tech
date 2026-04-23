@@ -13,7 +13,46 @@ import type {
   VerificationCodeType,
 } from "@/features/auth/domain/types/auth.types";
 import { httpClient } from "@/lib/api/http-client";
+import { ApiError } from "@/lib/api/errors";
 import type { SessionTokens } from "@/types/common.type";
+
+async function parseJsonSafe(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+async function requestSessionRoute<T>(input: RequestInfo | URL, init: RequestInit) {
+  const response = await fetch(input, {
+    ...init,
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(init.headers ?? {}),
+    },
+  });
+
+  const payload = await parseJsonSafe(response);
+
+  if (!response.ok) {
+    throw new ApiError({
+      details: payload,
+      message:
+        typeof payload === "object" &&
+        payload !== null &&
+        "message" in payload &&
+        typeof payload.message === "string"
+          ? payload.message
+          : "Request failed",
+      status: response.status,
+    });
+  }
+
+  return payload as T;
+}
 
 async function requestOtp(email: string, type: VerificationCodeType) {
   const response = await httpClient.post<MessageResponse>("/auth/otp", {
@@ -60,8 +99,10 @@ export async function forgotPassword(input: ForgotPasswordInput) {
 }
 
 export async function login(input: AuthLoginInput) {
-  const response = await httpClient.post<SessionTokens>("/auth/login", input);
-  return response.data;
+  return requestSessionRoute<SessionTokens>("/api/auth/session/login", {
+    body: JSON.stringify(input),
+    method: "POST",
+  });
 }
 
 export async function getProfile() {
@@ -94,12 +135,10 @@ export async function deleteAddressBook(id: number) {
   return response.data;
 }
 
-export async function logout(refreshToken: string) {
-  const response = await httpClient.post<MessageResponse>("/auth/logout", {
-    refreshToken,
+export async function logout() {
+  return requestSessionRoute<MessageResponse>("/api/auth/session", {
+    method: "DELETE",
   });
-
-  return response.data;
 }
 
 export async function getGoogleLoginLink() {
@@ -111,4 +150,11 @@ export async function getGoogleLoginLink() {
   );
 
   return response.data;
+}
+
+export async function exchangeGoogleSession(sessionToken: string) {
+  return requestSessionRoute<SessionTokens>("/api/auth/session/google", {
+    body: JSON.stringify({ sessionToken }),
+    method: "POST",
+  });
 }

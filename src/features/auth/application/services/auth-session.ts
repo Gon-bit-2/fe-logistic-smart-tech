@@ -106,7 +106,19 @@ export function decodeAccessTokenPayload(
       return null;
     }
 
-    return JSON.parse(base64UrlToUtf8(encodedPayload)) as AccessTokenPayload;
+    const payload = JSON.parse(base64UrlToUtf8(encodedPayload)) as AccessTokenPayload;
+
+    if (typeof payload.exp !== "number") {
+      return null;
+    }
+
+    const currentEpoch = Math.floor(Date.now() / 1000);
+
+    if (payload.exp <= currentEpoch) {
+      return null;
+    }
+
+    return payload;
   } catch {
     return null;
   }

@@ -50,9 +50,8 @@ export type GoogleLoginLinkResponse = {
 };
 
 export type GoogleCallbackParams = {
-  accessToken: string | null;
   errorMessage: string | null;
-  refreshToken: string | null;
+  sessionToken: string | null;
 };
 
 export type MessageResponse = {

@@ -8,8 +8,8 @@ import type {
   RegisterDraft,
 } from "@/features/auth/domain/types/auth.types";
 import type { AuthUser } from "@/features/auth/domain/types/auth.types";
-import { tokenStorage } from "@/lib/api/token-storage";
 import { extractAuthUserFromToken } from "@/features/auth/application/services/auth-session";
+import { restoreSession } from "@/lib/api/session-client";
 import type { SessionTokens } from "@/types/common.type";
 
 type AuthState = {
@@ -18,7 +18,6 @@ type AuthState = {
   otpChallengeMeta: OtpChallengeMeta | null;
   pendingPasswordReset: ForgotPasswordDraft | null;
   pendingRegistration: RegisterDraft | null;
-  refreshToken: string | null;
   status: AuthStatus;
   user: AuthUser | null;
 };
@@ -26,7 +25,7 @@ type AuthState = {
 type AuthSnapshot = AuthState & {
   clearOtpFlowState: () => void;
   clearSession: () => void;
-  initialize: () => void;
+  initialize: () => Promise<void>;
   isAuthenticated: boolean;
   setAuthSessionTokens: (tokens: SessionTokens) => void;
   setOtpChallengeMeta: (challenge: OtpChallengeMeta | null) => void;
@@ -41,13 +40,13 @@ const initialState: AuthState = {
   otpChallengeMeta: null,
   pendingPasswordReset: null,
   pendingRegistration: null,
-  refreshToken: null,
   status: "anonymous",
   user: null,
 };
 
 let state = initialState;
 let hasInitialized = false;
+let initializePromise: Promise<void> | null = null;
 
 function computeStatus(nextState: Pick<AuthState, "accessToken">): AuthStatus {
   return nextState.accessToken ? "authenticated" : "anonymous";
@@ -63,34 +62,50 @@ function setState(nextState: Partial<AuthState>) {
 
 const actions = {
   initialize() {
+    if (initializePromise) {
+      return initializePromise;
+    }
+
     if (hasInitialized) {
       if (!state.isHydrated) {
         setState({ isHydrated: true });
       }
 
-      return;
+      return Promise.resolve();
     }
 
     hasInitialized = true;
 
-    const tokens = tokenStorage.getTokens();
+    initializePromise = restoreSession()
+      .then((tokens) => {
+        const accessToken = tokens?.accessToken ?? null;
 
-    setState({
-      accessToken: tokens?.accessToken ?? null,
-      isHydrated: true,
-      refreshToken: tokens?.refreshToken ?? null,
-      status: computeStatus({
-        accessToken: tokens?.accessToken ?? null,
-      }),
-      user: tokens?.accessToken ? extractAuthUserFromToken(tokens.accessToken) : null,
-    });
+        setState({
+          accessToken,
+          status: computeStatus({
+            accessToken,
+          }),
+          user: accessToken ? extractAuthUserFromToken(accessToken) : null,
+        });
+      })
+      .catch(() => {
+        setState({
+          accessToken: null,
+          status: "anonymous",
+          user: null,
+        });
+      })
+      .finally(() => {
+        initializePromise = null;
+        setState({ isHydrated: true });
+      });
+
+    return initializePromise;
   },
 
   setAuthSessionTokens(tokens: SessionTokens) {
-    tokenStorage.setTokens(tokens);
     setState({
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
       status: "authenticated",
       user: extractAuthUserFromToken(tokens.accessToken),
     });
@@ -123,13 +138,13 @@ const actions = {
   },
 
   clearSession() {
-    tokenStorage.clear();
+    hasInitialized = false;
+    initializePromise = null;
     setState({
       accessToken: null,
       otpChallengeMeta: null,
       pendingPasswordReset: null,
       pendingRegistration: null,
-      refreshToken: null,
       status: "anonymous",
       user: null,
     });
@@ -161,7 +176,7 @@ function getSnapshot() {
 }
 
 export function initializeAuthStore() {
-  actions.initialize();
+  return actions.initialize();
 }
 
 export function getAuthSessionSnapshot() {
@@ -195,4 +210,3 @@ export function setOtpChallengeMeta(challenge: OtpChallengeMeta | null) {
 export function useAuthStore() {
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }
-

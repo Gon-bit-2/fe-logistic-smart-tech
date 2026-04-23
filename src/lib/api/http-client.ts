@@ -1,6 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import type { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { clearAuthSession, getAuthSessionSnapshot, setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
+import { restoreSession } from "@/lib/api/session-client";
 import type { SessionTokens } from "@/types/common.type";
 import { API_BASE_URL } from "./env";
 import { ApiError, normalizeApiError } from "./errors";
@@ -83,28 +84,19 @@ export const httpClient = axios.create({
   headers: defaultHeaders,
 });
 
-const refreshClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: defaultHeaders,
-});
-
 let refreshPromise: Promise<SessionTokens> | null = null;
 
 async function refreshSessionTokens() {
-  const { refreshToken } = getAuthSessionSnapshot();
+  const tokens = await restoreSession();
 
-  if (!refreshToken) {
+  if (!tokens?.accessToken) {
     throw new ApiError({
       message: "Your session has expired. Please log in again.",
       status: 401,
     });
   }
 
-  const response = await refreshClient.post<SessionTokens>("/auth/refresh-token", {
-    refreshToken,
-  });
-
-  return response.data;
+  return tokens;
 }
 
 async function getRefreshPromise() {
@@ -168,4 +160,3 @@ httpClient.interceptors.response.use(
     }
   },
 );
-

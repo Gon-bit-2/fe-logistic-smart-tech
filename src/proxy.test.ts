@@ -5,6 +5,7 @@ import { proxy } from "./proxy";
 function createAccessToken(roleName: string, roleId: number) {
   const payload = Buffer.from(
     JSON.stringify({
+      exp: Math.floor(Date.now() / 1000) + 60 * 60,
       roleId,
       roleName,
       userId: 1,
@@ -32,13 +33,13 @@ function createRequest(pathname: string, accessToken?: string) {
 describe("proxy", () => {
   it("rewrites the legacy Google callback path to the flat callback page", () => {
     const request = createRequest(
-      "/auth/google/callback?accessToken=test-access&refreshToken=test-refresh",
+      "/auth/google/callback?sessionToken=test-session-token",
     );
 
     const response = proxy(request);
 
     expect(response.headers.get("x-middleware-rewrite")).toBe(
-      "http://localhost/auth/google-callback?accessToken=test-access&refreshToken=test-refresh",
+      "http://localhost/auth/google-callback?sessionToken=test-session-token",
     );
   });
 

@@ -54,15 +54,13 @@ describe("auth.utils", () => {
 
   it("parses Google callback params from URL search params", () => {
     const params = new URLSearchParams({
-      accessToken: "access",
-      refreshToken: "refresh",
       errorMessage: "blocked",
+      sessionToken: "session-token",
     });
 
     expect(parseGoogleCallbackParams(params)).toEqual({
-      accessToken: "access",
-      refreshToken: "refresh",
       errorMessage: "blocked",
+      sessionToken: "session-token",
     });
   });
 });
