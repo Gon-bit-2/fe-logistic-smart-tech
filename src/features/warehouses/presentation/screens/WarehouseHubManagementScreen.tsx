@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import { Warehouse, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
 import {
   useAssignHubStaff,
@@ -11,6 +12,8 @@ import {
   useRemoveHubStaff,
   useUpdateHub,
 } from "@/features/warehouses/presentation/hooks/useHubsQuery";
+import { useImageUpload } from "@/lib/hooks/useImageUpload";
+import ImageUploadField from "@/components/ui/ImageUploadField";
 import { warehouseHubScreenCopy } from "@/i18n/vi";
 
 export interface WarehouseHubManagementScreenProps {
@@ -30,6 +33,7 @@ export default function WarehouseHubManagementScreen(
     latitude: 0,
     longitude: 0,
     name: "",
+    imageUrl: "", // URL ảnh đại diện kho
   });
   const selectedHubQuery = useHubDetailQuery(selectedHubId, Boolean(selectedHubId));
   const createHub = useCreateHub();
@@ -37,25 +41,38 @@ export default function WarehouseHubManagementScreen(
   const deleteHub = useDeleteHub();
   const assignHubStaff = useAssignHubStaff();
   const removeHubStaff = useRemoveHubStaff();
+  const imageUpload = useImageUpload("logistic_hubs");
 
+  /** Xử lý submit form tạo/cập nhật hub */
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    // Chuẩn bị payload (loại bỏ imageUrl rỗng)
+    const payload = {
+      address: form.address,
+      code: form.code,
+      latitude: form.latitude,
+      longitude: form.longitude,
+      name: form.name,
+      ...(form.imageUrl ? { imageUrl: form.imageUrl } : {}),
+    };
 
     if (selectedHubId) {
       await updateHub.mutateAsync({
         hubId: selectedHubId,
-        payload: form,
+        payload,
       });
       return;
     }
 
-    await createHub.mutateAsync(form);
+    await createHub.mutateAsync(payload);
     setForm({
       address: "",
       code: "",
       latitude: 0,
       longitude: 0,
       name: "",
+      imageUrl: "",
     });
   }
 
@@ -67,6 +84,7 @@ export default function WarehouseHubManagementScreen(
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        {/* === Form tạo/sửa hub === */}
         <form
           onSubmit={(event) => void handleSubmit(event)}
           className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6"
@@ -75,10 +93,25 @@ export default function WarehouseHubManagementScreen(
             {selectedHubId ? "Cập nhật hub" : "Tạo hub mới"}
           </h2>
 
+          {/* Upload ảnh đại diện kho */}
+          <ImageUploadField
+            label="Ảnh đại diện kho"
+            placeholder="Kéo thả ảnh kho vào đây"
+            currentImageUrl={form.imageUrl || null}
+            isUploading={imageUpload.isUploading}
+            uploadFn={imageUpload.upload}
+            onImageUploaded={(url) =>
+              setForm((current) => ({ ...current, imageUrl: url }))
+            }
+            onImageRemoved={() =>
+              setForm((current) => ({ ...current, imageUrl: "" }))
+            }
+          />
+
           {(["code", "name", "address"] as const).map((key) => (
             <label key={key} className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                {key}
+                {key === "code" ? "Mã kho" : key === "name" ? "Tên kho" : "Địa chỉ"}
               </span>
               <input
                 value={String(form[key])}
@@ -128,22 +161,43 @@ export default function WarehouseHubManagementScreen(
           <div className="flex flex-wrap gap-3">
             <button
               type="submit"
-              className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white"
+              disabled={createHub.isPending || updateHub.isPending}
+              className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white transition-all hover:shadow-lg disabled:opacity-50"
             >
               {selectedHubId ? "Lưu thay đổi" : "Tạo hub"}
             </button>
             {selectedHubId ? (
-              <button
-                type="button"
-                onClick={() => void deleteHub.mutateAsync(selectedHubId)}
-                className="rounded-xl bg-destructive/10 px-5 py-3 text-sm font-bold text-destructive"
-              >
-                Xóa hub
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => void deleteHub.mutateAsync(selectedHubId)}
+                  className="rounded-xl bg-destructive/10 px-5 py-3 text-sm font-bold text-destructive"
+                >
+                  Xóa hub
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedHubId("");
+                    setForm({
+                      address: "",
+                      code: "",
+                      latitude: 0,
+                      longitude: 0,
+                      name: "",
+                      imageUrl: "",
+                    });
+                  }}
+                  className="rounded-xl bg-surface-container-low px-5 py-3 text-sm font-bold text-on-surface/55"
+                >
+                  Hủy
+                </button>
+              </>
             ) : null}
           </div>
         </form>
 
+        {/* === Danh sách Hub === */}
         <section className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-black tracking-tight text-on-surface">
@@ -166,22 +220,38 @@ export default function WarehouseHubManagementScreen(
                   latitude: hub.latitude ?? 0,
                   longitude: hub.longitude ?? 0,
                   name: hub.name,
+                  imageUrl: hub.imageUrl ?? "",
                 });
               }}
-              className="flex w-full items-center justify-between rounded-xl border border-outline-variant/10 bg-background px-4 py-4 text-left"
+              className="flex w-full items-center gap-4 rounded-xl border border-outline-variant/10 bg-background px-4 py-4 text-left transition-colors hover:bg-primary/[0.03]"
             >
-              <div>
+              {/* Thumbnail ảnh kho */}
+              {hub.imageUrl ? (
+                <img
+                  src={hub.imageUrl}
+                  alt={hub.name}
+                  className="size-14 shrink-0 rounded-xl object-cover shadow-sm"
+                />
+              ) : (
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-surface-container-low">
+                  <Warehouse className="size-6 text-on-surface/25" />
+                </div>
+              )}
+
+              <div className="min-w-0 flex-1">
                 <p className="font-bold text-on-surface">{hub.name}</p>
-                <p className="text-xs text-on-surface/55">
+                <p className="truncate text-xs text-on-surface/55">
                   {hub.code} • {hub.address}
                 </p>
               </div>
-              <span className="text-xs font-black uppercase tracking-[0.14em] text-primary">
+
+              <span className="shrink-0 text-xs font-black uppercase tracking-[0.14em] text-primary">
                 {hub.isActive === false ? "inactive" : "active"}
               </span>
             </button>
           ))}
 
+          {/* === Hub Detail (Staff) === */}
           {selectedHubQuery.data ? (
             <div className="rounded-xl border border-outline-variant/10 bg-background p-4">
               <div className="flex items-center justify-between gap-3">
@@ -250,4 +320,3 @@ export default function WarehouseHubManagementScreen(
     </div>
   );
 }
-

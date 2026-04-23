@@ -48,6 +48,7 @@ export const API_PAYMENT_COD_CONFIRM = (orderId: string | number) =>
 // upload api endpoints
 export const API_UPLOAD_POD = "/upload/pod";
 export const API_UPLOAD_MULTIPLE_POD = "/upload/multiple-pod";
+export const API_UPLOAD_IMAGE = "/upload/image"; // Upload ảnh chung (vehicle, hub, etc.)
 
 // analytics api endpoints
 export const API_ANALYTICS_DASHBOARD = "/analytics/dashboard";
