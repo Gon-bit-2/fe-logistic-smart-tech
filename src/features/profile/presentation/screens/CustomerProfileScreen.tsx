@@ -31,7 +31,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { EmptyState, ErrorState, LoadingState } from "@/components/ui/data-states";
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/components/ui/data-states";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -193,7 +197,9 @@ function AddressBookDialog({
                 className="h-10 rounded-lg border border-slate-300 bg-white px-3"
               />
               {errors.label ? (
-                <p className="text-xs font-medium text-red-600">{errors.label}</p>
+                <p className="text-xs font-medium text-red-600">
+                  {errors.label}
+                </p>
               ) : null}
             </div>
 
@@ -205,12 +211,18 @@ function AddressBookDialog({
                 <Input
                   id="address-contact"
                   value={draft.contactName}
-                  onChange={(event) => updateField("contactName", event.target.value)}
-                  placeholder={profileScreenCopy.addressBook.placeholders.contactName}
+                  onChange={(event) =>
+                    updateField("contactName", event.target.value)
+                  }
+                  placeholder={
+                    profileScreenCopy.addressBook.placeholders.contactName
+                  }
                   className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                 />
                 {errors.contactName ? (
-                  <p className="text-xs font-medium text-red-600">{errors.contactName}</p>
+                  <p className="text-xs font-medium text-red-600">
+                    {errors.contactName}
+                  </p>
                 ) : null}
               </div>
 
@@ -226,7 +238,9 @@ function AddressBookDialog({
                   className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                 />
                 {errors.phone ? (
-                  <p className="text-xs font-medium text-red-600">{errors.phone}</p>
+                  <p className="text-xs font-medium text-red-600">
+                    {errors.phone}
+                  </p>
                 ) : null}
               </div>
             </div>
@@ -239,11 +253,15 @@ function AddressBookDialog({
                 id="address-line"
                 value={draft.address}
                 onChange={(event) => updateField("address", event.target.value)}
-                placeholder={profileScreenCopy.addressBook.placeholders.addressLine}
+                placeholder={
+                  profileScreenCopy.addressBook.placeholders.addressLine
+                }
                 className="min-h-24 rounded-lg border border-slate-300 bg-white px-3 py-2.5"
               />
               {errors.address ? (
-                <p className="text-xs font-medium text-red-600">{errors.address}</p>
+                <p className="text-xs font-medium text-red-600">
+                  {errors.address}
+                </p>
               ) : null}
             </div>
 
@@ -251,7 +269,9 @@ function AddressBookDialog({
               <input
                 type="checkbox"
                 checked={draft.isDefault}
-                onChange={(event) => updateField("isDefault", event.target.checked)}
+                onChange={(event) =>
+                  updateField("isDefault", event.target.checked)
+                }
                 className="size-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
               {profileScreenCopy.addressBook.fields.setAsDefault}
@@ -313,9 +333,8 @@ export default function CustomerProfileScreen() {
   } = useCustomerProfileSettings();
 
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
-  const [addressDialogValue, setAddressDialogValue] = useState<AddressBookDraftInput>(
-    createEmptyAddressDraft(),
-  );
+  const [addressDialogValue, setAddressDialogValue] =
+    useState<AddressBookDraftInput>(createEmptyAddressDraft());
 
   if (profileQuery.isPending) {
     return (
@@ -335,7 +354,10 @@ export default function CustomerProfileScreen() {
           title="Không thể tải hồ sơ"
           description={getProfileLoadErrorMessage(profileQuery.error)}
           action={
-            <Button variant="outline" onClick={() => void profileQuery.refetch()}>
+            <Button
+              variant="outline"
+              onClick={() => void profileQuery.refetch()}
+            >
               Tải lại
             </Button>
           }
@@ -383,10 +405,18 @@ export default function CustomerProfileScreen() {
 
         <Tabs defaultValue="account" className="w-full">
           <TabsList>
-            <TabsTrigger value="account">{profileScreenCopy.tabs.account}</TabsTrigger>
-            <TabsTrigger value="addresses">{profileScreenCopy.tabs.addressBook}</TabsTrigger>
-            <TabsTrigger value="access">{profileScreenCopy.tabs.access}</TabsTrigger>
-            <TabsTrigger value="security">{profileScreenCopy.tabs.security}</TabsTrigger>
+            <TabsTrigger value="account">
+              {profileScreenCopy.tabs.account}
+            </TabsTrigger>
+            <TabsTrigger value="addresses">
+              {profileScreenCopy.tabs.addressBook}
+            </TabsTrigger>
+            <TabsTrigger value="access">
+              {profileScreenCopy.tabs.access}
+            </TabsTrigger>
+            <TabsTrigger value="security">
+              {profileScreenCopy.tabs.security}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="account">
@@ -396,7 +426,10 @@ export default function CustomerProfileScreen() {
                   <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_58%)]" />
                   <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
                     <Avatar className="size-20 ring-4 ring-white/15">
-                      <AvatarImage alt={profile.fullName} src={profile.avatarUrl ?? undefined} />
+                      <AvatarImage
+                        alt={profile.fullName}
+                        src={profile.avatarUrl ?? undefined}
+                      />
                       <AvatarFallback className="bg-white/15 text-lg text-white">
                         {profile.initials}
                       </AvatarFallback>
@@ -408,7 +441,9 @@ export default function CustomerProfileScreen() {
                       <h2 className="text-2xl font-bold tracking-tight">
                         {profile.fullName}
                       </h2>
-                      <p className="text-sm text-emerald-50/90">{profile.email}</p>
+                      <p className="text-sm text-emerald-50/90">
+                        {profile.email}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -443,7 +478,9 @@ export default function CustomerProfileScreen() {
                     <ProfileMetaItem
                       icon={<MapPinned className="size-4" />}
                       label={profileScreenCopy.account.hubId}
-                      value={profile.hubId ? `Hub #${profile.hubId}` : "Chưa gán hub"}
+                      value={
+                        profile.hubId ? `Hub #${profile.hubId}` : "Chưa gán hub"
+                      }
                     />
                     <ProfileMetaItem
                       icon={<Mail className="size-4" />}
@@ -471,8 +508,12 @@ export default function CustomerProfileScreen() {
                     <Input
                       id="profile-full-name"
                       value={form.fullName}
-                      onChange={(event) => updateField("fullName", event.target.value)}
-                      placeholder={profileScreenCopy.account.fullNamePlaceholder}
+                      onChange={(event) =>
+                        updateField("fullName", event.target.value)
+                      }
+                      placeholder={
+                        profileScreenCopy.account.fullNamePlaceholder
+                      }
                       className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                     />
                     {formErrors.fullName ? (
@@ -489,7 +530,9 @@ export default function CustomerProfileScreen() {
                     <Input
                       id="profile-phone"
                       value={form.phone}
-                      onChange={(event) => updateField("phone", event.target.value)}
+                      onChange={(event) =>
+                        updateField("phone", event.target.value)
+                      }
                       placeholder={profileScreenCopy.account.phonePlaceholder}
                       className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                     />
@@ -592,7 +635,9 @@ export default function CustomerProfileScreen() {
                   <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/70 p-4">
                     <EmptyState
                       title={profileScreenCopy.addressBook.emptyTitle}
-                      description={profileScreenCopy.addressBook.emptyDescription}
+                      description={
+                        profileScreenCopy.addressBook.emptyDescription
+                      }
                     />
                   </div>
                 ) : (
@@ -632,7 +677,9 @@ export default function CustomerProfileScreen() {
                                 variant="outline"
                                 disabled={isAddressMutating}
                                 className="h-9 rounded-lg border-slate-200 bg-white text-slate-700"
-                                onClick={() => void setDefaultAddress(address.id)}
+                                onClick={() =>
+                                  void setDefaultAddress(address.id)
+                                }
                               >
                                 {profileScreenCopy.addressBook.setDefault}
                               </Button>
@@ -690,15 +737,17 @@ export default function CustomerProfileScreen() {
               </CardHeader>
               <CardContent className="grid gap-6 px-6 pb-6 md:grid-cols-2">
                 <ActionCard
-                  href="/dashboard/customer?notifications=1"
+                  href="/overview?notifications=1"
                   icon={<Bell className="size-5" />}
                   title={profileScreenCopy.access.notificationsTitle}
-                  description={profileScreenCopy.access.notificationsDescription}
+                  description={
+                    profileScreenCopy.access.notificationsDescription
+                  }
                   ctaLabel={profileScreenCopy.access.notificationsCta}
                   primary
                 />
                 <ActionCard
-                  href="/dashboard/customer/roles"
+                  href="/role-requests"
                   icon={<ShieldCheck className="size-5" />}
                   title={profileScreenCopy.access.rolesTitle}
                   description={profileScreenCopy.access.rolesDescription}
@@ -736,7 +785,9 @@ export default function CustomerProfileScreen() {
                   <Separator className="my-4 bg-slate-200" />
                   <div className="flex items-center gap-3 rounded-lg border border-white bg-white p-4">
                     <UserRound className="size-4 text-emerald-700" />
-                    <span className="text-sm font-semibold text-slate-700">{profile.email}</span>
+                    <span className="text-sm font-semibold text-slate-700">
+                      {profile.email}
+                    </span>
                   </div>
                 </div>
 

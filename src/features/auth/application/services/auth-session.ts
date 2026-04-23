@@ -9,28 +9,28 @@ import {
 
 const ROLE_REDIRECTS: Record<UserRole, string> = {
   admin: "/dashboard/admin",
-  customer: "/dashboard/customer",
+  customer: "/overview",
   driver: "/dashboard/driver",
   warehouse_staff: "/dashboard/warehouse",
 };
 
 const NOTIFICATION_REDIRECTS: Record<UserRole, string> = {
   admin: "/dashboard/admin/notifications",
-  customer: "/dashboard/customer?notifications=1",
+  customer: "/notifications",
   driver: "/dashboard/driver/notifications",
   warehouse_staff: "/dashboard/warehouse/notifications",
 };
 
 const ROLE_REQUEST_REDIRECTS: Record<UserRole, string> = {
   admin: "/dashboard/admin/role-requests",
-  customer: "/dashboard/customer/roles",
+  customer: "/role-requests",
   driver: "/dashboard/driver/roles",
   warehouse_staff: "/dashboard/warehouse/roles",
 };
 
 const PROFILE_REDIRECTS: Record<UserRole, string> = {
   admin: "/dashboard/admin",
-  customer: "/dashboard/customer/settings",
+  customer: "/profile",
   driver: "/dashboard/driver",
   warehouse_staff: "/dashboard/warehouse",
 };
@@ -81,19 +81,19 @@ export function normalizeUserRole(
 }
 
 export function getDashboardHrefForRole(role?: UserRole | null): string {
-  return role ? ROLE_REDIRECTS[role] : "/dashboard/customer";
+  return role ? ROLE_REDIRECTS[role] : "/overview";
 }
 
 export function getNotificationsHrefForRole(role?: UserRole | null): string {
-  return role ? NOTIFICATION_REDIRECTS[role] : "/dashboard/customer?notifications=1";
+  return role ? NOTIFICATION_REDIRECTS[role] : "/notifications";
 }
 
 export function getRoleRequestHrefForRole(role?: UserRole | null): string {
-  return role ? ROLE_REQUEST_REDIRECTS[role] : "/dashboard/customer/roles";
+  return role ? ROLE_REQUEST_REDIRECTS[role] : "/role-requests";
 }
 
 export function getProfileHrefForRole(role?: UserRole | null): string {
-  return role ? PROFILE_REDIRECTS[role] : "/dashboard/customer/settings";
+  return role ? PROFILE_REDIRECTS[role] : "/profile";
 }
 
 export function decodeAccessTokenPayload(
@@ -106,7 +106,9 @@ export function decodeAccessTokenPayload(
       return null;
     }
 
-    const payload = JSON.parse(base64UrlToUtf8(encodedPayload)) as AccessTokenPayload;
+    const payload = JSON.parse(
+      base64UrlToUtf8(encodedPayload),
+    ) as AccessTokenPayload;
 
     if (typeof payload.exp !== "number") {
       return null;
@@ -147,12 +149,13 @@ export function extractAuthUserFromToken(token: string): AuthUser | null {
 export function toAuthProfile(dto: AuthProfileDto): AuthProfile {
   const role = normalizeUserRole(dto.roleName, dto.roleId) ?? "customer";
   const fullName = dto.fullName?.trim() || dto.email;
-  const initials = fullName
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((segment) => segment[0]?.toUpperCase() ?? "")
-    .join("") || "NA";
+  const initials =
+    fullName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((segment) => segment[0]?.toUpperCase() ?? "")
+      .join("") || "NA";
 
   return {
     avatarUrl: dto.avatar ?? dto.avatarUrl ?? null,

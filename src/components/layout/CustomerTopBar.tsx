@@ -30,14 +30,14 @@ type CustomerNavItem = {
 
 const customerNavItems: CustomerNavItem[] = [
   {
-    href: "/dashboard/customer",
+    href: "/overview",
     icon: <LayoutDashboard className="size-4" />,
     isActive: (pathname) =>
       pathname === "/overview" || pathname === "/dashboard/customer",
     label: "Tổng quan",
   },
   {
-    href: "/dashboard/customer/orders",
+    href: "/orders",
     icon: <Package className="size-4" />,
     isActive: (pathname) =>
       pathname === "/orders" || pathname === "/dashboard/customer/orders",
@@ -50,14 +50,14 @@ const customerNavItems: CustomerNavItem[] = [
     label: "Tạo đơn",
   },
   {
-    href: "/dashboard/customer/settings",
+    href: "/profile",
     icon: <UserRound className="size-4" />,
     isActive: (pathname) =>
       pathname === "/profile" || pathname === "/dashboard/customer/settings",
     label: "Hồ sơ",
   },
   {
-    href: "/dashboard/customer/roles",
+    href: "/role-requests",
     icon: <ShieldCheck className="size-4" />,
     isActive: (pathname) =>
       pathname === "/role-requests" || pathname === "/dashboard/customer/roles",
@@ -83,8 +83,7 @@ export default function CustomerTopBar() {
       .slice(0, 2)
       .map((segment) => segment[0]?.toUpperCase() ?? "")
       .join("") || "CU";
-  const initials =
-    profileQuery.data?.initials ?? fallbackInitials;
+  const initials = profileQuery.data?.initials ?? fallbackInitials;
   const shouldOpenNotifications = searchParams.get("notifications") === "1";
 
   useEffect(() => {
@@ -126,7 +125,7 @@ export default function CustomerTopBar() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="min-w-0">
             <Link
-              href="/dashboard/customer"
+              href="/overview"
               className="text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
             >
               Emerald Customer Hub
@@ -143,12 +142,11 @@ export default function CustomerTopBar() {
             <div ref={bellContainerRef} className="relative">
               <button
                 type="button"
-                onClick={() =>
-                  setIsNotificationsOpen((current) => !current)
-                }
+                onClick={() => setIsNotificationsOpen((current) => !current)}
                 className={cn(
                   "relative rounded-full border border-white/70 bg-white/85 p-2.5 text-slate-600 transition-colors hover:text-emerald-700",
-                  isNotificationsOpen && "text-emerald-700 ring-2 ring-emerald-200",
+                  isNotificationsOpen &&
+                    "text-emerald-700 ring-2 ring-emerald-200",
                 )}
                 aria-expanded={isNotificationsOpen}
                 aria-haspopup="dialog"
@@ -172,7 +170,7 @@ export default function CustomerTopBar() {
             </div>
 
             <Link
-              href="/dashboard/customer/settings"
+              href="/profile"
               className="group flex items-center gap-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1.5 text-left shadow-sm transition-all hover:-translate-y-0.5"
             >
               <Avatar className="size-9 ring-2 ring-emerald-100">

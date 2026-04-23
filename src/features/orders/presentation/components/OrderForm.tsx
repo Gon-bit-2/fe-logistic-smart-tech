@@ -77,7 +77,7 @@ function AddressAutocompleteField({
           }}
           onChange={(event) => controller.setQuery(event.target.value)}
           onFocus={() => setIsFocused(true)}
-          className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+          className="border-b border-outline-variant/25 focus:rounded-lg"
           placeholder={orderFormCopy.addressAutocompleteHint}
         />
 
@@ -269,7 +269,7 @@ export default function OrderForm({
             <Input
               value={form.contactName}
               onChange={(event) => updateField("contactName", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
           </label>
@@ -281,7 +281,7 @@ export default function OrderForm({
             <Input
               value={form.contactPhone}
               onChange={(event) => updateField("contactPhone", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
           </label>
@@ -293,7 +293,7 @@ export default function OrderForm({
             <Input
               value={form.receiverName}
               onChange={(event) => updateField("receiverName", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
           </label>
@@ -305,7 +305,7 @@ export default function OrderForm({
             <Input
               value={form.receiverPhone}
               onChange={(event) => updateField("receiverPhone", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
           </label>
@@ -320,7 +320,7 @@ export default function OrderForm({
               onChange={(event) =>
                 updateField("estimatedArrival", toIsoString(event.target.value))
               }
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
             />
           </label>
 
@@ -336,7 +336,7 @@ export default function OrderForm({
               onChange={(event) =>
                 updateField("packageWeightKg", Number(event.target.value || 0))
               }
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
           </label>
@@ -348,7 +348,7 @@ export default function OrderForm({
             <Input
               value={form.packageDimensions}
               onChange={(event) => updateField("packageDimensions", event.target.value)}
-              className="border-b border-outline-variant/25 pb-3 focus:rounded-lg"
+              className="border-b border-outline-variant/25 focus:rounded-lg"
             />
           </label>
 

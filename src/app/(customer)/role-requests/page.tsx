@@ -1,1 +1,1 @@
-export { default } from "@/app/dashboard/customer/roles/page";
+export { default } from "@/app/customer/role-requests/page";

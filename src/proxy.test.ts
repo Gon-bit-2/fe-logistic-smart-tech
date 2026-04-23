@@ -55,10 +55,7 @@ describe("proxy", () => {
   });
 
   it("lets admins access customer root routes without forcing a customer redirect", () => {
-    const request = createRequest(
-      "/orders",
-      createAccessToken("admin", 1),
-    );
+    const request = createRequest("/orders", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
@@ -66,14 +63,13 @@ describe("proxy", () => {
   });
 
   it("still redirects dashboard root to the admin workspace", () => {
-    const request = createRequest(
-      "/dashboard",
-      createAccessToken("admin", 1),
-    );
+    const request = createRequest("/dashboard", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/admin");
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/dashboard/admin",
+    );
   });
 
   it("redirects non-admin users away from restricted dashboard workspaces", () => {
@@ -84,7 +80,7 @@ describe("proxy", () => {
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/customer");
+    expect(response.headers.get("location")).toBe("http://localhost/overview");
   });
 
   it("redirects drivers away from customer checkout routes", () => {
@@ -95,6 +91,8 @@ describe("proxy", () => {
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/dashboard/driver");
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/dashboard/driver",
+    );
   });
 });
