@@ -14,12 +14,14 @@ type SidebarProps = {
   title?: string;
   items: SidebarItem[];
   footerNote?: string;
+  footerActions?: React.ReactNode;
 };
 
 export default function Sidebar({
   title = "Điều hướng",
   items,
   footerNote,
+  footerActions,
 }: SidebarProps) {
   const pathname = usePathname();
 
@@ -60,11 +62,14 @@ export default function Sidebar({
         })}
       </nav>
 
-      {footerNote && (
-        <div className="mt-auto rounded-2xl border border-primary/10 bg-primary/5 p-4 text-sm text-slate-600">
-          {footerNote}
-        </div>
-      )}
+      <div className="mt-auto">
+        {footerNote && (
+          <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4 text-sm text-slate-600">
+            {footerNote}
+          </div>
+        )}
+        {footerActions}
+      </div>
     </aside>
   );
 }

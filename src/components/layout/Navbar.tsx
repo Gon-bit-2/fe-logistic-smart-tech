@@ -20,13 +20,13 @@ export default function Navbar() {
         </div>
         <div className="hidden md:flex items-center gap-8 font-medium text-sm tracking-tight text-white/80">
           {navbarCopy.navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
               className="relative pb-1 transition-all duration-300 hover:text-white after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary-fixed after:transition-transform after:duration-300 hover:after:scale-x-100"
               href={item.href}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="flex items-center gap-4">

@@ -54,7 +54,7 @@ export function acquireTrackingSocket({
   }
 
   const socket = io(url, {
-    auth: authToken ? { token: `Bearer ${authToken}` } : undefined,
+    auth: authToken ? { token: authToken } : undefined,
     autoConnect: true,
     transports: ["websocket"],
   });

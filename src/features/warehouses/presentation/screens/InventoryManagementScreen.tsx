@@ -34,11 +34,15 @@ export default function InventoryManagementScreen(
   const hubs = hubsQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
   const filteredHubs = hubs.filter((hub) =>
-    [hub.code, hub.name, hub.address].join(" ").toLowerCase().includes(normalizedSearchTerm),
+    [hub.code, hub.name, hub.address]
+      .join(" ")
+      .toLowerCase()
+      .includes(normalizedSearchTerm),
   );
   const activeHubs = hubs.filter((hub) => hub.isActive !== false).length;
   const hubsWithCoordinates = hubs.filter(
-    (hub) => typeof hub.latitude === "number" && typeof hub.longitude === "number",
+    (hub) =>
+      typeof hub.latitude === "number" && typeof hub.longitude === "number",
   ).length;
 
   return (
@@ -118,7 +122,9 @@ export default function InventoryManagementScreen(
           </div>
         ) : null}
 
-        {!hubsQuery.isLoading && !hubsQuery.isError && filteredHubs.length === 0 ? (
+        {!hubsQuery.isLoading &&
+        !hubsQuery.isError &&
+        filteredHubs.length === 0 ? (
           <div className="p-5">
             <EmptyState
               title={inventoryScreenCopy.emptyTitle}
@@ -127,7 +133,9 @@ export default function InventoryManagementScreen(
           </div>
         ) : null}
 
-        {!hubsQuery.isLoading && !hubsQuery.isError && filteredHubs.length > 0 ? (
+        {!hubsQuery.isLoading &&
+        !hubsQuery.isError &&
+        filteredHubs.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
@@ -162,13 +170,18 @@ export default function InventoryManagementScreen(
                       {hub.address}
                     </td>
                     <td className="px-6 py-4 text-[0.72rem] text-on-surface/65">
-                      {typeof hub.latitude === "number" && typeof hub.longitude === "number"
+                      {typeof hub.latitude === "number" &&
+                      typeof hub.longitude === "number"
                         ? `${hub.latitude}, ${hub.longitude}`
                         : inventoryScreenCopy.hubVehiclePending}
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge
-                        label={hub.isActive === false ? "Ngừng hoạt động" : "Đang hoạt động"}
+                        label={
+                          hub.isActive === false
+                            ? "Ngừng hoạt động"
+                            : "Đang hoạt động"
+                        }
                         tone={hub.isActive === false ? "neutral" : "green"}
                       />
                     </td>
@@ -217,7 +230,9 @@ function MetricTile({
   chips,
 }: Readonly<MetricTileProps>) {
   return (
-    <SectionCard className={cn("p-6", bordered && "border-l-4 border-l-primary")}>
+    <SectionCard
+      className={cn("p-6", bordered && "border-l-4 border-l-primary")}
+    >
       <div className="flex items-start justify-between">
         <p className="text-[0.68rem] font-black uppercase tracking-[0.22em] text-on-surface/40">
           {label}
@@ -226,14 +241,21 @@ function MetricTile({
       </div>
       <div className="mt-5">
         <div className="flex items-baseline gap-2">
-          <p className="text-4xl font-black tracking-tight text-on-surface">{value}</p>
+          <p className="text-4xl font-black tracking-tight text-on-surface">
+            {value}
+          </p>
         </div>
         {supporting ? (
-          <p className="mt-1 text-xs font-semibold text-secondary">{supporting}</p>
+          <p className="mt-1 text-xs font-semibold text-secondary">
+            {supporting}
+          </p>
         ) : null}
         {progress !== undefined ? (
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-surface-container-high">
-            <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
+            <div
+              className="h-full rounded-full bg-primary"
+              style={{ width: `${progress}%` }}
+            />
           </div>
         ) : null}
         {chips?.length ? (
@@ -257,4 +279,3 @@ function MetricTile({
     </SectionCard>
   );
 }
-

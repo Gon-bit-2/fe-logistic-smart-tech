@@ -13,8 +13,8 @@ export const navbarCopy = {
   navItems: [
     { href: "#features", label: "Tính năng" },
     { href: "#solutions", label: "Giải pháp" },
+    { href: "/tracking", label: "Tra cứu đơn hàng" },
     { href: "#sustainability", label: "Bền vững" },
-    { href: "#about", label: "Giới thiệu" },
   ],
 } as const;
 

@@ -3,6 +3,7 @@ import Sidebar, { type SidebarItem } from "@/components/layout/Sidebar";
 import RoleGuard from "@/features/auth/presentation/components/RoleGuard";
 import { ROUTE_PERMISSIONS } from "@/features/auth/domain/constants/rbac.config";
 import { Home, Truck, Route, Bell, ShieldCheck } from "lucide-react";
+import DriverSidebarActions from "./DriverSidebarActions";
 
 const driverSidebarItems: SidebarItem[] = [
   { href: "/dashboard/driver", label: "Không gian tài xế", icon: <Home className="size-5" /> },
@@ -24,6 +25,7 @@ export default function DriverLayout({
           title="Tài Xế" 
           items={driverSidebarItems} 
           footerNote="Theo dõi chuyến đi và báo cáo trạng thái phương tiện."
+          footerActions={<DriverSidebarActions />}
         />
         <main className="px-6 py-8 md:px-8">{children}</main>
       </div>
