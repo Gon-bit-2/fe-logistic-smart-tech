@@ -59,6 +59,7 @@ export const orderFormCopy = {
   addressAutocompleteHint: "Nhập tối thiểu 2 ký tự và chọn một địa chỉ từ danh sách gợi ý.",
   addressAutocompleteLoading: "Đang tìm địa chỉ...",
   addressAutocompleteRequired: "Vui lòng chọn một địa chỉ từ gợi ý.",
+  addressAutocompleteSuggestion: "Địa chỉ gợi ý",
   addressSelected: "Đã chốt tọa độ",
   contactName: "Tên liên hệ",
   contactPhone: "Số điện thoại liên hệ",

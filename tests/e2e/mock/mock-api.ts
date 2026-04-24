@@ -88,7 +88,57 @@ async function fulfillJson(route: Route, status: number, body: unknown) {
   });
 }
 
+function getCookieValue(cookieHeader: string | undefined, key: string) {
+  return cookieHeader
+    ?.split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${key}=`))
+    ?.slice(key.length + 1);
+}
+
 export async function registerMockApiRoutes(page: Page) {
+  await page.route("**/api/auth/session/login", async (route) => {
+    if (route.request().method() !== "POST") {
+      return route.fallback();
+    }
+
+    const accessToken = createMockAccessToken("customer");
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: {
+        "Set-Cookie": `${accessTokenKey}=${accessToken}; Path=/; HttpOnly; SameSite=Lax`,
+      },
+      body: JSON.stringify({ accessToken }),
+    });
+  });
+
+  await page.route("**/api/auth/session", async (route) => {
+    const method = route.request().method();
+
+    if (method === "GET") {
+      const accessToken = getCookieValue(
+        route.request().headers().cookie,
+        accessTokenKey,
+      );
+
+      if (!accessToken) {
+        return route.fulfill({
+          status: 204,
+          headers: { "Cache-Control": "no-store" },
+        });
+      }
+
+      return fulfillJson(route, 200, { accessToken });
+    }
+
+    if (method === "DELETE") {
+      return fulfillJson(route, 200, { message: "Logged out" });
+    }
+
+    return route.fallback();
+  });
+
   await page.route(`${apiBaseUrl}/**`, async (route) => {
     const request = route.request();
     const url = new URL(request.url());
@@ -127,6 +177,10 @@ export async function registerMockApiRoutes(page: Page) {
 
     if (method === "GET" && pathname === "/orders") {
       return fulfillJson(route, 200, sampleOrdersPage);
+    }
+
+    if (method === "GET" && pathname === `/orders/${sampleOrder.id}`) {
+      return fulfillJson(route, 200, sampleOrder);
     }
 
     if (method === "POST" && pathname === "/orders/quote") {
@@ -185,7 +239,8 @@ export async function registerMockApiRoutes(page: Page) {
     }
 
     if (method === "GET" && pathname === "/maps/places/detail") {
-      const placeId = url.searchParams.get("placeid");
+      const placeId =
+        url.searchParams.get("placeId") ?? url.searchParams.get("placeid");
       return fulfillJson(route, 200, {
         result: {
           formatted_address:

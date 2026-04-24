@@ -92,6 +92,7 @@ export const trackingDetailCopy = {
     "Hệ thống đang đồng bộ dữ liệu hành trình mới nhất.",
   loadingEyebrow: "Đang tải",
   loadingTitle: "Đang tải dữ liệu hành trình mới nhất",
+  locationPending: "Chưa có cập nhật vị trí",
   notFoundEyebrow: "Không tìm thấy",
   notFoundTitle: "Không tìm thấy lô hàng công khai với mã theo dõi này",
   printLabels: "In nhãn",

@@ -1,4 +1,4 @@
-import { getOrderStatusLabel, orderTimelineCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatDate } from "@/utils/formatters";
 import type { OrderDTO } from "@/features/orders/domain/types/order.types";
 
@@ -7,6 +7,8 @@ type OrderTimelineProps = {
 };
 
 export default function OrderTimeline({ order }: OrderTimelineProps) {
+  const { getOrderStatusLabel, orderTimelineCopy } = useI18nCopy();
+
   return (
     <section className="rounded-[1.5rem] border border-border bg-card p-6">
       <div className="mb-5 flex items-center justify-between gap-4">
@@ -51,4 +53,3 @@ export default function OrderTimeline({ order }: OrderTimelineProps) {
     </section>
   );
 }
-

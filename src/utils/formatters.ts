@@ -1,12 +1,18 @@
-const DEFAULT_LOCALE = "vi-VN";
-const DEFAULT_TIME_ZONE = "Asia/Ho_Chi_Minh";
+import {
+  defaultTimeZone,
+  toIntlLocale,
+  type IntlLocale,
+  type Locale,
+} from "@/i18n/config";
+
+const DEFAULT_LOCALE: IntlLocale = "vi-VN";
 
 export function formatCurrency(
   value: number,
   currency = "USD",
-  locale = DEFAULT_LOCALE,
+  locale: IntlLocale | Locale = DEFAULT_LOCALE,
 ) {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(normalizeLocale(locale), {
     style: "currency",
     currency,
   }).format(value);
@@ -14,10 +20,10 @@ export function formatCurrency(
 
 export function formatDate(
   value: Date | number | string,
-  locale = DEFAULT_LOCALE,
-  timeZone = DEFAULT_TIME_ZONE,
+  locale: IntlLocale | Locale = DEFAULT_LOCALE,
+  timeZone = defaultTimeZone,
 ) {
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(normalizeLocale(locale), {
     dateStyle: "medium",
     timeStyle: "short",
     timeZone,
@@ -26,13 +32,17 @@ export function formatDate(
 
 export function formatDateOnly(
   value: Date | number | string,
-  locale = DEFAULT_LOCALE,
-  timeZone = DEFAULT_TIME_ZONE,
+  locale: IntlLocale | Locale = DEFAULT_LOCALE,
+  timeZone = defaultTimeZone,
 ) {
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(normalizeLocale(locale), {
     dateStyle: "medium",
     timeZone,
   }).format(new Date(value));
+}
+
+function normalizeLocale(locale: IntlLocale | Locale): IntlLocale {
+  return locale === "vi" || locale === "en" ? toIntlLocale(locale) : locale;
 }
 
 export function formatEnumLabel(value: string) {

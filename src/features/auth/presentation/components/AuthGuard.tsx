@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
+import { localizePath, type Locale } from "@/i18n/config";
 
 export interface AuthGuardProps {
   readonly children: React.ReactNode;
@@ -11,13 +13,14 @@ export interface AuthGuardProps {
 
 export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const { status, isHydrated } = useAuthStore();
 
   useEffect(() => {
     if (isHydrated && status === "anonymous") {
-      router.replace("/auth/login");
+      router.replace(localizePath("/auth/login", locale));
     }
-  }, [isHydrated, status, router]);
+  }, [isHydrated, locale, status, router]);
 
   // While hydrating or if anonymous, don't render children to prevent layout flashing
   if (!isHydrated || status === "anonymous") {

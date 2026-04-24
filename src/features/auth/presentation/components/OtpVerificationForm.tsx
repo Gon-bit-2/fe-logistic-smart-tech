@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { startTransition, useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
@@ -10,7 +11,7 @@ import { useForgotPasswordMutation } from "@/features/auth/presentation/hooks/us
 import { useRegisterWithOtpMutation } from "@/features/auth/presentation/hooks/useRegisterWithOtpMutation";
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
-import { otpVerificationCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 const OTP_LENGTH = 6;
 
@@ -19,6 +20,7 @@ function getInitialDigits() {
 }
 
 export default function OtpVerificationForm() {
+  const { otpVerificationCopy } = useI18nCopy();
   const router = useRouter();
   const searchParams = useSearchParams();
   const otpMode =

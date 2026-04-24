@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useDeferredValue, useState } from "react";
 import { useAutoDispatch, useTripsQuery, useUpdateTripStatus } from "@/features/trips/presentation/hooks/useTrips";
 import {

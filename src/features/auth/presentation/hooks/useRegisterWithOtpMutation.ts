@@ -7,13 +7,15 @@ import {
   clearOtpFlowState,
   getAuthSessionSnapshot,
 } from "@/features/auth/presentation/state/auth.store";
-import { authRuntimeCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type RegisterWithOtpMutationInput = {
   code: string;
 };
 
 export function useRegisterWithOtpMutation() {
+  const { authRuntimeCopy } = useI18nCopy();
+
   return useMutation<unknown, ApiError, RegisterWithOtpMutationInput>({
     mutationFn: async ({ code }: RegisterWithOtpMutationInput) => {
       const { pendingRegistration } = getAuthSessionSnapshot();
@@ -34,4 +36,3 @@ export function useRegisterWithOtpMutation() {
     },
   });
 }
-

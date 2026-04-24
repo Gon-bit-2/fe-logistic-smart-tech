@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { startTransition } from "react";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import AppIcon from "@/components/ui/app-icon";
@@ -13,7 +14,8 @@ import { useLoginMutation } from "@/features/auth/presentation/hooks/useLoginMut
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
 import { getDashboardHrefForRole } from "@/features/auth/application/services/auth-session";
 import type { AuthFormMode } from "@/features/auth/domain/types/auth.types";
-import { loginFormCopy } from "@/i18n/vi";
+import { localizePath, type Locale } from "@/i18n/config";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type LoginFormProps = {
   mode?: AuthFormMode;
@@ -23,8 +25,10 @@ const authInputClass =
   "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
 
 export default function LoginForm({ mode = "login" }: LoginFormProps) {
+  const { loginFormCopy } = useI18nCopy();
   const isRegister = mode === "register";
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const googleLoginMutation = useGoogleLoginMutation();
   const loginMutation = useLoginMutation();
   const requestOtpMutation = useRequestRegisterOtpMutation();
@@ -58,7 +62,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
 
         setStatus(loginFormCopy.registerSuccessStatus);
         startTransition(() => {
-          router.push("/auth/otp?mode=register");
+          router.push(`${localizePath("/auth/otp", locale)}?mode=register`);
         });
         return;
       }
@@ -75,11 +79,11 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         const extractedUser = extractUserFromToken(tokens.accessToken);
         
         startTransition(() => {
-          router.push(getDashboardHrefForRole(extractedUser?.role));
+          router.push(localizePath(getDashboardHrefForRole(extractedUser?.role), locale));
         });
       } catch {
         startTransition(() => {
-          router.push("/dashboard");
+          router.push(localizePath("/dashboard", locale));
         });
       }
     } catch {
@@ -309,4 +313,3 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
     </div>
   );
 }
-

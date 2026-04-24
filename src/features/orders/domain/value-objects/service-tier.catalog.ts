@@ -1,5 +1,6 @@
 import type { ServiceTier } from "@/features/orders/domain/types/order.types";
-import { serviceTierOptions } from "@/i18n/vi";
+import { getI18nCopy } from "@/i18n/copy-catalog";
+import type { Locale } from "@/i18n/config";
 
 export type ServiceTierOption = Readonly<{
   accent: "primary" | "tertiary" | "outline";
@@ -9,12 +10,17 @@ export type ServiceTierOption = Readonly<{
   label: string;
 }>;
 
-export const SERVICE_TIER_OPTIONS: readonly ServiceTierOption[] = serviceTierOptions;
+export const SERVICE_TIER_OPTIONS: readonly ServiceTierOption[] =
+  getI18nCopy("vi").serviceTierOptions;
 
-export function getServiceTierOption(serviceTier: ServiceTier) {
-  return (
-    SERVICE_TIER_OPTIONS.find((option) => option.id === serviceTier) ??
-    SERVICE_TIER_OPTIONS[0]
-  );
+export function getServiceTierOptions(locale?: Locale): readonly ServiceTierOption[] {
+  return getI18nCopy(locale).serviceTierOptions;
 }
 
+export function getServiceTierOption(serviceTier: ServiceTier, locale?: Locale) {
+  const serviceTierOptions = getServiceTierOptions(locale);
+  return (
+    serviceTierOptions.find((option) => option.id === serviceTier) ??
+    serviceTierOptions[0]
+  );
+}

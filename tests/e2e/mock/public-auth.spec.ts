@@ -15,7 +15,7 @@ test("loads the landing page and uses operations navigation", async ({ page }) =
   await page.goto("/tracking");
   await page.getByRole("link", { name: "Precision Logistics" }).click();
 
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/vi$/);
 });
 
 test("logs in and redirects to order creation", async ({ page }) => {
@@ -25,7 +25,7 @@ test("logs in and redirects to order creation", async ({ page }) => {
   await page.locator("input[type='password']").fill("Secret123");
   await page.getByRole("button", { name: "Truy cập hệ thống" }).click();
 
-  await expect(page).toHaveURL(/\/dashboard\/customer$/);
+  await expect(page).toHaveURL(/\/vi\/overview$/);
   await expect(page.getByText("Tổng quan Khách hàng")).toBeVisible();
 });
 
@@ -38,12 +38,12 @@ test("completes register and forgot-password OTP flows", async ({ page }) => {
   await page.locator("input[type='password']").fill("Secret123");
   await page.getByRole("button", { name: "Đăng ký và tiếp tục" }).click();
 
-  await expect(page).toHaveURL(/\/auth\/otp\?mode=register$/);
+  await expect(page).toHaveURL(/\/vi\/auth\/otp\?mode=register$/);
   for (let index = 0; index < 6; index += 1) {
     await page.getByLabel(`Chữ số OTP ${index + 1}`).fill("1");
   }
   await page.getByRole("button", { name: "Xác minh và hoàn tất" }).click();
-  await expect(page).toHaveURL(/\/auth\/login$/);
+  await expect(page).toHaveURL(/\/vi\/auth\/login$/);
 
   await page.goto("/auth/forgot-password");
   await page.getByLabel("Email tổ chức").fill("reset@emerald.com");
@@ -51,12 +51,12 @@ test("completes register and forgot-password OTP flows", async ({ page }) => {
   await page.locator("input[type='password']").nth(1).fill("NewSecret123");
   await page.getByRole("button", { name: "Gửi mã xác thực" }).click();
 
-  await expect(page).toHaveURL(/\/auth\/otp\?mode=forgot-password$/);
+  await expect(page).toHaveURL(/\/vi\/auth\/otp\?mode=forgot-password$/);
   for (let index = 0; index < 6; index += 1) {
     await page.getByLabel(`Chữ số OTP ${index + 1}`).fill("2");
   }
   await page.getByRole("button", { name: "Xác minh và đặt lại mật khẩu" }).click();
-  await expect(page).toHaveURL(/\/auth\/login$/);
+  await expect(page).toHaveURL(/\/vi\/auth\/login$/);
 });
 
 test("tracks public shipments for success and not-found states", async ({ page }) => {
@@ -64,14 +64,14 @@ test("tracks public shipments for success and not-found states", async ({ page }
   await page.getByPlaceholder("Nhập mã theo dõi").fill("ELG-2026-0001");
   await page.getByRole("button", { name: "Theo dõi đơn hàng" }).click();
 
-  await expect(page).toHaveURL(/\/tracking\/ELG-2026-0001$/);
+  await expect(page).toHaveURL(/\/vi\/tracking\/ELG-2026-0001$/);
   await expect(page.getByText("Đang vận chuyển").first()).toBeVisible();
 
   await page.goto("/tracking");
   await page.getByPlaceholder("Nhập mã theo dõi").fill("MISSING");
   await page.getByRole("button", { name: "Theo dõi đơn hàng" }).click();
 
-  await expect(page).toHaveURL(/\/tracking\/MISSING$/);
+  await expect(page).toHaveURL(/\/vi\/tracking\/MISSING$/);
   await expect(
     page.getByRole("heading", {
       name: "Không tìm thấy lô hàng công khai với mã theo dõi này",

@@ -15,7 +15,7 @@ import ServiceTierSelector from "@/features/orders/presentation/components/Servi
 import { useResolvedAddressField } from "@/features/orders/presentation/hooks/useResolvedAddressField";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
 import { useCreateOrder } from "@/features/orders/presentation/hooks/useCreateOrder";
-import { orderFormCopy, paymentMethodOptions } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatCurrency } from "@/utils/formatters";
 
 type OrderFormProps = Readonly<{
@@ -27,6 +27,7 @@ type OrderFormProps = Readonly<{
 }>;
 
 type AddressAutocompleteFieldProps = {
+  copy: ReturnType<typeof useI18nCopy>["orderFormCopy"];
   label: string;
   onChange: (nextValue: ResolvedOrderAddressInput) => void;
   value: ResolvedOrderAddressInput;
@@ -49,6 +50,7 @@ function toIsoString(value: string) {
 }
 
 function AddressAutocompleteField({
+  copy,
   label,
   onChange,
   value,
@@ -78,14 +80,14 @@ function AddressAutocompleteField({
           onChange={(event) => controller.setQuery(event.target.value)}
           onFocus={() => setIsFocused(true)}
           className="border-b border-outline-variant/25 focus:rounded-lg"
-          placeholder={orderFormCopy.addressAutocompleteHint}
+          placeholder={copy.addressAutocompleteHint}
         />
 
         {showSuggestions ? (
           <div className="absolute top-[calc(100%+0.5rem)] z-20 w-full overflow-hidden rounded-2xl border border-outline-variant/20 bg-white shadow-[0_24px_50px_-20px_rgba(6,78,59,0.3)]">
             {controller.isLoadingPredictions ? (
               <p className="px-4 py-3 text-sm text-slate-500">
-                {orderFormCopy.addressAutocompleteLoading}
+                {copy.addressAutocompleteLoading}
               </p>
             ) : (
               <ul className="max-h-64 overflow-y-auto py-2">
@@ -103,7 +105,7 @@ function AddressAutocompleteField({
                       <span className="text-sm font-semibold text-slate-900">
                         {prediction.structured_formatting?.main_text ??
                           prediction.description ??
-                          "Địa chỉ gợi ý"}
+                          copy.addressAutocompleteSuggestion}
                       </span>
                       <span className="text-xs text-slate-500">
                         {prediction.structured_formatting?.secondary_text ??
@@ -114,7 +116,7 @@ function AddressAutocompleteField({
                 ))}
                 {controller.predictions.length === 0 ? (
                   <li className="px-4 py-3 text-sm text-slate-500">
-                    {orderFormCopy.addressAutocompleteEmpty}
+                    {copy.addressAutocompleteEmpty}
                   </li>
                 ) : null}
               </ul>
@@ -125,16 +127,16 @@ function AddressAutocompleteField({
 
       <div className="min-h-5">
         {controller.isResolvingSelection ? (
-          <p className="text-xs text-primary">{orderFormCopy.resolvingAddress}</p>
+          <p className="text-xs text-primary">{copy.resolvingAddress}</p>
         ) : controller.isResolved ? (
           <p className="text-xs font-semibold text-primary">
-            {orderFormCopy.addressSelected}
+            {copy.addressSelected}
           </p>
         ) : controller.error ? (
           <p className="text-xs text-destructive">{controller.error}</p>
         ) : (
           <p className="text-xs text-on-surface-variant">
-            {orderFormCopy.addressAutocompleteRequired}
+            {copy.addressAutocompleteRequired}
           </p>
         )}
       </div>
@@ -149,6 +151,7 @@ export default function OrderForm({
   quoteState,
   value,
 }: OrderFormProps) {
+  const { orderFormCopy, paymentMethodOptions } = useI18nCopy();
   const { mutateAsync, isPending, order, error } = useCreateOrder();
   const [internalForm, setInternalForm] = useState(createEmptyOrderInput);
   const form = value ?? internalForm;
@@ -251,12 +254,14 @@ export default function OrderForm({
       <form className="space-y-8" onSubmit={handleSubmit}>
         <div className="grid gap-6 md:grid-cols-2">
           <AddressAutocompleteField
+            copy={orderFormCopy}
             label={orderFormCopy.pickupAddress}
             value={form.pickup}
             onChange={(nextValue) => updateAddressField("pickup", nextValue)}
           />
 
           <AddressAutocompleteField
+            copy={orderFormCopy}
             label={orderFormCopy.deliveryAddress}
             value={form.delivery}
             onChange={(nextValue) => updateAddressField("delivery", nextValue)}

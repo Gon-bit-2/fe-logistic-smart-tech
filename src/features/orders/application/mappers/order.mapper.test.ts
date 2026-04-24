@@ -51,4 +51,17 @@ describe("mapOrderApiToViewModel", () => {
       trackingCode: "cmabc123xyz",
     });
   });
+
+  it("uses the tracking code as the customer-facing reference when reference is missing", () => {
+    const viewModel = mapOrderApiToViewModel({
+      id: 202,
+      receiverAddress: "Kho B",
+      senderAddress: "Kho A",
+      status: "DELIVERED",
+      trackingCode: "TRK-20260421",
+    });
+
+    expect(viewModel.reference).toBe("TRK-20260421");
+    expect(viewModel.trackingCode).toBe("TRK-20260421");
+  });
 });

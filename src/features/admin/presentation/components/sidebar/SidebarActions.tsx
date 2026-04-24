@@ -1,16 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { CircleHelp, LogOut, Plus } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
-import { adminSidebarCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 export interface SidebarActionsProps {
   readonly config: AdminShellConfig;
 }
 
 export function SidebarActions({ config }: Readonly<SidebarActionsProps>) {
+  const { adminSidebarCopy } = useI18nCopy();
   const router = useRouter();
   const { logout } = useAuth();
   const isDashboard = config.topBarVariant === "dashboard";
@@ -80,7 +81,7 @@ export function SidebarActions({ config }: Readonly<SidebarActionsProps>) {
             className="inline-flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[0.72rem] font-medium uppercase tracking-[0.14em] text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
           >
             <CircleHelp className="size-4" />
-            Hỗ trợ
+            {adminSidebarCopy.helpCenter}
           </button>
           <button
             type="button"

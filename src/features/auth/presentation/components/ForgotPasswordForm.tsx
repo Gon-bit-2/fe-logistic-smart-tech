@@ -1,17 +1,18 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { startTransition, type FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
-import { forgotPasswordCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 const authInputClass =
   "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
 
 export default function ForgotPasswordForm() {
+  const { forgotPasswordCopy } = useI18nCopy();
   const router = useRouter();
   const requestOtpMutation = useRequestForgotPasswordOtpMutation();
   const [status, setStatus] = useState<string | null>(null);
@@ -130,4 +131,3 @@ export default function ForgotPasswordForm() {
     </div>
   );
 }
-

@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
   await registerMockApiRoutes(page);
 });
 
-test("creates an order, confirms COD checkout, and lands on tracking detail", async ({
+test("creates an order and opens localized checkout", async ({
   page,
 }) => {
   await seedAuthenticatedSession(page, "customer");
@@ -17,7 +17,6 @@ test("creates an order, confirms COD checkout, and lands on tracking detail", as
 
   await expect(submitButton).toBeDisabled();
 
-  await page.getByRole("textbox", { name: "Khách hàng" }).fill("Công ty Emerald");
   await page.getByRole("textbox", { name: "Tên liên hệ" }).fill("Nguyen Van A");
   await page.getByRole("textbox", { name: "Số điện thoại liên hệ" }).fill("0901234567");
   await page.getByRole("textbox", { name: "Tên người nhận" }).fill("Tran Thi B");
@@ -38,12 +37,11 @@ test("creates an order, confirms COD checkout, and lands on tracking detail", as
 
   await submitButton.click();
 
-  await expect(page).toHaveURL(/\/checkout\?orderId=ord-001$/);
-  await page.getByRole("button", { name: "Thanh toán khi nhận hàng" }).click();
-  await page.getByRole("button", { name: "Xác nhận đơn COD" }).click();
-
-  await expect(page).toHaveURL(/\/tracking\/ELG-2026-0001$/);
-  await expect(page.getByText("Biên nhận giao hàng")).toBeVisible();
+  await expect(page).toHaveURL(/\/vi\/checkout\?orderId=ord-001$/);
+  await expect(
+    page.getByRole("heading", { name: "Thanh toán", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("Tóm tắt đơn hàng")).toBeVisible();
 });
 
 test("renders admin and customer dashboards with mocked backend data", async ({

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import { createEmptyOrderInput } from "@/features/orders/domain/value-objects/order-form";
@@ -11,7 +12,8 @@ import type {
 import OrderForm from "@/features/orders/presentation/components/OrderForm";
 import RoutePreviewCard from "@/features/orders/presentation/components/RoutePreviewCard";
 import { useOrderQuote } from "@/features/orders/presentation/hooks/useOrderQuote";
-import { orderCreationWorkspaceCopy } from "@/i18n/vi";
+import { localizePath, type Locale } from "@/i18n/config";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type OrderCreationWorkspaceProps = Readonly<{
   showTopBar?: boolean;
@@ -20,17 +22,26 @@ type OrderCreationWorkspaceProps = Readonly<{
 export default function OrderCreationWorkspace({
   showTopBar = true,
 }: OrderCreationWorkspaceProps) {
+  const { orderCreationWorkspaceCopy } = useI18nCopy();
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const [form, setForm] = useState<CreateOrderInput>(createEmptyOrderInput);
   const quoteState = useOrderQuote(form);
 
   function handleSubmitSuccess(order: OrderDTO) {
     if (order.payment?.method === "COD") {
-      router.push(`/tracking/${order.trackingCode ?? order.reference}`);
+      const destination = localizePath(
+        `/tracking/${order.trackingCode ?? order.reference}`,
+        locale,
+      );
+      router.push(destination);
+      window.location.assign(destination);
       return;
     }
 
-    router.push(`/checkout?orderId=${order.id}`);
+    const checkoutUrl = `${localizePath("/checkout", locale)}?orderId=${order.id}`;
+    router.push(checkoutUrl);
+    window.location.assign(checkoutUrl);
   }
 
   return (

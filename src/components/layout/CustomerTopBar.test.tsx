@@ -57,7 +57,7 @@ describe("CustomerTopBar", () => {
     expect(screen.queryByRole("link", { name: "Thông báo" })).not.toBeInTheDocument();
     expect(screen.queryByText("Notifications panel")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Mở thông báo" }));
+    fireEvent.click(screen.getByRole("button", { name: "openNotifications" }));
 
     expect(screen.getByText("Notifications panel")).toBeInTheDocument();
   });

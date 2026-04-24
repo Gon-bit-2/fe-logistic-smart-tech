@@ -1,7 +1,7 @@
 "use client";
 
 import { type ChangeEvent, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
@@ -16,7 +16,7 @@ import { useTripDetailQuery } from "@/features/trips/presentation/hooks/useTrips
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import type { TrackingPackageCondition } from "@/features/tracking/domain/types/tracking.types";
-import { getOrderStatusLabel } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatDate } from "@/utils/formatters";
 
 type TripDetailWorkspaceProps = {
@@ -67,6 +67,7 @@ function getNextOrderActionLabel(
 export default function TripDetailWorkspace({
   tripId,
 }: Readonly<TripDetailWorkspaceProps>) {
+  const { getOrderStatusLabel } = useI18nCopy();
   const router = useRouter();
   const tripQuery = useTripDetailQuery(tripId);
   const trip = tripQuery.data ?? null;

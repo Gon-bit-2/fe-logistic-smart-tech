@@ -1,5 +1,5 @@
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
-import { sustainabilityScreenCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import CO2Dashboard from "@/features/green-tech/presentation/components/CO2Dashboard";
 import EmissionTimeline from "@/features/green-tech/presentation/components/EmissionTimeline";
 
@@ -11,6 +11,8 @@ export default function SustainabilityImpactScreen(
   _props: Readonly<SustainabilityImpactScreenProps>,
 ) {
   void _props;
+  const { sustainabilityScreenCopy } = useI18nCopy();
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -25,4 +27,3 @@ export default function SustainabilityImpactScreen(
     </div>
   );
 }
-

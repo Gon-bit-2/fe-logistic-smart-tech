@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Settings2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuthProfileQuery } from "@/features/auth/presentation/hooks/useAuthProfileQuery";

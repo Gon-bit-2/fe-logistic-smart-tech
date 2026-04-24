@@ -1,5 +1,5 @@
 import AppIcon from "@/components/ui/app-icon";
-import { getTrackingStepStatusLabel, trackingTimelineCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatDate } from "@/utils/formatters";
 import type { TrackingTimelineItem } from "@/features/tracking/domain/types/tracking.types";
 
@@ -8,6 +8,8 @@ type TrackingTimelineProps = {
 };
 
 export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
+  const { getTrackingStepStatusLabel, trackingTimelineCopy } = useI18nCopy();
+
   return (
     <section className="rounded-xl bg-surface-container-lowest p-6 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
       <div className="mb-5">
@@ -72,4 +74,3 @@ export default function TrackingTimeline({ stops }: TrackingTimelineProps) {
     </section>
   );
 }
-

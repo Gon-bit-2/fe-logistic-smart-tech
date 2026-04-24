@@ -8,9 +8,10 @@ import { useRegisterWithOtpMutation } from "@/features/auth/presentation/hooks/u
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
 import { getAuthSessionSnapshot } from "@/features/auth/presentation/state/auth.store";
-import { authRuntimeCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 export function useAuth() {
+  const { authRuntimeCopy } = useI18nCopy();
   const auth = useAuthSession();
   const loginMutation = useLoginMutation();
   const requestOtpMutation = useRequestRegisterOtpMutation();
@@ -21,6 +22,7 @@ export function useAuth() {
 
   return {
     ...auth,
+    isLoggingOut: logoutMutation.isPending,
     login: loginMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,
     requestForgotPasswordChallenge: requestForgotPasswordOtpMutation.mutateAsync,
@@ -40,4 +42,3 @@ export function useAuth() {
       registerMutation.mutateAsync({ code: input.code }),
   };
 }
-

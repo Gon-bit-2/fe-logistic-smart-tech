@@ -13,7 +13,7 @@ import {
   useCreateRoleRequest,
   useMyRoleRequestsQuery,
 } from "@/features/role-requests/presentation/hooks/useRoleRequests";
-import { roleRequestCenterCopy } from "@/i18n/vi/roleRequests";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate, formatEnumLabel } from "@/utils/formatters";
 import type { TargetRoleName } from "@/features/role-requests/domain/types/role-request.types";
@@ -34,7 +34,12 @@ function getStatusTone(status: string) {
   return "amber" as const;
 }
 
-function getRoleRequestLoadErrorMessage(error: unknown) {
+type RoleRequestCenterCopy = ReturnType<typeof useI18nCopy>["roleRequestCenterCopy"];
+
+function getRoleRequestLoadErrorMessage(
+  error: unknown,
+  roleRequestCenterCopy: RoleRequestCenterCopy,
+) {
   if (error instanceof ApiError) {
     if (error.status === 401) return roleRequestCenterCopy.loadErrorUnauthorized;
     if (error.status === 403) return roleRequestCenterCopy.loadErrorForbidden;
@@ -43,6 +48,7 @@ function getRoleRequestLoadErrorMessage(error: unknown) {
 }
 
 export default function RoleRequestCenterScreen() {
+  const { roleRequestCenterCopy } = useI18nCopy();
   const { user } = useAuthSession();
   const roleRequestsQuery = useMyRoleRequestsQuery({ limit: 10, page: 1 });
   const createRoleRequestMutation = useCreateRoleRequest();
@@ -89,7 +95,10 @@ export default function RoleRequestCenterScreen() {
     return (
       <ErrorState
         title="Không thể tải role requests"
-        description={getRoleRequestLoadErrorMessage(roleRequestsQuery.error)}
+        description={getRoleRequestLoadErrorMessage(
+          roleRequestsQuery.error,
+          roleRequestCenterCopy,
+        )}
       />
     );
   }

@@ -2,9 +2,9 @@
 
 import React, { useRef } from "react";
 import { BrainCircuit, Route, ShieldCheck, TimerReset } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { featuresSectionCopy } from "@/i18n/vi";
 import { useLandingReveal } from "@/features/landing/presentation/components/useLandingReveal";
 
 const iconMap = {
@@ -13,7 +13,29 @@ const iconMap = {
   shield: ShieldCheck,
 } as const;
 
+type FeatureCard = {
+  description: string;
+  icon: keyof typeof iconMap;
+  metric: string;
+  title: string;
+};
+
+type DashboardStat = {
+  label: string;
+  value: string;
+};
+
+type BoardMetric = {
+  fill: string;
+  label: string;
+  value: string;
+};
+
 export default function FeaturesSection() {
+  const t = useTranslations("landing.features");
+  const featureCards = t.raw("featureCards") as FeatureCard[];
+  const dashboardStats = t.raw("dashboardStats") as DashboardStat[];
+  const boardMetrics = t.raw("boardMetrics") as BoardMetric[];
   const sectionRef = useRef<HTMLElement>(null);
 
   useLandingReveal(sectionRef);
@@ -27,20 +49,20 @@ export default function FeaturesSection() {
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="mx-auto max-w-3xl space-y-5 text-center">
           <Badge variant="outline" className="border-primary/15 bg-white/65 px-3 py-1 text-[11px] font-bold tracking-[0.24em] uppercase text-primary">
-            {featuresSectionCopy.eyebrow}
+            {t("eyebrow")}
           </Badge>
           <h2 className="text-4xl font-black tracking-tight text-on-surface md:text-6xl">
-            {featuresSectionCopy.title}{" "}
-            <span className="text-primary">{featuresSectionCopy.titleHighlight}</span>
+            {t("title")}{" "}
+            <span className="text-primary">{t("titleHighlight")}</span>
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-8 text-on-surface-variant">
-            {featuresSectionCopy.description}
+            {t("description")}
           </p>
         </div>
 
         <div className="mt-16 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {featuresSectionCopy.featureCards.map((feature) => {
+            {featureCards.map((feature) => {
               const Icon = iconMap[feature.icon];
 
               return (
@@ -78,13 +100,13 @@ export default function FeaturesSection() {
               <div className="flex items-start justify-between gap-6">
                 <div className="max-w-md">
                   <Badge className="bg-white/8 px-3 py-1 text-[11px] font-bold tracking-[0.24em] uppercase text-primary-fixed">
-                    Live control tower
+                    {t("controlTowerEyebrow")}
                   </Badge>
                   <h3 className="mt-5 text-3xl font-black tracking-tight md:text-4xl">
-                    {featuresSectionCopy.spotlightTitle}
+                    {t("spotlightTitle")}
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-white/74 md:text-base">
-                    {featuresSectionCopy.spotlightDescription}
+                    {t("spotlightDescription")}
                   </p>
                 </div>
                 <div className="hidden rounded-2xl border border-white/10 bg-white/5 p-4 xl:block">
@@ -93,7 +115,7 @@ export default function FeaturesSection() {
               </div>
 
               <div className="mt-10 grid gap-4 md:grid-cols-3">
-                {featuresSectionCopy.dashboardStats.map((stat) => (
+                {dashboardStats.map((stat) => (
                   <div
                     key={stat.label}
                     className="rounded-[1.5rem] border border-white/10 bg-white/7 p-5"
@@ -109,9 +131,9 @@ export default function FeaturesSection() {
               <div className="mt-8 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#10392b] p-5 shadow-inner shadow-black/20">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <div>
-                    <p className="text-sm font-bold text-white">Fleet board</p>
+                    <p className="text-sm font-bold text-white">{t("boardTitle")}</p>
                     <p className="text-xs tracking-[0.22em] text-white/45 uppercase">
-                      Predictive routing
+                      {t("boardSubtitle")}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -122,11 +144,7 @@ export default function FeaturesSection() {
                 </div>
 
                 <div className="mt-5 space-y-4">
-                  {[
-                    { fill: "86%", label: "Xe đang đúng ETA", value: "142/165" },
-                    { fill: "73%", label: "Đơn được tự động gợi ý tuyến", value: "927" },
-                    { fill: "58%", label: "Rủi ro được cảnh báo sớm", value: "41 case" },
-                  ].map((row) => (
+                  {boardMetrics.map((row) => (
                     <div key={row.label} className="space-y-2">
                       <div className="flex items-center justify-between text-sm text-white/72">
                         <span>{row.label}</span>

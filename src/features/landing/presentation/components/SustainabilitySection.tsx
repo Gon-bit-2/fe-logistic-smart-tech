@@ -2,9 +2,9 @@
 
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { sustainabilitySectionCopy } from "@/i18n/vi";
 import { useLandingReveal } from "@/features/landing/presentation/components/useLandingReveal";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,6 +15,11 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 type SustainabilitySceneState = {
   carbonLevel: number;
   val: number;
+};
+
+type ImpactStat = {
+  label: string;
+  value: string;
 };
 
 const SustainabilityParticleScene = dynamic(
@@ -28,6 +33,9 @@ const SustainabilityParticleScene = dynamic(
 );
 
 export default function SustainabilitySection() {
+  const t = useTranslations("landing.sustainability");
+  const impactStats = t.raw("impactStats") as ImpactStat[];
+  const commitments = t.raw("commitments") as string[];
   const sectionRef = useRef<HTMLElement>(null);
   const sceneStateRef = useRef<SustainabilitySceneState>({
     carbonLevel: 0.2,
@@ -69,21 +77,21 @@ export default function SustainabilitySection() {
         <div className="space-y-8">
           <div data-reveal className="space-y-5">
             <Badge variant="outline" className="border-primary/15 bg-white/70 px-3 py-1 text-[11px] font-bold tracking-[0.24em] uppercase text-primary">
-              {sustainabilitySectionCopy.eyebrow}
+              {t("eyebrow")}
             </Badge>
             <h2 className="max-w-xl text-4xl font-black leading-[1.04] tracking-tight text-on-surface md:text-7xl">
-              {sustainabilitySectionCopy.title}{" "}
+              {t("title")}{" "}
               <span className="text-primary">
-                {sustainabilitySectionCopy.titleHighlight}
+                {t("titleHighlight")}
               </span>
             </h2>
             <p className="max-w-2xl text-lg leading-8 text-on-surface-variant">
-              {sustainabilitySectionCopy.description}
+              {t("description")}
             </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            {sustainabilitySectionCopy.impactStats.map((stat) => (
+            {impactStats.map((stat) => (
               <Card
                 key={stat.label}
                 data-reveal
@@ -109,19 +117,19 @@ export default function SustainabilitySection() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-black tracking-[0.24em] text-primary uppercase">
-                    {sustainabilitySectionCopy.pendingTitle}
+                    {t("pendingTitle")}
                   </p>
                   <p className="mt-2 max-w-xl text-sm leading-7 text-on-surface-variant md:text-base">
-                    {sustainabilitySectionCopy.pendingDescription}
+                    {t("pendingDescription")}
                   </p>
                 </div>
                 <div className="hidden rounded-full bg-primary-fixed/40 px-4 py-2 text-sm font-bold text-primary md:block">
-                  ESG Ready
+                  {t("esgBadge")}
                 </div>
               </div>
 
               <div className="mt-6 grid gap-3">
-                {sustainabilitySectionCopy.commitments.map((item) => (
+                {commitments.map((item) => (
                   <div
                     key={item}
                     className="flex items-start gap-3 rounded-2xl bg-surface-container-low px-4 py-3"
@@ -146,19 +154,19 @@ export default function SustainabilitySection() {
 
             <div className="absolute left-6 top-6 rounded-2xl border border-white/65 bg-white/78 px-4 py-3 shadow-lg backdrop-blur-xl">
               <p className="text-xs font-black tracking-[0.22em] text-primary uppercase">
-                Smart carbon routing
+                {t("routingEyebrow")}
               </p>
               <p className="mt-1 text-sm text-on-surface-variant">
-                Ưu tiên tuyến ít phát thải nhưng vẫn giữ SLA.
+                {t("routingDescription")}
               </p>
             </div>
 
             <div className="absolute bottom-6 right-6 rounded-2xl border border-[#1a4f3d]/10 bg-[#0d2f23] px-5 py-4 text-white shadow-2xl">
               <p className="text-xs font-black tracking-[0.24em] text-primary-fixed uppercase">
-                Emission score
+                {t("emissionScoreLabel")}
               </p>
               <div className="mt-2 text-4xl font-black text-primary-fixed">A+</div>
-              <p className="mt-1 text-sm text-white/70">Tối ưu xanh trên mỗi km vận hành</p>
+              <p className="mt-1 text-sm text-white/70">{t("emissionScoreDescription")}</p>
             </div>
           </div>
         </div>

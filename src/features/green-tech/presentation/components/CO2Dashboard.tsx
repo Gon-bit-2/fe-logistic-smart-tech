@@ -1,9 +1,10 @@
 "use client";
 
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
-import { co2DashboardCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 export default function CO2Dashboard() {
+  const { co2DashboardCopy } = useI18nCopy();
   const { data, isLoading, isError } = useEmissionAnalytics();
 
   const totalCo2Emitted = data?.reduce((sum, item) => sum + Number(item.co2Emitted), 0) ?? 0;

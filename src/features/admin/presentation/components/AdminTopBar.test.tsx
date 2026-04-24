@@ -6,7 +6,19 @@ import AdminTopBar from "./AdminTopBar";
 vi.mock("@/features/auth/presentation/hooks/useAuthSession", () => ({
   useAuthSession: () => ({
     user: {
+      id: 1,
       role: "admin",
+      roleId: 1,
+    },
+  }),
+}));
+
+vi.mock("@/features/auth/presentation/hooks/useAuthProfileQuery", () => ({
+  useAuthProfileQuery: () => ({
+    data: {
+      avatarUrl: null,
+      fullName: "Admin User",
+      initials: "AD",
     },
   }),
 }));

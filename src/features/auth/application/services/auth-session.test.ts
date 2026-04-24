@@ -8,7 +8,7 @@ import {
 describe("auth-session route helpers", () => {
   it("returns dashboard hrefs by role", () => {
     expect(getDashboardHrefForRole("admin")).toBe("/dashboard/admin");
-    expect(getDashboardHrefForRole("customer")).toBe("/dashboard/customer");
+    expect(getDashboardHrefForRole("customer")).toBe("/overview");
     expect(getDashboardHrefForRole("driver")).toBe("/dashboard/driver");
   });
 
@@ -16,14 +16,14 @@ describe("auth-session route helpers", () => {
     expect(getNotificationsHrefForRole("admin")).toBe(
       "/dashboard/admin/notifications",
     );
-    expect(getNotificationsHrefForRole("customer")).toBe("/dashboard/customer?notifications=1");
+    expect(getNotificationsHrefForRole("customer")).toBe("/notifications");
     expect(getNotificationsHrefForRole("warehouse_staff")).toBe(
       "/dashboard/warehouse/notifications",
     );
   });
 
   it("returns role request hrefs by role", () => {
-    expect(getRoleRequestHrefForRole("customer")).toBe("/dashboard/customer/roles");
+    expect(getRoleRequestHrefForRole("customer")).toBe("/role-requests");
     expect(getRoleRequestHrefForRole("driver")).toBe("/dashboard/driver/roles");
   });
 });

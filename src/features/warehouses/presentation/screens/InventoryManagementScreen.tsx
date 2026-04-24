@@ -15,7 +15,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
-import { inventoryScreenCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
@@ -28,6 +28,7 @@ export default function InventoryManagementScreen(
   _props: Readonly<InventoryManagementScreenProps>,
 ) {
   void _props;
+  const { inventoryScreenCopy } = useI18nCopy();
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const hubsQuery = useHubsQuery();

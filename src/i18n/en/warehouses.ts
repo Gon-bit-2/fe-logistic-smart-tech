@@ -1,0 +1,65 @@
+export const inventoryScreenCopy = {
+  activeInventoryLedger: "Active inventory ledger",
+  centralHubDescription:
+    "Automated cold-chain handling for sensitive goods and pharmaceuticals across the northern corridor.",
+  centralHubTitle: "Distribution center A1",
+  emptyDescription:
+    "The system has not recorded distribution center data or you do not have access.",
+  emptyTitle: "No distribution center data",
+  filters: "Filters",
+  headings: [
+    "Hub ID",
+    "Hub name",
+    "Address",
+    "Coordinates",
+    "Status",
+  ],
+  hubSubtitle: "Real-time monitoring for the Precision logistics network.",
+  hubTitle: "Distribution center management",
+  hubVehiclePending: "Detailed inventory data is being synchronized.",
+  integrationPendingDescription:
+    "Inventory ledger, scanning, and alert features will work after the system connects successfully to warehouses.",
+  integrationPendingTitle: "Detailed inventory data waiting for integration",
+  lowStockAlert: "Low stock alert",
+  lowStockDescription:
+    "Lithium Cell Packs (Unit-82) are below the alert threshold.",
+  loadingDescription: "Loading distribution centers from the system...",
+  loadingTitle: "Loading warehouse data",
+  manageFacility: "Manage facility",
+  metricPendingDispatch: "Pending dispatch",
+  metricStorageCapacity: "Storage capacity",
+  metricTotalStock: "Total stock",
+  recordsButton: "View all hubs",
+  searchPlaceholder: "Search SKU...",
+  solarEfficiency: "Solar grid efficiency",
+  solarTitle: "Sustainability indicator",
+  stockChips: ["Hubs API", "Realtime shell"],
+  stockSupporting: "Aggregated from available hub data",
+  used: "used",
+} as const;
+
+export const warehouseHubScreenCopy = {
+  destinationHub: "Destination",
+  flagged: "Needs attention",
+  inbound: "Inbound",
+  itemType: "Item type",
+  logisticsMap: "View logistics map",
+  nextFleetArrival: "Next fleet arrival",
+  outbound: "Outbound",
+  pageTitle: "Warehouse management",
+  processed: "Processed",
+  readyForInput: "Ready for input",
+  route: "Route",
+  scanPlaceholder: "Scan tracking code...",
+  shiftEfficiency: "Shift efficiency: 94.2%",
+  shiftText:
+    "The warehouse is operating at peak capacity. 450 packages were scanned in the last 2 hours without errors.",
+  showing: "Showing 4 / 128 shipments",
+  status: "Status",
+  submit: "Submit",
+  trackingId: "Tracking ID",
+  weight: "Weight",
+  pendingDescription:
+    "The scanning interface is ready. The package list will appear when scanner data is available.",
+  pendingTitle: "System is waiting for scanner data",
+} as const;

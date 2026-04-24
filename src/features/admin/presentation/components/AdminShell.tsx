@@ -1,10 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
 import AdminSidebar from "@/features/admin/presentation/components/AdminSidebar";
 import AdminTopBar from "@/features/admin/presentation/components/AdminTopBar";
-import { adminShellConfigByPath } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 export interface AdminShellProps {
@@ -12,6 +12,7 @@ export interface AdminShellProps {
 }
 
 export default function AdminShell({ children }: Readonly<AdminShellProps>) {
+  const { adminShellConfigByPath } = useI18nCopy();
   const pathname = usePathname();
   const config =
     adminShellConfigByPath[pathname] ?? adminShellConfigByPath["/dashboard/admin"];
@@ -48,4 +49,3 @@ export default function AdminShell({ children }: Readonly<AdminShellProps>) {
     </div>
   );
 }
-

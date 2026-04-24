@@ -1,5 +1,5 @@
 import AppIcon from "@/components/ui/app-icon";
-import { proofOfDeliveryCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import Image from "next/image";
 
 type ProofOfDeliveryCardProps = {
@@ -15,6 +15,7 @@ export default function ProofOfDeliveryCard({
   recipient,
   trackingCode,
 }: ProofOfDeliveryCardProps) {
+  const { proofOfDeliveryCopy } = useI18nCopy();
   return (
     <section className="rounded-xl bg-surface-container-lowest p-6 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
       <div className="mb-5">
