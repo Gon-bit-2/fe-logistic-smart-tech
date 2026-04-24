@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Bell, CircleHelp, Search, Settings2 } from "lucide-react";
+import AuthUserMenu from "@/components/layout/AuthUserMenu";
+import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 import { getNotificationsHrefForRole } from "@/features/auth/application/services/auth-session";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
-import { adminTopBarCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 export interface AdminTopBarProps {
@@ -18,6 +20,7 @@ export default function AdminTopBar({
   config,
   pathname,
 }: Readonly<AdminTopBarProps>) {
+  const { adminTopBarCopy } = useI18nCopy();
   const { user } = useAuthSession();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
@@ -25,6 +28,7 @@ export default function AdminTopBar({
   const showSearch = config.topBarVariant !== "warehouse";
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
+  const adminInitials = config.initials ?? "AD";
 
   if (isDashboard) {
     return (
@@ -64,6 +68,7 @@ export default function AdminTopBar({
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
+            <LocaleSwitcher className="hidden lg:inline-flex" />
             <Link
               href={notificationsHref}
               className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
@@ -83,9 +88,13 @@ export default function AdminTopBar({
               <Settings2 className="size-[1.125rem]" />
             </button>
             <div className="hidden h-6 w-px bg-outline-variant/30 md:block" />
-            <div className="flex size-8 items-center justify-center rounded-full border-2 border-primary-container bg-gradient-to-br from-surface-container-lowest to-primary-fixed/20 text-[0.65rem] font-black uppercase text-primary">
-              {config.initials}
-            </div>
+            <AuthUserMenu
+              defaultFullName={adminTopBarCopy.adminLabel}
+              fallbackInitials={adminInitials}
+              logoutLabel={adminTopBarCopy.logoutLabel}
+              profileLabel={adminTopBarCopy.profileLabel}
+              triggerClassName="border-primary-container bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
+            />
           </div>
         </div>
       </header>
@@ -125,6 +134,7 @@ export default function AdminTopBar({
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
+            <LocaleSwitcher className="hidden lg:inline-flex" />
             <Link
               href={notificationsHref}
               className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
@@ -150,9 +160,13 @@ export default function AdminTopBar({
             >
               <CircleHelp className="size-[1.125rem]" />
             </button>
-            <div className="flex size-8 items-center justify-center rounded-full border border-primary-fixed/35 bg-gradient-to-br from-surface-container-lowest to-primary-fixed/25 text-[0.65rem] font-black uppercase text-primary">
-              {config.initials}
-            </div>
+            <AuthUserMenu
+              defaultFullName={adminTopBarCopy.adminLabel}
+              fallbackInitials={adminInitials}
+              logoutLabel={adminTopBarCopy.logoutLabel}
+              profileLabel={adminTopBarCopy.profileLabel}
+              triggerClassName="border-primary-fixed/35 bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
+            />
           </div>
         </div>
       </header>
@@ -181,6 +195,7 @@ export default function AdminTopBar({
         </div>
 
         <div className="flex flex-wrap items-center gap-3 md:justify-end">
+          <LocaleSwitcher />
           <Link
             href={notificationsHref}
             className="relative rounded-full p-2 text-on-surface/55 transition-colors hover:bg-surface-container-lowest hover:text-primary"
@@ -209,14 +224,13 @@ export default function AdminTopBar({
             </button>
           ) : null}
 
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-full border-2 border-primary-fixed/35 bg-gradient-to-br from-surface-container-lowest to-primary-fixed/20 text-[0.68rem] font-black uppercase text-primary">
-              {config.initials}
-            </div>
-            <span className="hidden text-sm font-semibold text-on-surface md:inline">
-              {adminTopBarCopy.adminLabel}
-            </span>
-          </div>
+          <AuthUserMenu
+            defaultFullName={adminTopBarCopy.adminLabel}
+            fallbackInitials={adminInitials}
+            logoutLabel={adminTopBarCopy.logoutLabel}
+            profileLabel={adminTopBarCopy.profileLabel}
+            triggerClassName="border-primary-fixed/35 bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
+          />
         </div>
       </div>
     </header>

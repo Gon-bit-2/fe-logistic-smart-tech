@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
-import { adminNavItems } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 export interface SidebarNavItemsProps {
@@ -11,6 +11,7 @@ export interface SidebarNavItemsProps {
 }
 
 export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsProps>) {
+  const { adminNavItems } = useI18nCopy();
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
 

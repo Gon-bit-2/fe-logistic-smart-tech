@@ -1,21 +1,21 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import {
   Bell,
   Home,
-  LogOut,
   Package,
   ShieldCheck,
   Truck,
-  UserRound,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import AuthUserMenu from "@/components/layout/AuthUserMenu";
+import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
-import { useAuthProfileQuery } from "@/features/auth/presentation/hooks/useAuthProfileQuery";
 import CustomerNotificationsPanel from "@/features/notifications/presentation/components/CustomerNotificationsPanel";
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
 import { cn } from "@/lib/utils";
@@ -28,54 +28,42 @@ type WarehouseNavItem = {
   label: string;
 };
 
-const warehouseNavItems: WarehouseNavItem[] = [
-  {
-    href: "/dashboard/warehouse",
-    icon: <Home className="size-4" />,
-    isActive: (pathname) => pathname === "/dashboard/warehouse",
-    label: "Trạm Quét Mã",
-  },
-  {
-    href: "/dashboard/warehouse/orders",
-    icon: <Package className="size-4" />,
-    isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/orders"),
-    label: "Đơn hàng",
-  },
-  {
-    href: "/dashboard/warehouse/trips",
-    icon: <Truck className="size-4" />,
-    isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/trips"),
-    label: "Chuyến xe",
-  },
-  {
-    href: "/dashboard/warehouse/roles",
-    icon: <ShieldCheck className="size-4" />,
-    isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/roles"),
-    label: "Role",
-  },
-];
-
 export default function WarehouseTopBar() {
+  const t = useTranslations("warehouseTopBar");
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { logout, user } = useAuth();
-  const profileQuery = useAuthProfileQuery(Boolean(user));
+  const { user } = useAuth();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const bellContainerRef = useRef<HTMLDivElement | null>(null);
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
-  const fullName = profileQuery.data?.fullName ?? "Warehouse workspace";
-  const avatarUrl = profileQuery.data?.avatarUrl ?? null;
-  const fallbackInitials =
-    fullName
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((segment) => segment[0]?.toUpperCase() ?? "")
-      .join("") || "WH";
-  const initials =
-    profileQuery.data?.initials ?? fallbackInitials;
   const shouldOpenNotifications = searchParams.get("notifications") === "1";
+  const warehouseNavItems: WarehouseNavItem[] = [
+    {
+      href: "/dashboard/warehouse",
+      icon: <Home className="size-4" />,
+      isActive: (pathname) => pathname === "/dashboard/warehouse",
+      label: t("nav.scanStation"),
+    },
+    {
+      href: "/dashboard/warehouse/orders",
+      icon: <Package className="size-4" />,
+      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/orders"),
+      label: t("nav.orders"),
+    },
+    {
+      href: "/dashboard/warehouse/trips",
+      icon: <Truck className="size-4" />,
+      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/trips"),
+      label: t("nav.trips"),
+    },
+    {
+      href: "/dashboard/warehouse/roles",
+      icon: <ShieldCheck className="size-4" />,
+      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/roles"),
+      label: t("nav.role"),
+    },
+  ];
 
   useEffect(() => {
     if (!shouldOpenNotifications) {
@@ -119,10 +107,10 @@ export default function WarehouseTopBar() {
               href="/dashboard/warehouse"
               className="text-base md:text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
             >
-              Emerald Warehouse Hub
+              {t("brand")}
             </Link>
             <div className="flex flex-wrap items-center gap-2 text-[11px] md:text-xs text-slate-500">
-              <span className="hidden sm:inline">Kiểm soát luồng hàng hóa và điều phối trạm kho</span>
+              <span className="hidden sm:inline">{t("subtitle")}</span>
               <Badge className="h-4 rounded-full bg-emerald-100 px-1.5 text-[9px] font-bold uppercase text-emerald-800">
                 {formatEnumLabel(user?.role ?? "warehouse_staff")}
               </Badge>
@@ -130,6 +118,7 @@ export default function WarehouseTopBar() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
+            <LocaleSwitcher className="hidden md:inline-flex" />
             <div ref={bellContainerRef} className="relative">
               <button
                 type="button"
@@ -142,7 +131,7 @@ export default function WarehouseTopBar() {
                 )}
                 aria-expanded={isNotificationsOpen}
                 aria-haspopup="dialog"
-                aria-label="Mở thông báo"
+                aria-label={t("openNotifications")}
               >
                 <Bell className="size-4" />
                 {unreadCount > 0 ? (
@@ -161,27 +150,12 @@ export default function WarehouseTopBar() {
               ) : null}
             </div>
 
-            <div className="group flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-2 py-1 text-left shadow-sm transition-all hover:-translate-y-0.5 cursor-default">
-              <Avatar className="size-8 ring-2 ring-emerald-100">
-                <AvatarImage alt={fullName} src={avatarUrl ?? undefined} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-              <div className="hidden min-w-0 sm:block">
-                <p className="max-w-32 truncate text-xs font-bold text-emerald-950">
-                  {fullName}
-                </p>
-                <p className="text-[10px] text-slate-500 leading-tight">Hồ sơ</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => void logout()}
-              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-950 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-800"
-            >
-              <LogOut className="size-3.5" />
-              <span className="hidden sm:inline">Đăng xuất</span>
-            </button>
+            <AuthUserMenu
+              defaultFullName="Warehouse workspace"
+              fallbackInitials="WH"
+              logoutLabel={t("logout")}
+              profileLabel={t("profile")}
+            />
           </div>
         </div>
 

@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import { ErrorState } from "@/components/ui/data-states";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
-import { analyticsScreenCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import type { AnalyticsDateRange } from "@/features/analytics/domain/types/analytics.types";
 import { useDashboardAnalytics } from "@/features/analytics/presentation/hooks/useDashboardAnalytics";
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
@@ -31,6 +31,7 @@ export default function AnalyticsDashboardScreen(
   _props: Readonly<AnalyticsDashboardScreenProps>,
 ) {
   void _props;
+  const { analyticsScreenCopy } = useI18nCopy();
   const [dateRange, setDateRange] = useState<AnalyticsDateRange>("30d");
   const filterOptions: ReadonlyArray<{ label: string; value: AnalyticsDateRange }> = [
     { label: "7 ngày", value: "7d" },
@@ -215,4 +216,3 @@ export default function AnalyticsDashboardScreen(
     </div>
   );
 }
-

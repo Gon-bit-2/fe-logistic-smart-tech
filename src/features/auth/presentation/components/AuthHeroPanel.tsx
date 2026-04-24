@@ -1,11 +1,12 @@
 import AppIcon from "@/components/ui/app-icon";
-import { authHeroPanelContent } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type AuthHeroPanelProps = Readonly<{
   variant: "auth" | "otp";
 }>;
 
 export default function AuthHeroPanel({ variant }: AuthHeroPanelProps) {
+  const { authHeroPanelContent } = useI18nCopy();
   const content = authHeroPanelContent[variant];
 
   return (

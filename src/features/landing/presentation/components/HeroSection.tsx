@@ -6,13 +6,13 @@
  */
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { heroData } from "@/i18n/vi";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -31,6 +31,7 @@ const HeroLogisticsScene = dynamic(
 );
 
 export default function HeroSection() {
+  const t = useTranslations("landing.hero");
   const containerRef = useRef<HTMLElement>(null);
   const sceneStateRef = useRef<HeroSceneState>({ progress: 0 });
 
@@ -77,33 +78,32 @@ export default function HeroSection() {
 
       <div className="relative z-10 mx-auto max-w-5xl px-8 pt-20 text-center">
         <h1 className="hero-anim mb-8 text-5xl leading-[1.1] font-extrabold tracking-tighter text-white md:text-8xl">
-          {heroData.titleLine1} <br />
+          {t("titleLine1")} <br />
           <span className="text-primary-fixed italic">
-            {heroData.titleLine2}
+            {t("titleLine2")}
           </span>
         </h1>
 
         <p className="hero-anim mx-auto mb-12 max-w-2xl text-xl font-medium text-white/80 md:text-2xl">
-          {heroData.description}
+          {t("description")}
         </p>
 
         <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
           <Button asChild className="hero-anim w-full rounded-lg bg-primary-fixed px-10 py-7 text-sm font-black tracking-widest text-on-primary-fixed uppercase shadow-xl transition-all hover:bg-primary-fixed hover:brightness-110 active:scale-95 sm:w-auto">
             <Link href="/dashboard">
-              {heroData.primaryCta}
+              {t("primaryCta")}
             </Link>
           </Button>
           <Button className="hero-anim flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-10 py-7 text-sm font-black tracking-widest text-white uppercase backdrop-blur-md transition-all hover:bg-white/20 sm:w-auto">
             <AppIcon name="play_circle" />
-            {heroData.secondaryCta}
+            {t("secondaryCta")}
           </Button>
         </div>
 
         <div className="hero-anim mt-16 text-sm font-bold tracking-widest text-white/60 uppercase">
-          {heroData.trustedHint}
+          {t("trustedHint")}
         </div>
       </div>
     </section>
   );
 }
-

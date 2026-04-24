@@ -19,7 +19,7 @@ import { useUpdateVehicle } from "@/features/fleet/presentation/hooks/useUpdateV
 import { useDeleteVehicle } from "@/features/fleet/presentation/hooks/useDeleteVehicle";
 import { useImageUpload } from "@/lib/hooks/useImageUpload";
 import ImageUploadField from "@/components/ui/ImageUploadField";
-import { fleetScreenCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatEnumLabel } from "@/utils/formatters";
 import type {
   CreateVehicleInput,
@@ -53,6 +53,7 @@ export default function FleetOperationsScreen(
   _props: Readonly<FleetOperationsScreenProps>,
 ) {
   void _props;
+  const { fleetScreenCopy } = useI18nCopy();
 
   // === Queries & Mutations ===
   const vehiclesQuery = useFleetVehiclesQuery();

@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "appTitle": "Smart logistics platform",
+    "appDescription": "A smart logistics interface for shipment tracking, fleet operations, and sustainable dispatching.",
+    "homeTitle": "Emerald Logistics | Sustainable Delivery",
+    "homeDescription": "Green and efficient logistics solutions for your business."
+  },
+  "language": {
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "switcherLabel": "Change language"
+  },
+  "navbar": {
+    "brand": "Emerald Logistics",
+    "loginLabel": "Log in",
+    "registerLabel": "Sign up",
+    "navItems": [
+      { "href": "#features", "label": "Features" },
+      { "href": "#solutions", "label": "Solutions" },
+      { "href": "/tracking", "label": "Track shipment" },
+      { "href": "#sustainability", "label": "Sustainability" }
+    ]
+  },
+  "footer": {
+    "brand": "Emerald Logistics",
+    "copyright": "© 2026 Emerald Logistics. Precision in every operating rhythm.",
+    "shareLabel": "Share",
+    "links": [
+      { "href": "#", "label": "Privacy policy" },
+      { "href": "#", "label": "Terms of service" },
+      { "href": "#", "label": "Carbon report" },
+      { "href": "#", "label": "Global network" }
+    ]
+  },
+  "operationsTopBar": {
+    "brand": "Precision Logistics",
+    "notificationsLabel": "Notifications",
+    "profileLabel": "Profile",
+    "logoutLabel": "Log out",
+    "items": [
+      { "href": "/dashboard/admin", "id": "dashboard", "label": "Dashboard" },
+      { "href": "/orders/create", "id": "shipments", "label": "Shipments" },
+      { "href": "/tracking", "id": "tracking", "label": "Tracking" }
+    ]
+  },
+  "customerTopBar": {
+    "brand": "Emerald Customer Hub",
+    "subtitle": "Customer operations workspace",
+    "openNotifications": "Open notifications",
+    "openProfile": "Open profile",
+    "logout": "Log out",
+    "nav": {
+      "overview": "Overview",
+      "orders": "Orders",
+      "createOrder": "Create order",
+      "tracking": "Tracking",
+      "profile": "Profile",
+      "role": "Role"
+    }
+  },
+  "warehouseTopBar": {
+    "brand": "Emerald Warehouse Hub",
+    "subtitle": "Control cargo flow and coordinate warehouse stations",
+    "openNotifications": "Open notifications",
+    "profile": "Profile",
+    "logout": "Log out",
+    "nav": {
+      "scanStation": "Scan station",
+      "orders": "Orders",
+      "trips": "Trips",
+      "role": "Role"
+    }
+  },
+  "sidebar": {
+    "menu": "Menu",
+    "title": "Navigation"
+  },
+  "landing": {
+    "hero": {
+      "primaryCta": "Open app",
+      "secondaryCta": "Learn more",
+      "titleLine1": "Green Logistics",
+      "titleLine2": "Built Smart.",
+      "trustedHint": "Optimized operations - Breakthrough supply chain performance.",
+      "description": "We apply AI to optimize supply chains, reduce empty miles, and move businesses toward low-emission delivery and sustainable growth."
+    },
+    "statBar": {
+      "eyebrow": "Operational confidence",
+      "description": "An always-on operating network built to keep shipments moving and meet demanding customer requirements.",
+      "title": "A broad and reliable logistics network",
+      "items": [
+        { "label": "Provinces served", "value": "63" },
+        { "label": "Trips monitored daily", "value": "24k+" },
+        { "label": "Platform uptime", "value": "99.95%" },
+        { "label": "Integrated carrier partners", "value": "150+" }
+      ]
+    },
+    "socialProof": {
+      "eyebrow": "Trusted network",
+      "description": "Trusted by hundreds of businesses and strategic partners across transportation and supply chain operations.",
+      "title": "Strategic partners",
+      "ecosystemEyebrow": "Trusted ecosystem",
+      "ecosystemDescription": "Sustainable growth happens when data, operations, and partners work toward the same goal.",
+      "stats": [
+        { "label": "Active businesses", "value": "500+" },
+        { "label": "Connected hubs and warehouses", "value": "18" },
+        { "label": "Average on-time delivery rate", "value": "99.2%" }
+      ],
+      "partnerGroups": [
+        "Retail & FMCG",
+        "Import and export",
+        "Industrial manufacturing",
+        "Cold chain",
+        "E-commerce",
+        "3PL & Fulfillment"
+      ],
+      "highlights": [
+        {
+          "description": "APIs and dashboards unify orders, vehicle status, costs, and emissions in one operating data flow.",
+          "title": "Real-time multi-party data connectivity"
+        },
+        {
+          "description": "From carriers and warehouse partners to internal dispatch teams, every link has a clear and transparent workflow.",
+          "title": "Standardized operations across the ecosystem"
+        }
+      ]
+    },
+    "features": {
+      "eyebrow": "Fleet Intelligence Platform",
+      "title": "A complete solution for",
+      "titleHighlight": "smart fleets",
+      "description": "Our technology connects high-performance logistics with measurable environmental commitments.",
+      "spotlightTitle": "Real-time route optimization",
+      "spotlightDescription": "Track routes, detect delays, surface risk, and automatically reroute so dispatch teams can decide faster.",
+      "controlTowerEyebrow": "Live control tower",
+      "boardTitle": "Fleet board",
+      "boardSubtitle": "Predictive routing",
+      "featureCards": [
+        {
+          "description": "Live maps, dynamic ETAs, and off-route alerts help dispatch teams see every trip while it is moving.",
+          "icon": "route",
+          "metric": "ETA updates every minute",
+          "title": "Visual dispatching"
+        },
+        {
+          "description": "Algorithms recommend delivery schedules, trip consolidation, and load optimization to reduce fuel cost and waiting time.",
+          "icon": "brain",
+          "metric": "Up to 27% fewer empty miles",
+          "title": "AI-assisted decisions"
+        },
+        {
+          "description": "Digital workflows from order creation and proof of delivery to reconciliation reduce operating errors and improve scale.",
+          "icon": "shield",
+          "metric": "100% traceable activity logs",
+          "title": "End-to-end control"
+        }
+      ],
+      "dashboardStats": [
+        { "label": "Orders in dispatch", "value": "1,284" },
+        { "label": "Load utilization", "value": "93%" },
+        { "label": "Alerts handled automatically", "value": "76%" }
+      ],
+      "boardMetrics": [
+        { "fill": "86%", "label": "Vehicles on ETA", "value": "142/165" },
+        { "fill": "73%", "label": "Orders with suggested routing", "value": "927" },
+        { "fill": "58%", "label": "Risks flagged early", "value": "41 cases" }
+      ]
+    },
+    "sustainability": {
+      "eyebrow": "Sustainability Engine",
+      "title": "Logistics moving toward",
+      "titleHighlight": "zero carbon emissions.",
+      "description": "Beyond delivery, we build greener value. Smart algorithms help reduce thousands of tons of CO2 each year by removing inefficient routes.",
+      "pendingTitle": "Environmental impact metrics",
+      "pendingDescription": "Transparent emissions indicators and sustainability efforts for every shipment.",
+      "esgBadge": "ESG Ready",
+      "routingEyebrow": "Smart carbon routing",
+      "routingDescription": "Prioritize lower-emission routes while still protecting SLA.",
+      "emissionScoreLabel": "Emission score",
+      "emissionScoreDescription": "Greener optimization for every operating kilometer",
+      "impactStats": [
+        { "label": "CO2 reduced per year", "value": "12.6k tons" },
+        { "label": "Trips analyzed", "value": "4.8M" },
+        { "label": "Fuel savings", "value": "18%" }
+      ],
+      "commitments": [
+        "Measure emissions by trip and route",
+        "Shareable ESG reports for customers and partners",
+        "Recommend greener operating options without compromising SLA"
+      ]
+    },
+    "testimonials": {
+      "eyebrow": "Voice Of Customers",
+      "description": "Success stories from businesses that optimized their supply chains and reduced cost with our platform.",
+      "title": "What customers say about Emerald Logistics",
+      "resultLabel": "Recorded impact",
+      "metrics": [
+        { "label": "Businesses scaled after 6 months", "value": "87%" },
+        { "label": "Incident response time", "value": "-43%" },
+        { "label": "Average operating cost reduction", "value": "22%" }
+      ],
+      "testimonials": [
+        {
+          "company": "Nova Retail",
+          "name": "Nguyen Thanh Nam",
+          "quote": "Emerald helps our operations team see delivery risk hours earlier. That makes a major difference when managing thousands of orders every day.",
+          "result": "31% shorter dispatch handling time",
+          "role": "Supply Chain Director"
+        },
+        {
+          "company": "Polar Fresh",
+          "name": "Le Minh Chau",
+          "quote": "The emissions reports and route optimization help us hit cold-chain delivery KPIs while giving us clear data for enterprise partners.",
+          "result": "19% fuel cost reduction on north-south routes",
+          "role": "Head of Logistics"
+        },
+        {
+          "company": "Mekong Export",
+          "name": "Tran Gia Han",
+          "quote": "What I value most is how warehouses, fleet teams, and customer care are connected in one interface that operators can actually use.",
+          "result": "2.4x higher handling capacity without adding headcount",
+          "role": "COO"
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Build a lower-carbon network",
+      "title": "Ready to digitize logistics operations?",
+      "description": "Join more than 500 businesses adopting green technology. Optimize cost, improve performance, and protect the planet.",
+      "buttonText": "Log in to system",
+      "secondaryButtonText": "View demo",
+      "panelEyebrow": "Launch with Emerald",
+      "panelTitle": "Run greener, see clearer data, and scale faster.",
+      "panelDescription": "One platform for dispatch, emissions transparency, and cost optimization instead of a patchwork of disconnected tools.",
+      "supportPoints": [
+        "Fast onboarding for dispatch teams and carrier partners",
+        "Real-time dashboards for operations, finance, and ESG",
+        "Flexible integration with existing business workflows"
+      ],
+      "trustStats": [
+        { "label": "Active businesses", "value": "500+" },
+        { "label": "B2B customer NPS", "value": "71" },
+        { "label": "Average go-live time", "value": "14 days" }
+      ]
+    }
+  }
+}

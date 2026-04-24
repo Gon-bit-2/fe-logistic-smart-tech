@@ -9,7 +9,7 @@ import {
   PageHeader,
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
-import { orderManagementCopy, getOrderStatusLabel } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { mapOrdersToManagementRows } from "@/features/orders/application/mappers/order-management.mapper";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ export default function OrderManagementScreen(
   _props: Readonly<OrderManagementScreenProps>,
 ) {
   void _props;
+  const { orderManagementCopy, getOrderStatusLabel } = useI18nCopy();
 
   const ordersQuery = useOrdersListQuery();
   const rawOrders = ordersQuery.data?.data ?? [];

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import { ArrowRight, CheckCircle2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,11 +10,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ctaData } from "@/i18n/vi";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+type TrustStat = {
+  label: string;
+  value: string;
+};
+
 export default function CallToAction() {
+  const t = useTranslations("landing.cta");
+  const supportPoints = t.raw("supportPoints") as string[];
+  const trustStats = t.raw("trustStats") as TrustStat[];
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -97,18 +105,18 @@ export default function CallToAction() {
             <div className="flex flex-col justify-between gap-8">
               <div data-cta-reveal className="max-w-xl space-y-5">
                 <Badge className="bg-white/8 px-3 py-1 text-[11px] font-bold tracking-[0.26em] uppercase text-primary-fixed">
-                  {ctaData.eyebrow}
+                  {t("eyebrow")}
                 </Badge>
                 <h2 className="text-4xl font-black tracking-tight text-white md:text-6xl">
-                  {ctaData.title}
+                  {t("title")}
                 </h2>
                 <p className="text-lg leading-8 text-white/74">
-                  {ctaData.description}
+                  {t("description")}
                 </p>
               </div>
 
               <div className="grid gap-3" data-cta-reveal>
-                {ctaData.supportPoints.map((item) => (
+                {supportPoints.map((item) => (
                   <div
                     key={item}
                     className="flex items-start gap-3 rounded-[1.35rem] border border-white/10 bg-white/6 px-4 py-3 text-white/84 backdrop-blur-sm"
@@ -131,7 +139,7 @@ export default function CallToAction() {
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_32%,transparent)]" />
                 <CardContent className="relative p-6 md:p-8">
                   <div className="grid gap-4 sm:grid-cols-3">
-                    {ctaData.trustStats.map((stat) => (
+                    {trustStats.map((stat) => (
                       <div
                         key={stat.label}
                         className="rounded-[1.4rem] border border-white/10 bg-[#0d2c21] px-4 py-4"
@@ -148,13 +156,13 @@ export default function CallToAction() {
 
                   <div className="mt-8 rounded-[1.8rem] border border-white/12 bg-[#0d2f23]/92 p-6">
                     <p className="text-xs font-black tracking-[0.28em] text-primary-fixed uppercase">
-                      Launch with Emerald
+                      {t("panelEyebrow")}
                     </p>
                     <h3 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
-                      Vận hành xanh, nhìn rõ dữ liệu, mở rộng nhanh hơn.
+                      {t("panelTitle")}
                     </h3>
                     <p className="mt-4 max-w-2xl text-base leading-8 text-white/74">
-                      Một nền tảng cho điều phối, minh bạch phát thải và tối ưu chi phí thay vì chắp vá nhiều công cụ rời rạc.
+                      {t("panelDescription")}
                     </p>
 
                     <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -164,7 +172,7 @@ export default function CallToAction() {
                         className="h-13 rounded-xl bg-primary-fixed px-7 text-sm font-black tracking-[0.22em] text-on-primary-fixed uppercase hover:bg-primary-fixed hover:brightness-110"
                       >
                         <Link href="/dashboard">
-                          {ctaData.buttonText}
+                          {t("buttonText")}
                           <ArrowRight className="h-4 w-4" />
                         </Link>
                       </Button>
@@ -177,7 +185,7 @@ export default function CallToAction() {
                       >
                         <Link href="#features">
                           <Play className="h-4 w-4 fill-current" />
-                          {ctaData.secondaryButtonText}
+                          {t("secondaryButtonText")}
                         </Link>
                       </Button>
                     </div>

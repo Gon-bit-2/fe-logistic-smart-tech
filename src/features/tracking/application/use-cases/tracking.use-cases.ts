@@ -7,6 +7,7 @@ import {
 import { mapTrackingResponseToViewModel } from "../mappers/tracking-view-model.mapper";
 import { ApiError } from "@/lib/api/errors";
 import type { TrackingEventCreateInput } from "@/features/tracking/domain/types/tracking.types";
+import type { Locale } from "@/i18n/config";
 import { validateTrackingEventInput } from "@/features/tracking/application/services/tracking-event-validator";
 import {
   uploadMultiplePodImagesRequest,
@@ -23,16 +24,16 @@ function assertApiConfigured() {
   }
 }
 
-export async function getPublicTrackingUseCase(trackingCode: string) {
+export async function getPublicTrackingUseCase(trackingCode: string, locale?: Locale) {
   assertApiConfigured();
   const response = await getPublicTracking(trackingCode);
-  return mapTrackingResponseToViewModel(response);
+  return mapTrackingResponseToViewModel(response, locale);
 }
 
-export async function getInternalTrackingUseCase(orderId: string) {
+export async function getInternalTrackingUseCase(orderId: string, locale?: Locale) {
   assertApiConfigured();
   const response = await getInternalTracking(orderId);
-  return mapTrackingResponseToViewModel(response);
+  return mapTrackingResponseToViewModel(response, locale);
 }
 
 export async function createTrackingEventUseCase(input: TrackingEventCreateInput) {

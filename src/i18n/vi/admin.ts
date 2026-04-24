@@ -137,6 +137,8 @@ export const adminScreenCopy = {
 export const adminTopBarCopy = {
   adminLabel: "Quản trị",
   ecosystemBrand: "Hệ sinh thái Precision",
+  logoutLabel: "Đăng xuất",
+  profileLabel: "Hồ sơ",
 } as const;
 
 export const adminSidebarCopy = {

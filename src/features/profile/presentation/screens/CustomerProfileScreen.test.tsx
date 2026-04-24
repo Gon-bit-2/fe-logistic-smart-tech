@@ -172,11 +172,11 @@ describe("CustomerProfileScreen", () => {
     activateTab("Quyền & thông báo");
     expect(screen.getByRole("link", { name: "Mở inbox" })).toHaveAttribute(
       "href",
-      "/dashboard/customer?notifications=1",
+      "/overview?notifications=1",
     );
     expect(screen.getByRole("link", { name: "Mở role center" })).toHaveAttribute(
       "href",
-      "/dashboard/customer/roles",
+      "/role-requests",
     );
 
     activateTab("Bảo mật");

@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 export type SidebarItem = {
@@ -18,21 +19,23 @@ type SidebarProps = {
 };
 
 export default function Sidebar({
-  title = "Điều hướng",
+  title,
   items,
   footerNote,
   footerActions,
 }: SidebarProps) {
+  const t = useTranslations("sidebar");
   const pathname = usePathname();
+  const resolvedTitle = title ?? t("title");
 
   return (
     <aside className="flex h-full w-full max-w-[280px] flex-col border-r border-border bg-surface-container-low px-5 py-6">
       <div className="mb-8">
         <p className="text-xs font-black tracking-[0.3em] text-primary uppercase">
-          Menu
+          {t("menu")}
         </p>
         <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-          {title}
+          {resolvedTitle}
         </h2>
       </div>
 

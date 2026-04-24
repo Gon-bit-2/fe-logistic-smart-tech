@@ -31,21 +31,31 @@ function createRequest(pathname: string, accessToken?: string) {
 }
 
 describe("proxy", () => {
+  it("redirects unprefixed routes to the default Vietnamese locale", () => {
+    const request = createRequest("/tracking?code=EL-1");
+
+    const response = proxy(request);
+
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/vi/tracking?code=EL-1",
+    );
+  });
+
   it("rewrites the legacy Google callback path to the flat callback page", () => {
     const request = createRequest(
-      "/auth/google/callback?sessionToken=test-session-token",
+      "/vi/auth/google/callback?sessionToken=test-session-token",
     );
 
     const response = proxy(request);
 
     expect(response.headers.get("x-middleware-rewrite")).toBe(
-      "http://localhost/auth/google-callback?sessionToken=test-session-token",
+      "http://localhost/vi/auth/google-callback?sessionToken=test-session-token",
     );
   });
 
   it("lets admins access other dashboard workspaces", () => {
     const request = createRequest(
-      "/dashboard/driver",
+      "/vi/dashboard/driver",
       createAccessToken("admin", 1),
     );
 
@@ -55,7 +65,7 @@ describe("proxy", () => {
   });
 
   it("lets admins access customer root routes without forcing a customer redirect", () => {
-    const request = createRequest("/orders", createAccessToken("admin", 1));
+    const request = createRequest("/vi/orders", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
@@ -63,36 +73,36 @@ describe("proxy", () => {
   });
 
   it("still redirects dashboard root to the admin workspace", () => {
-    const request = createRequest("/dashboard", createAccessToken("admin", 1));
+    const request = createRequest("/en/dashboard", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBe(
-      "http://localhost/dashboard/admin",
+      "http://localhost/en/dashboard/admin",
     );
   });
 
   it("redirects non-admin users away from restricted dashboard workspaces", () => {
     const request = createRequest(
-      "/dashboard/driver",
+      "/vi/dashboard/driver",
       createAccessToken("customer", 2),
     );
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/overview");
+    expect(response.headers.get("location")).toBe("http://localhost/vi/overview");
   });
 
   it("redirects drivers away from customer checkout routes", () => {
     const request = createRequest(
-      "/checkout?orderId=21",
+      "/en/checkout?orderId=21",
       createAccessToken("driver", 3),
     );
 
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBe(
-      "http://localhost/dashboard/driver",
+      "http://localhost/en/dashboard/driver?orderId=21",
     );
   });
 });

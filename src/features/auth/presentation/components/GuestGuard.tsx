@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
+import { localizePath, type Locale } from "@/i18n/config";
 
 export interface GuestGuardProps {
   readonly children: React.ReactNode;
@@ -11,23 +13,28 @@ export interface GuestGuardProps {
 
 export default function GuestGuard({ children }: GuestGuardProps) {
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const { status, isHydrated, user } = useAuthStore();
 
   useEffect(() => {
     if (isHydrated && status === "authenticated") {
+      let destination = "/";
+
       if (user?.role === "customer") {
-        router.replace("/overview");
+        destination = "/overview";
       } else if (user?.role === "driver") {
-        router.replace("/dashboard/driver");
+        destination = "/dashboard/driver";
       } else if (user?.role === "admin") {
-        router.replace("/dashboard/admin");
+        destination = "/dashboard/admin";
       } else if (user?.role === "warehouse_staff") {
-        router.replace("/dashboard/warehouse");
-      } else {
-        router.replace("/");
+        destination = "/dashboard/warehouse";
       }
+
+      const localizedDestination = localizePath(destination, locale);
+      router.replace(localizedDestination);
+      window.location.replace(localizedDestination);
     }
-  }, [isHydrated, status, user, router]);
+  }, [isHydrated, locale, status, user, router]);
 
   // While hydrating or if redirecting, show a simple loader or nothing
   if (!isHydrated || status === "authenticated") {

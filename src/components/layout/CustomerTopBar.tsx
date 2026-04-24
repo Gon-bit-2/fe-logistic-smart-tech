@@ -1,22 +1,23 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import {
   Bell,
   LayoutDashboard,
-  LogOut,
   MapPin,
   Package,
   Plus,
   ShieldCheck,
   UserRound,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import AuthUserMenu from "@/components/layout/AuthUserMenu";
+import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
-import { useAuthProfileQuery } from "@/features/auth/presentation/hooks/useAuthProfileQuery";
 import CustomerNotificationsPanel from "@/features/notifications/presentation/components/CustomerNotificationsPanel";
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
 import { cn } from "@/lib/utils";
@@ -29,69 +30,58 @@ type CustomerNavItem = {
   label: string;
 };
 
-const customerNavItems: CustomerNavItem[] = [
-  {
-    href: "/overview",
-    icon: <LayoutDashboard className="size-4" />,
-    isActive: (pathname) =>
-      pathname === "/overview" || pathname === "/dashboard/customer",
-    label: "Tổng quan",
-  },
-  {
-    href: "/orders",
-    icon: <Package className="size-4" />,
-    isActive: (pathname) =>
-      pathname === "/orders" || pathname === "/dashboard/customer/orders",
-    label: "Đơn hàng",
-  },
-  {
-    href: "/orders/create",
-    icon: <Plus className="size-4" />,
-    isActive: (pathname) => pathname === "/orders/create",
-    label: "Tạo đơn",
-  },
-  {
-    href: "/tracking",
-    icon: <MapPin className="size-4" />,
-    isActive: (pathname) => pathname.startsWith("/tracking"),
-    label: "Theo dõi",
-  },
-  {
-    href: "/profile",
-    icon: <UserRound className="size-4" />,
-    isActive: (pathname) =>
-      pathname === "/profile" || pathname === "/dashboard/customer/settings",
-    label: "Hồ sơ",
-  },
-  {
-    href: "/role-requests",
-    icon: <ShieldCheck className="size-4" />,
-    isActive: (pathname) =>
-      pathname === "/role-requests" || pathname === "/dashboard/customer/roles",
-    label: "Role",
-  },
-];
-
 export default function CustomerTopBar() {
+  const t = useTranslations("customerTopBar");
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { logout, user } = useAuth();
-  const profileQuery = useAuthProfileQuery(Boolean(user));
+  const { user } = useAuth();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const bellContainerRef = useRef<HTMLDivElement | null>(null);
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
-  const fullName = profileQuery.data?.fullName ?? "Customer workspace";
-  const avatarUrl = profileQuery.data?.avatarUrl ?? null;
-  const fallbackInitials =
-    fullName
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((segment) => segment[0]?.toUpperCase() ?? "")
-      .join("") || "CU";
-  const initials = profileQuery.data?.initials ?? fallbackInitials;
   const shouldOpenNotifications = searchParams.get("notifications") === "1";
+  const customerNavItems: CustomerNavItem[] = [
+    {
+      href: "/overview",
+      icon: <LayoutDashboard className="size-4" />,
+      isActive: (pathname) =>
+        pathname === "/overview" || pathname === "/dashboard/customer",
+      label: t("nav.overview"),
+    },
+    {
+      href: "/orders",
+      icon: <Package className="size-4" />,
+      isActive: (pathname) =>
+        pathname === "/orders" || pathname === "/dashboard/customer/orders",
+      label: t("nav.orders"),
+    },
+    {
+      href: "/orders/create",
+      icon: <Plus className="size-4" />,
+      isActive: (pathname) => pathname === "/orders/create",
+      label: t("nav.createOrder"),
+    },
+    {
+      href: "/tracking",
+      icon: <MapPin className="size-4" />,
+      isActive: (pathname) => pathname.startsWith("/tracking"),
+      label: t("nav.tracking"),
+    },
+    {
+      href: "/profile",
+      icon: <UserRound className="size-4" />,
+      isActive: (pathname) =>
+        pathname === "/profile" || pathname === "/dashboard/customer/settings",
+      label: t("nav.profile"),
+    },
+    {
+      href: "/role-requests",
+      icon: <ShieldCheck className="size-4" />,
+      isActive: (pathname) =>
+        pathname === "/role-requests" || pathname === "/dashboard/customer/roles",
+      label: t("nav.role"),
+    },
+  ];
 
   useEffect(() => {
     if (!shouldOpenNotifications) {
@@ -135,10 +125,10 @@ export default function CustomerTopBar() {
               href="/overview"
               className="text-base md:text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
             >
-              Emerald Customer Hub
+              {t("brand")}
             </Link>
             <div className="flex flex-wrap items-center gap-2 text-[11px] md:text-xs text-slate-500">
-              <span className="hidden sm:inline">Không gian thao tác của khách hàng</span>
+              <span className="hidden sm:inline">{t("subtitle")}</span>
               <Badge className="h-4 rounded-full bg-emerald-100 px-1.5 text-[9px] font-bold uppercase text-emerald-800">
                 {formatEnumLabel(user?.role ?? "customer")}
               </Badge>
@@ -146,6 +136,7 @@ export default function CustomerTopBar() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
+            <LocaleSwitcher className="hidden md:inline-flex" />
             <div ref={bellContainerRef} className="relative">
               <button
                 type="button"
@@ -157,7 +148,7 @@ export default function CustomerTopBar() {
                 )}
                 aria-expanded={isNotificationsOpen}
                 aria-haspopup="dialog"
-                aria-label="Mở thông báo"
+                aria-label={t("openNotifications")}
               >
                 <Bell className="size-4" />
                 {unreadCount > 0 ? (
@@ -176,30 +167,13 @@ export default function CustomerTopBar() {
               ) : null}
             </div>
 
-            <Link
-              href="/profile"
-              className="group flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-2 py-1 text-left shadow-sm transition-all hover:-translate-y-0.5"
-            >
-              <Avatar className="size-8 ring-2 ring-emerald-100">
-                <AvatarImage alt={fullName} src={avatarUrl ?? undefined} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-              <div className="hidden min-w-0 sm:block">
-                <p className="max-w-32 truncate text-xs font-bold text-emerald-950">
-                  {fullName}
-                </p>
-                <p className="text-[10px] text-slate-500 leading-tight">Mở hồ sơ</p>
-              </div>
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => void logout()}
-              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-950 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-800"
-            >
-              <LogOut className="size-3.5" />
-              <span className="hidden sm:inline">Đăng xuất</span>
-            </button>
+            <AuthUserMenu
+              defaultFullName="Customer workspace"
+              fallbackInitials="CU"
+              logoutLabel={t("logout")}
+              profileHref="/profile"
+              profileLabel={t("openProfile")}
+            />
           </div>
         </div>
 

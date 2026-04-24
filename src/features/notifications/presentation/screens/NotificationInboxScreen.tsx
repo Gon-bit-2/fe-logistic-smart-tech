@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useMemo, useState } from "react";
 import { BellDot, BellRing, ArrowRight, CheckCheck } from "lucide-react";
 import {
@@ -12,12 +12,17 @@ import { Button } from "@/components/ui/button";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotificationsQuery } from "@/features/notifications/presentation/hooks/useNotifications";
-import { notificationScreenCopy } from "@/i18n/vi/notifications";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
 import { cn } from "@/lib/utils";
 
-function getNotificationLoadErrorMessage(error: unknown) {
+type NotificationScreenCopy = ReturnType<typeof useI18nCopy>["notificationScreenCopy"];
+
+function getNotificationLoadErrorMessage(
+  error: unknown,
+  notificationScreenCopy: NotificationScreenCopy,
+) {
   if (error instanceof ApiError) {
     if (error.status === 401) return notificationScreenCopy.loadErrorUnauthorized;
     if (error.status === 403) return notificationScreenCopy.loadErrorForbidden;
@@ -26,6 +31,7 @@ function getNotificationLoadErrorMessage(error: unknown) {
 }
 
 export default function NotificationInboxScreen() {
+  const { notificationScreenCopy } = useI18nCopy();
   const { user } = useAuthSession();
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
   
@@ -59,7 +65,10 @@ export default function NotificationInboxScreen() {
     return (
       <ErrorState
         title="Không thể tải notifications"
-        description={getNotificationLoadErrorMessage(notificationsQuery.error)}
+        description={getNotificationLoadErrorMessage(
+          notificationsQuery.error,
+          notificationScreenCopy,
+        )}
         action={
           <Button variant="outline" onClick={() => void notificationsQuery.refetch()}>
             Tải lại

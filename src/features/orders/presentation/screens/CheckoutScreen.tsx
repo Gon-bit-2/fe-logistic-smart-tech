@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
@@ -12,17 +12,18 @@ import type { OrderPricing } from "@/features/orders/domain/types/order.types";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
-import { checkoutCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { normalizePublicEnvValue } from "@/lib/api/env";
 import { formatCurrency } from "@/utils/formatters";
 
 function formatPricingValue(
   value?: number,
   currency?: OrderPricing["currency"],
+  pendingLabel = "Pending quote",
 ) {
   return typeof value === "number"
     ? formatCurrency(value, currency ?? "USD")
-    : checkoutCopy.pendingApiQuote;
+    : pendingLabel;
 }
 
 const stripePublishableKey = normalizePublicEnvValue(
@@ -38,6 +39,8 @@ const stripePromise = stripePublishableKey
 type StripePaymentFormProps = {
   onError: (message: string | null) => void;
   onSuccess: () => void;
+  payLabel: string;
+  processingLabel: string;
 };
 
 type CheckoutScreenProps = Readonly<{
@@ -47,6 +50,8 @@ type CheckoutScreenProps = Readonly<{
 function StripePaymentForm({
   onError,
   onSuccess,
+  payLabel,
+  processingLabel,
 }: Readonly<StripePaymentFormProps>) {
   const stripe = useStripe();
   const elements = useElements();
@@ -66,7 +71,7 @@ function StripePaymentForm({
     });
 
     if (result.error) {
-      onError(result.error.message ?? "Không thể xác nhận thanh toán.");
+      onError(result.error.message ?? null);
       setIsSubmitting(false);
       return;
     }
@@ -82,7 +87,7 @@ function StripePaymentForm({
         onClick={handleSubmit}
         className="h-14 w-full bg-gradient-to-br from-tertiary to-tertiary-container text-base font-black text-white"
       >
-        {isSubmitting ? checkoutCopy.processing : checkoutCopy.payAndConfirmOrder}
+        {isSubmitting ? processingLabel : payLabel}
       </Button>
     </div>
   );
@@ -91,6 +96,7 @@ function StripePaymentForm({
 export default function CheckoutScreen({
   showTopBar = true,
 }: CheckoutScreenProps) {
+  const { checkoutCopy } = useI18nCopy();
   const router = useRouter();
   const { order, orderId, isLoading, loadError, paymentRecord } = useCheckout();
   const createPaymentIntent = useCreatePaymentIntent();
@@ -244,6 +250,8 @@ export default function CheckoutScreen({
                     <StripePaymentForm
                       onError={setError}
                       onSuccess={() => router.push(`/tracking/${trackingDestination}`)}
+                      payLabel={checkoutCopy.payAndConfirmOrder}
+                      processingLabel={checkoutCopy.processing}
                     />
                   </Elements>
                 ) : (
@@ -295,13 +303,21 @@ export default function CheckoutScreen({
                 <div className="flex justify-between">
                   <span>{checkoutCopy.logisticsFee}</span>
                   <span className="font-medium">
-                    {formatPricingValue(pricing?.logisticsFee, pricing?.currency)}
+                    {formatPricingValue(
+                      pricing?.logisticsFee,
+                      pricing?.currency,
+                      checkoutCopy.pendingApiQuote,
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>{checkoutCopy.shippingAndHandling}</span>
                   <span className="font-medium">
-                    {formatPricingValue(pricing?.handlingFee, pricing?.currency)}
+                    {formatPricingValue(
+                      pricing?.handlingFee,
+                      pricing?.currency,
+                      checkoutCopy.pendingApiQuote,
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center justify-between rounded-lg bg-primary/10 px-3 py-2">
@@ -317,7 +333,11 @@ export default function CheckoutScreen({
                 <div className="flex justify-between">
                   <span>{checkoutCopy.vat}</span>
                   <span className="font-medium">
-                    {formatPricingValue(pricing?.vat, pricing?.currency)}
+                    {formatPricingValue(
+                      pricing?.vat,
+                      pricing?.currency,
+                      checkoutCopy.pendingApiQuote,
+                    )}
                   </span>
                 </div>
               </div>
@@ -329,7 +349,11 @@ export default function CheckoutScreen({
                       {checkoutCopy.totalAmount}
                     </p>
                     <p className="mt-1 text-3xl font-black tracking-tight text-on-surface">
-                      {formatPricingValue(totalAmount, totalCurrency)}
+                      {formatPricingValue(
+                        totalAmount,
+                        totalCurrency,
+                        checkoutCopy.pendingApiQuote,
+                      )}
                     </p>
                   </div>
                   <span className="rounded-full bg-secondary-container px-3 py-1 text-[10px] font-black tracking-[0.12em] text-on-secondary-container uppercase">

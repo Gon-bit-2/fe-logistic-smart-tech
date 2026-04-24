@@ -1,20 +1,26 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import AuthUserMenu from "@/components/layout/AuthUserMenu";
 import AppIcon from "@/components/ui/app-icon";
-import { operationsTopBarCopy } from "@/i18n/vi";
-import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
 
 type OperationsTopBarProps = Readonly<{
   active?: "dashboard" | "shipments" | "tracking";
 }>;
 
-const items = operationsTopBarCopy.items;
+type OperationsTopBarItem = {
+  href: string;
+  id: OperationsTopBarProps["active"];
+  label: string;
+};
 
 export default function OperationsTopBar({
   active = "shipments",
 }: OperationsTopBarProps) {
-  const { logout } = useAuth();
+  const t = useTranslations("operationsTopBar");
+  const items =
+    typeof t.raw === "function" ? (t.raw("items") as OperationsTopBarItem[]) : [];
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/30 bg-emerald-50/80 backdrop-blur-md">
@@ -24,7 +30,7 @@ export default function OperationsTopBar({
             href="/"
             className="text-xl font-black tracking-tight text-emerald-900"
           >
-            {operationsTopBarCopy.brand}
+            {t("brand")}
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             {items.map((item) => (
@@ -46,19 +52,18 @@ export default function OperationsTopBar({
         <div className="flex items-center gap-4">
           <button
             type="button"
-            aria-label="Thông báo"
+            aria-label={t("notificationsLabel")}
             className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
           >
             <AppIcon name="notifications" />
           </button>
-          <button
-            type="button"
-            aria-label="Đăng xuất"
-            onClick={() => void logout()}
-            className="rounded-full p-2 text-slate-700 transition hover:bg-emerald-100/70"
-          >
-            <AppIcon name="logout" />
-          </button>
+          <AuthUserMenu
+            defaultFullName="Operations workspace"
+            fallbackInitials="OP"
+            logoutLabel={t("logoutLabel")}
+            profileLabel={t("profileLabel")}
+            triggerClassName="border-transparent bg-transparent p-2 shadow-none hover:bg-emerald-100/70 hover:translate-y-0"
+          />
         </div>
       </div>
     </header>

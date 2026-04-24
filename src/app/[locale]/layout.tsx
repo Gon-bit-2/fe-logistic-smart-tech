@@ -1,0 +1,70 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import Script from "next/script";
+import BisAttributeStripper from "@/components/BisAttributeStripper";
+import ProfileQuickAccess from "@/features/profile/presentation/components/ProfileQuickAccess";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { routing } from "@/i18n/routing";
+import { Providers } from "../providers";
+import "../globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+type LocaleLayoutProps = Readonly<{
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}>;
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: Pick<LocaleLayoutProps, "params">): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = hasLocale(routing.locales, locale) ? locale : defaultLocale;
+  const t = await getTranslations({ locale: safeLocale, namespace: "metadata" });
+
+  return {
+    title: t("appTitle"),
+    description: t("appDescription"),
+  };
+}
+
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+
+  const messages = await getMessages();
+
+  return (
+    <html
+      lang={locale as Locale}
+      className={`${inter.variable} h-full font-sans antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <BisAttributeStripper />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            {children}
+            <ProfileQuickAccess />
+          </Providers>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

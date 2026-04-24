@@ -3,11 +3,20 @@
  * Sticky overlay with blurred backdrop. Contains navigation links and action buttons.
  */
 import React from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import AppIcon from "@/components/ui/app-icon";
-import { navbarCopy } from "@/i18n/vi";
+import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
+
+type NavItem = {
+  href: string;
+  label: string;
+};
 
 export default function Navbar() {
+  const t = useTranslations("navbar");
+  const navItems = t.raw("navItems") as NavItem[];
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md">
       <div className="flex justify-between items-center px-8 py-5 max-w-7xl mx-auto">
@@ -16,10 +25,10 @@ export default function Navbar() {
             name="eco"
             className="text-primary-fixed transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110"
           />
-          {navbarCopy.brand}
+          {t("brand")}
         </div>
         <div className="hidden md:flex items-center gap-8 font-medium text-sm tracking-tight text-white/80">
-          {navbarCopy.navItems.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.label}
               className="relative pb-1 transition-all duration-300 hover:text-white after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary-fixed after:transition-transform after:duration-300 hover:after:scale-x-100"
@@ -30,17 +39,18 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-4">
+          <LocaleSwitcher tone="light" className="hidden sm:inline-flex" />
           <Link
             href="/auth/login"
             className="hidden sm:block text-sm font-bold text-white/80 hover:text-white transition-colors"
           >
-            {navbarCopy.loginLabel}
+            {t("loginLabel")}
           </Link>
           <Link
             href="/auth/register"
             className="rounded-lg bg-primary-fixed px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-on-primary-fixed transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95"
           >
-            {navbarCopy.registerLabel}
+            {t("registerLabel")}
           </Link>
         </div>
       </div>

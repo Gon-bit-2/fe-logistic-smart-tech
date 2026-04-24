@@ -7,13 +7,15 @@ import {
   clearOtpFlowState,
   getAuthSessionSnapshot,
 } from "@/features/auth/presentation/state/auth.store";
-import { authRuntimeCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type ForgotPasswordMutationInput = {
   code: string;
 };
 
 export function useForgotPasswordMutation() {
+  const { authRuntimeCopy } = useI18nCopy();
+
   return useMutation<unknown, ApiError, ForgotPasswordMutationInput>({
     mutationFn: async ({ code }: ForgotPasswordMutationInput) => {
       const { pendingPasswordReset } = getAuthSessionSnapshot();
@@ -34,4 +36,3 @@ export function useForgotPasswordMutation() {
     },
   });
 }
-

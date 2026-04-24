@@ -105,6 +105,33 @@ describe("create-order request mappers", () => {
     });
   });
 
+  it("keeps exact pickup and delivery coordinates in the create-order payload", () => {
+    const payload = mapCreateOrderInputToApiPayload({
+      contactName: "Lan",
+      contactPhone: "0909000001",
+      customerName: "Công ty Emerald",
+      declaredValueUsd: 0,
+      delivery: createResolvedAddress("456 Điện Biên Phủ", "delivery-place", 10.773118, 106.698299),
+      estimatedArrival: "",
+      itemDescription: "Thiết bị điện tử",
+      packageDimensions: "40x30x20",
+      packageWeightKg: 25,
+      paymentMethod: "COD",
+      pickup: createResolvedAddress("123 Nguyễn Văn Linh", "pickup-place", 10.776889, 106.700806),
+      receiverName: "Minh",
+      receiverPhone: "0909000002",
+      serviceTier: "express",
+    });
+
+    expect(payload).toMatchObject({
+      receiverLat: 10.773118,
+      receiverLng: 106.698299,
+      senderLat: 10.776889,
+      senderLng: 106.700806,
+      serviceType: "EXPRESS",
+    });
+  });
+
   it("uses the same safe fallback contact fields for quote validation as create-order", () => {
     const payload = mapCreateOrderInputToQuotePayload({
       contactName: "",

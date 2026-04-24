@@ -3,7 +3,7 @@ import { getServiceTierOption } from "@/features/orders/domain/value-objects/ser
 import type { CreateOrderInput } from "@/features/orders/domain/types/order.types";
 import OrderRouteMap from "@/features/orders/presentation/components/OrderRouteMap";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
-import { routePreviewCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 
 type RoutePreviewCardProps = Readonly<{
@@ -11,21 +11,21 @@ type RoutePreviewCardProps = Readonly<{
   quoteState: OrderQuoteState;
 }>;
 
-function formatDistance(value: number) {
+function formatDistance(value: number, pendingLabel: string) {
   if (!Number.isFinite(value) || value <= 0) {
-    return routePreviewCopy.pending;
+    return pendingLabel;
   }
 
   return `${value.toFixed(1)} km`;
 }
 
-function formatDuration(seconds: number, fallbackText?: string) {
+function formatDuration(seconds: number, pendingLabel: string, fallbackText?: string) {
   if (fallbackText?.trim()) {
     return fallbackText;
   }
 
   if (!Number.isFinite(seconds) || seconds <= 0) {
-    return routePreviewCopy.pending;
+    return pendingLabel;
   }
 
   const minutes = Math.round(seconds / 60);
@@ -46,6 +46,7 @@ export default function RoutePreviewCard({
   form,
   quoteState,
 }: RoutePreviewCardProps) {
+  const { routePreviewCopy } = useI18nCopy();
   const service = getServiceTierOption(form.serviceTier);
   const primaryRoute = quoteState.quote?.routes[0] ?? null;
   const pickup =
@@ -146,7 +147,10 @@ export default function RoutePreviewCard({
           <div className="flex justify-between">
             <span>{routePreviewCopy.distance}</span>
             <span className="font-semibold text-on-surface">
-              {formatDistance(quoteState.quote?.quote.distanceKm ?? 0)}
+              {formatDistance(
+                quoteState.quote?.quote.distanceKm ?? 0,
+                routePreviewCopy.pending,
+              )}
             </span>
           </div>
           <div className="flex justify-between">
@@ -154,6 +158,7 @@ export default function RoutePreviewCard({
             <span className="font-semibold text-on-surface">
               {formatDuration(
                 primaryRoute?.durationSeconds ?? quoteState.quote?.quote.durationSeconds ?? 0,
+                routePreviewCopy.pending,
                 primaryRoute?.durationText,
               )}
             </span>

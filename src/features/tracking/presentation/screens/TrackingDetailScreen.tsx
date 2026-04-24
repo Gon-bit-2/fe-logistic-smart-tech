@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { useResolvedTrackingOrder } from "@/features/orders/presentation/hooks/u
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePublicTrackingQuery } from "@/features/tracking/presentation/hooks/usePublicTrackingQuery";
-import { getTrackingStatusLabel, trackingDetailCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError, isApiError } from "@/lib/api/errors";
 
 type TrackingDetailScreenProps = Readonly<{
@@ -48,6 +48,7 @@ function canCustomerCancel(order: { status: string }) {
 export default function TrackingDetailScreen({
   trackingCode,
 }: TrackingDetailScreenProps) {
+  const { getTrackingStatusLabel, trackingDetailCopy } = useI18nCopy();
   const router = useRouter();
   const [trackingId, setTrackingId] = useState(trackingCode);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -63,6 +64,7 @@ export default function TrackingDetailScreen({
     trackingQuery.error?.message ?? trackingDetailCopy.fallbackError;
   const isCustomerOrderUnavailable =
     resolvedOrderQuery.error instanceof ApiError &&
+    resolvedOrderQuery.error.status != null &&
     [401, 403, 404].includes(resolvedOrderQuery.error.status);
 
   async function handleCancelOrder() {

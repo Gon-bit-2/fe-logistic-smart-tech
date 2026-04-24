@@ -1,11 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import {
-  SERVICE_TIER_OPTIONS,
-  type ServiceTierOption,
-} from "@/features/orders/domain/value-objects/service-tier.catalog";
+import type { ServiceTierOption } from "@/features/orders/domain/value-objects/service-tier.catalog";
 import type { ServiceTier } from "@/features/orders/domain/types/order.types";
-import { serviceTierSelectorCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type ServiceTierSelectorProps = Readonly<{
   onChange: (value: ServiceTier) => void;
@@ -16,10 +13,12 @@ function ServiceTierCard({
   isSelected,
   onSelect,
   option,
+  quoteLabel,
 }: Readonly<{
   isSelected: boolean;
   onSelect: () => void;
   option: ServiceTierOption;
+  quoteLabel: string;
 }>) {
   return (
     <button
@@ -45,7 +44,7 @@ function ServiceTierCard({
           isSelected ? "text-primary" : "text-on-surface-variant",
         )}
       >
-        {serviceTierSelectorCopy.apiQuote}
+        {quoteLabel}
       </div>
     </button>
   );
@@ -55,17 +54,19 @@ export default function ServiceTierSelector({
   onChange,
   value,
 }: ServiceTierSelectorProps) {
+  const { serviceTierOptions, serviceTierSelectorCopy } = useI18nCopy();
+
   return (
     <div className="grid gap-3">
-      {SERVICE_TIER_OPTIONS.map((option) => (
+      {serviceTierOptions.map((option) => (
         <ServiceTierCard
           key={option.id}
           option={option}
           isSelected={option.id === value}
           onSelect={() => onChange(option.id)}
+          quoteLabel={serviceTierSelectorCopy.apiQuote}
         />
       ))}
     </div>
   );
 }
-

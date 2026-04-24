@@ -15,7 +15,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useDispatcherMetrics } from "@/features/admin/presentation/hooks/useDispatcherMetrics";
-import { adminScreenCopy, getOrderStatusLabel } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatDate } from "@/utils/formatters";
 import { isActiveTripStatus } from "@/features/trips/presentation/lib/trip-status";
 
@@ -33,6 +33,7 @@ export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,
 ) {
   void _props;
+  const { adminScreenCopy, getOrderStatusLabel } = useI18nCopy();
   const tripsQuery = useTripsQuery();
   const activeTripIds = useMemo(
     () =>

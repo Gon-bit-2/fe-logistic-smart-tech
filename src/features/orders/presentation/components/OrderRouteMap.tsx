@@ -16,7 +16,7 @@ import {
   toGoongBounds,
 } from "@/features/maps/presentation/lib/goong";
 import { decodePolyline } from "@/features/orders/presentation/lib/polyline";
-import { routePreviewCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_CENTER = { lat: 10.7769, lng: 106.7009 };
@@ -106,6 +106,7 @@ function createMapStateMessage(
   hasVisiblePoint: boolean,
   error: string | null,
   isLoadingRoute: boolean,
+  routePreviewCopy: ReturnType<typeof useI18nCopy>["routePreviewCopy"],
 ) {
   if (!hasVisiblePoint) {
     return routePreviewCopy.mapPendingDescription;
@@ -130,6 +131,7 @@ export default function OrderRouteMap({
   pickup,
   polyline,
 }: OrderRouteMapProps) {
+  const { routePreviewCopy } = useI18nCopy();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<GoongMap | null>(null);
   const markerRefs = useRef<GoongMarker[]>([]);
@@ -153,7 +155,12 @@ export default function OrderRouteMap({
   );
   const viewportPoints = routePoints.length >= 2 ? routePoints : markerPoints;
   const hasVisiblePoint = viewportPoints.length > 0;
-  const mapStateMessage = createMapStateMessage(hasVisiblePoint, error, isLoadingRoute);
+  const mapStateMessage = createMapStateMessage(
+    hasVisiblePoint,
+    error,
+    isLoadingRoute,
+    routePreviewCopy,
+  );
 
   useEffect(() => {
     ensureGoongCssLoaded();

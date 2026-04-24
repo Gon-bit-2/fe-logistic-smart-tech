@@ -20,11 +20,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
-import {
-  getOrderStatusLabel,
-  shipmentFilters,
-  shipmentsManagementCopy,
-} from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/formatters";
 
@@ -38,8 +34,14 @@ export default function ShipmentsManagementScreen(
   _props: Readonly<ShipmentsManagementScreenProps>,
 ) {
   void _props;
+  const {
+    getOrderStatusLabel,
+    shipmentFilters,
+    shipmentsManagementCopy,
+  } = useI18nCopy();
 
-  const [activeFilter, setActiveFilter] = useState(shipmentFilters[0]?.label ?? "Tất cả lô hàng");
+  const [activeFilterIndex, setActiveFilterIndex] = useState(0);
+  const activeFilter = shipmentFilters[activeFilterIndex] ?? shipmentFilters[0];
   const [searchTerm, setSearchTerm] = useState("");
   const [renderTimestamp, setRenderTimestamp] = useState<number | null>(null);
   const deferredSearchTerm = useDeferredValue(searchTerm);
@@ -54,9 +56,9 @@ export default function ShipmentsManagementScreen(
   const filteredOrders = orders.filter((order) => {
     const statusLabel = getOrderStatusLabel(order.status);
     const matchesFilter =
-      activeFilter === "Tất cả lô hàng"
+      activeFilterIndex === 0
         ? true
-        : activeFilter === "Đang hoạt động"
+        : activeFilterIndex === 1
           ? order.status !== "DELIVERED" && order.status !== "CANCELLED"
           : order.estimatedArrival && renderTimestamp !== null
             ? order.status !== "DELIVERED" &&
@@ -199,14 +201,14 @@ export default function ShipmentsManagementScreen(
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
         <div className="inline-flex w-fit items-center gap-1 rounded-full bg-surface-container-high p-1">
-          {shipmentFilters.map((filter) => (
+          {shipmentFilters.map((filter, index) => (
             <button
               key={filter.label}
               type="button"
-              onClick={() => setActiveFilter(filter.label)}
+              onClick={() => setActiveFilterIndex(index)}
               className={cn(
                 "rounded-full px-4 py-1.5 text-[0.68rem] transition-colors",
-                activeFilter === filter.label
+                activeFilterIndex === index
                   ? "bg-surface-container-lowest font-bold text-primary shadow-[0_12px_24px_-18px_rgba(6,78,59,0.45)]"
                   : "font-medium text-on-surface/55 hover:bg-surface-container-lowest",
               )}

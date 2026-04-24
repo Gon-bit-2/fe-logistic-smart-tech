@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useMemo, useState } from "react";
 import {
   Bell,
@@ -43,7 +43,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError } from "@/lib/api/errors";
 import { cn } from "@/lib/utils";
-import { profileScreenCopy } from "@/i18n/vi/profile";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { formatEnumLabel } from "@/utils/formatters";
 import type { AddressBookDraftInput } from "@/features/profile/domain/types/profile.types";
 import {
@@ -52,7 +52,12 @@ import {
   validateAddressDraft,
 } from "@/features/profile/presentation/hooks/useCustomerProfileSettings";
 
-function getProfileLoadErrorMessage(error: unknown) {
+type ProfileScreenCopy = ReturnType<typeof useI18nCopy>["profileScreenCopy"];
+
+function getProfileLoadErrorMessage(
+  error: unknown,
+  profileScreenCopy: ProfileScreenCopy,
+) {
   if (error instanceof ApiError) {
     if (error.status === 401) {
       return profileScreenCopy.loadErrorUnauthorized;
@@ -135,18 +140,21 @@ function ActionCard({
 }
 
 function AddressBookDialog({
+  copy,
   isPending = false,
   onOpenChange,
   onSave,
   open,
   value,
 }: Readonly<{
+  copy: ProfileScreenCopy;
   isPending?: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (value: AddressBookDraftInput) => Promise<boolean>;
   open: boolean;
   value: AddressBookDraftInput;
 }>) {
+  const profileScreenCopy = copy;
   const [draft, setDraft] = useState<AddressBookDraftInput>(value);
   const errors = useMemo(() => validateAddressDraft(draft), [draft]);
   const hasErrors = Object.values(errors).some(Boolean);
@@ -312,6 +320,7 @@ function AddressBookDialog({
 }
 
 export default function CustomerProfileScreen() {
+  const { profileScreenCopy } = useI18nCopy();
   const {
     addresses,
     addressesQuery,
@@ -352,7 +361,10 @@ export default function CustomerProfileScreen() {
       <div className="mx-auto min-h-[calc(100vh-4rem)] max-w-[1440px] bg-[#F0FDF4] p-6 md:p-8">
         <ErrorState
           title="Không thể tải hồ sơ"
-          description={getProfileLoadErrorMessage(profileQuery.error)}
+          description={getProfileLoadErrorMessage(
+            profileQuery.error,
+            profileScreenCopy,
+          )}
           action={
             <Button
               variant="outline"
@@ -821,6 +833,7 @@ export default function CustomerProfileScreen() {
       </div>
 
       <AddressBookDialog
+        copy={profileScreenCopy}
         isPending={isAddressMutating}
         open={isAddressDialogOpen}
         value={addressDialogValue}

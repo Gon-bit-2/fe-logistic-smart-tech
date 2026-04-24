@@ -38,9 +38,11 @@ function normalizeAutocompleteResponse(
     };
   }
 
-  return {
-    predictions:
-      payload.data?.map((item) => ({
+  const backendPayload = payload as BackendMapAutocompleteResponse;
+
+  if ("data" in backendPayload) {
+    return {
+      predictions: backendPayload.data?.map((item) => ({
         description: item.description?.trim() || null,
         place_id: item.placeId?.trim() || null,
         structured_formatting: {
@@ -48,7 +50,10 @@ function normalizeAutocompleteResponse(
           secondary_text: item.secondaryText?.trim() || null,
         },
       })) ?? [],
-  };
+    };
+  }
+
+  return { predictions: [] };
 }
 
 function normalizePlaceDetailResponse(
@@ -74,16 +79,17 @@ function normalizePlaceDetailResponse(
     };
   }
 
+  const backendPayload = payload as BackendMapPlaceDetailResponse;
   const result: MapPlaceDetail = {
-    formatted_address: payload.formattedAddress?.trim() || null,
+    formatted_address: backendPayload.formattedAddress?.trim() || null,
     geometry: {
       location: {
-        lat: payload.latitude ?? null,
-        lng: payload.longitude ?? null,
+        lat: backendPayload.latitude ?? null,
+        lng: backendPayload.longitude ?? null,
       },
     },
-    name: payload.name?.trim() || null,
-    place_id: payload.placeId?.trim() || null,
+    name: backendPayload.name?.trim() || null,
+    place_id: backendPayload.placeId?.trim() || null,
   };
 
   return {

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { BellDot, BellRing, CheckCheck, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
@@ -9,12 +9,17 @@ import {
   useMarkNotificationRead,
   useNotificationsQuery,
 } from "@/features/notifications/presentation/hooks/useNotifications";
-import { notificationScreenCopy } from "@/i18n/vi/notifications";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/formatters";
 
-function getNotificationLoadErrorMessage(error: unknown) {
+type NotificationScreenCopy = ReturnType<typeof useI18nCopy>["notificationScreenCopy"];
+
+function getNotificationLoadErrorMessage(
+  error: unknown,
+  notificationScreenCopy: NotificationScreenCopy,
+) {
   if (error instanceof ApiError) {
     if (error.status === 401) return notificationScreenCopy.loadErrorUnauthorized;
     if (error.status === 403) return notificationScreenCopy.loadErrorForbidden;
@@ -30,6 +35,7 @@ type CustomerNotificationsPanelProps = Readonly<{
 export default function CustomerNotificationsPanel({
   enabled = true,
 }: CustomerNotificationsPanelProps) {
+  const { notificationScreenCopy } = useI18nCopy();
   const { user } = useAuthSession();
   const role = user?.role ?? "customer";
   const notificationsQuery = useNotificationsQuery(
@@ -83,7 +89,10 @@ export default function CustomerNotificationsPanel({
           </div>
         ) : notificationsQuery.isError ? (
           <div className="rounded-2xl border border-red-100 bg-red-50/80 px-4 py-6 text-sm text-red-700">
-            {getNotificationLoadErrorMessage(notificationsQuery.error)}
+            {getNotificationLoadErrorMessage(
+              notificationsQuery.error,
+              notificationScreenCopy,
+            )}
           </div>
         ) : notifications.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-8 text-center">

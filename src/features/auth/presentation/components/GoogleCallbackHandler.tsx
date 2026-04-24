@@ -1,14 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { startTransition, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import { parseGoogleCallbackParams } from "@/features/auth/application/services/auth.utils";
 import { exchangeGoogleSession } from "@/features/auth/infrastructure/api/auth.api";
 import { setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
-import { googleCallbackCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 export default function GoogleCallbackHandler() {
+  const { googleCallbackCopy } = useI18nCopy();
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackParams = parseGoogleCallbackParams(searchParams);

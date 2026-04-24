@@ -67,7 +67,7 @@ describe("LoginForm", () => {
         email: "ops@emerald.com",
         password: "Secret123",
       });
-      expect(router.push).toHaveBeenCalledWith("/dashboard");
+      expect(router.push).toHaveBeenCalledWith("/vi/dashboard");
     });
   });
 
@@ -106,7 +106,7 @@ describe("LoginForm", () => {
         phone: "0909000000",
         password: "Secret123",
       });
-      expect(router.push).toHaveBeenCalledWith("/auth/otp?mode=register");
+      expect(router.push).toHaveBeenCalledWith("/vi/auth/otp?mode=register");
     });
   });
 

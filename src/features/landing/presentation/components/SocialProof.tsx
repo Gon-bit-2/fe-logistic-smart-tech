@@ -2,14 +2,28 @@
 
 import React, { useRef } from "react";
 import { ArrowUpRight, Building2, Handshake, Orbit, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { socialProofCopy } from "@/i18n/vi";
 import { useLandingReveal } from "@/features/landing/presentation/components/useLandingReveal";
 
 const icons = [Orbit, Building2, ShieldCheck];
 
+type SocialStat = {
+  label: string;
+  value: string;
+};
+
+type SocialHighlight = {
+  description: string;
+  title: string;
+};
+
 export default function SocialProof() {
+  const t = useTranslations("landing.socialProof");
+  const stats = t.raw("stats") as SocialStat[];
+  const partnerGroups = t.raw("partnerGroups") as string[];
+  const highlights = t.raw("highlights") as SocialHighlight[];
   const sectionRef = useRef<HTMLElement>(null);
 
   useLandingReveal(sectionRef);
@@ -28,20 +42,20 @@ export default function SocialProof() {
           className="rounded-[2rem] border border-white/70 bg-white/70 p-8 shadow-[0_30px_80px_-42px_rgba(0,79,53,0.35)] backdrop-blur-xl md:p-10"
         >
           <Badge variant="outline" className="border-primary/15 bg-primary-fixed/40 px-3 py-1 text-[11px] font-bold tracking-[0.24em] uppercase text-primary">
-            {socialProofCopy.eyebrow}
+            {t("eyebrow")}
           </Badge>
 
           <div className="mt-6 max-w-2xl space-y-4">
             <h2 className="text-3xl font-black tracking-tight text-on-surface md:text-5xl">
-              {socialProofCopy.title}
+              {t("title")}
             </h2>
             <p className="text-base leading-8 text-on-surface-variant md:text-lg">
-              {socialProofCopy.description}
+              {t("description")}
             </p>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {socialProofCopy.stats.map((stat, index) => {
+            {stats.map((stat, index) => {
               const Icon = icons[index] ?? Orbit;
 
               return (
@@ -80,16 +94,16 @@ export default function SocialProof() {
               <div className="flex items-center gap-3 text-primary-fixed">
                 <Handshake className="h-5 w-5" />
                 <span className="text-xs font-black tracking-[0.28em] uppercase text-primary-fixed/90">
-                  Trusted ecosystem
+                  {t("ecosystemEyebrow")}
                 </span>
               </div>
               <p className="mt-5 max-w-sm text-sm leading-7 text-white/72">
-                Tăng trưởng bền vững chỉ xảy ra khi dữ liệu, vận hành và đối tác cùng nhìn về một mục tiêu chung.
+                {t("ecosystemDescription")}
               </p>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              {socialProofCopy.partnerGroups.map((group) => (
+              {partnerGroups.map((group) => (
                 <Badge
                   key={group}
                   variant="outline"
@@ -104,7 +118,7 @@ export default function SocialProof() {
       </div>
 
       <div className="mx-auto mt-8 grid max-w-7xl gap-6 lg:grid-cols-2">
-        {socialProofCopy.highlights.map((item) => (
+        {highlights.map((item) => (
           <Card
             key={item.title}
             data-reveal

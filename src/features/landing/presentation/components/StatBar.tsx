@@ -1,12 +1,19 @@
 "use client";
 
 import React, { useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { statBarCopy } from "@/i18n/vi";
 import { useLandingReveal } from "@/features/landing/presentation/components/useLandingReveal";
 
+type StatItem = {
+  label: string;
+  value: string;
+};
+
 export default function StatBar() {
+  const t = useTranslations("landing.statBar");
+  const items = t.raw("items") as StatItem[];
   const sectionRef = useRef<HTMLElement>(null);
 
   useLandingReveal(sectionRef, { start: "top 82%", y: 28 });
@@ -21,18 +28,18 @@ export default function StatBar() {
       <div className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div data-reveal className="max-w-xl space-y-4">
           <Badge className="bg-white/8 px-3 py-1 text-[11px] font-bold tracking-[0.24em] uppercase text-primary-fixed">
-            Operational confidence
+            {t("eyebrow")}
           </Badge>
           <h2 className="text-3xl font-black tracking-tight text-white md:text-4xl">
-            {statBarCopy.title}
+            {t("title")}
           </h2>
           <p className="text-base leading-8 text-white/72">
-            {statBarCopy.description}
+            {t("description")}
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {statBarCopy.items.map((item) => (
+          {items.map((item) => (
             <Card
               key={item.label}
               data-reveal

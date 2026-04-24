@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import React, { useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowRight, Compass, LifeBuoy, RefreshCcw } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";

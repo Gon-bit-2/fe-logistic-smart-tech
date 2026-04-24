@@ -3,10 +3,7 @@
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
-import {
-  getTrackingStatusLabel,
-  internalTrackingCopy,
-} from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { isApiError } from "@/lib/api/errors";
 import { hasApiBaseUrl } from "@/lib/api/env";
 
@@ -17,6 +14,7 @@ type InternalTrackingWorkspaceProps = {
 export default function InternalTrackingWorkspace({
   orderId,
 }: InternalTrackingWorkspaceProps) {
+  const { getTrackingStatusLabel, internalTrackingCopy } = useI18nCopy();
   const effectiveOrderId = orderId?.trim() ?? "";
   const trackingQuery = useInternalTrackingQuery(
     effectiveOrderId,

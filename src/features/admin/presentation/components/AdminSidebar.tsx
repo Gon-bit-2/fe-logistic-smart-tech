@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 import { SidebarBrand } from "./sidebar/SidebarBrand";
 import { SidebarNavItems } from "./sidebar/SidebarNavItems";

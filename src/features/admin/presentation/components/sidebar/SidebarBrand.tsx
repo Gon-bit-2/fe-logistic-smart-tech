@@ -2,13 +2,14 @@
 
 import { ShieldCheck } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
-import { adminSidebarCopy } from "@/i18n/vi";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 export interface SidebarBrandProps {
   readonly config: AdminShellConfig;
 }
 
 export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
+  const { adminSidebarCopy } = useI18nCopy();
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
 

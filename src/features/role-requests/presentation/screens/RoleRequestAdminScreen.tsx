@@ -14,7 +14,7 @@ import {
   useApproveRoleRequest,
   useRejectRoleRequest,
 } from "@/features/role-requests/presentation/hooks/useRoleRequests";
-import { roleRequestAdminCopy } from "@/i18n/vi/roleRequests";
+import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
 import type { RoleRequestStatus } from "@/features/role-requests/domain/types/role-request.types";
@@ -40,7 +40,12 @@ function getStatusTone(status: RoleRequestStatus) {
   return "amber" as const;
 }
 
-function getAdminRoleRequestLoadErrorMessage(error: unknown) {
+type RoleRequestAdminCopy = ReturnType<typeof useI18nCopy>["roleRequestAdminCopy"];
+
+function getAdminRoleRequestLoadErrorMessage(
+  error: unknown,
+  roleRequestAdminCopy: RoleRequestAdminCopy,
+) {
   if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
     return error.message;
   }
@@ -49,6 +54,7 @@ function getAdminRoleRequestLoadErrorMessage(error: unknown) {
 }
 
 export default function RoleRequestAdminScreen() {
+  const { roleRequestAdminCopy } = useI18nCopy();
   const [status, setStatus] = useState<RoleRequestStatus>("PENDING");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const roleRequestsQuery = useAdminRoleRequestsQuery({
@@ -76,7 +82,10 @@ export default function RoleRequestAdminScreen() {
     return (
       <ErrorState
         title="Không thể tải queue role requests"
-        description={getAdminRoleRequestLoadErrorMessage(roleRequestsQuery.error)}
+        description={getAdminRoleRequestLoadErrorMessage(
+          roleRequestsQuery.error,
+          roleRequestAdminCopy,
+        )}
       />
     );
   }
@@ -159,6 +168,7 @@ export default function RoleRequestAdminScreen() {
           {selectedRequest ? (
             <RoleRequestReviewPanel
               key={selectedRequest.id}
+              copy={roleRequestAdminCopy}
               request={selectedRequest}
               hubs={hubsQuery.data?.data ?? []}
               approveMutation={approveMutation}
@@ -173,17 +183,20 @@ export default function RoleRequestAdminScreen() {
 
 interface RoleRequestReviewPanelProps {
   readonly approveMutation: ReturnType<typeof useApproveRoleRequest>;
+  readonly copy: RoleRequestAdminCopy;
   readonly hubs: ReadonlyArray<{ code: string; id: number | string; name: string }>;
   readonly rejectMutation: ReturnType<typeof useRejectRoleRequest>;
   readonly request: RoleRequestViewModel;
 }
 
 function RoleRequestReviewPanel({
+  copy,
   request,
   hubs,
   approveMutation,
   rejectMutation,
 }: Readonly<RoleRequestReviewPanelProps>) {
+  const roleRequestAdminCopy = copy;
   const [reviewNote, setReviewNote] = useState(request.reviewNote ?? "");
   const [hubId, setHubId] = useState(request.hubId != null ? String(request.hubId) : "");
   const requireHub = request.targetRoleName === "WAREHOUSE_STAFF";
