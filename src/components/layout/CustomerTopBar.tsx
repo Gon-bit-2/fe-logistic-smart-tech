@@ -7,6 +7,7 @@ import {
   Bell,
   LayoutDashboard,
   LogOut,
+  MapPin,
   Package,
   Plus,
   ShieldCheck,
@@ -48,6 +49,12 @@ const customerNavItems: CustomerNavItem[] = [
     icon: <Plus className="size-4" />,
     isActive: (pathname) => pathname === "/orders/create",
     label: "Tạo đơn",
+  },
+  {
+    href: "/tracking",
+    icon: <MapPin className="size-4" />,
+    isActive: (pathname) => pathname.startsWith("/tracking"),
+    label: "Theo dõi",
   },
   {
     href: "/profile",
@@ -121,30 +128,30 @@ export default function CustomerTopBar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-emerald-200/80 bg-[linear-gradient(180deg,rgba(236,253,245,0.96),rgba(255,255,255,0.9))] backdrop-blur-xl shadow-[0_22px_50px_-26px_rgba(6,78,59,0.35)]">
-      <div className="mx-auto max-w-[1440px] px-4 py-4 md:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="mx-auto max-w-[1440px] px-4 py-2 md:px-8 md:py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
             <Link
               href="/overview"
-              className="text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
+              className="text-base md:text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
             >
               Emerald Customer Hub
             </Link>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-              <span>Không gian thao tác của khách hàng</span>
-              <Badge className="h-5 rounded-full bg-emerald-100 px-2 text-[10px] font-bold uppercase text-emerald-800">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] md:text-xs text-slate-500">
+              <span className="hidden sm:inline">Không gian thao tác của khách hàng</span>
+              <Badge className="h-4 rounded-full bg-emerald-100 px-1.5 text-[9px] font-bold uppercase text-emerald-800">
                 {formatEnumLabel(user?.role ?? "customer")}
               </Badge>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <div ref={bellContainerRef} className="relative">
               <button
                 type="button"
                 onClick={() => setIsNotificationsOpen((current) => !current)}
                 className={cn(
-                  "relative rounded-full border border-white/70 bg-white/85 p-2.5 text-slate-600 transition-colors hover:text-emerald-700",
+                  "relative rounded-full border border-white/70 bg-white/85 p-2 text-slate-600 transition-colors hover:text-emerald-700",
                   isNotificationsOpen &&
                     "text-emerald-700 ring-2 ring-emerald-200",
                 )}
@@ -152,16 +159,16 @@ export default function CustomerTopBar() {
                 aria-haspopup="dialog"
                 aria-label="Mở thông báo"
               >
-                <Bell className="size-[18px]" />
+                <Bell className="size-4" />
                 {unreadCount > 0 ? (
-                  <span className="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[0.62rem] font-black text-white">
+                  <span className="absolute -right-1 -top-1 inline-flex min-w-4 items-center justify-center rounded-full bg-red-500 px-1 py-0.5 text-[0.6rem] font-black text-white">
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 ) : null}
               </button>
 
               {isNotificationsOpen ? (
-                <div className="absolute right-0 top-[calc(100%+0.85rem)] z-50">
+                <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50">
                   <CustomerNotificationsPanel
                     enabled={isNotificationsOpen || shouldOpenNotifications}
                   />
@@ -171,33 +178,33 @@ export default function CustomerTopBar() {
 
             <Link
               href="/profile"
-              className="group flex items-center gap-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1.5 text-left shadow-sm transition-all hover:-translate-y-0.5"
+              className="group flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-2 py-1 text-left shadow-sm transition-all hover:-translate-y-0.5"
             >
-              <Avatar className="size-9 ring-2 ring-emerald-100">
+              <Avatar className="size-8 ring-2 ring-emerald-100">
                 <AvatarImage alt={fullName} src={avatarUrl ?? undefined} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="hidden min-w-0 sm:block">
-                <p className="max-w-40 truncate text-sm font-bold text-emerald-950">
+                <p className="max-w-32 truncate text-xs font-bold text-emerald-950">
                   {fullName}
                 </p>
-                <p className="text-xs text-slate-500">Mở hồ sơ</p>
+                <p className="text-[10px] text-slate-500 leading-tight">Mở hồ sơ</p>
               </div>
             </Link>
 
             <button
               type="button"
               onClick={() => void logout()}
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-950 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-emerald-800"
+              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-950 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-800"
             >
-              <LogOut className="size-4" />
+              <LogOut className="size-3.5" />
               <span className="hidden sm:inline">Đăng xuất</span>
             </button>
           </div>
         </div>
 
-        <nav className="mt-4 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-w-max items-center gap-2 rounded-[1.35rem] border border-emerald-100/80 bg-white/80 p-2 shadow-inner shadow-emerald-50">
+        <nav className="mt-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-w-max items-center gap-1.5 rounded-2xl border border-emerald-100/80 bg-white/80 p-1.5 shadow-inner shadow-emerald-50">
             {customerNavItems.map((item) => {
               const isActive = item.isActive(pathname);
 
@@ -206,7 +213,7 @@ export default function CustomerTopBar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all",
+                    "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-semibold transition-all",
                     isActive
                       ? "bg-emerald-600 text-white shadow-sm"
                       : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-800",

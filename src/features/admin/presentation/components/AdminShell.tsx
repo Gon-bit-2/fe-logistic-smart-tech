@@ -38,7 +38,7 @@ export default function AdminShell({ children }: Readonly<AdminShellProps>) {
         <main
           className={cn(
             isDashboard
-              ? "min-h-[calc(100vh-4rem)] overflow-hidden"
+              ? "px-4 py-6 md:px-8 md:py-8 xl:px-10 min-h-[calc(100vh-4rem)] overflow-hidden"
               : "px-4 py-6 md:min-h-[calc(100vh-4rem)] md:px-8 md:py-8 xl:px-10",
           )}
         >

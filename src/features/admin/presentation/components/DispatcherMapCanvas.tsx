@@ -118,6 +118,9 @@ export default function DispatcherMapCanvas({
 
   useEffect(() => {
     ensureGoongCssLoaded();
+    if (getGoongGlobal()) {
+      setIsScriptReady(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -279,35 +282,7 @@ export default function DispatcherMapCanvas({
     };
   }, []);
 
-  if (isFleetLoading || isOrderLoading || isHubLoading) {
-    return (
-      <MapFallback
-        className={className}
-        title="Đang tải bản đồ điều phối..."
-        description="Hệ thống đang đồng bộ trạng thái hubs, đơn hàng và đội xe."
-      />
-    );
-  }
-
-  if (!GOONG_MAPS_TILES_KEY) {
-    return (
-      <MapFallback
-        className={className}
-        title="Chưa cấu hình Goong Maps"
-        description="Thiếu biến môi trường NEXT_PUBLIC_GOONG_MAPS_TILES_KEY. Thêm map tiles key vào file .env ở thư mục gốc rồi khởi động lại ứng dụng."
-      />
-    );
-  }
-
-  if (mapError) {
-    return (
-      <MapFallback
-        className={className}
-        title="Không thể tải bản đồ điều phối"
-        description={mapError}
-      />
-    );
-  }
+  const isLoading = isFleetLoading || isOrderLoading || isHubLoading;
 
   return (
     <div className={cn("relative h-full w-full overflow-hidden", className)}>
@@ -317,32 +292,57 @@ export default function DispatcherMapCanvas({
         onError={() => {
           setMapError("Không thể tải Goong GL JS từ CDN.");
         }}
+        onLoad={() => {
+          setIsScriptReady(true);
+        }}
         onReady={() => {
           setIsScriptReady(true);
         }}
       />
 
+      {isLoading ? (
+        <MapFallback
+          className="absolute inset-0 z-20"
+          title="Đang tải bản đồ điều phối..."
+          description="Hệ thống đang đồng bộ trạng thái hubs, đơn hàng và đội xe."
+        />
+      ) : !GOONG_MAPS_TILES_KEY ? (
+        <MapFallback
+          className="absolute inset-0 z-20"
+          title="Chưa cấu hình Goong Maps"
+          description="Thiếu biến môi trường NEXT_PUBLIC_GOONG_MAPS_TILES_KEY. Thêm map tiles key vào file .env ở thư mục gốc rồi khởi động lại ứng dụng."
+        />
+      ) : mapError ? (
+        <MapFallback
+          className="absolute inset-0 z-20"
+          title="Không thể tải bản đồ điều phối"
+          description={mapError}
+        />
+      ) : null}
+
       <div ref={mapContainerRef} className="h-full w-full" />
 
-      <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
-        <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
-          <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#064e3b]"></span>
-          <span className="mr-1 font-bold text-[#064E3B]">{hubs.length}</span>
-          Hubs
+      {!isLoading && !mapError && GOONG_MAPS_TILES_KEY ? (
+        <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+          <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
+            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#064e3b]"></span>
+            <span className="mr-1 font-bold text-[#064E3B]">{hubs.length}</span>
+            Hubs
+          </div>
+          <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
+            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-amber-500"></span>
+            <span className="mr-1 font-bold text-amber-600">
+              {pendingOrders.length}
+            </span>
+            Đơn chờ
+          </div>
+          <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
+            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#10B981]"></span>
+            <span className="mr-1 font-bold text-[#10B981]">{totalVehicles}</span>
+            Xe sẵn sàng
+          </div>
         </div>
-        <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
-          <span className="mr-2 inline-block h-2 w-2 rounded-full bg-amber-500"></span>
-          <span className="mr-1 font-bold text-amber-600">
-            {pendingOrders.length}
-          </span>
-          Đơn chờ
-        </div>
-        <div className="flex items-center rounded border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
-          <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#10B981]"></span>
-          <span className="mr-1 font-bold text-[#10B981]">{totalVehicles}</span>
-          Xe sẵn sàng
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }
