@@ -107,7 +107,7 @@ function createMapStateMessage(
   error: string | null,
   isLoadingRoute: boolean,
   routePreviewCopy: ReturnType<typeof useI18nCopy>["routePreviewCopy"],
-) {
+): string | null {
   if (!hasVisiblePoint) {
     return routePreviewCopy.mapPendingDescription;
   }
@@ -120,7 +120,7 @@ function createMapStateMessage(
     return routePreviewCopy.mapLoadingDescription;
   }
 
-  return routePreviewCopy.mapMarkerOnlyDescription;
+  return null;
 }
 
 export default function OrderRouteMap({
@@ -380,7 +380,7 @@ export default function OrderRouteMap({
         data-testid="order-route-map"
       />
 
-      {!polyline ? (
+      {!polyline && mapStateMessage ? (
         <div className="absolute right-4 top-4 z-10 rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[10px] font-black tracking-[0.14em] text-white uppercase backdrop-blur">
           {mapStateMessage}
         </div>

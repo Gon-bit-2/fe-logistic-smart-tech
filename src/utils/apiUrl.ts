@@ -19,6 +19,8 @@ export const API_TRIP_CANCEL_ORDER = (
 ) => `/trips/${tripId}/cancel-order/${orderId}`;
 export const API_TRIP_AUTO_DISPATCH = "/trips/auto-dispatch";
 export const API_TRIP_AUTO_DISPATCH_ALL = "/trips/auto-dispatch/all";
+export const API_TRIP_DISPATCH_PREVIEW = "/trips/dispatch-preview";
+export const API_TRIP_DISPATCH_APPROVE = "/trips/dispatch-approve";
 
 // orders api endpoints
 export const API_ORDERS = "/orders";
@@ -59,12 +61,20 @@ export const API_ANALYTICS_FLEET_PERFORMANCE = "/analytics/fleet-performance";
 // hubs api endpoints
 export const API_HUBS = "/hubs";
 export const API_HUB_DETAIL = (id: string | number) => `/hubs/${id}`;
+export const API_HUB_ASSIGNABLE_USERS = (id: string | number) =>
+  `/hubs/${id}/assignable-users`;
 export const API_HUB_ASSIGN_STAFF = (id: string | number) =>
   `/hubs/${id}/staff`;
+export const API_HUB_ASSIGN_DRIVER = (id: string | number) =>
+  `/hubs/${id}/drivers`;
 export const API_HUB_REMOVE_STAFF = (
   hubId: string | number,
   userId: string | number,
 ) => `/hubs/${hubId}/staff/${userId}`;
+export const API_HUB_REMOVE_DRIVER = (
+  hubId: string | number,
+  userId: string | number,
+) => `/hubs/${hubId}/drivers/${userId}`;
 
 // language api endpoints
 export const API_LANGUAGE = "/language";

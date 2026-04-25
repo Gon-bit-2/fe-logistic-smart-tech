@@ -222,6 +222,7 @@ export type OrderQuoteApiResponse = {
 };
 
 export type OrderListParams = PaginationParams & {
+  currentHubId?: number;
   status?: OrderStatus;
   search?: string;
   trackingCode?: string;

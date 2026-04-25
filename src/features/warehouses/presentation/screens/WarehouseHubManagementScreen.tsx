@@ -4,12 +4,10 @@ import { type FormEvent, useState } from "react";
 import { Warehouse, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
 import {
-  useAssignHubStaff,
   useCreateHub,
   useDeleteHub,
   useHubDetailQuery,
   useHubsQuery,
-  useRemoveHubStaff,
   useUpdateHub,
 } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { useImageUpload } from "@/lib/hooks/useImageUpload";
@@ -27,7 +25,6 @@ export default function WarehouseHubManagementScreen(
   const { warehouseHubScreenCopy } = useI18nCopy();
   const hubsQuery = useHubsQuery();
   const [selectedHubId, setSelectedHubId] = useState<string>("");
-  const [staffUserId, setStaffUserId] = useState("");
   const [form, setForm] = useState({
     address: "",
     code: "",
@@ -40,8 +37,6 @@ export default function WarehouseHubManagementScreen(
   const createHub = useCreateHub();
   const updateHub = useUpdateHub();
   const deleteHub = useDeleteHub();
-  const assignHubStaff = useAssignHubStaff();
-  const removeHubStaff = useRemoveHubStaff();
   const imageUpload = useImageUpload("logistic_hubs");
 
   /** Xử lý submit form tạo/cập nhật hub */
@@ -278,41 +273,29 @@ export default function WarehouseHubManagementScreen(
                       </p>
                       <p className="text-xs text-on-surface/55">{staff.email}</p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        void removeHubStaff.mutateAsync({
-                          hubId: selectedHubId,
-                          userId: staff.id,
-                        })
-                      }
-                      className="rounded-lg bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive"
-                    >
-                      Gỡ
-                    </button>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 flex gap-3">
-                <input
-                  value={staffUserId}
-                  onChange={(event) => setStaffUserId(event.target.value)}
-                  className="h-11 flex-1 rounded-xl border border-outline-variant/20 bg-background px-4"
-                  placeholder="Nhập userId để gán staff"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    void assignHubStaff.mutateAsync({
-                      hubId: selectedHubId,
-                      payload: { userId: Number(staffUserId) },
-                    })
-                  }
-                  className="rounded-xl bg-tertiary px-4 py-3 text-sm font-bold text-white"
-                >
-                  Gán staff
-                </button>
+              <div className="mt-6 border-t border-outline-variant/10 pt-4">
+                <p className="text-sm font-black text-on-surface">
+                  Tài xế của hub
+                </p>
+                <div className="mt-4 space-y-2">
+                  {(selectedHubQuery.data.drivers ?? []).map((driver) => (
+                    <div
+                      key={driver.id}
+                      className="flex items-center justify-between rounded-lg bg-surface-container-low px-3 py-2"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-on-surface">
+                          {driver.fullName ?? driver.email}
+                        </p>
+                        <p className="text-xs text-on-surface/55">{driver.email}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ) : null}

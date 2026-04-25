@@ -19,6 +19,7 @@ export interface HubStaffRecord {
 }
 
 export interface HubDetailRecord extends HubRecord {
+  readonly drivers?: HubStaffRecord[];
   readonly staff: HubStaffRecord[];
   readonly vehicleCount: number;
 }
@@ -34,4 +35,22 @@ export type HubUpsertInput = {
 
 export type AssignHubStaffInput = {
   userId: number;
+};
+
+export type AssignHubDriverInput = AssignHubStaffInput;
+
+export type HubAssignableRole = "WAREHOUSE_STAFF" | "DRIVER";
+
+export interface HubAssignableUserRecord {
+  readonly email: string;
+  readonly fullName?: string | null;
+  readonly hubId?: number | null;
+  readonly id: number;
+  readonly phone?: string | null;
+  readonly role?: { name?: string | null } | null;
+}
+
+export type HubAssignableUsersParams = {
+  role: HubAssignableRole;
+  search?: string;
 };

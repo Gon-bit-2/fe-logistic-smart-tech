@@ -19,12 +19,44 @@ function hasResolvedAddress(address: ResolvedOrderAddressInput) {
   );
 }
 
+function hasMinimumPhoneLength(value: string) {
+  return value.trim().length >= 10;
+}
+
+export function getOrderQuoteValidationMessage(input: CreateOrderInput) {
+  if (!hasResolvedAddress(input.pickup)) {
+    return "Vui lòng chọn địa chỉ lấy hàng từ danh sách gợi ý.";
+  }
+
+  if (!hasResolvedAddress(input.delivery)) {
+    return "Vui lòng chọn địa chỉ giao hàng từ danh sách gợi ý.";
+  }
+
+  if (!input.contactName.trim()) {
+    return "Vui lòng nhập tên người gửi.";
+  }
+
+  if (!hasMinimumPhoneLength(input.contactPhone)) {
+    return "Số điện thoại người gửi cần có ít nhất 10 ký tự.";
+  }
+
+  if (!input.receiverName.trim()) {
+    return "Vui lòng nhập tên người nhận.";
+  }
+
+  if (!hasMinimumPhoneLength(input.receiverPhone)) {
+    return "Số điện thoại người nhận cần có ít nhất 10 ký tự.";
+  }
+
+  if (Number(input.packageWeightKg) <= 0) {
+    return "Vui lòng nhập cân nặng kiện hàng lớn hơn 0.";
+  }
+
+  return null;
+}
+
 export function canFetchOrderQuote(input: CreateOrderInput) {
-  return (
-    hasResolvedAddress(input.pickup) &&
-    hasResolvedAddress(input.delivery) &&
-    Number(input.packageWeightKg) > 0
-  );
+  return getOrderQuoteValidationMessage(input) === null;
 }
 
 export type OrderQuoteState = {
@@ -34,10 +66,12 @@ export type OrderQuoteState = {
   isLoading: boolean;
   isRefreshing: boolean;
   quote: OrderQuoteResponse | null;
+  validationMessage: string | null;
 };
 
 export function useOrderQuote(input: CreateOrderInput): OrderQuoteState {
-  const canRequestQuote = canFetchOrderQuote(input);
+  const validationMessage = getOrderQuoteValidationMessage(input);
+  const canRequestQuote = validationMessage === null;
   const quoteQuery = useQuery<OrderQuoteResponse, Error>({
     enabled: canRequestQuote,
     queryFn: () => getOrderQuoteUseCase(input),
@@ -75,6 +109,7 @@ export function useOrderQuote(input: CreateOrderInput): OrderQuoteState {
       isLoading: canRequestQuote && quoteQuery.isPending,
       isRefreshing: canRequestQuote && quoteQuery.isFetching && !quoteQuery.isPending,
       quote,
+      validationMessage,
     }),
     [
       canRequestQuote,
@@ -83,6 +118,7 @@ export function useOrderQuote(input: CreateOrderInput): OrderQuoteState {
       quoteQuery.error,
       quoteQuery.isFetching,
       quoteQuery.isPending,
+      validationMessage,
     ],
   );
 }

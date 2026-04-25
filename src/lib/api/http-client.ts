@@ -1,6 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import type { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { clearAuthSession, getAuthSessionSnapshot, setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
+import { isAccessTokenExpiringSoon } from "@/features/auth/application/services/auth-session";
 import { restoreSession } from "@/lib/api/session-client";
 import type { SessionTokens } from "@/types/common.type";
 import { API_BASE_URL } from "./env";
@@ -119,14 +120,26 @@ async function getRefreshPromise() {
 }
 
 httpClient.interceptors.request.use((config) => {
+  if (shouldSkipRefresh(config)) {
+    return config;
+  }
+
   const { accessToken } = getAuthSessionSnapshot();
   const headers = toAxiosHeaders(config.headers);
 
-  if (accessToken && !headers.has("Authorization")) {
-    setAuthorizationHeader(config, accessToken);
+  if (!accessToken || headers.has("Authorization")) {
+    return config;
   }
 
-  return config;
+  if (!isAccessTokenExpiringSoon(accessToken)) {
+    setAuthorizationHeader(config, accessToken);
+    return config;
+  }
+
+  return getRefreshPromise().then((tokens) => {
+    setAuthorizationHeader(config, tokens.accessToken);
+    return config;
+  });
 });
 
 httpClient.interceptors.response.use(

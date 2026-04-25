@@ -5,16 +5,22 @@ import type { PaginatedResult } from "@/types/common.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type {
   AssignHubStaffInput,
+  AssignHubDriverInput,
+  HubAssignableUserRecord,
+  HubAssignableUsersParams,
   HubDetailRecord,
   HubRecord,
   HubUpsertInput,
 } from "@/features/warehouses/domain/types/hub.types";
 import {
+  assignHubDriverUseCase,
   assignHubStaffUseCase,
   createHubUseCase,
   deleteHubUseCase,
   getHubDetailUseCase,
+  listHubAssignableUsersUseCase,
   listHubsUseCase,
+  removeHubDriverUseCase,
   removeHubStaffUseCase,
   updateHubUseCase,
 } from "@/features/warehouses/application/use-cases/warehouse.use-cases";
@@ -32,6 +38,18 @@ export function useHubDetailQuery(hubId: string, enabled = true) {
     enabled: enabled && hubId.trim().length > 0,
     queryFn: () => getHubDetailUseCase(hubId),
     queryKey: ["warehouses", "hub", hubId],
+  });
+}
+
+export function useHubAssignableUsersQuery(
+  hubId: string,
+  params: HubAssignableUsersParams,
+  enabled = true,
+) {
+  return useQuery<HubAssignableUserRecord[], ApiError>({
+    enabled: enabled && hubId.trim().length > 0,
+    queryFn: () => listHubAssignableUsersUseCase(hubId, params),
+    queryKey: ["warehouses", "hub", hubId, "assignable-users", params],
   });
 }
 
@@ -80,6 +98,7 @@ export function useAssignHubStaff() {
     mutationFn: ({ hubId, payload }) => assignHubStaffUseCase(hubId, payload),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId] });
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId, "assignable-users"] });
     },
   });
 }
@@ -95,6 +114,39 @@ export function useRemoveHubStaff() {
     mutationFn: ({ hubId, userId }) => removeHubStaffUseCase(hubId, userId),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId] });
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId, "assignable-users"] });
+    },
+  });
+}
+
+export function useAssignHubDriver() {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    HubDetailRecord["staff"][number],
+    ApiError,
+    { hubId: string; payload: AssignHubDriverInput }
+  >({
+    mutationFn: ({ hubId, payload }) => assignHubDriverUseCase(hubId, payload),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId] });
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId, "assignable-users"] });
+    },
+  });
+}
+
+export function useRemoveHubDriver() {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    { message: string },
+    ApiError,
+    { hubId: string; userId: number }
+  >({
+    mutationFn: ({ hubId, userId }) => removeHubDriverUseCase(hubId, userId),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId] });
+      queryClient.invalidateQueries({ queryKey: ["warehouses", "hub", variables.hubId, "assignable-users"] });
     },
   });
 }

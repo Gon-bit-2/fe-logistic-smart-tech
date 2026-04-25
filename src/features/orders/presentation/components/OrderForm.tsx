@@ -49,6 +49,18 @@ function toIsoString(value: string) {
   return new Date(value).toISOString();
 }
 
+function getPhoneValidationMessage(value: string, label: string) {
+  if (!value.trim()) {
+    return null;
+  }
+
+  if (value.trim().length < 10) {
+    return `${label} cần có ít nhất 10 ký tự.`;
+  }
+
+  return null;
+}
+
 function AddressAutocompleteField({
   copy,
   label,
@@ -156,6 +168,14 @@ export default function OrderForm({
   const [internalForm, setInternalForm] = useState(createEmptyOrderInput);
   const form = value ?? internalForm;
   const formRef = useRef(form);
+  const contactPhoneError = getPhoneValidationMessage(
+    form.contactPhone,
+    orderFormCopy.contactPhone,
+  );
+  const receiverPhoneError = getPhoneValidationMessage(
+    form.receiverPhone,
+    orderFormCopy.receiverPhone,
+  );
 
   useEffect(() => {
     formRef.current = form;
@@ -284,11 +304,15 @@ export default function OrderForm({
               {orderFormCopy.contactPhone}
             </span>
             <Input
+              aria-invalid={Boolean(contactPhoneError)}
               value={form.contactPhone}
               onChange={(event) => updateField("contactPhone", event.target.value)}
               className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
+            {contactPhoneError ? (
+              <p className="px-1 text-xs text-destructive">{contactPhoneError}</p>
+            ) : null}
           </label>
 
           <label className="space-y-2">
@@ -308,11 +332,15 @@ export default function OrderForm({
               {orderFormCopy.receiverPhone}
             </span>
             <Input
+              aria-invalid={Boolean(receiverPhoneError)}
               value={form.receiverPhone}
               onChange={(event) => updateField("receiverPhone", event.target.value)}
               className="border-b border-outline-variant/25 focus:rounded-lg"
               required
             />
+            {receiverPhoneError ? (
+              <p className="px-1 text-xs text-destructive">{receiverPhoneError}</p>
+            ) : null}
           </label>
 
           <label className="space-y-2">
@@ -428,7 +456,11 @@ export default function OrderForm({
                   : orderFormCopy.localMockQuote}
             </div>
           </div>
-          {!isFormComplete ? (
+          {quoteState.validationMessage ? (
+            <p className="mt-3 text-xs text-amber-700">
+              {quoteState.validationMessage}
+            </p>
+          ) : !isFormComplete ? (
             <p className="mt-3 text-xs text-amber-700">
               {orderFormCopy.submitDisabledAddress}
             </p>

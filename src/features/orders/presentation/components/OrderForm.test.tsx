@@ -31,6 +31,7 @@ const quoteState = {
   isLoading: false,
   isRefreshing: false,
   quote: null,
+  validationMessage: null,
 } as const;
 
 describe("OrderForm", () => {
@@ -150,5 +151,53 @@ describe("OrderForm", () => {
       );
       expect(onSubmitSuccess).toHaveBeenCalledWith(sampleOrder);
     });
+  });
+
+  it("shows a specific phone validation message before requesting a quote", () => {
+    renderWithProviders(
+      <OrderForm
+        quoteState={{
+          ...quoteState,
+          canRequestQuote: false,
+          canSubmit: false,
+          validationMessage: "Số điện thoại người gửi cần có ít nhất 10 ký tự.",
+        }}
+        value={{
+          contactName: "Lan",
+          contactPhone: "090",
+          customerName: "",
+          declaredValueUsd: 0,
+          delivery: {
+            address: "456 Điện Biên Phủ, Bình Thạnh",
+            isResolved: true,
+            latitude: 10.80035,
+            longitude: 106.71482,
+            placeId: "delivery-place",
+            query: "456 Điện Biên Phủ, Bình Thạnh",
+          },
+          estimatedArrival: "",
+          itemDescription: "",
+          packageDimensions: "",
+          packageWeightKg: 25,
+          paymentMethod: "STRIPE",
+          pickup: {
+            address: "123 Nguyễn Văn Linh, Quận 7",
+            isResolved: true,
+            latitude: 10.728851,
+            longitude: 106.721659,
+            placeId: "pickup-place",
+            query: "123 Nguyễn Văn Linh, Quận 7",
+          },
+          receiverName: "Minh",
+          receiverPhone: "0909000002",
+          serviceTier: "standard",
+        }}
+      />,
+    );
+
+    expect(
+      screen.getAllByText("Số điện thoại người gửi cần có ít nhất 10 ký tự.").length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: /Tạo đơn hàng/i })).toBeDisabled();
   });
 });

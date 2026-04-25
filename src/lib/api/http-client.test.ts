@@ -54,6 +54,18 @@ function createAxiosInstance() {
   return instance;
 }
 
+function createAccessToken(expOffsetSeconds: number) {
+  const payload = {
+    exp: Math.floor(Date.now() / 1000) + expOffsetSeconds,
+    roleId: 2,
+    roleName: "customer",
+    userId: 1,
+  };
+  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
+
+  return `header.${encodedPayload}.signature`;
+}
+
 describe("http-client", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -62,6 +74,7 @@ describe("http-client", () => {
   it("injects the access token into outgoing requests", async () => {
     const httpClientMock = createAxiosInstance();
     const create = vi.fn().mockReturnValue(httpClientMock);
+    const accessToken = createAccessToken(60 * 60);
 
     vi.doMock("axios", () => ({
       default: {
@@ -78,7 +91,7 @@ describe("http-client", () => {
     vi.doMock("@/features/auth/presentation/state/auth.store", () => ({
       clearAuthSession: vi.fn(),
       getAuthSessionSnapshot: vi.fn(() => ({
-        accessToken: "access-token",
+        accessToken,
       })),
       setAuthSessionTokens: vi.fn(),
     }));
@@ -93,7 +106,56 @@ describe("http-client", () => {
     };
     const nextConfig = await (httpClient as any).__requestHandler(config);
 
-    expect(nextConfig.headers.get("authorization")).toBe("Bearer access-token");
+    expect(nextConfig.headers.get("authorization")).toBe(`Bearer ${accessToken}`);
+  });
+
+  it("refreshes an expiring access token before sending the request", async () => {
+    const httpClientMock = createAxiosInstance();
+    const create = vi.fn().mockReturnValue(httpClientMock);
+    const clearAuthSession = vi.fn();
+    const setAuthSessionTokens = vi.fn();
+    const newAccessToken = createAccessToken(60 * 60);
+    const restoreSession = vi.fn().mockResolvedValue({
+      accessToken: newAccessToken,
+    });
+
+    vi.doMock("axios", () => ({
+      default: {
+        create,
+        isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+      },
+      create,
+      isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+      AxiosHeaders: MockAxiosHeaders,
+    }));
+    vi.doMock("@/lib/api/env", () => ({
+      API_BASE_URL: "http://localhost:8386",
+    }));
+    vi.doMock("@/features/auth/presentation/state/auth.store", () => ({
+      clearAuthSession,
+      getAuthSessionSnapshot: vi.fn(() => ({
+        accessToken: createAccessToken(-10),
+      })),
+      setAuthSessionTokens,
+    }));
+    vi.doMock("@/lib/api/session-client", () => ({
+      restoreSession,
+    }));
+
+    const { httpClient } = await import("./http-client");
+
+    const config = {
+      headers: new MockAxiosHeaders(),
+      url: "/maps/places/autocomplete",
+    };
+    const nextConfig = await (httpClient as any).__requestHandler(config);
+
+    expect(restoreSession).toHaveBeenCalledTimes(1);
+    expect(setAuthSessionTokens).toHaveBeenCalledWith({
+      accessToken: newAccessToken,
+    });
+    expect(clearAuthSession).not.toHaveBeenCalled();
+    expect(nextConfig.headers.get("authorization")).toBe(`Bearer ${newAccessToken}`);
   });
 
   it("refreshes the session and retries the failed request on 401", async () => {

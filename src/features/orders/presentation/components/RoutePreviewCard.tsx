@@ -84,20 +84,20 @@ export default function RoutePreviewCard({
               error={quoteState.error}
             />
           </div>
-          <div className="absolute left-6 top-6 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-black tracking-[0.18em] text-white uppercase backdrop-blur">
+          <div className="absolute left-6 top-6 rounded-full border border-emerald-900/10 bg-white/90 px-3 py-1 text-[10px] font-black tracking-[0.18em] text-emerald-950 uppercase shadow-[0_8px_22px_rgba(6,78,59,0.16)] backdrop-blur-md">
             {routePreviewCopy.routePreview}
           </div>
           <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-3">
-            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white shadow-lg backdrop-blur">
-              <p className="text-[10px] font-black tracking-[0.16em] uppercase text-white/70">
+            <div className="rounded-2xl border border-emerald-900/10 bg-white/[0.92] px-4 py-3 text-emerald-950 shadow-[0_14px_34px_rgba(6,78,59,0.18)] backdrop-blur-md">
+              <p className="text-[10px] font-black tracking-[0.16em] uppercase text-emerald-800">
                 {routePreviewCopy.pickup}
               </p>
               <p className="mt-1 max-w-52 text-sm font-semibold leading-5">
                 {form.pickup.address || routePreviewCopy.pickupMissing}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white shadow-lg backdrop-blur">
-              <p className="text-[10px] font-black tracking-[0.16em] uppercase text-white/70">
+            <div className="rounded-2xl border border-emerald-900/10 bg-white/[0.92] px-4 py-3 text-emerald-950 shadow-[0_14px_34px_rgba(6,78,59,0.18)] backdrop-blur-md">
+              <p className="text-[10px] font-black tracking-[0.16em] uppercase text-emerald-800">
                 {routePreviewCopy.delivery}
               </p>
               <p className="mt-1 max-w-52 text-sm font-semibold leading-5">
@@ -173,6 +173,8 @@ export default function RoutePreviewCard({
             <span className="text-[10px] font-black tracking-[0.14em] text-primary uppercase">
               {quoteState.error
                 ? routePreviewCopy.quoteError
+                : quoteState.validationMessage
+                  ? routePreviewCopy.pendingQuote
                 : quoteState.quote
                   ? routePreviewCopy.quoteReady
                   : routePreviewCopy.pendingQuote}
@@ -181,6 +183,8 @@ export default function RoutePreviewCard({
           <p className="mt-2 text-xs leading-5 text-on-surface-variant">
             {quoteState.error
               ? quoteState.error
+              : quoteState.validationMessage
+                ? quoteState.validationMessage
               : quoteState.quote
                 ? routePreviewCopy.pricingSourceDescription
                 : routePreviewCopy.quotePendingDescription}

@@ -1,14 +1,19 @@
 import { hasApiBaseUrl } from "@/lib/api/env";
 import type {
   AssignHubStaffInput,
+  AssignHubDriverInput,
+  HubAssignableUsersParams,
   HubUpsertInput,
 } from "@/features/warehouses/domain/types/hub.types";
 import {
+  assignHubDriverRequest,
   assignHubStaffRequest,
   createHubRequest,
   deleteHubRequest,
   getHubByIdRequest,
+  listHubAssignableUsersRequest,
   listHubsRequest,
+  removeHubDriverRequest,
   removeHubStaffRequest,
   updateHubRequest,
 } from "@/features/warehouses/infrastructure/api/warehouse.api";
@@ -55,4 +60,25 @@ export async function assignHubStaffUseCase(
 export async function removeHubStaffUseCase(hubId: string, userId: number) {
   assertConfigured();
   return removeHubStaffRequest(hubId, userId);
+}
+
+export async function assignHubDriverUseCase(
+  hubId: string,
+  payload: AssignHubDriverInput,
+) {
+  assertConfigured();
+  return assignHubDriverRequest(hubId, payload);
+}
+
+export async function removeHubDriverUseCase(hubId: string, userId: number) {
+  assertConfigured();
+  return removeHubDriverRequest(hubId, userId);
+}
+
+export async function listHubAssignableUsersUseCase(
+  hubId: string,
+  params: HubAssignableUsersParams,
+) {
+  assertConfigured();
+  return listHubAssignableUsersRequest(hubId, params);
 }
