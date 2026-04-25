@@ -19,17 +19,33 @@ describe("mapTripApiToViewModel", () => {
           id: 1,
           order: {
             id: 101,
+            payment: {
+              amount: 250000,
+              method: "COD",
+              status: "PENDING",
+            },
+            receiverAddress: "123 Nguyen Trai",
+            receiverLat: 10.78,
+            receiverLng: 106.68,
+            receiverName: "Le Thi C",
+            receiverPhone: "0909000111",
+            senderAddress: "456 Nguyen Huu Tho",
+            senderLat: 10.73,
+            senderLng: 106.71,
             status: "ASSIGNED",
+            totalVolume: 0.8,
+            totalWeight: 12.5,
             trackingCode: "GT-ORD-20260003",
           },
           orderId: 101,
           stopSequence: 1,
-          stopType: "DROPOFF",
+          stopType: "PICKUP",
         },
         {
           id: 2,
           order: {
             id: 101,
+            receiverAddress: "123 Nguyen Trai",
             status: "ASSIGNED",
             trackingCode: "GT-ORD-20260003",
           },
@@ -66,6 +82,10 @@ describe("mapTripApiToViewModel", () => {
         trackingCode: "GT-ORD-20260003",
       },
     ]);
+    expect(trip.stops).toHaveLength(2);
+    expect(trip.stops[0].order?.payment?.method).toBe("COD");
+    expect(trip.stops[0].order?.senderAddress).toBe("456 Nguyen Huu Tho");
+    expect(trip.stops[1].order?.receiverAddress).toBe("123 Nguyen Trai");
     expect(trip.totalDistance).toBe(18.5);
   });
 });

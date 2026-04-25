@@ -20,7 +20,15 @@ export const API_TRIP_CANCEL_ORDER = (
 export const API_TRIP_AUTO_DISPATCH = "/trips/auto-dispatch";
 export const API_TRIP_AUTO_DISPATCH_ALL = "/trips/auto-dispatch/all";
 export const API_TRIP_DISPATCH_PREVIEW = "/trips/dispatch-preview";
+export const API_TRIP_DISPATCH_BOARD = "/trips/dispatch-board";
 export const API_TRIP_DISPATCH_APPROVE = "/trips/dispatch-approve";
+export const API_DRIVER_DISPATCH_BOARD = "/trips/driver-dispatch-board";
+export const API_DRIVER_ASSIGNMENT_REQUESTS = "/trips/driver-assignment-requests";
+export const API_ASSIGNMENT_REQUESTS = "/trips/assignment-requests";
+export const API_ASSIGNMENT_REQUEST_APPROVE = (id: string | number) =>
+  `/trips/assignment-requests/${id}/approve`;
+export const API_ASSIGNMENT_REQUEST_REJECT = (id: string | number) =>
+  `/trips/assignment-requests/${id}/reject`;
 
 // orders api endpoints
 export const API_ORDERS = "/orders";

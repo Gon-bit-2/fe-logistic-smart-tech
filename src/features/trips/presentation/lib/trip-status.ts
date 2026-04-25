@@ -9,9 +9,9 @@ export function getTripStatusLabel(status: TripStatus) {
     case "PENDING":
       return "Chờ khởi hành";
     case "IN_PROGRESS":
-      return "Đang vận chuyển";
+      return "Đang thực hiện";
     case "COMPLETED":
-      return "Đã hoàn thành";
+      return "Hoàn tất";
     case "CANCELLED":
       return "Đã hủy";
   }

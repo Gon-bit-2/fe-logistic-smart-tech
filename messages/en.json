@@ -71,6 +71,20 @@
       "role": "Role"
     }
   },
+  "driverTopBar": {
+    "brand": "Emerald Driver Hub",
+    "subtitle": "Driver operations workspace",
+    "openNotifications": "Open notifications",
+    "profile": "Profile",
+    "logout": "Log out",
+    "nav": {
+      "workspace": "Driver workspace",
+      "vehicle": "Vehicle",
+      "trips": "Trips",
+      "notifications": "Notifications",
+      "role": "Role"
+    }
+  },
   "sidebar": {
     "menu": "Menu",
     "title": "Navigation"

@@ -1,6 +1,12 @@
 import type { PaginationParams } from "@/types/common.type";
 
 export type NotificationPayload = {
+  assignmentRequestId?: number | null;
+  driverId?: number | null;
+  hubId?: number | null;
+  orderId?: number | null;
+  orderTrackingCode?: string | null;
+  reviewNote?: string | null;
   reviewedById?: number | null;
   roleRequestId?: number | null;
   status?: string | null;

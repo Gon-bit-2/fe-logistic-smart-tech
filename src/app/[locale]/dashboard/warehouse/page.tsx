@@ -2,11 +2,13 @@
 
 import { Link } from "@/i18n/routing";
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Bell, Camera, Loader2, Search, ShieldCheck } from "lucide-react";
 import type { OrderDTO, OrderStatus } from "@/features/orders/domain/types/order.types";
 import { resolveOrderByTrackingCodeUseCase } from "@/features/orders/application/use-cases/order.use-cases";
 import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 import { normalizeApiError } from "@/lib/api/errors";
+import { useI18nCopy } from "@/i18n/useCopy";
 
 type ScannerTab = "inbound" | "outbound";
 type ScannerStatus =
@@ -82,6 +84,8 @@ function getStatusTone(status: OrderStatus) {
 }
 
 export default function WarehouseScannerPage() {
+  const { getTrackingStatusLabel } = useI18nCopy();
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<ScannerTab>("inbound");
   const [scannerStatus, setScannerStatus] = useState<ScannerStatus>("idle");
   const [trackingCodeInput, setTrackingCodeInput] = useState("");
@@ -112,6 +116,16 @@ export default function WarehouseScannerPage() {
       Boolean(getBarcodeDetectorConstructor());
     setCameraReady(hasCameraApi);
   }, []);
+
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "outbound" || mode === "inbound") {
+      setActiveTab(mode);
+      if (resolvedOrder) {
+        setDescription(getDefaultDescription(mode));
+      }
+    }
+  }, [resolvedOrder, searchParams]);
 
   useEffect(() => {
     return () => {
@@ -340,7 +354,7 @@ export default function WarehouseScannerPage() {
     (resolvedOrder ? `ORD-${resolvedOrder.id}` : "");
 
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-4rem)] flex-col bg-[#F0FDF4] p-4 md:p-6">
+    <div className="mx-auto flex min-h-[calc(100vh-4rem)] flex-col bg-[#F0FDF4] py-5 md:py-7">
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
         <div className="mb-6 pt-4 text-center">
           <h1 className="text-[28px] font-bold text-emerald-900">Trạm Quét Mã Kho</h1>
@@ -557,7 +571,7 @@ export default function WarehouseScannerPage() {
                         resolvedOrder.status,
                       )}`}
                     >
-                      {resolvedOrder.status}
+                      {getTrackingStatusLabel(resolvedOrder.status)}
                     </span>
                   </div>
 

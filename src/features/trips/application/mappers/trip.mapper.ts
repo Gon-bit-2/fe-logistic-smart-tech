@@ -1,7 +1,9 @@
+import { mapPaymentApiToRecord } from "@/features/payments/application/mappers/payment.mapper";
 import type {
   TripApiDto,
   TripApiOrderDto,
   TripStatus,
+  TripStopDetail,
   TripViewModel,
 } from "@/features/trips/domain/types/trip.types";
 
@@ -31,6 +33,54 @@ function dedupeOrders(orders: TripApiOrderDto[]) {
   });
 
   return [...orderMap.values()];
+}
+
+function mapTripStop(stop: NonNullable<TripApiDto["stops"]>[number]): TripStopDetail {
+  return {
+    actualArrivalTime: stop.actualArrivalTime ?? null,
+    expectedArrivalTime: stop.expectedArrivalTime ?? null,
+    hub:
+      stop.hub || stop.hubId != null
+        ? {
+            id: stop.hub?.id != null ? String(stop.hub.id) : stop.hubId != null ? String(stop.hubId) : null,
+            latitude: stop.hub?.latitude ?? null,
+            longitude: stop.hub?.longitude ?? null,
+            name: stop.hub?.name ?? null,
+          }
+        : null,
+    hubId: stop.hubId != null ? String(stop.hubId) : null,
+    id: stop.id != null ? String(stop.id) : null,
+    order:
+      stop.order || stop.orderId != null
+        ? {
+            currentHubId: stop.order?.currentHubId ?? null,
+            currentTripId: stop.order?.currentTripId != null ? String(stop.order.currentTripId) : null,
+            id: stop.order?.id != null ? String(stop.order.id) : String(stop.orderId ?? ""),
+            payment: mapPaymentApiToRecord(stop.order?.payment),
+            preferredDeliveryTimeEnd: stop.order?.preferredDeliveryTimeEnd ?? null,
+            preferredDeliveryTimeStart: stop.order?.preferredDeliveryTimeStart ?? null,
+            receiverAddress: stop.order?.receiverAddress ?? null,
+            receiverLat: stop.order?.receiverLat ?? null,
+            receiverLng: stop.order?.receiverLng ?? null,
+            receiverName: stop.order?.receiverName ?? null,
+            receiverPhone: stop.order?.receiverPhone ?? null,
+            reference:
+              stop.order?.reference ??
+              stop.order?.trackingCode ??
+              `ORD-${stop.order?.id ?? stop.orderId ?? "N/A"}`,
+            senderAddress: stop.order?.senderAddress ?? null,
+            senderLat: stop.order?.senderLat ?? null,
+            senderLng: stop.order?.senderLng ?? null,
+            status: stop.order?.status ?? undefined,
+            totalVolume: stop.order?.totalVolume ?? null,
+            totalWeight: stop.order?.totalWeight ?? null,
+            trackingCode: stop.order?.trackingCode ?? undefined,
+          }
+        : null,
+    orderId: stop.orderId != null ? String(stop.orderId) : null,
+    stopSequence: stop.stopSequence ?? 0,
+    stopType: stop.stopType ?? null,
+  };
 }
 
 export function mapTripApiToViewModel(payload: TripApiDto): TripViewModel {
@@ -81,6 +131,7 @@ export function mapTripApiToViewModel(payload: TripApiDto): TripViewModel {
       })),
     startTime: payload.startTime ?? null,
     status: normalizeTripStatus(payload.status),
+    stops: (payload.stops ?? []).map(mapTripStop),
     totalDistance: payload.totalDistance ?? payload.actualDistance ?? null,
     vehicle:
       payload.vehicle || payload.vehicleId != null

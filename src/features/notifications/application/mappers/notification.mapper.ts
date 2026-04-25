@@ -42,6 +42,10 @@ function normalizeMessageValue(value: unknown): string {
 }
 
 function getFallbackTitle(payload: NotificationPayload) {
+  if (payload.assignmentRequestId != null) {
+    return "Cập nhật yêu cầu nhận đơn";
+  }
+
   if (payload.roleRequestId != null) {
     return "Cập nhật yêu cầu vai trò";
   }
@@ -50,6 +54,13 @@ function getFallbackTitle(payload: NotificationPayload) {
 }
 
 function getFallbackContent(payload: NotificationPayload) {
+  if (payload.assignmentRequestId != null) {
+    const orderTrackingCode = payload.orderTrackingCode ?? `ORD-${payload.orderId ?? "N/A"}`;
+    const status = payload.status ? formatEnumLabel(payload.status) : "đã được cập nhật";
+
+    return `Yêu cầu nhận đơn ${orderTrackingCode} của bạn đang ở trạng thái ${status}.`;
+  }
+
   if (payload.roleRequestId == null) {
     return "Bạn có một thông báo mới trong hệ thống.";
   }
@@ -63,6 +74,22 @@ function getFallbackContent(payload: NotificationPayload) {
 }
 
 function getRoleRequestCta(role: UserRole, payload: NotificationPayload) {
+  if (payload.assignmentRequestId != null) {
+    if (role === "warehouse_staff") {
+      return {
+        ctaHref: "/dashboard/warehouse/trips",
+        ctaLabel: "Mở queue điều phối",
+      };
+    }
+
+    if (role === "driver") {
+      return {
+        ctaHref: "/dashboard/driver",
+        ctaLabel: "Mở dashboard tài xế",
+      };
+    }
+  }
+
   if (payload.roleRequestId == null) {
     return {
       ctaHref: getNotificationsHrefForRole(role),
