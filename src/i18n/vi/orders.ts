@@ -2,14 +2,14 @@ import type { OrderPaymentMethod, ServiceTier } from "@/features/orders/domain/t
 import type { ShipmentFilter } from "@/features/orders/domain/types/shipments-management.types";
 
 export const ORDER_STATUS_LABELS: Record<string, string> = {
-  ARRIVED_AT_HUB: "Đã tới trung tâm",
-  ASSIGNED: "Đã phân công",
+  ARRIVED_AT_HUB: "Đã nhập kho",
+  ASSIGNED: "Đã xếp chuyến",
   CANCELLED: "Đã huỷ",
-  DELIVERED: "Đã giao",
-  IN_TRANSIT: "Đang vận chuyển",
-  OUT_FOR_DELIVERY: "Đang giao hàng",
-  PENDING: "Chờ xử lý",
-  PICKED_UP: "Đã lấy hàng",
+  DELIVERED: "Giao thành công",
+  IN_TRANSIT: "Đang trung chuyển",
+  OUT_FOR_DELIVERY: "Đang đi giao",
+  PENDING: "Chờ xác nhận",
+  PICKED_UP: "Đã nhận hàng",
 } as const;
 
 export const ORDER_STOP_STATUS_LABELS: Record<string, string> = {

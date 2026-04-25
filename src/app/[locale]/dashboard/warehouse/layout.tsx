@@ -12,7 +12,9 @@ export default function WarehouseLayout({
     <RoleGuard allowedRoles={ROUTE_PERMISSIONS.WAREHOUSE}>
       <div className="min-h-screen bg-[#F0FDF4]">
         <WarehouseTopBar />
-        <div className="pb-10">{children}</div>
+        <main className="mx-auto w-full max-w-[1600px] px-4 pb-10 pt-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+          {children}
+        </main>
       </div>
     </RoleGuard>
   );

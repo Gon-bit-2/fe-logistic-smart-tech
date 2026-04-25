@@ -71,6 +71,20 @@
       "role": "Role"
     }
   },
+  "driverTopBar": {
+    "brand": "Emerald Driver Hub",
+    "subtitle": "Không gian vận hành dành cho tài xế",
+    "openNotifications": "Mở thông báo",
+    "profile": "Hồ sơ",
+    "logout": "Đăng xuất",
+    "nav": {
+      "workspace": "Không gian tài xế",
+      "vehicle": "Phương tiện",
+      "trips": "Chuyến đi",
+      "notifications": "Thông báo",
+      "role": "Role"
+    }
+  },
   "sidebar": {
     "menu": "Menu",
     "title": "Điều hướng"

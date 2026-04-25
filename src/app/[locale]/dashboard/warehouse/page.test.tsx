@@ -121,4 +121,34 @@ describe("WarehouseScannerPage", () => {
       ),
     ).toBeInTheDocument();
   });
+
+  it("reads the outbound mode from query params and renders Vietnamese status labels", async () => {
+    resolveOrderByTrackingCodeUseCaseMock.mockResolvedValue({
+      id: "99",
+      reference: "GT-ORD-20260099",
+      trackingCode: "GT-ORD-20260099",
+      customerName: "Nguyen Van A",
+      pickupAddress: "123 Nguyen Trai",
+      deliveryAddress: "456 Le Loi",
+      receiverName: "Tran Thi B",
+      status: "IN_TRANSIT",
+      packageWeightKg: 8,
+      currentHubId: 5,
+      estimatedArrival: new Date().toISOString(),
+      stops: [],
+    });
+
+    renderWithProviders(<WarehouseScannerPage />, {
+      searchParams: { mode: "outbound" },
+    });
+
+    const trackingInput = screen.getByPlaceholderText("Quét hoặc nhập mã theo dõi...");
+    fireEvent.change(trackingInput, {
+      target: { value: "GT-ORD-20260099" },
+    });
+    fireEvent.submit(trackingInput.closest("form")!);
+
+    expect(await screen.findByText("Đang trung chuyển")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Xác nhận xuất kho" })).toBeInTheDocument();
+  });
 });
