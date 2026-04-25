@@ -54,6 +54,7 @@ export type RoleRequestListParams = PaginationParams & {
 };
 
 export type CreateRoleRequestInput = {
+  hubId: number;
   reason: string;
   targetRoleName: TargetRoleName;
 };

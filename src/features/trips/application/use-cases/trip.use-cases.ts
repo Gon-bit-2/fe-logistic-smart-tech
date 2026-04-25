@@ -2,12 +2,16 @@ import { hasApiBaseUrl } from "@/lib/api/env";
 import { ApiError } from "@/lib/api/errors";
 import type {
   AutoDispatchInput,
+  DispatchApproveInput,
+  DispatchPreviewInput,
   TripListParams,
   UpdateTripStatusInput,
 } from "@/features/trips/domain/types/trip.types";
 import {
   autoDispatchRequest,
   cancelTripOrderRequest,
+  dispatchApproveRequest,
+  dispatchPreviewRequest,
   getTripByIdRequest,
   listTripsRequest,
   optimizeTripRouteRequest,
@@ -54,4 +58,14 @@ export async function cancelTripOrderUseCase(tripId: string, orderId: string) {
 export async function autoDispatchUseCase(payload?: AutoDispatchInput) {
   assertApiConfigured();
   return autoDispatchRequest(payload);
+}
+
+export async function dispatchPreviewUseCase(payload?: DispatchPreviewInput) {
+  assertApiConfigured();
+  return dispatchPreviewRequest(payload);
+}
+
+export async function dispatchApproveUseCase(payload: DispatchApproveInput) {
+  assertApiConfigured();
+  return dispatchApproveRequest(payload);
 }

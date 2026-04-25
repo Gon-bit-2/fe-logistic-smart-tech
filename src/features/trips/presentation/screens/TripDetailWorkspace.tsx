@@ -5,14 +5,16 @@ import { useRouter } from "@/i18n/routing";
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePaymentRecord } from "@/features/payments/presentation/hooks/usePaymentIntent";
-import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 import {
   useUploadMultiplePodImages,
   useUploadPodImage,
 } from "@/features/tracking/presentation/hooks/usePodUploads";
 import { useTripTrackingSocket } from "@/features/tracking/presentation/hooks/useTripTrackingSocket";
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
-import { useTripDetailQuery } from "@/features/trips/presentation/hooks/useTrips";
+import {
+  useTripDetailQuery,
+  useUpdateTripStatus,
+} from "@/features/trips/presentation/hooks/useTrips";
 import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import type { TrackingPackageCondition } from "@/features/tracking/domain/types/tracking.types";
@@ -25,43 +27,6 @@ type TripDetailWorkspaceProps = {
 
 function isTerminalOrderStatus(status?: OrderStatus | string | null) {
   return status === "DELIVERED" || status === "CANCELLED";
-}
-
-function getNextOrderStatus(status?: OrderStatus | string | null): OrderStatus | null {
-  switch (status) {
-    case "ASSIGNED":
-      return "PICKED_UP";
-    case "PICKED_UP":
-    case "ARRIVED_AT_HUB":
-      return "IN_TRANSIT";
-    case "IN_TRANSIT":
-      return "OUT_FOR_DELIVERY";
-    case "OUT_FOR_DELIVERY":
-      return "DELIVERED";
-    default:
-      return null;
-  }
-}
-
-function getNextOrderActionLabel(
-  status?: OrderStatus | string | null,
-  paymentMethod?: string | null,
-) {
-  switch (status) {
-    case "ASSIGNED":
-      return "Xác nhận đã lấy hàng";
-    case "PICKED_UP":
-    case "ARRIVED_AT_HUB":
-      return "Bắt đầu vận chuyển";
-    case "IN_TRANSIT":
-      return "Chuyển sang giao hàng";
-    case "OUT_FOR_DELIVERY":
-      return paymentMethod === "COD"
-        ? "Xác nhận đã giao và thu COD"
-        : "Xác nhận đã giao";
-    default:
-      return null;
-  }
 }
 
 export default function TripDetailWorkspace({
@@ -82,7 +47,7 @@ export default function TripDetailWorkspace({
   const orderId = activeOrder?.orderId ?? "";
   const trackingQuery = useInternalTrackingQuery(orderId, Boolean(orderId));
   const paymentQuery = usePaymentRecord(orderId || null);
-  const createTrackingEvent = useCreateTrackingEvent();
+  const updateTripStatus = useUpdateTripStatus();
   const uploadPodImage = useUploadPodImage();
   const uploadMultiplePodImages = useUploadMultiplePodImages();
   const [receiverName, setReceiverName] = useState("");
@@ -95,17 +60,11 @@ export default function TripDetailWorkspace({
 
   const tracking = trackingQuery.data ?? null;
   const paymentStatus = getPaymentStatusLabel(paymentQuery.data?.status);
-  const paymentMethod = paymentQuery.data?.method ?? null;
   const currentOrderStatus = (tracking?.currentStatus ??
     activeOrder?.status ??
     null) as OrderStatus | null;
-  const nextOrderStatus = getNextOrderStatus(currentOrderStatus);
-  const nextOrderActionLabel = getNextOrderActionLabel(
-    currentOrderStatus,
-    paymentMethod,
-  );
   const canConfirmDelivered =
-    nextOrderStatus === "DELIVERED" &&
+    trip?.status === "IN_PROGRESS" &&
     receiverName.trim().length > 0 &&
     uploadedImages.length > 0;
   const latestLocationLabel = useMemo(() => {
@@ -143,26 +102,41 @@ export default function TripDetailWorkspace({
     event.target.value = "";
   }
 
-  async function handleStatusChange(status: OrderStatus) {
-    if (!orderId || status !== nextOrderStatus) {
+  async function handleStartTrip() {
+    if (!trip?.id) {
       return;
     }
 
-    createTrackingEvent.reset();
+    updateTripStatus.reset();
+    await updateTripStatus.mutateAsync({
+      payload: { status: "IN_PROGRESS" },
+      tripId: trip.id,
+    });
 
-    await createTrackingEvent.mutateAsync({
-      eventType: "STATUS_CHANGE",
-      orderId: Number(orderId),
-      pod:
-        status === "DELIVERED"
-          ? {
-              images: uploadedImages.map((url) => ({ type: "PACKAGE", url })),
-              packageCondition,
-              receiverName: receiverName.trim(),
-            }
-          : undefined,
-      source: "DRIVER_APP",
-      status,
+    router.refresh();
+  }
+
+  async function handleCompleteTrip() {
+    if (!trip?.id || !canConfirmDelivered) {
+      return;
+    }
+
+    updateTripStatus.reset();
+
+    const pod = {
+      images: uploadedImages.map((url) => ({ type: "PACKAGE" as const, url })),
+      packageCondition,
+      receiverName: receiverName.trim(),
+    };
+    const podByOrderId = Object.fromEntries(
+      trip.orders
+        .filter((order) => !isTerminalOrderStatus(order.status))
+        .map((order) => [order.orderId, pod]),
+    );
+
+    await updateTripStatus.mutateAsync({
+      payload: { podByOrderId, status: "COMPLETED" },
+      tripId: trip.id,
     });
 
     router.refresh();
@@ -311,32 +285,37 @@ export default function TripDetailWorkspace({
                 ) : null}
 
                 <div className="flex flex-wrap gap-3">
-                  {nextOrderStatus && nextOrderActionLabel ? (
+                  {trip.status === "PENDING" ? (
                     <button
                       type="button"
-                      onClick={() => void handleStatusChange(nextOrderStatus)}
-                      disabled={
-                        createTrackingEvent.isPending ||
-                        (nextOrderStatus === "DELIVERED" && !canConfirmDelivered)
-                      }
+                      onClick={() => void handleStartTrip()}
+                      disabled={updateTripStatus.isPending}
                       className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
                     >
-                      {createTrackingEvent.isPending
-                        ? "Đang cập nhật..."
-                        : nextOrderActionLabel}
+                      {updateTripStatus.isPending ? "Đang cập nhật..." : "Bắt đầu chuyến"}
+                    </button>
+                  ) : null}
+                  {trip.status === "IN_PROGRESS" ? (
+                    <button
+                      type="button"
+                      onClick={() => void handleCompleteTrip()}
+                      disabled={updateTripStatus.isPending || !canConfirmDelivered}
+                      className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
+                    >
+                      {updateTripStatus.isPending ? "Đang cập nhật..." : "Hoàn tất chuyến"}
                     </button>
                   ) : null}
                 </div>
 
-                {nextOrderStatus === "DELIVERED" && !canConfirmDelivered ? (
+                {trip.status === "IN_PROGRESS" && !canConfirmDelivered ? (
                   <p className="text-sm text-amber-700">
-                    Cần nhập tên người nhận và tải lên ít nhất 1 ảnh POD trước khi xác nhận giao thành công.
+                    Cần nhập tên người nhận và tải lên ít nhất 1 ảnh POD trước khi hoàn tất chuyến.
                   </p>
                 ) : null}
 
-                {createTrackingEvent.error ? (
+                {updateTripStatus.error ? (
                   <p className="text-sm text-red-600">
-                    {createTrackingEvent.error.message}
+                    {updateTripStatus.error.message}
                   </p>
                 ) : null}
               </section>

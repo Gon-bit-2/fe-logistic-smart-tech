@@ -13,6 +13,7 @@ import {
   useCreateRoleRequest,
   useMyRoleRequestsQuery,
 } from "@/features/role-requests/presentation/hooks/useRoleRequests";
+import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate, formatEnumLabel } from "@/utils/formatters";
@@ -52,8 +53,10 @@ export default function RoleRequestCenterScreen() {
   const { user } = useAuthSession();
   const roleRequestsQuery = useMyRoleRequestsQuery({ limit: 10, page: 1 });
   const createRoleRequestMutation = useCreateRoleRequest();
+  const hubsQuery = useHubsQuery();
   
   const [targetRoleName, setTargetRoleName] = useState<TargetRoleName>("DRIVER");
+  const [hubId, setHubId] = useState("");
   const [reason, setReason] = useState("");
   
   const requests = roleRequestsQuery.data?.data ?? EMPTY_ROLE_REQUESTS;
@@ -73,13 +76,15 @@ export default function RoleRequestCenterScreen() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!canSubmit || reason.trim().length === 0) return;
+    if (!canSubmit || reason.trim().length === 0 || !hubId) return;
 
     await createRoleRequestMutation.mutateAsync({
+      hubId: Number(hubId),
       reason: reason.trim(),
       targetRoleName,
     });
     setReason("");
+    setHubId("");
   }
 
   if (roleRequestsQuery.isPending) {
@@ -172,6 +177,27 @@ export default function RoleRequestCenterScreen() {
 
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                  Hub mong muốn
+                </label>
+                <select
+                  className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm font-medium text-slate-900 transition-all hover:bg-slate-50 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  value={hubId}
+                  onChange={(event) => setHubId(event.target.value)}
+                  disabled={!canSubmit || createRoleRequestMutation.isPending}
+                >
+                  <option value="">
+                    {hubsQuery.isPending ? "Đang tải hub..." : "Chọn hub bạn muốn đăng ký"}
+                  </option>
+                  {(hubsQuery.data?.data ?? []).map((hub) => (
+                    <option key={hub.id} value={String(hub.id)}>
+                      {hub.code} - {hub.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
                   <FileText className="size-4 text-primary" />
                   {roleRequestCenterCopy.reasonLabel}
                 </label>
@@ -193,7 +219,7 @@ export default function RoleRequestCenterScreen() {
               <Button
                 type="submit"
                 className="w-full h-12 text-base font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 group"
-                disabled={!canSubmit || createRoleRequestMutation.isPending || reason.trim().length === 0}
+                disabled={!canSubmit || createRoleRequestMutation.isPending || reason.trim().length === 0 || !hubId}
               >
                 {roleRequestCenterCopy.submitLabel}
                 <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />

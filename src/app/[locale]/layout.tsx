@@ -3,9 +3,6 @@ import { Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import Script from "next/script";
-import BisAttributeStripper from "@/components/BisAttributeStripper";
-import ProfileQuickAccess from "@/features/profile/presentation/components/ProfileQuickAccess";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
 import { Providers } from "../providers";
@@ -57,11 +54,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <BisAttributeStripper />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             {children}
-            <ProfileQuickAccess />
           </Providers>
         </NextIntlClientProvider>
       </body>

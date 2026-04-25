@@ -199,7 +199,7 @@ function RoleRequestReviewPanel({
   const roleRequestAdminCopy = copy;
   const [reviewNote, setReviewNote] = useState(request.reviewNote ?? "");
   const [hubId, setHubId] = useState(request.hubId != null ? String(request.hubId) : "");
-  const requireHub = request.targetRoleName === "WAREHOUSE_STAFF";
+  const requireHub = request.targetRoleName === "WAREHOUSE_STAFF" || request.targetRoleName === "DRIVER";
 
   async function handleApprove() {
     await approveMutation.mutateAsync({
@@ -256,8 +256,7 @@ function RoleRequestReviewPanel({
           </p>
         </div>
 
-        {requireHub ? (
-          <label className="block space-y-2">
+        <label className="block space-y-2">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-on-surface/45">
               {roleRequestAdminCopy.hubLabel}
             </span>
@@ -273,8 +272,7 @@ function RoleRequestReviewPanel({
                 </option>
               ))}
             </select>
-          </label>
-        ) : null}
+        </label>
 
         <label className="block space-y-2">
           <span className="text-xs font-black uppercase tracking-[0.18em] text-on-surface/45">

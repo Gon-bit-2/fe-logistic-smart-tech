@@ -3,6 +3,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AutoDispatchInput,
+  DispatchApproveInput,
+  DispatchPreviewInput,
+  DispatchPreviewResult,
   OptimizeTripRouteResult,
   TripListParams,
   TripViewModel,
@@ -10,6 +13,8 @@ import type {
 } from "@/features/trips/domain/types/trip.types";
 import {
   autoDispatchUseCase,
+  dispatchApproveUseCase,
+  dispatchPreviewUseCase,
   getTripDetailUseCase,
   listTripsUseCase,
   optimizeTripRouteUseCase,
@@ -58,6 +63,26 @@ export function useUpdateTripStatus() {
 export function useAutoDispatch() {
   return useMutation({
     mutationFn: (payload?: AutoDispatchInput) => autoDispatchUseCase(payload),
+  });
+}
+
+export function useDispatchPreview() {
+  return useMutation<DispatchPreviewResult, ApiError, DispatchPreviewInput | undefined>({
+    mutationFn: (payload) => dispatchPreviewUseCase(payload),
+  });
+}
+
+export function useDispatchApprove() {
+  const queryClient = useQueryClient();
+
+  return useMutation<TripViewModel | null, ApiError, DispatchApproveInput>({
+    mutationFn: dispatchApproveUseCase,
+    onSuccess: (trip) => {
+      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      if (trip) {
+        queryClient.setQueryData(tripKeys.detail(trip.id), trip);
+      }
+    },
   });
 }
 

@@ -5,6 +5,9 @@ import type {
   AssignVehicleInput,
   AutoDispatchInput,
   AutoDispatchResult,
+  DispatchApproveInput,
+  DispatchPreviewInput,
+  DispatchPreviewResult,
   ManualTripInput,
   ManualTripResult,
   OptimizeTripRouteResult,
@@ -18,6 +21,8 @@ import {
   API_TRIP_AUTO_DISPATCH_ALL,
   API_TRIP_CANCEL_ORDER,
   API_TRIP_DETAIL,
+  API_TRIP_DISPATCH_APPROVE,
+  API_TRIP_DISPATCH_PREVIEW,
   API_TRIP_OPTIMIZE_ROUTE,
   API_TRIPS,
   API_TRIP_STATUS,
@@ -81,6 +86,24 @@ export async function autoDispatchRequest(payload?: AutoDispatchInput) {
     : API_TRIP_AUTO_DISPATCH_ALL;
   const response = await httpClient.post<AutoDispatchResult>(endpoint, payload);
   return response.data;
+}
+
+export async function dispatchPreviewRequest(payload?: DispatchPreviewInput) {
+  const response = await httpClient.get<DispatchPreviewResult>(
+    API_TRIP_DISPATCH_PREVIEW,
+    {
+      params: payload,
+    },
+  );
+  return response.data;
+}
+
+export async function dispatchApproveRequest(payload: DispatchApproveInput) {
+  const response = await httpClient.post<TripApiDto | null>(
+    API_TRIP_DISPATCH_APPROVE,
+    payload,
+  );
+  return response.data ? mapTripApiToViewModel(response.data) : null;
 }
 
 export async function manualCreateTripRequest(payload: ManualTripInput) {

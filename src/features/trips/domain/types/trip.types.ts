@@ -1,5 +1,6 @@
 import type { PaginationParams } from "@/types/common.type";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
+import type { TrackingPod } from "@/features/tracking/domain/types/tracking.types";
 
 export type TripStatus =
   | "PENDING"
@@ -102,11 +103,13 @@ export type TripViewModel = {
 };
 
 export type TripListParams = PaginationParams & {
+  hubId?: number;
   search?: string;
   status?: TripStatus;
 };
 
 export type UpdateTripStatusInput = {
+  podByOrderId?: Record<string, TrackingPod>;
   status: TripStatus;
 };
 
@@ -117,6 +120,52 @@ export type AutoDispatchInput = {
 export type AutoDispatchResult = {
   jobId?: string;
   message: string;
+};
+
+export type DispatchStopInput = {
+  actualArrivalTime?: Date | string | null;
+  expectedArrivalTime?: Date | string | null;
+  hubId?: number | null;
+  orderId?: number | null;
+  stopSequence: number;
+  stopType: "PICKUP" | "DROPOFF" | "HUB_TRANSFER";
+};
+
+export type DispatchSuggestion = {
+  driverId: number;
+  driverName?: string;
+  hubId: number;
+  orderIds: number[];
+  orders?: Array<{
+    id: number;
+    totalVolume: number;
+    totalWeight: number;
+    trackingCode?: string | null;
+  }>;
+  stops: DispatchStopInput[];
+  totalVolume: number;
+  totalWeight: number;
+  vehicleId: number;
+  vehicleLicensePlate?: string;
+};
+
+export type DispatchPreviewResult = {
+  availableDriverIds: number[];
+  hubId: number;
+  suggestions: DispatchSuggestion[];
+  unassignedOrderIds: number[];
+};
+
+export type DispatchPreviewInput = {
+  hubId?: number;
+};
+
+export type DispatchApproveInput = {
+  driverId: number;
+  hubId: number;
+  orderIds: number[];
+  stops?: DispatchStopInput[];
+  vehicleId: number;
 };
 
 export type OptimizeTripRouteResult = {

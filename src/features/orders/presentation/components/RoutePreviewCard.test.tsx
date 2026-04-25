@@ -134,6 +134,7 @@ describe("RoutePreviewCard", () => {
               },
             ],
           },
+          validationMessage: null,
         }}
       />,
     );
@@ -184,6 +185,7 @@ describe("RoutePreviewCard", () => {
           isLoading: false,
           isRefreshing: false,
           quote: null,
+          validationMessage: null,
         }}
       />,
     );
@@ -193,7 +195,9 @@ describe("RoutePreviewCard", () => {
       expect(markerInstances).toHaveLength(2);
     });
 
-    expect(screen.getByText(/Bản đồ đang hiển thị các điểm dừng thực tế/i)).toBeInTheDocument();
+    expect(
+      screen.queryByText(/Bản đồ đang hiển thị các điểm dừng thực tế/i),
+    ).not.toBeInTheDocument();
   });
 
   it("shows the pending map message when no address has been resolved", async () => {
@@ -209,6 +213,7 @@ describe("RoutePreviewCard", () => {
           isLoading: false,
           isRefreshing: false,
           quote: null,
+          validationMessage: "Vui lòng chọn địa chỉ lấy hàng từ danh sách gợi ý.",
         }}
       />,
     );

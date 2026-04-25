@@ -126,6 +126,32 @@ export function decodeAccessTokenPayload(
   }
 }
 
+export function isAccessTokenExpiringSoon(
+  token: string,
+  clockSkewSeconds = 30,
+) {
+  try {
+    const encodedPayload = token.split(".")[1];
+
+    if (!encodedPayload) {
+      return true;
+    }
+
+    const payload = JSON.parse(
+      base64UrlToUtf8(encodedPayload),
+    ) as AccessTokenPayload;
+
+    if (typeof payload.exp !== "number") {
+      return true;
+    }
+
+    const currentEpoch = Math.floor(Date.now() / 1000);
+    return payload.exp <= currentEpoch + clockSkewSeconds;
+  } catch {
+    return true;
+  }
+}
+
 export function extractAuthUserFromToken(token: string): AuthUser | null {
   const payload = decodeAccessTokenPayload(token);
 
