@@ -27,6 +27,7 @@ export type TripApiOrderDto = {
   currentTripId?: number | string | null;
   id?: number | string | null;
   payment?: PaymentApiDto | null;
+  paymentMethod?: string | null;
   preferredDeliveryTimeEnd?: string | null;
   preferredDeliveryTimeStart?: string | null;
   receiverAddress?: string | null;

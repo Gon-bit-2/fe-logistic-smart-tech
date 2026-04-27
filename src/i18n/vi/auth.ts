@@ -2,9 +2,9 @@ export const authHeroPanelContent = {
   auth: {
     accentIcon: "eco",
     badge: "Giảm 12% lượng khí thải carbon",
-    brand: "Fleet Command",
+    brand: "Điều phối đội xe",
     description:
-      "Hệ thống quản lý thông minh giúp chuyển hóa dữ liệu logistics thành các báo cáo trực quan, hỗ trợ ra quyết định nhanh chóng.",
+      "Hệ thống quản lý thông minh giúp chuyển hóa dữ liệu giao nhận thành các báo cáo trực quan, hỗ trợ ra quyết định nhanh chóng.",
     icon: "hub",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD71GiZjcbSj_iPfrsRfIB_FqJr0mTyGEU5r9JjqFKM50RXWb2TL1Fuq0sOISqFEROMbqGq7SYONVAqbNfB_0z3kTuwWGitrzbC9l7SyGOKwd5wEdSROhwxy2tNBfvlzIeYxK4UEUbHBqfDUy4XIk-8FSJc0ZtwF0jXTNwB1fbvPEUUJad9-qit2vdrCz2zirCde-58FjeuPLiBdXhneJE3f5eVtOrGYFlLYynDCnX7c_PUt-zNJFGp6x7P-OEikkt7awY-PRC7uBxi",
@@ -43,7 +43,7 @@ export const loginFormCopy = {
     { icon: "fingerprint", label: "Sinh trắc học" },
   ],
   headerDescription:
-    "Truy cập hệ thống quản trị logistics để theo dõi và tối ưu hoá toàn bộ chuỗi cung ứng của doanh nghiệp.",
+    "Truy cập hệ thống quản trị vận hành để theo dõi và tối ưu hoá toàn bộ chuỗi cung ứng của doanh nghiệp.",
   headerTitle: "Chào mừng đến với Emerald Logistics",
   loginLabel: "Đăng nhập",
   loginSuccessStatus:

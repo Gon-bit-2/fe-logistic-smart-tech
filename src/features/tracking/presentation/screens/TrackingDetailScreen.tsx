@@ -6,6 +6,8 @@ import { useRouter } from "@/i18n/routing";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
+import type { UserRole } from "@/features/auth/domain/types/auth.types";
+import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { Input } from "@/components/ui/input";
 import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useResolvedTrackingOrder } from "@/features/orders/presentation/hooks/useResolvedTrackingOrder";
@@ -41,14 +43,22 @@ function canOpenOnlineCheckout(order: {
   return true;
 }
 
-function canCustomerCancel(order: { status: string }) {
-  return order.status === "PENDING" || order.status === "ASSIGNED";
+function canCancelOrder(
+  order: { status: string },
+  role?: UserRole | null,
+) {
+  if (order.status !== "PENDING" && order.status !== "ASSIGNED") {
+    return false;
+  }
+
+  return role === "customer" || role === "warehouse_staff";
 }
 
 export default function TrackingDetailScreen({
   trackingCode,
 }: TrackingDetailScreenProps) {
   const { getTrackingStatusLabel, trackingDetailCopy } = useI18nCopy();
+  const { user } = useAuthSession();
   const router = useRouter();
   const [trackingId, setTrackingId] = useState(trackingCode);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -244,7 +254,7 @@ export default function TrackingDetailScreen({
                         {trackingDetailCopy.payNow}
                       </Link>
                     ) : null}
-                    {canCustomerCancel(resolvedOrder) ? (
+                    {canCancelOrder(resolvedOrder, user?.role) ? (
                       <Button
                         variant="outline"
                         className="font-semibold"

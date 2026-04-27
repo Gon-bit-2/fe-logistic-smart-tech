@@ -1,9 +1,7 @@
+import Image from "next/image";
 import AppIcon from "@/components/ui/app-icon";
 import { useI18nCopy } from "@/i18n/useCopy";
-
-type AuthHeroPanelProps = Readonly<{
-  variant: "auth" | "otp";
-}>;
+import type { AuthHeroPanelProps } from "@/features/auth/presentation/types";
 
 export default function AuthHeroPanel({ variant }: AuthHeroPanelProps) {
   const { authHeroPanelContent } = useI18nCopy();
@@ -11,9 +9,10 @@ export default function AuthHeroPanel({ variant }: AuthHeroPanelProps) {
 
   return (
     <section className="relative hidden min-h-screen overflow-hidden bg-primary lg:flex lg:w-1/2 lg:flex-col lg:justify-between lg:p-12">
-      <img
+      <Image
         src={content.image}
         alt=""
+        fill
         className="absolute inset-0 h-full w-full object-cover opacity-35 mix-blend-overlay"
       />
       <div className={`absolute inset-0 bg-gradient-to-tr ${content.overlay}`} />

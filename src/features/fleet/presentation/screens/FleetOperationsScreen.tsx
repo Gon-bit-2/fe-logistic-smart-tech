@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { type FormEvent, useState } from "react";
 import { Leaf, Truck, Wrench, Zap, ImageIcon } from "lucide-react";
 import {
@@ -25,6 +27,7 @@ import type {
   CreateVehicleInput,
   FleetVehicleRecord,
 } from "@/features/fleet/domain/types/fleet-operations.types";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export interface FleetOperationsScreenProps {
   readonly _unused?: never;
@@ -407,10 +410,13 @@ export default function FleetOperationsScreen(
 
       {/* === Loading / Error / Empty states === */}
       {vehiclesQuery.isLoading ? (
-        <LoadingState
-          title={fleetScreenCopy.loadingTitle}
-          description={fleetScreenCopy.loadingDescription}
-        />
+        <div className="space-y-4">
+          <div className="px-8 py-6">
+            <div className="h-8 w-64 animate-pulse rounded bg-surface-variant/50" />
+            <div className="mt-2 h-4 w-96 animate-pulse rounded bg-surface-variant/50" />
+          </div>
+          <TableSkeleton columns={5} rows={5} />
+        </div>
       ) : null}
 
       {vehiclesQuery.isError ? (
@@ -483,9 +489,11 @@ export default function FleetOperationsScreen(
                     {/* Cột ảnh */}
                     <td className="px-6 py-4">
                       {vehicle.imageUrl ? (
-                        <img
+                        <Image
                           src={vehicle.imageUrl}
                           alt={vehicle.licensePlate}
+                          width={48}
+                          height={48}
                           className="size-12 rounded-xl object-cover shadow-sm"
                         />
                       ) : (

@@ -13,7 +13,7 @@ import {
 function assertApiConfigured() {
   if (!hasApiBaseUrl) {
     throw new ApiError({
-      message: "Notifications API chưa được cấu hình.",
+      message: "Chưa cấu hình dịch vụ thông báo.",
       status: 503,
     });
   }

@@ -16,12 +16,42 @@ import {
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
-import { formatDate, formatEnumLabel } from "@/utils/formatters";
+import { formatDate } from "@/utils/formatters";
 import type { TargetRoleName } from "@/features/role-requests/domain/types/role-request.types";
 import { ArrowRight, UserPlus, FileText, CheckCircle2, History, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const EMPTY_ROLE_REQUESTS = [] as const;
+
+function getRoleLabel(role?: string | null) {
+  switch (role) {
+    case "admin":
+      return "Quản trị viên";
+    case "customer":
+      return "Khách hàng";
+    case "driver":
+    case "DRIVER":
+      return "Tài xế";
+    case "warehouse_staff":
+    case "WAREHOUSE_STAFF":
+      return "Nhân viên kho";
+    default:
+      return "Chưa xác định";
+  }
+}
+
+function getRequestStatusLabel(status: string) {
+  switch (status) {
+    case "APPROVED":
+      return "Đã duyệt";
+    case "REJECTED":
+      return "Đã từ chối";
+    case "PENDING":
+      return "Chờ duyệt";
+    default:
+      return status;
+  }
+}
 
 function mapUserRoleToTarget(role?: string | null): TargetRoleName | null {
   if (role === "driver") return "DRIVER";
@@ -90,7 +120,7 @@ export default function RoleRequestCenterScreen() {
   if (roleRequestsQuery.isPending) {
     return (
       <LoadingState
-        title="Đang tải role requests"
+        title="Đang tải yêu cầu vai trò"
         description="Hệ thống đang đồng bộ lịch sử yêu cầu mới nhất."
       />
     );
@@ -99,7 +129,7 @@ export default function RoleRequestCenterScreen() {
   if (roleRequestsQuery.isError) {
     return (
       <ErrorState
-        title="Không thể tải role requests"
+        title="Không thể tải yêu cầu vai trò"
         description={getRoleRequestLoadErrorMessage(
           roleRequestsQuery.error,
           roleRequestCenterCopy,
@@ -111,7 +141,7 @@ export default function RoleRequestCenterScreen() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <PageHeader
-        eyebrow="Role Module"
+        eyebrow="Phân quyền"
         title={roleRequestCenterCopy.title}
         description={roleRequestCenterCopy.description}
       />
@@ -151,7 +181,7 @@ export default function RoleRequestCenterScreen() {
                   {roleRequestCenterCopy.currentRoleLabel}
                 </p>
                 <h2 className="text-2xl font-black tracking-tight text-slate-900 mt-1">
-                  {formatEnumLabel(user?.role ?? "customer")}
+                  {getRoleLabel(user?.role)}
                 </h2>
               </div>
             </div>
@@ -168,8 +198,8 @@ export default function RoleRequestCenterScreen() {
                     onChange={(e) => setTargetRoleName(e.target.value as TargetRoleName)}
                     disabled={!canSubmit || createRoleRequestMutation.isPending}
                   >
-                    <option value="DRIVER">Tài xế giao hàng (Driver)</option>
-                    <option value="WAREHOUSE_STAFF">Nhân viên kho (Warehouse Staff)</option>
+                    <option value="DRIVER">Tài xế giao hàng</option>
+                    <option value="WAREHOUSE_STAFF">Nhân viên kho</option>
                   </select>
                   <ArrowRight className="absolute right-4 top-1/2 size-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 </div>
@@ -177,7 +207,7 @@ export default function RoleRequestCenterScreen() {
 
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
-                  Hub mong muốn
+                  Trung tâm mong muốn
                 </label>
                 <select
                   className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm font-medium text-slate-900 transition-all hover:bg-slate-50 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
@@ -186,7 +216,7 @@ export default function RoleRequestCenterScreen() {
                   disabled={!canSubmit || createRoleRequestMutation.isPending}
                 >
                   <option value="">
-                    {hubsQuery.isPending ? "Đang tải hub..." : "Chọn hub bạn muốn đăng ký"}
+                    {hubsQuery.isPending ? "Đang tải trung tâm..." : "Chọn trung tâm bạn muốn đăng ký"}
                   </option>
                   {(hubsQuery.data?.data ?? []).map((hub) => (
                     <option key={hub.id} value={String(hub.id)}>
@@ -257,7 +287,7 @@ export default function RoleRequestCenterScreen() {
                       <div>
                         <div className="flex items-center gap-3">
                           <span className="flex h-8 items-center justify-center rounded-lg bg-primary/10 px-3 text-xs font-black uppercase tracking-wider text-primary">
-                            {request.targetRoleLabel}
+                            {getRoleLabel(request.targetRoleName)}
                           </span>
                           <span className="text-xs font-semibold text-slate-400">
                             {formatDate(request.createdAt)}
@@ -265,7 +295,7 @@ export default function RoleRequestCenterScreen() {
                         </div>
                       </div>
                       <StatusBadge
-                        label={request.status}
+                        label={getRequestStatusLabel(request.status)}
                         tone={getStatusTone(request.status)}
                       />
                     </div>

@@ -11,10 +11,10 @@ export const profileScreenCopy = {
   account: {
     cardTitle: "Hồ sơ vận hành",
     cardDescription:
-      "Thông tin này được dùng để hiển thị trong dashboard và các luồng phối hợp vận hành.",
+      "Thông tin này được dùng để hiển thị trong bảng điều hành và các luồng phối hợp vận hành.",
     profileId: "Mã người dùng",
     role: "Vai trò",
-    hubId: "Mã hub",
+    hubId: "Mã trung tâm",
     syncReady: "Đã đồng bộ",
     syncPending: "Có thay đổi chưa lưu",
     syncDescription:
@@ -24,7 +24,7 @@ export const profileScreenCopy = {
     phoneLabel: "Số điện thoại liên hệ",
     phonePlaceholder: "0900 111 222",
     emailLabel: "Email đăng nhập",
-    emailHint: "Email hiện chưa thể thay đổi trực tiếp từ giao diện profile.",
+    emailHint: "Email hiện chưa thể thay đổi trực tiếp từ giao diện hồ sơ.",
     save: "Lưu thay đổi",
     savePending: "Đang lưu...",
     reset: "Khôi phục dữ liệu gốc",
@@ -79,14 +79,14 @@ export const profileScreenCopy = {
     title: "Điều phối tài khoản",
     description:
       "Theo dõi thông báo hệ thống và các yêu cầu vai trò ngay trong không gian khách hàng.",
-    notificationsTitle: "Notification inbox",
+    notificationsTitle: "Hộp thông báo",
     notificationsDescription:
-      "Mở inbox để xem thông báo phê duyệt, nhắc việc và cập nhật vận hành.",
-    notificationsCta: "Mở inbox",
-    rolesTitle: "Role requests",
+      "Mở hộp thông báo để xem phê duyệt, nhắc việc và cập nhật vận hành.",
+    notificationsCta: "Mở hộp thông báo",
+    rolesTitle: "Yêu cầu vai trò",
     rolesDescription:
-      "Theo dõi hoặc gửi yêu cầu trở thành tài xế hay nhân viên kho từ dashboard.",
-    rolesCta: "Mở role center",
+      "Theo dõi hoặc gửi yêu cầu trở thành tài xế hay nhân viên kho từ bảng điều hành.",
+    rolesCta: "Mở trung tâm vai trò",
   },
   security: {
     title: "Bảo mật & đăng nhập",

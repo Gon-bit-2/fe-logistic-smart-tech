@@ -1,18 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/data-states";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
 import { useI18nCopy } from "@/i18n/useCopy";
@@ -22,6 +12,22 @@ import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/us
 import { useFleetPerformance } from "@/features/analytics/presentation/hooks/useFleetPerformance";
 import { useOrderAnalytics } from "@/features/analytics/presentation/hooks/useOrderAnalytics";
 import { cn } from "@/lib/utils";
+
+const OrderTrendChart = dynamic(
+  () => import("@/features/analytics/presentation/components/OrderTrendChart"),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-full w-full rounded-xl" />,
+  }
+);
+
+const EmissionBarChart = dynamic(
+  () => import("@/features/analytics/presentation/components/EmissionBarChart"),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-full w-full rounded-xl" />,
+  }
+);
 
 export interface AnalyticsDashboardScreenProps {
   readonly _unused?: never;
@@ -117,17 +123,7 @@ export default function AnalyticsDashboardScreen(
               <h3 className="font-bold text-on-surface">Xu hướng đơn hàng</h3>
               {orderAnalyticsQuery.data ? (
                 <div className="mt-4 h-[250px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={orderAnalyticsQuery.data}>
-                      <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.15} />
-                      <XAxis dataKey="period" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="count" stroke="#15803d" name="Số đơn" />
-                      <Line type="monotone" dataKey="revenue" stroke="#0f766e" name="Doanh thu" />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  <OrderTrendChart data={orderAnalyticsQuery.data} />
                 </div>
               ) : (
                 <p className="mt-4 text-sm text-on-surface/60">Đang chờ dữ liệu xu hướng đơn hàng...</p>
@@ -186,17 +182,7 @@ export default function AnalyticsDashboardScreen(
               <SectionCard className="min-h-[320px] p-5">
                 <h3 className="font-bold text-on-surface">Khí thải theo thời gian</h3>
                 <div className="mt-4 h-[250px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={emissionQuery.data}>
-                      <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.15} />
-                      <XAxis dataKey="period" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="co2Emitted" fill="#dc2626" name="CO2 phát thải" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="co2Saved" fill="#16a34a" name="CO2 tiết kiệm" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <EmissionBarChart data={emissionQuery.data} />
                 </div>
               </SectionCard>
 

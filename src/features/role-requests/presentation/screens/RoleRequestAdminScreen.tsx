@@ -28,6 +28,30 @@ const filterOptions: ReadonlyArray<RoleRequestStatus> = [
 ];
 const EMPTY_ROLE_REQUESTS = [] as const;
 
+function getRoleLabel(role?: string | null) {
+  switch (role) {
+    case "DRIVER":
+      return "Tài xế";
+    case "WAREHOUSE_STAFF":
+      return "Nhân viên kho";
+    default:
+      return role ?? "Chưa xác định";
+  }
+}
+
+function getRequestStatusLabel(status: string) {
+  switch (status) {
+    case "PENDING":
+      return "Chờ duyệt";
+    case "APPROVED":
+      return "Đã duyệt";
+    case "REJECTED":
+      return "Đã từ chối";
+    default:
+      return status;
+  }
+}
+
 function getStatusTone(status: RoleRequestStatus) {
   if (status === "APPROVED") {
     return "green" as const;
@@ -72,7 +96,7 @@ export default function RoleRequestAdminScreen() {
   if (roleRequestsQuery.isPending) {
     return (
       <LoadingState
-        title="Đang tải queue role requests"
+        title="Đang tải hàng chờ yêu cầu vai trò"
         description="Hệ thống đang gom các yêu cầu chờ duyệt mới nhất."
       />
     );
@@ -81,7 +105,7 @@ export default function RoleRequestAdminScreen() {
   if (roleRequestsQuery.isError) {
     return (
       <ErrorState
-        title="Không thể tải queue role requests"
+        title="Không thể tải hàng chờ yêu cầu vai trò"
         description={getAdminRoleRequestLoadErrorMessage(
           roleRequestsQuery.error,
           roleRequestAdminCopy,
@@ -93,7 +117,7 @@ export default function RoleRequestAdminScreen() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Admin Review"
+        eyebrow="Duyệt yêu cầu"
         title={roleRequestAdminCopy.title}
         description={roleRequestAdminCopy.description}
         actions={
@@ -110,7 +134,7 @@ export default function RoleRequestAdminScreen() {
                     : "text-on-surface/55 hover:text-primary",
                 )}
               >
-                {filter}
+                {getRequestStatusLabel(filter)}
               </button>
             ))}
           </div>
@@ -146,14 +170,14 @@ export default function RoleRequestAdminScreen() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="text-xs font-black uppercase tracking-[0.18em] text-primary">
-                        {request.targetRoleLabel}
+                        {getRoleLabel(request.targetRoleName)}
                       </p>
                       <h3 className="mt-2 text-lg font-bold text-on-surface">
                         {request.userDisplayName}
                       </h3>
                     </div>
                     <StatusBadge
-                      label={request.status}
+                      label={getRequestStatusLabel(request.status)}
                       tone={getStatusTone(request.status)}
                     />
                   </div>
@@ -226,14 +250,14 @@ function RoleRequestReviewPanel({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-primary">
-              {request.targetRoleLabel}
+              {getRoleLabel(request.targetRoleName)}
             </p>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-on-surface">
               {request.userDisplayName}
             </h2>
           </div>
           <StatusBadge
-            label={request.status}
+            label={getRequestStatusLabel(request.status)}
             tone={getStatusTone(request.status)}
           />
         </div>
@@ -243,7 +267,7 @@ function RoleRequestReviewPanel({
             Tạo lúc: {formatDate(request.createdAt)}
           </p>
           <p className="text-sm text-on-surface/65">
-            Reviewer: {request.reviewerName ?? "Chưa có"}
+            Người duyệt: {request.reviewerName ?? "Chưa có"}
           </p>
         </div>
 
@@ -265,7 +289,7 @@ function RoleRequestReviewPanel({
               value={hubId}
               onChange={(event) => setHubId(event.target.value)}
             >
-              <option value="">Chọn hub</option>
+              <option value="">Chọn trung tâm</option>
               {hubs.map((hub) => (
                 <option key={hub.id} value={String(hub.id)}>
                   {hub.code} - {hub.name}

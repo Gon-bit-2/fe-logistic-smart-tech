@@ -5,10 +5,7 @@ import { CircleHelp, LogOut, Plus } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 import { useAuth } from "@/features/auth/presentation/hooks/useAuth";
 import { useI18nCopy } from "@/i18n/useCopy";
-
-export interface SidebarActionsProps {
-  readonly config: AdminShellConfig;
-}
+import type { SidebarActionsProps } from "../../types/layout.types";
 
 export function SidebarActions({ config }: Readonly<SidebarActionsProps>) {
   const { adminSidebarCopy } = useI18nCopy();

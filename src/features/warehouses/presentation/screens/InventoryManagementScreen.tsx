@@ -19,6 +19,7 @@ import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export interface InventoryManagementScreenProps {
   readonly _unused?: never;
@@ -65,7 +66,7 @@ export default function InventoryManagementScreen(
           icon={<Warehouse className="size-4 text-tertiary" />}
           label={inventoryScreenCopy.metricStorageCapacity}
           value={String(activeHubs)}
-          supporting="hub đang hoạt động"
+          supporting="trung tâm đang hoạt động"
         />
         <MetricTile
           icon={<Factory className="size-4 text-tertiary" />}
@@ -107,10 +108,7 @@ export default function InventoryManagementScreen(
 
         {hubsQuery.isLoading ? (
           <div className="p-5">
-            <LoadingState
-              title={inventoryScreenCopy.loadingTitle}
-              description={inventoryScreenCopy.loadingDescription}
-            />
+            <TableSkeleton columns={4} rows={6} className="border-0 shadow-none bg-transparent" />
           </div>
         ) : null}
 

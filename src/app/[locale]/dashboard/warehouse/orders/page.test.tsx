@@ -6,14 +6,24 @@ import { renderWithProviders } from "@/test/render";
 import WarehouseOrdersPage from "./page";
 
 const useOrdersListQueryMock = vi.fn();
+const useCancelOrderMock = vi.fn();
 
 vi.mock("@/features/orders/presentation/hooks/useOrdersListQuery", () => ({
   useOrdersListQuery: (params?: unknown) => useOrdersListQueryMock(params),
 }));
 
+vi.mock("@/features/orders/presentation/hooks/useCancelOrder", () => ({
+  useCancelOrder: () => useCancelOrderMock(),
+}));
+
 describe("WarehouseOrdersPage", () => {
   beforeEach(() => {
     useOrdersListQueryMock.mockReset();
+    useCancelOrderMock.mockReset();
+    useCancelOrderMock.mockReturnValue({
+      isPending: false,
+      mutateAsync: vi.fn(),
+    });
     useOrdersListQueryMock.mockReturnValue({
       data: {
         data: [
@@ -49,5 +59,10 @@ describe("WarehouseOrdersPage", () => {
       expect.stringContaining("/dashboard/warehouse?mode=outbound"),
     );
     expect(screen.getAllByText("Chờ xác nhận").length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "Xem chi tiết" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/dashboard/warehouse/orders/1"),
+    );
+    expect(screen.getByRole("button", { name: "Hủy đơn" })).toBeInTheDocument();
   });
 });

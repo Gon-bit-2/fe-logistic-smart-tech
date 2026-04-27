@@ -6,10 +6,7 @@ import { SidebarBrand } from "./sidebar/SidebarBrand";
 import { SidebarNavItems } from "./sidebar/SidebarNavItems";
 import { SidebarActions } from "./sidebar/SidebarActions";
 import { SidebarShell } from "./sidebar/SidebarShell";
-
-export interface AdminSidebarProps {
-  readonly config: AdminShellConfig;
-}
+import type { AdminSidebarProps } from "../types/layout.types";
 
 export default function AdminSidebar({
   config,

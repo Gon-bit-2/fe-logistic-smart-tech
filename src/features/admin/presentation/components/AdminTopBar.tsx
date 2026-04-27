@@ -10,11 +10,7 @@ import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSessio
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
-
-export interface AdminTopBarProps {
-  readonly config: AdminShellConfig;
-  readonly pathname: string;
-}
+import type { AdminTopBarProps } from "../types/layout.types";
 
 export default function AdminTopBar({
   config,

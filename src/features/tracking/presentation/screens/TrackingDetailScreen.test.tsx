@@ -10,6 +10,7 @@ import TrackingDetailScreen from "./TrackingDetailScreen";
 const usePublicTrackingQueryMock = vi.fn();
 const useResolvedTrackingOrderMock = vi.fn();
 const useCancelOrderMock = vi.fn();
+const useAuthSessionMock = vi.fn();
 
 vi.mock("@/features/tracking/presentation/hooks/usePublicTrackingQuery", () => ({
   usePublicTrackingQuery: (trackingCode: string) => usePublicTrackingQueryMock(trackingCode),
@@ -24,14 +25,26 @@ vi.mock("@/features/orders/presentation/hooks/useCancelOrder", () => ({
   useCancelOrder: () => useCancelOrderMock(),
 }));
 
+vi.mock("@/features/auth/presentation/hooks/useAuthSession", () => ({
+  useAuthSession: () => useAuthSessionMock(),
+}));
+
 describe("TrackingDetailScreen", () => {
   beforeEach(() => {
     usePublicTrackingQueryMock.mockReset();
     useResolvedTrackingOrderMock.mockReset();
     useCancelOrderMock.mockReset();
+    useAuthSessionMock.mockReset();
     useCancelOrderMock.mockReturnValue({
       isPending: false,
       mutateAsync: vi.fn().mockResolvedValue(undefined),
+    });
+    useAuthSessionMock.mockReturnValue({
+      user: {
+        id: 7,
+        role: "customer",
+        roleId: 2,
+      },
     });
     useResolvedTrackingOrderMock.mockReturnValue({
       data: null,
@@ -205,5 +218,33 @@ describe("TrackingDetailScreen", () => {
       );
       expect(screen.getByText(trackingDetailCopy.copySuccess)).toBeInTheDocument();
     });
+  });
+
+  it("shows cancel CTA for warehouse staff when the order is still cancelable", () => {
+    useAuthSessionMock.mockReturnValue({
+      user: {
+        id: 99,
+        role: "warehouse_staff",
+        roleId: 4,
+      },
+    });
+    usePublicTrackingQueryMock.mockReturnValue({
+      data: sampleTrackingViewModel,
+      error: null,
+      isPending: false,
+      refetch: vi.fn(),
+    });
+    useResolvedTrackingOrderMock.mockReturnValue({
+      data: {
+        ...sampleOrder,
+        status: "PENDING",
+        trackingCode: sampleTrackingViewModel.trackingCode,
+      },
+      error: null,
+    });
+
+    renderWithProviders(<TrackingDetailScreen trackingCode={sampleTrackingViewModel.trackingCode} />);
+
+    expect(screen.getByRole("button", { name: trackingDetailCopy.cancelOrder })).toBeInTheDocument();
   });
 });

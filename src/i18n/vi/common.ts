@@ -1,7 +1,7 @@
 export const appMetadata = {
-  title: "Nền tảng logistics thông minh",
+  title: "Nền tảng giao nhận thông minh",
   description:
-    "Giao diện logistics thông minh cho theo dõi đơn hàng, vận hành đội xe và điều phối bền vững.",
+    "Giao diện giao nhận thông minh cho tra cứu đơn hàng, vận hành đội xe và điều phối bền vững.",
 } as const;
 
 export const navbarCopy = {
@@ -9,7 +9,7 @@ export const navbarCopy = {
   contactLabel: "Hệ thống",
   loginLabel: "Đăng nhập",
   registerLabel: "Đăng ký",
-  menuLabel: "Menu",
+  menuLabel: "Trình đơn",
   navItems: [
     { href: "#features", label: "Tính năng" },
     { href: "#solutions", label: "Giải pháp" },

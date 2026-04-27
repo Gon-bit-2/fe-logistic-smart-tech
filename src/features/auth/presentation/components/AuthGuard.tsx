@@ -6,10 +6,7 @@ import { useRouter } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
 import { localizePath, type Locale } from "@/i18n/config";
-
-export interface AuthGuardProps {
-  readonly children: React.ReactNode;
-}
+import type { AuthGuardProps } from "@/features/auth/presentation/types";
 
 export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();

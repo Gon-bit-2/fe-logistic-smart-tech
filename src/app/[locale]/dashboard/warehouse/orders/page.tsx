@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, Package, Search } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { Button } from "@/components/ui/button";
+import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
@@ -30,6 +32,9 @@ export default function WarehouseOrdersPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("");
   const [page, setPage] = useState(1);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+  const cancelOrderMutation = useCancelOrder();
 
   const { data: result, isLoading, isError, error } = useOrdersListQuery({
     page,
@@ -40,6 +45,28 @@ export default function WarehouseOrdersPage() {
 
   const orders = result?.data || [];
   const totalPages = Math.ceil((result?.totalItems || 0) / 10) || 1;
+
+  async function handleCancelOrder(orderId: string) {
+    const didConfirm = window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?");
+
+    if (!didConfirm) {
+      return;
+    }
+
+    setActionError(null);
+    setActionSuccess(null);
+
+    try {
+      await cancelOrderMutation.mutateAsync(orderId);
+      setActionSuccess("Đơn hàng đã được hủy thành công.");
+    } catch (mutationError) {
+      setActionError(
+        mutationError instanceof Error
+          ? mutationError.message
+          : "Không thể hủy đơn hàng vào lúc này.",
+      );
+    }
+  }
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] flex-col bg-[#F0FDF4] py-5 md:py-7">
@@ -72,6 +99,17 @@ export default function WarehouseOrdersPage() {
             </Link>
           </div>
         </div>
+
+        {actionSuccess ? (
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+            {actionSuccess}
+          </div>
+        ) : null}
+        {actionError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {actionError}
+          </div>
+        ) : null}
 
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="relative flex-1">
@@ -146,6 +184,7 @@ export default function WarehouseOrdersPage() {
                       <th className="px-6 py-4 font-medium">Người Gửi</th>
                       <th className="px-6 py-4 font-medium">Khối lượng</th>
                       <th className="px-6 py-4 font-medium">Trạng thái</th>
+                      <th className="px-6 py-4 font-medium">Hành động</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
@@ -174,6 +213,27 @@ export default function WarehouseOrdersPage() {
                             label={getOrderStatusLabel(order.status)}
                             tone={getWarehouseOrderTone(order.status)}
                           />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-wrap gap-2">
+                            <Link
+                              href={`/dashboard/warehouse/orders/${order.id}`}
+                              className="inline-flex h-8 items-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-xs font-semibold text-emerald-800 transition-colors hover:bg-emerald-100"
+                            >
+                              Xem chi tiết
+                            </Link>
+                            {(order.status === "PENDING" || order.status === "ASSIGNED") ? (
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                disabled={cancelOrderMutation.isPending}
+                                onClick={() => void handleCancelOrder(order.id)}
+                              >
+                                {cancelOrderMutation.isPending ? "Đang hủy..." : "Hủy đơn"}
+                              </Button>
+                            ) : null}
+                          </div>
                         </td>
                       </tr>
                     ))}

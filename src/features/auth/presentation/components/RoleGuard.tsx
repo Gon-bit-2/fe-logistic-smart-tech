@@ -8,11 +8,7 @@ import {
 } from "@/features/auth/application/services/auth-session";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
 import type { UserRole } from "@/features/auth/domain/types/auth.types";
-
-export interface RoleGuardProps {
-  readonly allowedRoles: UserRole[];
-  readonly children: React.ReactNode;
-}
+import type { RoleGuardProps } from "@/features/auth/presentation/types";
 
 export default function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
   const router = useRouter();

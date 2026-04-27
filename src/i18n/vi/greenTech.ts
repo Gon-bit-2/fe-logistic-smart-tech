@@ -28,7 +28,7 @@ export const sustainabilityScreenCopy = {
   renewableEnergyMix: "Tỷ lệ năng lượng tái tạo",
   renewableEnergySubtitle: "Tỉ trọng sử dụng điện lưới quốc gia so với năng lượng sạch",
   title: "Tác động bền vững",
-  topPercent: "Top 2% nhà cung cấp logistics toàn cầu",
+  topPercent: "Top 2% đơn vị giao nhận toàn cầu",
 } as const;
 
 export const co2DashboardCopy = {

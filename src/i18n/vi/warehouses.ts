@@ -1,5 +1,5 @@
 export const inventoryScreenCopy = {
-  activeInventoryLedger: "Sổ tồn kho đang hoạt động",
+  activeInventoryLedger: "Sổ tồn kho hiện hành",
   centralHubDescription:
     "Xử lý chuỗi lạnh tự động cho hàng hoá nhạy cảm và dược phẩm trên toàn hành lang phía Bắc.",
   centralHubTitle: "Trung tâm phân phối A1",
@@ -14,7 +14,7 @@ export const inventoryScreenCopy = {
     "Toạ độ",
     "Trạng thái",
   ],
-  hubSubtitle: "Giám sát thời gian thực cho mạng lưới logistics Precision.",
+  hubSubtitle: "Giám sát thời gian thực cho mạng lưới vận hành Precision.",
   hubTitle: "Quản lý trung tâm phân phối",
   hubVehiclePending: "Dữ liệu tồn kho chi tiết đang được đồng bộ.",
   integrationPendingDescription:
@@ -29,21 +29,21 @@ export const inventoryScreenCopy = {
   metricPendingDispatch: "Chờ xuất kho",
   metricStorageCapacity: "Công suất lưu trữ",
   metricTotalStock: "Tổng tồn kho",
-  recordsButton: "Xem toàn bộ hub",
+  recordsButton: "Xem toàn bộ trung tâm",
   searchPlaceholder: "Tìm SKU...",
   solarEfficiency: "Hiệu suất lưới điện mặt trời",
   solarTitle: "Chỉ số bền vững",
-  stockChips: ["Hubs API", "Realtime shell"],
-  stockSupporting: "Tổng hợp theo dữ liệu hub đang khả dụng",
+  stockChips: ["Dữ liệu trung tâm", "Giao diện thời gian thực"],
+  stockSupporting: "Tổng hợp theo dữ liệu trung tâm đang khả dụng",
   used: "đã dùng",
 } as const;
 
 export const warehouseHubScreenCopy = {
-  destinationHub: "Điểm đến",
+  destinationHub: "Trung tâm đích",
   flagged: "Cần chú ý",
   inbound: "Hàng vào",
   itemType: "Loại hàng",
-  logisticsMap: "Xem bản đồ logistics",
+  logisticsMap: "Xem bản đồ vận hành",
   nextFleetArrival: "Lượt xe tiếp theo đến",
   outbound: "Hàng ra",
   pageTitle: "Quản lý kho hàng",

@@ -371,8 +371,8 @@ export default function WarehouseScannerPage() {
                 <Bell className="size-5" />
               </div>
               <div>
-                <p className="text-sm font-bold text-emerald-900">Notifications</p>
-                <p className="text-xs text-slate-600">Mở inbox phê duyệt và vận hành</p>
+                <p className="text-sm font-bold text-emerald-900">Thông báo</p>
+                <p className="text-xs text-slate-600">Mở hộp thông báo phê duyệt và vận hành</p>
               </div>
             </div>
             <span className="text-sm font-bold text-emerald-700">Mở</span>
@@ -387,7 +387,7 @@ export default function WarehouseScannerPage() {
                 <ShieldCheck className="size-5" />
               </div>
               <div>
-                <p className="text-sm font-bold text-emerald-900">Role Requests</p>
+                <p className="text-sm font-bold text-emerald-900">Yêu cầu vai trò</p>
                 <p className="text-xs text-slate-600">Đăng ký và theo dõi yêu cầu vai trò</p>
               </div>
             </div>
@@ -410,7 +410,7 @@ export default function WarehouseScannerPage() {
             }}
             type="button"
           >
-            Nhập Kho (Inbound)
+            Nhập kho
           </button>
           <button
             className={`flex-1 rounded-xl py-3.5 text-center text-[16px] font-bold transition-all ${
@@ -426,7 +426,7 @@ export default function WarehouseScannerPage() {
             }}
             type="button"
           >
-            Xuất Kho (Outbound)
+            Xuất kho
           </button>
         </div>
 
@@ -484,8 +484,8 @@ export default function WarehouseScannerPage() {
                 </p>
                 <p className="max-w-md text-[14px] leading-relaxed text-slate-600">
                   {cameraReady
-                    ? "Nếu thiết bị không đọc được camera, hãy dùng máy quét USB hoặc nhập trackingCode ở form bên dưới."
-                    : "Thiết bị hiện không hỗ trợ BarcodeDetector. Luồng nhập tay và máy quét USB vẫn hoạt động bình thường."}
+                    ? "Nếu thiết bị không quét được bằng camera, hãy dùng máy quét USB hoặc nhập mã theo dõi ở biểu mẫu bên dưới."
+                    : "Thiết bị hiện không hỗ trợ bộ quét mã của trình duyệt. Luồng nhập tay và máy quét USB vẫn hoạt động bình thường."}
                 </p>
               </div>
             </button>
@@ -509,7 +509,7 @@ export default function WarehouseScannerPage() {
             >
               <label className="block space-y-2">
                 <span className="text-sm font-semibold text-slate-700">
-                  Tracking code / máy quét USB
+                  Mã theo dõi / máy quét USB
                 </span>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <div className="relative flex-1">
@@ -560,7 +560,7 @@ export default function WarehouseScannerPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
-                        Tracking Code
+                        Mã theo dõi
                       </p>
                       <p className="mt-2 text-lg font-bold text-slate-900">
                         {resolvedTrackingLabel}
@@ -606,7 +606,7 @@ export default function WarehouseScannerPage() {
                     </div>
                     <div>
                       <dt className="text-xs font-black uppercase tracking-[0.14em] text-slate-400">
-                        Hub hiện tại
+                        Trung tâm hiện tại
                       </dt>
                       <dd className="mt-1 font-medium text-slate-900">
                         {resolvedOrder.currentHubId ?? "Chưa gán"}
@@ -621,7 +621,7 @@ export default function WarehouseScannerPage() {
                 >
                   <label className="block space-y-2">
                     <span className="text-sm font-semibold text-slate-700">
-                      Mô tả tracking event
+                      Mô tả lượt cập nhật
                     </span>
                     <textarea
                       className="min-h-28 w-full rounded-lg border border-slate-300 px-4 py-3 text-[14px] text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -655,7 +655,7 @@ export default function WarehouseScannerPage() {
                   Chưa có kiện hàng nào được chọn
                 </h3>
                 <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-600">
-                  Quét camera hoặc dùng máy quét USB để lấy trackingCode, hệ thống sẽ
+                  Quét camera hoặc dùng máy quét USB để lấy mã theo dõi, hệ thống sẽ
                   tra cứu đơn rồi hiển thị khối xác nhận tại đây.
                 </p>
               </div>

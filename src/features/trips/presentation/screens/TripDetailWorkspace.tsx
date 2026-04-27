@@ -36,6 +36,7 @@ import { Button } from "@/components/ui/button";
 import TripRouteMap from "@/features/trips/presentation/components/TripRouteMap";
 import { SectionCard, StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
 import { cn } from "@/lib/utils";
+import type { GoongCoordinate } from "@/features/maps/presentation/lib/goong";
 
 type TripDetailWorkspaceProps = {
   tripId: string;
@@ -84,6 +85,57 @@ export default function TripDetailWorkspace({
   }, [optimizeRoute, trip?.id, optimizeRoute.data, optimizeRoute.isPending]);
 
   const tracking = trackingQuery.data ?? null;
+  const liveLocation = socketState.latestLocation;
+  const liveLocationPoint = useMemo<GoongCoordinate | null>(() => {
+    if (!liveLocation) {
+      return null;
+    }
+
+    return {
+      lat: liveLocation.lat,
+      lng: liveLocation.lng,
+    };
+  }, [liveLocation]);
+  const trackingEvents = useMemo(() => {
+    if (!tracking) {
+      return [];
+    }
+
+    if (!liveLocation) {
+      return tracking.events;
+    }
+
+    const liveLocationLabel = `${liveLocation.lat.toFixed(5)}, ${liveLocation.lng.toFixed(5)}`;
+    const liveDescription = "Vị trí tài xế vừa được cập nhật theo thời gian thực.";
+    const currentEventIndex = tracking.events.findLastIndex(
+      (event) => event.status === "current",
+    );
+
+    if (currentEventIndex === -1) {
+      return [
+        ...tracking.events,
+        {
+          id: `live-location-${liveLocation.timestamp}`,
+          label: "Theo dõi trực tiếp",
+          location: liveLocationLabel,
+          status: "current" as const,
+          timestamp: liveLocation.timestamp,
+          description: liveDescription,
+        },
+      ];
+    }
+
+    return tracking.events.map((event, index) =>
+      index === currentEventIndex
+        ? {
+            ...event,
+            location: liveLocationLabel,
+            description: event.description ?? liveDescription,
+            timestamp: liveLocation.timestamp,
+          }
+        : event,
+    );
+  }, [liveLocation, tracking]);
   const paymentStatus = getPaymentStatusLabel(
     paymentQuery.data?.status ?? activeOrder?.payment?.status,
   );
@@ -263,6 +315,7 @@ export default function TripDetailWorkspace({
               </div>
 
               <TripRouteMap
+                currentLocation={liveLocationPoint}
                 polyline={optimizeRoute.data?.polyline ?? null}
                 stops={trip.stops}
               />
@@ -553,7 +606,7 @@ export default function TripDetailWorkspace({
               </div>
 
               {tracking ? (
-                <TrackingTimeline stops={tracking.events} />
+                <TrackingTimeline stops={trackingEvents} />
               ) : (
                 <p className="text-sm text-on-surface/60">
                   Chưa tải được timeline nội bộ cho order hiện tại.

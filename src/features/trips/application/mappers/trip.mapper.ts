@@ -56,7 +56,14 @@ function mapTripStop(stop: NonNullable<TripApiDto["stops"]>[number]): TripStopDe
             currentHubId: stop.order?.currentHubId ?? null,
             currentTripId: stop.order?.currentTripId != null ? String(stop.order.currentTripId) : null,
             id: stop.order?.id != null ? String(stop.order.id) : String(stop.orderId ?? ""),
-            payment: mapPaymentApiToRecord(stop.order?.payment),
+            payment: mapPaymentApiToRecord(
+              stop.order?.payment ??
+                (stop.order?.paymentMethod
+                  ? {
+                      method: stop.order.paymentMethod,
+                    }
+                  : null),
+            ),
             preferredDeliveryTimeEnd: stop.order?.preferredDeliveryTimeEnd ?? null,
             preferredDeliveryTimeStart: stop.order?.preferredDeliveryTimeStart ?? null,
             receiverAddress: stop.order?.receiverAddress ?? null,

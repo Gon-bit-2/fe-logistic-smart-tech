@@ -68,6 +68,10 @@ export const orderFormCopy = {
   declaredValue: "Giá trị khai báo",
   deliveryAddress: "Địa chỉ giao hàng",
   dimensions: "Kích thước (cm)",
+  dimensionsHint: "Nhập theo dạng Dài x Rộng x Cao. Ví dụ: 40x30x20 hoặc 40 × 30 × 20 cm.",
+  dimensionsInvalid: "Kích thước kiện hàng không hợp lệ. Ví dụ: 40x30x20 cm.",
+  dimensionsPlaceholder: "Ví dụ: 40x30x20",
+  dimensionsRequired: "Vui lòng nhập kích thước kiện hàng.",
   estimatedArrival: "Thời gian dự kiến đến",
   itemDescription: "Mô tả hàng hoá",
   localMockQuote: "Chờ lấy báo giá từ hệ thống",
@@ -94,9 +98,9 @@ export const orderFormCopy = {
 
 export const paymentMethodOptions = [
   {
-    description: "Thanh toán online ngay sau khi tạo đơn để đưa lô hàng vào luồng xử lý nhanh.",
+    description: "Thanh toán trực tuyến ngay sau khi tạo đơn để đưa lô hàng vào luồng xử lý nhanh.",
     id: "STRIPE",
-    label: "Thanh toán online",
+    label: "Thanh toán trực tuyến",
   },
   {
     description: "Tài xế thu tiền mặt khi giao thành công và hệ thống sẽ đối soát COD nội bộ.",
@@ -178,7 +182,7 @@ export const checkoutCopy = {
     "Hệ thống đang tiến hành lấy báo giá chính thức. Vui lòng chờ trong giây lát.",
   processing: "Đang xử lý...",
   redirectToCodTracking:
-    "Đơn hàng này dùng COD. Theo dõi tiến trình giao nhận và thu hộ từ màn hình tracking.",
+    "Đơn hàng này dùng COD. Theo dõi tiến trình giao nhận và thu hộ từ màn hình theo dõi.",
   shippingAndHandling: "Phí xử lý",
   sustainableChoice: "Lựa chọn bền vững",
   sustainabilityMissing:
@@ -211,7 +215,7 @@ export const orderManagementCopy = {
   ecoImpact: "Tác động xanh",
   exportData: "Xuất dữ liệu",
   exportSnapshot: "Xuất ảnh chụp dữ liệu",
-  logisticsStatus: "Trạng thái vận hành",
+  logisticsStatus: "Trạng thái giao nhận",
   orderId: "Mã đơn hàng",
   pageSummary: "Trang 1 / 64",
   priority: "Mức ưu tiên",
@@ -238,7 +242,7 @@ export const shipmentsManagementCopy = {
   ecoImpactDescription: "Bạn đã bù đắp 12,4 tấn CO2 trong tuần này.",
   ecoImpactTitle: "Điểm tác động xanh",
   filterPlaceholder: "Lọc theo mã, xe hoặc tuyến...",
-  headings: ["Mã theo dõi", "Tuyến đường", "Mã xe", "Trạng thái", "ETA", ""],
+  headings: ["Mã theo dõi", "Tuyến đường", "Mã xe", "Trạng thái", "ETA", "Hành động"],
   listEmptyDescription:
     "Không tìm thấy lô hàng nào phù hợp với điều kiện tìm kiếm.",
   listEmptyTitle: "Chưa có lô hàng để hiển thị",

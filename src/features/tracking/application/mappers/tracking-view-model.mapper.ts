@@ -23,6 +23,29 @@ function mapEventLabel(
   return copy.getTrackingStatusLabel(fallbackStatus);
 }
 
+function formatCoordinateLocation(event: TrackingEventApi) {
+  if (event.latitude == null || event.longitude == null) {
+    return null;
+  }
+
+  return `${Number(event.latitude).toFixed(5)}, ${Number(event.longitude).toFixed(5)}`;
+}
+
+function resolveEventLocation(
+  event: TrackingEventApi,
+  copy: ReturnType<typeof getI18nCopy>,
+) {
+  return (
+    event.location?.trim() ||
+    formatCoordinateLocation(event) ||
+    copy.trackingDetailCopy.locationPending
+  );
+}
+
+function resolveEventTimestamp(event: TrackingEventApi) {
+  return event.occurredAt ?? event.createdAt ?? new Date().toISOString();
+}
+
 function mapTrackingEvents(
   events: TrackingEventApi[],
   currentStatus: string,
@@ -44,9 +67,9 @@ function mapTrackingEvents(
     description: event.description,
     id: String(event.id ?? `${event.status ?? event.eventType ?? "event"}-${index}`),
     label: mapEventLabel(event, currentStatus, copy),
-    location: event.location ?? copy.trackingDetailCopy.locationPending,
+    location: resolveEventLocation(event, copy),
     status: index === events.length - 1 ? "current" : "completed",
-    timestamp: event.createdAt ?? new Date().toISOString(),
+    timestamp: resolveEventTimestamp(event),
   }));
 }
 

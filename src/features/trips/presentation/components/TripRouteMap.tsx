@@ -24,6 +24,7 @@ const ROUTE_LAYER_ID = "trip-route-line";
 
 type TripRouteMapProps = {
   className?: string;
+  currentLocation?: GoongCoordinate | null;
   polyline?: string | null;
   stops: TripStopDetail[];
 };
@@ -52,12 +53,14 @@ function MapFallback({
 
 export default function TripRouteMap({
   className,
+  currentLocation,
   polyline,
   stops,
 }: Readonly<TripRouteMapProps>) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<GoongMap | null>(null);
   const markerRef = useRef<GoongMarker[]>([]);
+  const liveMarkerRef = useRef<GoongMarker | null>(null);
   const [isScriptReady, setIsScriptReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
 
@@ -95,18 +98,22 @@ export default function TripRouteMap({
   }, [polyline, stops]);
 
   const mapCenter = useMemo(() => {
-    if (routePoints.length === 0) {
+    const visiblePoints = currentLocation
+      ? [...routePoints, currentLocation]
+      : routePoints;
+
+    if (visiblePoints.length === 0) {
       return DEFAULT_CENTER;
     }
 
-    const latSum = routePoints.reduce((sum, point) => sum + point.lat, 0);
-    const lngSum = routePoints.reduce((sum, point) => sum + point.lng, 0);
+    const latSum = visiblePoints.reduce((sum, point) => sum + point.lat, 0);
+    const lngSum = visiblePoints.reduce((sum, point) => sum + point.lng, 0);
 
     return {
-      lat: latSum / routePoints.length,
-      lng: lngSum / routePoints.length,
+      lat: latSum / visiblePoints.length,
+      lng: lngSum / visiblePoints.length,
     };
-  }, [routePoints]);
+  }, [currentLocation, routePoints]);
 
   useEffect(() => {
     ensureGoongCssLoaded();
@@ -166,8 +173,11 @@ export default function TripRouteMap({
     }
 
     map.resize();
-    const bounds = toGoongBounds(routePoints);
-    if (bounds && routePoints.length > 1) {
+    const visiblePoints = currentLocation
+      ? [...routePoints, currentLocation]
+      : routePoints;
+    const bounds = toGoongBounds(visiblePoints);
+    if (bounds && visiblePoints.length > 1) {
       map.fitBounds?.(bounds, {
         duration: 500,
         maxZoom: 13,
@@ -176,12 +186,12 @@ export default function TripRouteMap({
       return;
     }
 
-    map.easeTo?.({
+      map.easeTo?.({
       center: [mapCenter.lng, mapCenter.lat],
       duration: 400,
-      zoom: routePoints.length > 0 ? 12 : 10,
+      zoom: visiblePoints.length > 0 ? 12 : 10,
     });
-  }, [mapCenter.lat, mapCenter.lng, routePoints]);
+  }, [currentLocation, mapCenter.lat, mapCenter.lng, routePoints]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -206,6 +216,34 @@ export default function TripRouteMap({
       markerRef.current = [];
     };
   }, [routePoints]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const goong = getGoongGlobal();
+
+    if (!map || !goong) {
+      return;
+    }
+
+    liveMarkerRef.current?.remove();
+    liveMarkerRef.current = null;
+
+    if (!currentLocation) {
+      return;
+    }
+
+    liveMarkerRef.current = new goong.Marker({
+      color: "#2563eb",
+      scale: 1.25,
+    })
+      .setLngLat([currentLocation.lng, currentLocation.lat])
+      .addTo(map);
+
+    return () => {
+      liveMarkerRef.current?.remove();
+      liveMarkerRef.current = null;
+    };
+  }, [currentLocation]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -258,6 +296,8 @@ export default function TripRouteMap({
     return () => {
       markerRef.current.forEach((marker) => marker.remove());
       markerRef.current = [];
+      liveMarkerRef.current?.remove();
+      liveMarkerRef.current = null;
       if (mapRef.current?.getLayer?.(ROUTE_LAYER_ID) && mapRef.current.removeLayer) {
         mapRef.current.removeLayer(ROUTE_LAYER_ID);
       }

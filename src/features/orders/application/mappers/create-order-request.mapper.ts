@@ -5,6 +5,7 @@ import type {
   ResolvedOrderAddressInput,
   ServiceTier,
 } from "@/features/orders/domain/types/order.types";
+import { parsePackageDimensions } from "@/features/orders/domain/utils/package-dimensions";
 
 function mapServiceTier(value: ServiceTier): CreateOrderApiInput["serviceType"] {
   if (value === "express") {
@@ -16,25 +17,6 @@ function mapServiceTier(value: ServiceTier): CreateOrderApiInput["serviceType"] 
   }
 
   return "STANDARD";
-}
-
-function parseDimensions(value: string) {
-  const parts = value
-    .split(/x/i)
-    .map((part) => Number(part.trim()))
-    .filter((part) => Number.isFinite(part) && part > 0);
-
-  if (parts.length !== 3) {
-    return {};
-  }
-
-  const [length, width, height] = parts;
-
-  return {
-    height,
-    length,
-    width,
-  };
 }
 
 function toPreferredDeliveryWindow(value: string) {
@@ -76,9 +58,11 @@ function requireResolvedAddress(address: ResolvedOrderAddressInput, fieldName: s
 }
 
 function mapItems(input: CreateOrderInput) {
+  const dimensions = parsePackageDimensions(input.packageDimensions);
+
   return [
     {
-      ...parseDimensions(input.packageDimensions),
+      ...(dimensions ?? {}),
       name: input.itemDescription.trim() || "Kiện hàng",
       quantity: 1,
       weight: Number(input.packageWeightKg || 0),

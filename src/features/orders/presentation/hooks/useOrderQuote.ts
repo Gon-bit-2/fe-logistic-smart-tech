@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getOrderQuoteUseCase } from "@/features/orders/application/use-cases/order.use-cases";
+import { hasValidPackageDimensions } from "@/features/orders/domain/utils/package-dimensions";
 import type {
   CreateOrderInput,
   OrderQuoteResponse,
@@ -50,6 +51,14 @@ export function getOrderQuoteValidationMessage(input: CreateOrderInput) {
 
   if (Number(input.packageWeightKg) <= 0) {
     return "Vui lòng nhập cân nặng kiện hàng lớn hơn 0.";
+  }
+
+  if (!input.packageDimensions.trim()) {
+    return "Vui lòng nhập kích thước kiện hàng theo định dạng Dài x Rộng x Cao.";
+  }
+
+  if (!hasValidPackageDimensions(input.packageDimensions)) {
+    return "Kích thước kiện hàng không hợp lệ. Ví dụ: 40x30x20 cm.";
   }
 
   return null;

@@ -117,7 +117,7 @@ export default function CustomerDashboardPage() {
             </div>
             <div>
               <h2 className="text-[20px] font-semibold text-emerald-900">
-                Notification Inbox
+                Hộp thông báo
               </h2>
               <p className="mt-1 text-[14px] text-slate-600">
                 Theo dõi cập nhật phê duyệt và các thông báo hệ thống.
@@ -128,7 +128,7 @@ export default function CustomerDashboardPage() {
             href="/overview?notifications=1"
             className="mt-5 inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white"
           >
-            Mở inbox
+            Mở hộp thông báo
           </Link>
         </div>
 
@@ -139,11 +139,11 @@ export default function CustomerDashboardPage() {
             </div>
             <div>
               <h2 className="text-[20px] font-semibold text-emerald-900">
-                Role Requests
+                Yêu cầu vai trò
               </h2>
               <p className="mt-1 text-[14px] text-slate-600">
                 Đăng ký trở thành tài xế hoặc nhân viên kho trực tiếp từ
-                dashboard.
+                bảng điều hành.
               </p>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function CustomerDashboardPage() {
             href="/role-requests"
             className="mt-5 inline-flex rounded-lg border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700"
           >
-            Mở role center
+            Mở trung tâm vai trò
           </Link>
         </div>
       </div>

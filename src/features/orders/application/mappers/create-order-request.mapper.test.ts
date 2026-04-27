@@ -185,4 +185,34 @@ describe("create-order request mappers", () => {
       }),
     ).toThrow("Địa chỉ lấy hàng chưa được chọn từ gợi ý địa chỉ hợp lệ.");
   });
+
+  it("parses dimensions robustly when the input contains spaces, multiplication signs, or units", () => {
+    const payload = mapCreateOrderInputToApiPayload({
+      contactName: "Lan",
+      contactPhone: "0909000001",
+      customerName: "Công ty Emerald",
+      declaredValueUsd: 150,
+      delivery: createResolvedAddress("456 Điện Biên Phủ", "delivery-place", 10.773118, 106.698299),
+      estimatedArrival: "2026-04-21T10:30:00.000Z",
+      itemDescription: "Thiết bị điện tử",
+      packageDimensions: "40 × 30 × 20 cm",
+      packageWeightKg: 25,
+      paymentMethod: "COD",
+      pickup: createResolvedAddress("123 Nguyễn Văn Linh", "pickup-place", 10.776889, 106.700806),
+      receiverName: "Minh",
+      receiverPhone: "0909000002",
+      serviceTier: "eco_green",
+    });
+
+    expect(payload.items).toEqual([
+      {
+        height: 20,
+        length: 40,
+        name: "Thiết bị điện tử",
+        quantity: 1,
+        weight: 25,
+        width: 30,
+      },
+    ]);
+  });
 });

@@ -3,10 +3,7 @@
 import { ShieldCheck } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 import { useI18nCopy } from "@/i18n/useCopy";
-
-export interface SidebarBrandProps {
-  readonly config: AdminShellConfig;
-}
+import type { SidebarBrandProps } from "../../types/layout.types";
 
 export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
   const { adminSidebarCopy } = useI18nCopy();

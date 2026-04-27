@@ -54,7 +54,7 @@ describe("tracking-view-model.mapper", () => {
     expect(viewModel.events).toEqual([
       {
         id: "PENDING-current",
-        label: "Chờ xử lý",
+        label: "Chờ xác nhận",
         location: "Chưa có cập nhật vị trí",
         status: "current",
         timestamp: "2026-04-19T10:00:00.000Z",
@@ -62,5 +62,27 @@ describe("tracking-view-model.mapper", () => {
     ]);
 
     vi.useRealTimers();
+  });
+
+  it("uses coordinates and occurredAt when location text is missing", () => {
+    const viewModel = mapTrackingResponseToViewModel({
+      trackingCode: "ELG-GPS-1",
+      currentStatus: "IN_TRANSIT",
+      events: [
+        {
+          id: "evt-gps",
+          eventType: "STATUS_CHANGE",
+          status: "IN_TRANSIT",
+          latitude: 10.776889,
+          longitude: 106.700806,
+          occurredAt: "2026-04-19T09:15:00.000Z",
+        },
+      ],
+    });
+
+    expect(viewModel.events[0]).toMatchObject({
+      location: "10.77689, 106.70081",
+      timestamp: "2026-04-19T09:15:00.000Z",
+    });
   });
 });

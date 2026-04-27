@@ -74,6 +74,7 @@ export const ROLE_ID_MAP: Record<number, UserRole> = {
 export type AccessTokenPayload = {
   deviceId: number;
   exp: number;
+  hubId?: number | null;
   iat: number;
   roleId: number;
   roleName: string;
@@ -81,6 +82,7 @@ export type AccessTokenPayload = {
 };
 
 export type AuthUser = {
+  hubId?: number | null;
   id: number;
   role: UserRole;
   roleId: number;

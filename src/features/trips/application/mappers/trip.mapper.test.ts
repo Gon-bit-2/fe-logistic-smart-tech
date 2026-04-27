@@ -88,4 +88,30 @@ describe("mapTripApiToViewModel", () => {
     expect(trip.stops[1].order?.receiverAddress).toBe("123 Nguyen Trai");
     expect(trip.totalDistance).toBe(18.5);
   });
+
+  it("falls back to paymentMethod when the trip stop omits payment detail", () => {
+    const trip = mapTripApiToViewModel({
+      id: 99,
+      stops: [
+        {
+          id: 1,
+          order: {
+            id: 501,
+            paymentMethod: "COD",
+            receiverAddress: "789 Le Van Sy",
+            status: "IN_TRANSIT",
+            trackingCode: "GT-ORD-20269999",
+          },
+          orderId: 501,
+          stopSequence: 1,
+          stopType: "DROPOFF",
+        },
+      ],
+    });
+
+    expect(trip.stops[0].order?.payment).toMatchObject({
+      method: "COD",
+      status: null,
+    });
+  });
 });

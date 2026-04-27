@@ -24,10 +24,7 @@ import DispatcherUnassignedOrdersPanel from "@/features/admin/presentation/compo
 import DispatcherFleetStatusPanel from "@/features/admin/presentation/components/DispatcherFleetStatusPanel";
 import { useDispatcherSocket } from "@/features/admin/presentation/hooks/useDispatcherSocket";
 import { useTripsQuery } from "@/features/trips/presentation/hooks/useTrips";
-
-export interface DispatcherDashboardScreenProps {
-  readonly _unused?: never;
-}
+import type { DispatcherDashboardScreenProps } from "../types/screens.types";
 
 export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,

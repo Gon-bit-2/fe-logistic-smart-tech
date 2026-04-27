@@ -67,8 +67,8 @@ describe("RoleRequestAdminScreen", () => {
   it("requires a hub before approving warehouse staff requests", () => {
     renderWithProviders(<RoleRequestAdminScreen />);
 
-    expect(screen.getByText("Hub phụ trách")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Approve" })).toBeDisabled();
+    expect(screen.getByText("Trung tâm phụ trách")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Duyệt" })).toBeDisabled();
   });
 
   it("submits approve payload with hubId for warehouse staff requests", () => {
@@ -77,7 +77,7 @@ describe("RoleRequestAdminScreen", () => {
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "3" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Approve" }));
+    fireEvent.click(screen.getByRole("button", { name: "Duyệt" }));
 
     expect(approveMutation).toHaveBeenCalledWith({
       requestId: "88",
@@ -101,10 +101,10 @@ describe("RoleRequestAdminScreen", () => {
 
     renderWithProviders(<RoleRequestAdminScreen />);
 
-    expect(screen.getByText("Không thể tải queue role requests")).toBeInTheDocument();
+    expect(screen.getByText("Không thể tải hàng chờ yêu cầu vai trò")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Queue role request đang tạm thời không khả dụng. Vui lòng thử lại sau hoặc kiểm tra backend.",
+        "Hàng chờ yêu cầu vai trò đang tạm thời không khả dụng. Vui lòng thử lại sau hoặc kiểm tra hệ thống nền.",
       ),
     ).toBeInTheDocument();
     expect(

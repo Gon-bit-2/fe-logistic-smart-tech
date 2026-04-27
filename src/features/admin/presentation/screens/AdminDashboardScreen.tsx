@@ -1,8 +1,5 @@
 import DispatcherDashboardScreen from "@/features/admin/presentation/screens/DispatcherDashboardScreen";
-
-export interface AdminDashboardScreenProps {
-  readonly _unused?: never;
-}
+import type { AdminDashboardScreenProps } from "../types/screens.types";
 
 export default function AdminDashboardScreen(
   _props: Readonly<AdminDashboardScreenProps>,
