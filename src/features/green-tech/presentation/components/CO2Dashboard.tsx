@@ -2,6 +2,7 @@
 
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
 import { useI18nCopy } from "@/i18n/useCopy";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CO2Dashboard() {
   const { co2DashboardCopy } = useI18nCopy();
@@ -23,7 +24,11 @@ export default function CO2Dashboard() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-on-surface-variant">Đang tải dữ liệu tổng hợp...</p>
+        <div className="grid gap-4 md:grid-cols-3">
+          <Skeleton className="h-[100px] w-full rounded-2xl" />
+          <Skeleton className="h-[100px] w-full rounded-2xl" />
+          <Skeleton className="h-[100px] w-full rounded-2xl" />
+        </div>
       ) : isError ? (
         <p className="text-sm text-error">Lỗi khi tải dữ liệu tổng hợp.</p>
       ) : (

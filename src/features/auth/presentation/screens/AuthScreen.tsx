@@ -1,11 +1,7 @@
 import type { ReactNode } from "react";
 import AuthHeroPanel from "@/features/auth/presentation/components/AuthHeroPanel";
 import GuestGuard from "@/features/auth/presentation/components/GuestGuard";
-
-type AuthScreenProps = Readonly<{
-  children: ReactNode;
-  variant: "auth" | "otp";
-}>;
+import type { AuthScreenProps } from "@/features/auth/presentation/types";
 
 export default function AuthScreen({ children, variant }: AuthScreenProps) {
   return (

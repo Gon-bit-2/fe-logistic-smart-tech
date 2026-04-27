@@ -1,5 +1,4 @@
-/* Loading Material Symbols Font */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+/* Material Symbols Font is now loaded in layout.tsx for better performance */
 
 @import "tailwindcss";
 @import "tw-animate-css";

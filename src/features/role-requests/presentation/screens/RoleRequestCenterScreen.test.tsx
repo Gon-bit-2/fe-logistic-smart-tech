@@ -52,7 +52,7 @@ describe("RoleRequestCenterScreen", () => {
 
     expect(
       screen.getByText(
-        "Bạn đang có một yêu cầu chờ duyệt. Hãy đợi admin xử lý trước khi gửi yêu cầu mới.",
+        "Bạn đang có một yêu cầu chờ duyệt. Hãy đợi quản trị viên xử lý trước khi gửi yêu cầu mới.",
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Gửi yêu cầu" })).toBeDisabled();
@@ -71,10 +71,10 @@ describe("RoleRequestCenterScreen", () => {
 
     renderWithProviders(<RoleRequestCenterScreen />);
 
-    expect(screen.getByText("Không thể tải role requests")).toBeInTheDocument();
+    expect(screen.getByText("Không thể tải yêu cầu vai trò")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Dịch vụ role request đang tạm thời gián đoạn. Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu lỗi kéo dài.",
+        "Dịch vụ yêu cầu vai trò đang tạm thời gián đoạn. Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu lỗi kéo dài.",
       ),
     ).toBeInTheDocument();
     expect(

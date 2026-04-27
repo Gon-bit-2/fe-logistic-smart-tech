@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { formatDateOnly } from "@/utils/formatters";
 
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export interface OrderManagementScreenProps {
   readonly _unused?: never;
@@ -39,10 +40,7 @@ export default function OrderManagementScreen(
       />
 
       {ordersQuery.isLoading ? (
-        <LoadingState
-          title="Đang tải danh sách đơn hàng"
-          description="Vui lòng chờ trong giây lát..."
-        />
+        <TableSkeleton columns={7} rows={5} />
       ) : null}
 
       {ordersQuery.isError ? (

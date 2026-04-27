@@ -15,6 +15,18 @@ import type {
 import { httpClient } from "@/lib/api/http-client";
 import { ApiError } from "@/lib/api/errors";
 import type { SessionTokens } from "@/types/common.type";
+import {
+  API_AUTH_OTP,
+  API_AUTH_REGISTER,
+  API_AUTH_FORGOT_PASSWORD,
+  API_SESSION_LOGIN,
+  API_AUTH_PROFILE,
+  API_AUTH_ADDRESS_BOOK,
+  API_AUTH_ADDRESS_BOOK_DETAIL,
+  API_SESSION_LOGOUT,
+  API_AUTH_GOOGLE_LINK,
+  API_SESSION_GOOGLE,
+} from "@/utils/apiUrl";
 
 async function parseJsonSafe(response: Response) {
   try {
@@ -55,7 +67,7 @@ async function requestSessionRoute<T>(input: RequestInfo | URL, init: RequestIni
 }
 
 async function requestOtp(email: string, type: VerificationCodeType) {
-  const response = await httpClient.post<MessageResponse>("/auth/otp", {
+  const response = await httpClient.post<MessageResponse>(API_AUTH_OTP, {
     email,
     type,
   });
@@ -72,7 +84,7 @@ export async function requestForgotPasswordOtp(email: string) {
 }
 
 export async function registerWithOtp(input: RegisterWithOtpInput) {
-  const response = await httpClient.post("/auth/register", {
+  const response = await httpClient.post(API_AUTH_REGISTER, {
     code: input.code,
     confirmPassword: input.password,
     email: input.email,
@@ -86,7 +98,7 @@ export async function registerWithOtp(input: RegisterWithOtpInput) {
 
 export async function forgotPassword(input: ForgotPasswordInput) {
   const response = await httpClient.post<MessageResponse>(
-    "/auth/forgot-password",
+    API_AUTH_FORGOT_PASSWORD,
     {
       code: input.code,
       confirmPassword: input.confirmPassword,
@@ -99,51 +111,51 @@ export async function forgotPassword(input: ForgotPasswordInput) {
 }
 
 export async function login(input: AuthLoginInput) {
-  return requestSessionRoute<SessionTokens>("/api/auth/session/login", {
+  return requestSessionRoute<SessionTokens>(API_SESSION_LOGIN, {
     body: JSON.stringify(input),
     method: "POST",
   });
 }
 
 export async function getProfile() {
-  const response = await httpClient.get<AuthProfileDto>("/auth/profile");
+  const response = await httpClient.get<AuthProfileDto>(API_AUTH_PROFILE);
   return response.data;
 }
 
 export async function updateProfile(input: UpdateAuthProfileInput) {
-  const response = await httpClient.patch<AuthProfileDto>("/auth/profile", input);
+  const response = await httpClient.patch<AuthProfileDto>(API_AUTH_PROFILE, input);
   return response.data;
 }
 
 export async function getAddressBook() {
-  const response = await httpClient.get<AddressBookListResponse>("/auth/address-book");
+  const response = await httpClient.get<AddressBookListResponse>(API_AUTH_ADDRESS_BOOK);
   return response.data;
 }
 
 export async function createAddressBook(input: AddressBookUpsertInput) {
-  const response = await httpClient.post<AddressBookEntryDto>("/auth/address-book", input);
+  const response = await httpClient.post<AddressBookEntryDto>(API_AUTH_ADDRESS_BOOK, input);
   return response.data;
 }
 
 export async function updateAddressBook(id: number, input: AddressBookUpsertInput) {
-  const response = await httpClient.patch<AddressBookEntryDto>(`/auth/address-book/${id}`, input);
+  const response = await httpClient.patch<AddressBookEntryDto>(API_AUTH_ADDRESS_BOOK_DETAIL(id), input);
   return response.data;
 }
 
 export async function deleteAddressBook(id: number) {
-  const response = await httpClient.delete<MessageResponse>(`/auth/address-book/${id}`);
+  const response = await httpClient.delete<MessageResponse>(API_AUTH_ADDRESS_BOOK_DETAIL(id));
   return response.data;
 }
 
 export async function logout() {
-  return requestSessionRoute<MessageResponse>("/api/auth/session", {
+  return requestSessionRoute<MessageResponse>(API_SESSION_LOGOUT, {
     method: "DELETE",
   });
 }
 
 export async function getGoogleLoginLink() {
   const response = await httpClient.get<GoogleLoginLinkResponse>(
-    "/auth/google-link",
+    API_AUTH_GOOGLE_LINK,
     {
       skipAuthRefresh: true,
     },
@@ -153,7 +165,7 @@ export async function getGoogleLoginLink() {
 }
 
 export async function exchangeGoogleSession(sessionToken: string) {
-  return requestSessionRoute<SessionTokens>("/api/auth/session/google", {
+  return requestSessionRoute<SessionTokens>(API_SESSION_GOOGLE, {
     body: JSON.stringify({ sessionToken }),
     method: "POST",
   });

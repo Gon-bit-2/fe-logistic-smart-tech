@@ -11,7 +11,7 @@ import type { ApiListResponse } from "@/types/common.type";
 
 export async function fetchEmissionRecordsRequest(tripId: string | number) {
   const response = await httpClient.get<ApiListResponse<EmissionRecord>>(
-    `${API_GET_EMISSION_RECORDS}/${tripId}`
+    API_GET_EMISSION_RECORDS(tripId)
   );
   return response.data;
 }

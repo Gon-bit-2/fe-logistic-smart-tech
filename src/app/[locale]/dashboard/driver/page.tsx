@@ -63,7 +63,7 @@ function getAssignmentStatusConfig(status?: string | null) {
     case "PENDING":
       return {
         badgeClass: "bg-amber-50 text-amber-700 ring-amber-200",
-        buttonLabel: "Đang chờ staff",
+        buttonLabel: "Đang chờ điều phối viên",
         label: "Đang chờ",
       };
     default:
@@ -149,9 +149,9 @@ export default function DriverPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <PageHeader
-        eyebrow="Driver Control"
+        eyebrow="Điều hành tài xế"
         title="Không gian vận hành tài xế"
-        description="Theo dõi chuyến hiện tại, request staff phân đơn mới và xem nhanh các điểm giao cần xử lý."
+        description="Theo dõi chuyến hiện tại, gửi yêu cầu nhận đơn mới và xem nhanh các điểm giao cần xử lý."
         actions={
           <Button
             onClick={() => {
@@ -176,15 +176,15 @@ export default function DriverPage() {
           detail={
             boardQuery.data?.activeTrip
               ? `Chuyến nổi bật #${boardQuery.data.activeTrip.id}`
-              : "Hiện chưa có chuyến active"
+              : "Hiện chưa có chuyến đang hoạt động"
           }
           icon={<Route className="size-6" />}
           accent="blue"
         />
         <MetricCard
-          label="REQUEST ĐANG CHỜ"
+          label="YÊU CẦU ĐANG CHỜ"
           value={String(boardQuery.data?.summary.pendingRequestCount ?? 0)}
-          detail="Các yêu cầu staff chưa xử lý"
+          detail="Các yêu cầu điều phối viên chưa xử lý"
           icon={<BellRing className="size-6" />}
           accent="dark"
         />
@@ -224,7 +224,7 @@ export default function DriverPage() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.15em] text-emerald-700">
-                      Trip #{boardQuery.data.activeTrip.id}
+                      Chuyến #{boardQuery.data.activeTrip.id}
                     </p>
                     <h3 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
                       {boardQuery.data.activeTrip.vehicleLicensePlate}
@@ -312,7 +312,7 @@ export default function DriverPage() {
                       className="rounded-2xl border border-slate-200 bg-white p-4"
                     >
                       <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
-                        Stop {stop.stopSequence}
+                        Điểm dừng {stop.stopSequence}
                       </p>
                       <p className="mt-2 font-semibold text-slate-900">
                         {stop.order?.trackingCode ?? stop.order?.reference ?? stop.hub?.name ?? "Điểm dừng"}
@@ -330,8 +330,8 @@ export default function DriverPage() {
             </div>
           ) : (
             <EmptyState
-              title="Hiện chưa có chuyến active"
-              description="Khi staff phân chuyến hoặc duyệt request nhận đơn, khu vực này sẽ hiển thị điểm dừng kế tiếp và CTA xử lý nhanh."
+              title="Hiện chưa có chuyến đang hoạt động"
+              description="Khi điều phối viên phân chuyến hoặc duyệt yêu cầu nhận đơn, khu vực này sẽ hiển thị điểm dừng kế tiếp và nút xử lý nhanh."
               action={
                 <Button asChild variant="outline">
                   <Link href="/dashboard/driver/trips">Mở danh sách chuyến</Link>
@@ -345,10 +345,10 @@ export default function DriverPage() {
           <div className="flex items-center justify-between border-b border-outline-variant/15 pb-4">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
-                Request của tôi
+                Yêu cầu của tôi
               </p>
               <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
-                Staff xử lý đến đâu rồi
+                Điều phối viên xử lý đến đâu rồi
               </h2>
             </div>
             <Clock3 className="size-6 text-primary" />
@@ -383,7 +383,7 @@ export default function DriverPage() {
                     </div>
                     {request.reviewNote ? (
                       <p className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-600">
-                        Ghi chú staff: {request.reviewNote}
+                        Ghi chú điều phối viên: {request.reviewNote}
                       </p>
                     ) : null}
                   </div>
@@ -392,8 +392,8 @@ export default function DriverPage() {
             </div>
           ) : (
             <EmptyState
-              title="Bạn chưa gửi request nào"
-              description="Khi thấy đơn phù hợp trong cùng hub, bạn có thể gửi yêu cầu để staff phân cho mình."
+              title="Bạn chưa gửi yêu cầu nào"
+              description="Khi thấy đơn phù hợp trong cùng trung tâm, bạn có thể gửi yêu cầu để điều phối viên phân cho mình."
             />
           )}
         </SectionCard>
@@ -406,7 +406,7 @@ export default function DriverPage() {
               Đơn có thể nhận thêm
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
-              Xem đơn cùng hub và gửi yêu cầu cho staff
+              Xem đơn cùng trung tâm và gửi yêu cầu cho điều phối viên
             </h2>
           </div>
           <label className="flex h-11 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4">
@@ -519,7 +519,7 @@ export default function DriverPage() {
         ) : (
           <EmptyState
             title="Không còn đơn phù hợp với bộ lọc"
-            description="Thử đổi từ khóa tìm kiếm hoặc chờ thêm đơn mới xuất hiện trong hub."
+            description="Thử đổi từ khóa tìm kiếm hoặc chờ thêm đơn mới xuất hiện trong trung tâm."
           />
         )}
       </SectionCard>

@@ -1,13 +1,16 @@
-import type { ReactNode } from "react";
 import { MoreVertical, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MetricTrend } from "@/features/admin/domain/types/admin.types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
-export interface SectionCardProps {
-  readonly className?: string;
-  readonly children: ReactNode;
-}
+import type {
+  SectionCardProps,
+  PageHeaderProps,
+  MetricCardProps,
+  TrendPillProps,
+  StatusBadgeProps,
+  BarChartCardProps,
+  ProgressListCardProps,
+  DonutChartCardProps,
+} from "../types/admin-primitives.types";
 
 export function SectionCard({
   className,
@@ -23,13 +26,6 @@ export function SectionCard({
       {children}
     </Card>
   );
-}
-
-export interface PageHeaderProps {
-  readonly eyebrow?: string;
-  readonly title: string;
-  readonly description?: string;
-  readonly actions?: ReactNode;
 }
 
 export function PageHeader({
@@ -60,16 +56,6 @@ export function PageHeader({
       {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
     </div>
   );
-}
-
-export interface MetricCardProps {
-  readonly label: string;
-  readonly value: string;
-  readonly detail?: string;
-  readonly icon: ReactNode;
-  readonly trend?: MetricTrend;
-  readonly accent?: "green" | "blue" | "dark";
-  readonly className?: string;
 }
 
 export function MetricCard({
@@ -117,11 +103,6 @@ export function MetricCard({
   );
 }
 
-export interface TrendPillProps {
-  readonly label: string;
-  readonly tone: MetricTrend["tone"];
-}
-
 export function TrendPill({ label, tone }: Readonly<TrendPillProps>) {
   const styles =
     tone === "positive"
@@ -147,11 +128,6 @@ export function TrendPill({ label, tone }: Readonly<TrendPillProps>) {
       {label}
     </span>
   );
-}
-
-export interface StatusBadgeProps {
-  readonly label: string;
-  readonly tone?: "green" | "blue" | "amber" | "red" | "neutral";
 }
 
 export function StatusBadge({
@@ -180,22 +156,6 @@ export function StatusBadge({
       {label}
     </span>
   );
-}
-
-export interface ChartBarDatum {
-  readonly label: string;
-  readonly value: number;
-  readonly compareValue?: number;
-}
-
-export interface BarChartCardProps {
-  readonly title: string;
-  readonly description?: string;
-  readonly data: ReadonlyArray<ChartBarDatum>;
-  readonly legend?: ReadonlyArray<{
-    readonly label: string;
-    readonly tone: "green" | "blue";
-  }>;
 }
 
 export function BarChartCard({
@@ -268,18 +228,6 @@ export function BarChartCard({
   );
 }
 
-export interface ProgressDatum {
-  readonly label: string;
-  readonly value: string;
-  readonly progress: number;
-}
-
-export interface ProgressListCardProps {
-  readonly title: string;
-  readonly eyebrow?: string;
-  readonly items: ReadonlyArray<ProgressDatum>;
-}
-
 export function ProgressListCard({
   title,
   eyebrow,
@@ -328,17 +276,6 @@ export function ProgressListCard({
       </div>
     </SectionCard>
   );
-}
-
-export interface DonutChartCardProps {
-  readonly title: string;
-  readonly value: string;
-  readonly subtitle: string;
-  readonly segments: ReadonlyArray<{
-    readonly label: string;
-    readonly value: string;
-    readonly tone: "green" | "blue" | "neutral";
-  }>;
 }
 
 export function DonutChartCard({

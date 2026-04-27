@@ -20,13 +20,7 @@ import CustomerNotificationsPanel from "@/features/notifications/presentation/co
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
 import { cn } from "@/lib/utils";
 import { formatEnumLabel } from "@/utils/formatters";
-
-type DriverNavItem = {
-  href: string;
-  icon: ReactNode;
-  isActive: (pathname: string) => boolean;
-  label: string;
-};
+import type { DriverNavItem } from "@/types/components/layout.types";
 
 export default function DriverTopBar() {
   const t = useTranslations("driverTopBar");

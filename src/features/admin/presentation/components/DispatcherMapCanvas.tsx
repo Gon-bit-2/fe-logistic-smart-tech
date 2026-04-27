@@ -18,12 +18,9 @@ import {
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { cn } from "@/lib/utils";
+import type { DispatcherMapCanvasProps } from "../types/panels.types";
 
 const DEFAULT_CENTER = { lat: 10.7769, lng: 106.7009 };
-
-export interface DispatcherMapCanvasProps {
-  readonly className?: string;
-}
 
 function MapFallback({
   className,

@@ -18,7 +18,7 @@ function assertApiConfigured() {
   if (!hasApiBaseUrl) {
     throw new ApiError({
       message:
-        "API is not configured. Please check your environment variables.",
+        "Chưa cấu hình kết nối hệ thống. Hãy kiểm tra lại biến môi trường.",
       status: 503,
     });
   }

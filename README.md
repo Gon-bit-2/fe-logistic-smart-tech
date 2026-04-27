@@ -1,81 +1,164 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Logistic Green Tech Frontend
 
-## Getting Started
+Frontend của hệ thống logistics xanh, xây bằng Next.js App Router. Ứng dụng này cung cấp các màn hình cho khách hàng, tài xế, kho và admin; kết nối trực tiếp với backend NestJS qua REST API và Socket.IO.
 
-smart-logistics-frontend/
-├── public/ # Chứa ảnh tĩnh, icon, font, 3d models (.gltf, .glb)
-│
+## Mục tiêu
+
+- Tra cứu đơn hàng public và theo dõi nội bộ.
+- Tạo đơn, checkout Stripe, theo dõi COD.
+- Vận hành dashboard cho admin, warehouse và driver.
+- Hiển thị bản đồ, route, tracking timeline và trạng thái chuyến xe.
+- Hỗ trợ đa ngôn ngữ `vi` / `en`.
+
+## Stack chính
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- TanStack Query
+- Next Intl
+- Stripe Elements
+- Playwright + Vitest
+- Socket.IO Client
+- Goong Maps / Google Maps bridge
+
+## Cấu trúc chính
+
+```text
+frontend/
+├── public/              Ảnh tĩnh, asset, icon
 ├── src/
-│ ├── app/ # 🚀 LỚP ROUTING (Next.js App Router)
-│ │ ├── (auth)/ # Route group: /login, /register
-│ │ ├── (dashboard)/ # Route group: /admin, /driver (Dùng chung Layout Dashboard)
-│ │ ├── tracking/ # Route: /tracking/[id]
-│ │ ├── layout.tsx # Root layout (Chứa Providers)
-│ │ └── page.tsx # Landing page (Gọi các component từ features/landing)
-│ │
-│ ├── components/ # 🧱 LỚP SHARED UI (Dùng chung toàn hệ thống)
-│ │ ├── ui/ # Shadcn UI (button.tsx, badge.tsx, dialog.tsx...)
-│ │ ├── layout/ # Global Layouts (Navbar.tsx, Footer.tsx, Sidebar.tsx)
-│ │ └── 3d/ # Các component React Three Fiber dùng chung
-│ │
-│ ├── features/ # 🌟 TRÁI TIM CỦA CLEAN ARCHITECTURE (Chia theo Domain)
-│ │ ├── landing/ # Chứa các section của trang chủ (HeroSection, StatBar...)
-│ │ ├── auth/ # Domain Xác thực (Login Form, UseAuth hook)
-│ │ ├── orders/ # Domain Đơn hàng
-│ │ │ ├── api/ # Hàm gọi API: createOrder.ts, getOrderById.ts
-│ │ │ ├── components/ # UI riêng: OrderForm.tsx, OrderTimeline.tsx
-│ │ │ ├── hooks/ # Logic: useCreateOrder.ts (React Query)
-│ │ │ ├── store/ # Local state: orderStore.ts
-│ │ │ └── types/ # DTOs: order.dto.ts
-│ │ ├── fleet/ # Domain Xe & Kho bãi (VehicleList, HubMap)
-│ │ ├── tracking/ # Domain Theo dõi & POD
-│ │ └── green-tech/ # Domain Thống kê CO2 (CO2Dashboard)
-│ │
-│ ├── lib/ # 🛠 LỚP INFRASTRUCTURE (Cấu hình Third-party)
-│ │ ├── api-client.ts # Config Axios (gắn JWT token vào header)
-│ │ ├── query-client.ts # Config React Query / SWR
-│ │ ├── gsap-config.ts # Khởi tạo GSAP & ScrollTrigger global
-│ │ └── utils.ts # cn() function của Shadcn
-│ │
-│ ├── store/ # 📦 GLOBAL STATE (Zustand / Redux)
-│ │ └── useAuthStore.ts # Lưu thông tin User & Token dùng toàn app
-│ │
-│ ├── types/ # 🏷 GLOBAL TYPES
-│ │ └── common.type.ts # Response type chung (VD: PaginationResponse)
-│ │
-│ └── utils/ # 🧮 GLOBAL UTILS (Hàm helper thuần)
-│ ├── formatters.ts # formatCurrency, formatDate
-│ └── geo.ts # calculateDistance (FE cũng có thể cần tính toán tạm)
+│   ├── app/             App Router, layout, page, providers
+│   ├── components/      Shared UI và layout dùng chung
+│   ├── features/        Chia theo domain nghiệp vụ
+│   │   ├── admin
+│   │   ├── analytics
+│   │   ├── auth
+│   │   ├── fleet
+│   │   ├── green-tech
+│   │   ├── landing
+│   │   ├── language
+│   │   ├── maps
+│   │   ├── notifications
+│   │   ├── orders
+│   │   ├── payments
+│   │   ├── profile
+│   │   ├── role-requests
+│   │   ├── tracking
+│   │   ├── trips
+│   │   └── warehouses
+│   ├── i18n/            Dictionary, routing và locale config
+│   ├── lib/             API client, env helper, query client
+│   ├── test/            Test helper
+│   ├── types/           Type dùng chung
+│   └── utils/           Formatter và helper thuần
+├── tests/               Playwright e2e
+└── docs/                Tài liệu tích hợp và test report
+```
 
-First, run the development server:
+## Yêu cầu môi trường
+
+- Node.js phù hợp với Next.js 16
+- Backend chạy sẵn để frontend có API base URL hợp lệ
+- Key cho Stripe frontend nếu dùng checkout online
+- Key cho Goong Maps nếu cần render bản đồ tuyến đường
+
+## Biến môi trường quan trọng
+
+Hiện tại frontend đọc chủ yếu các biến sau:
+
+- `NEXT_PUBLIC_API_BASE_URL`
+- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_GOONG_MAPS_TILES_KEY`
+- `NEXT_DIST_DIR` nếu cần đổi thư mục build output
+
+Ghi chú:
+
+- `NEXT_PUBLIC_API_BASE_URL` là biến quan trọng nhất cho toàn bộ luồng API.
+- Nếu thiếu `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, màn checkout vẫn render nhưng sẽ báo Stripe chưa được cấu hình.
+- Nếu thiếu `NEXT_PUBLIC_GOONG_MAPS_TILES_KEY`, app vẫn chạy nhưng các màn map sẽ hiện fallback thay vì bản đồ thật.
+
+## Chạy local
+
+### 1. Cài dependency
+
+```bash
+npm install
+```
+
+### 2. Chuẩn bị `.env`
+
+Ví dụ tối thiểu:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8386
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_publishable_key
+NEXT_PUBLIC_GOONG_MAPS_TILES_KEY=your_goong_tiles_key
+```
+
+### 3. Chạy development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ứng dụng mặc định chạy tại:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```txt
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts hay dùng
 
-## Learn More
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run test:unit
+npm run test:coverage
+npm run test:e2e:mock
+npm run test:e2e:live
+npm run test:all
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Testing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run test:unit`: chạy Vitest
+- `npm run test:coverage`: unit test kèm coverage
+- `npm run test:e2e:mock`: Playwright e2e với môi trường mock
+- `npm run test:e2e:live`: Playwright e2e với backend thật
+- `npm run test:all`: build + toàn bộ test frontend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Luồng nghiệp vụ nổi bật
 
-## Deploy on Vercel
+- Auth và session client/server.
+- Dashboard cho `admin`, `warehouse`, `driver`, `customer`.
+- Order creation + quote + checkout Stripe.
+- Tracking public và internal tracking.
+- Realtime GPS / trip tracking qua Socket.IO.
+- Role request, notification và analytics.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tài liệu liên quan
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [docs/frontend-integration.md](docs/frontend-integration.md)
+- [docs/api-reference.md](docs/api-reference.md)
+- [docs/backend-goong-integration-requirements.md](docs/backend-goong-integration-requirements.md)
+- [docs/test-report.md](docs/test-report.md)
+
+## Ghi chú kỹ thuật
+
+- App dùng App Router với segment theo locale.
+- `src/app/providers.tsx` chứa Query Client, React Query Devtools và bootstrap auth store.
+- `src/i18n` quản lý route locale-aware và dictionary `vi` / `en`.
+- Nhiều màn hình phụ thuộc backend thật; khi API chưa cấu hình đúng, app sẽ fallback về trạng thái lỗi hoặc empty state rõ ràng.
+- Có xử lý dọn các attribute do browser extension chèn vào DOM để giảm nhiễu trong dev hydration.
+
+## Troubleshooting
+
+- Gọi API thất bại: kiểm tra `NEXT_PUBLIC_API_BASE_URL`.
+- Checkout không lên Stripe: kiểm tra `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+- Map không hiển thị: kiểm tra `NEXT_PUBLIC_GOONG_MAPS_TILES_KEY`.
+- Warning hydration lẻ tẻ chỉ xuất hiện ở máy local: kiểm tra browser extension trước khi sửa code SSR.

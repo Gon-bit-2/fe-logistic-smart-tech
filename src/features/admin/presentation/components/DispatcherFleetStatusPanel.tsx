@@ -7,10 +7,7 @@ import {
 } from "@/components/ui/data-states";
 import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFleetVehiclesQuery";
 import { cn } from "@/lib/utils";
-
-export interface DispatcherFleetStatusPanelProps {
-  readonly className?: string;
-}
+import type { DispatcherFleetStatusPanelProps } from "../types/panels.types";
 
 export default function DispatcherFleetStatusPanel({
   className,

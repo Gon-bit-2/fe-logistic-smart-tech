@@ -115,6 +115,9 @@ describe("OrderForm", () => {
     fireEvent.change(screen.getByLabelText(orderFormCopy.weight), {
       target: { value: "25" },
     });
+    fireEvent.change(screen.getByLabelText(orderFormCopy.dimensions), {
+      target: { value: "40 × 30 × 20 cm" },
+    });
     fireEvent.click(screen.getByRole("button", { name: /Chuyến ghép xanh/i }));
     const submitButton = screen.getByRole("button", { name: /Tạo đơn hàng/i });
 
@@ -136,6 +139,7 @@ describe("OrderForm", () => {
             placeId: "delivery-place",
           }),
           packageWeightKg: 25,
+          packageDimensions: "40 × 30 × 20 cm",
           paymentMethod: "STRIPE",
           pickup: expect.objectContaining({
             address: "123 Nguyễn Văn Linh, Quận 7",
@@ -177,7 +181,7 @@ describe("OrderForm", () => {
           },
           estimatedArrival: "",
           itemDescription: "",
-          packageDimensions: "",
+          packageDimensions: "40x30x20",
           packageWeightKg: 25,
           paymentMethod: "STRIPE",
           pickup: {
@@ -198,6 +202,52 @@ describe("OrderForm", () => {
     expect(
       screen.getAllByText("Số điện thoại người gửi cần có ít nhất 10 ký tự.").length,
     ).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: /Tạo đơn hàng/i })).toBeDisabled();
+  });
+
+  it("shows a dimensions validation message and keeps submit disabled for invalid input", () => {
+    renderWithProviders(
+      <OrderForm
+        quoteState={{
+          ...quoteState,
+          canRequestQuote: false,
+          canSubmit: false,
+          validationMessage: orderFormCopy.dimensionsInvalid,
+        }}
+        value={{
+          contactName: "Lan",
+          contactPhone: "0909000001",
+          customerName: "",
+          declaredValueUsd: 0,
+          delivery: {
+            address: "456 Điện Biên Phủ, Bình Thạnh",
+            isResolved: true,
+            latitude: 10.80035,
+            longitude: 106.71482,
+            placeId: "delivery-place",
+            query: "456 Điện Biên Phủ, Bình Thạnh",
+          },
+          estimatedArrival: "",
+          itemDescription: "",
+          packageDimensions: "dài rộng cao",
+          packageWeightKg: 25,
+          paymentMethod: "STRIPE",
+          pickup: {
+            address: "123 Nguyễn Văn Linh, Quận 7",
+            isResolved: true,
+            latitude: 10.728851,
+            longitude: 106.721659,
+            placeId: "pickup-place",
+            query: "123 Nguyễn Văn Linh, Quận 7",
+          },
+          receiverName: "Minh",
+          receiverPhone: "0909000002",
+          serviceTier: "standard",
+        }}
+      />,
+    );
+
+    expect(screen.getAllByText(orderFormCopy.dimensionsInvalid).length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: /Tạo đơn hàng/i })).toBeDisabled();
   });
 });

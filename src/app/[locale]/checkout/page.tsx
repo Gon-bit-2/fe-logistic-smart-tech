@@ -8,7 +8,7 @@ export default function CheckoutPage() {
       <Suspense
         fallback={
           <div className="mx-auto max-w-5xl px-6 py-12 text-on-surface md:px-8">
-            Loading checkout...
+            Đang tải trang thanh toán...
           </div>
         }
       >

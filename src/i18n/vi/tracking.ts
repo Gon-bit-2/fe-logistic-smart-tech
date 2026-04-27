@@ -53,7 +53,7 @@ export const proofOfDeliveryCopy = {
   recipientLabel: "Người nhận",
   title: "Biên nhận giao hàng",
   trackingCodeLabel: "Mã theo dõi",
-  eyebrow: "POD",
+  eyebrow: "Biên nhận",
 } as const;
 
 export const trackingTimelineCopy = {
@@ -118,10 +118,10 @@ export const trackingDetailCopy = {
 export const internalTrackingCopy = {
   accessErrorEyebrow: "Lỗi truy cập",
   accessErrorTitle: "Bạn không có quyền xem dòng thời gian nội bộ của đơn hàng này",
-  connectHint: "Vui lòng cung cấp mã đơn hàng (Order ID) để xem chi tiết hành trình vận chuyển nội bộ.",
+  connectHint: "Vui lòng cung cấp mã đơn hàng để xem chi tiết hành trình vận chuyển nội bộ.",
   currentStatusLabel: "Trạng thái hiện tại",
   dataSourceLabel: "Nguồn dữ liệu",
-  dataSourceValue: "API nội bộ",
+  dataSourceValue: "Hệ thống nội bộ",
   driverEyebrow: "Tài xế",
   fallbackError: "Hệ thống đang tạm thời gián đoạn. Không thể truy xuất dữ liệu vận hành.",
   loadingDescription: "Đang đồng bộ dữ liệu vận hành nội bộ.",
@@ -129,10 +129,10 @@ export const internalTrackingCopy = {
   loadingTitle: "Đang tải dữ liệu hành trình nội bộ",
   missingOrderDescription:
     "Vui lòng truy cập thông qua hệ thống quản lý để xem chi tiết hành trình vận chuyển nội bộ.",
-  title: "Không gian thực thi tuyến đường",
+  title: "Không gian điều hành lộ trình",
   trackingCodeLabel: "Mã theo dõi",
   trackingErrorEyebrow: "Lỗi theo dõi",
   trackingErrorTitle: "Không thể tải dòng thời gian nội bộ của lô hàng",
   viewLiveTracking: (trackingCode: string) =>
-    `Đang xem theo dõi nội bộ trực tiếp cho ${trackingCode}.`,
+    `Đang xem luồng theo dõi nội bộ trực tiếp cho ${trackingCode}.`,
 } as const;

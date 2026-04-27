@@ -6,10 +6,7 @@ import { useRouter } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
 import { localizePath, type Locale } from "@/i18n/config";
-
-export interface GuestGuardProps {
-  readonly children: React.ReactNode;
-}
+import type { GuestGuardProps } from "@/features/auth/presentation/types";
 
 export default function GuestGuard({ children }: GuestGuardProps) {
   const router = useRouter();

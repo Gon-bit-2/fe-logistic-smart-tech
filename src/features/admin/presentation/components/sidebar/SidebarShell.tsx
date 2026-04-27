@@ -1,11 +1,7 @@
 "use client";
 
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
-
-export interface SidebarShellProps {
-  readonly config: AdminShellConfig;
-  readonly children: React.ReactNode;
-}
+import type { SidebarShellProps } from "../../types/layout.types";
 
 export function SidebarShell({ config, children }: Readonly<SidebarShellProps>) {
   const isDashboard = config.topBarVariant === "dashboard";

@@ -166,6 +166,7 @@ export function extractAuthUserFromToken(token: string): AuthUser | null {
   }
 
   return {
+    hubId: payload.hubId ?? null,
     id: payload.userId,
     role,
     roleId: payload.roleId,

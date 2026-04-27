@@ -5,11 +5,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import AppIcon from "@/components/ui/app-icon";
-
-type FooterLink = {
-  href: string;
-  label: string;
-};
+import type { FooterLink } from "@/types/components/layout.types";
 
 export default function Footer() {
   const t = useTranslations("footer");

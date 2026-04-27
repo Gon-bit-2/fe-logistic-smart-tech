@@ -4,6 +4,10 @@ import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createEmptyOrderInput } from "@/features/orders/domain/value-objects/order-form";
+import {
+  hasValidPackageDimensions,
+  normalizePackageDimensionsInput,
+} from "@/features/orders/domain/utils/package-dimensions";
 import type {
   CreateOrderInput,
   OrderPaymentMethod,
@@ -172,6 +176,12 @@ export default function OrderForm({
     form.contactPhone,
     orderFormCopy.contactPhone,
   );
+  const dimensionsError =
+    form.packageDimensions.trim().length === 0
+      ? orderFormCopy.dimensionsRequired
+      : !hasValidPackageDimensions(form.packageDimensions)
+        ? orderFormCopy.dimensionsInvalid
+        : null;
   const receiverPhoneError = getPhoneValidationMessage(
     form.receiverPhone,
     orderFormCopy.receiverPhone,
@@ -214,15 +224,19 @@ export default function OrderForm({
           form.pickup.isResolved &&
           form.delivery.isResolved &&
           Number(form.packageWeightKg) > 0,
+          form.packageDimensions.trim(),
+          !dimensionsError,
       ),
     [
       form.contactName,
       form.contactPhone,
       form.delivery.isResolved,
+      form.packageDimensions,
       form.packageWeightKg,
       form.pickup.isResolved,
       form.receiverName,
       form.receiverPhone,
+      dimensionsError,
     ],
   );
 
@@ -379,10 +393,28 @@ export default function OrderForm({
               {orderFormCopy.dimensions}
             </span>
             <Input
+              aria-label={orderFormCopy.dimensions}
               value={form.packageDimensions}
               onChange={(event) => updateField("packageDimensions", event.target.value)}
+              onBlur={() => {
+                if (hasValidPackageDimensions(form.packageDimensions)) {
+                  updateField(
+                    "packageDimensions",
+                    normalizePackageDimensionsInput(form.packageDimensions),
+                  );
+                }
+              }}
               className="border-b border-outline-variant/25 focus:rounded-lg"
+              placeholder={orderFormCopy.dimensionsPlaceholder}
+              required
             />
+            {dimensionsError ? (
+              <p className="px-1 text-xs text-destructive">{dimensionsError}</p>
+            ) : (
+              <p className="px-1 text-xs text-on-surface-variant">
+                {orderFormCopy.dimensionsHint}
+              </p>
+            )}
           </label>
 
           <label className="space-y-2 md:col-span-2">

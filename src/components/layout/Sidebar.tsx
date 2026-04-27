@@ -4,19 +4,7 @@ import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-
-export type SidebarItem = {
-  href: string;
-  label: string;
-  icon?: React.ReactNode;
-};
-
-type SidebarProps = {
-  title?: string;
-  items: SidebarItem[];
-  footerNote?: string;
-  footerActions?: React.ReactNode;
-};
+import type { SidebarProps } from "@/types/components/layout.types";
 
 export default function Sidebar({
   title,

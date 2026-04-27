@@ -1,5 +1,19 @@
+// auth api endpoints
+export const API_AUTH_OTP = "/auth/otp";
+export const API_AUTH_REGISTER = "/auth/register";
+export const API_AUTH_FORGOT_PASSWORD = "/auth/forgot-password";
+export const API_AUTH_PROFILE = "/auth/profile";
+export const API_AUTH_ADDRESS_BOOK = "/auth/address-book";
+export const API_AUTH_ADDRESS_BOOK_DETAIL = (id: string | number) => `/auth/address-book/${id}`;
+export const API_AUTH_GOOGLE_LINK = "/auth/google-link";
+
+// session routes
+export const API_SESSION_LOGIN = "/api/auth/session/login";
+export const API_SESSION_LOGOUT = "/api/auth/session";
+export const API_SESSION_GOOGLE = "/api/auth/session/google";
+
 //green-tech api endpoints
-export const API_GET_EMISSION_RECORDS = `/green-tech/trips`;
+export const API_GET_EMISSION_RECORDS = (tripId: string | number) => `/green-tech/trips/${tripId}`;
 export const API_CALCULATE_EMISSIONS = (tripId: string | number) =>
   `/green-tech/calculate/${tripId}`;
 

@@ -56,6 +56,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**.your-cdn.com" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com", pathname: "/**" },
       ...(apiRemotePattern ? [apiRemotePattern] : []),
     ],
   },

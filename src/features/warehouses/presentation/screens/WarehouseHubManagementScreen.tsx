@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { type FormEvent, useState } from "react";
 import { Warehouse, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/features/admin/presentation/components/admin-primitives";
@@ -86,7 +88,7 @@ export default function WarehouseHubManagementScreen(
           className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6"
         >
           <h2 className="text-xl font-black tracking-tight text-on-surface">
-            {selectedHubId ? "Cập nhật hub" : "Tạo hub mới"}
+            {selectedHubId ? "Cập nhật trung tâm" : "Tạo trung tâm mới"}
           </h2>
 
           {/* Upload ảnh đại diện kho */}
@@ -122,7 +124,7 @@ export default function WarehouseHubManagementScreen(
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                Latitude
+                Vĩ độ
               </span>
               <input
                 type="number"
@@ -138,7 +140,7 @@ export default function WarehouseHubManagementScreen(
             </label>
             <label className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                Longitude
+                Kinh độ
               </span>
               <input
                 type="number"
@@ -160,7 +162,7 @@ export default function WarehouseHubManagementScreen(
               disabled={createHub.isPending || updateHub.isPending}
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white transition-all hover:shadow-lg disabled:opacity-50"
             >
-              {selectedHubId ? "Lưu thay đổi" : "Tạo hub"}
+              {selectedHubId ? "Lưu thay đổi" : "Tạo trung tâm"}
             </button>
             {selectedHubId ? (
               <>
@@ -169,7 +171,7 @@ export default function WarehouseHubManagementScreen(
                   onClick={() => void deleteHub.mutateAsync(selectedHubId)}
                   className="rounded-xl bg-destructive/10 px-5 py-3 text-sm font-bold text-destructive"
                 >
-                  Xóa hub
+                  Xóa trung tâm
                 </button>
                 <button
                   type="button"
@@ -197,7 +199,7 @@ export default function WarehouseHubManagementScreen(
         <section className="space-y-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-black tracking-tight text-on-surface">
-              Hub đang hoạt động
+              Trung tâm đang hoạt động
             </h2>
             <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">
               {hubsQuery.data?.totalItems ?? 0}
@@ -223,9 +225,11 @@ export default function WarehouseHubManagementScreen(
             >
               {/* Thumbnail ảnh kho */}
               {hub.imageUrl ? (
-                <img
+                <Image
                   src={hub.imageUrl}
                   alt={hub.name}
+                  width={56}
+                  height={56}
                   className="size-14 shrink-0 rounded-xl object-cover shadow-sm"
                 />
               ) : (
@@ -242,18 +246,18 @@ export default function WarehouseHubManagementScreen(
               </div>
 
               <span className="shrink-0 text-xs font-black uppercase tracking-[0.14em] text-primary">
-                {hub.isActive === false ? "inactive" : "active"}
+                {hub.isActive === false ? "ngừng hoạt động" : "đang hoạt động"}
               </span>
             </button>
           ))}
 
-          {/* === Hub Detail (Staff) === */}
+          {/* === Chi tiết trung tâm (nhân viên) === */}
           {selectedHubQuery.data ? (
             <div className="rounded-xl border border-outline-variant/10 bg-background p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-black text-on-surface">
-                    Staff của hub
+                    Nhân viên của trung tâm
                   </p>
                   <p className="text-xs text-on-surface/55">
                     {selectedHubQuery.data.vehicleCount} phương tiện
@@ -279,7 +283,7 @@ export default function WarehouseHubManagementScreen(
 
               <div className="mt-6 border-t border-outline-variant/10 pt-4">
                 <p className="text-sm font-black text-on-surface">
-                  Tài xế của hub
+                  Tài xế của trung tâm
                 </p>
                 <div className="mt-4 space-y-2">
                   {(selectedHubQuery.data.drivers ?? []).map((driver) => (

@@ -61,6 +61,7 @@ export type TrackingLocationEvent = {
 };
 
 export type TrackingEventApi = {
+  occurredAt?: string;
   createdAt?: string;
   description?: string;
   eta?: string;

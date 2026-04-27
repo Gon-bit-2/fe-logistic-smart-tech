@@ -11,10 +11,7 @@ import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFl
 import { manualCreateTripRequest } from "@/features/trips/infrastructure/api/trip.api";
 import { OrderDTO } from "@/features/orders/domain/types/order.types";
 import { cn } from "@/lib/utils";
-
-export interface DispatcherUnassignedOrdersPanelProps {
-  readonly className?: string;
-}
+import type { DispatcherUnassignedOrdersPanelProps } from "../types/panels.types";
 
 export default function DispatcherUnassignedOrdersPanel({
   className,

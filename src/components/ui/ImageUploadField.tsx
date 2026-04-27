@@ -1,6 +1,7 @@
 "use client";
 
 import { type ChangeEvent, type DragEvent, useCallback, useRef, useState } from "react";
+import Image from "next/image";
 import { ImagePlus, Loader2, X, Upload } from "lucide-react";
 
 export interface ImageUploadFieldProps {
@@ -129,9 +130,11 @@ export default function ImageUploadField({
       {displayUrl ? (
         /* === Chế độ hiển thị ảnh đã có === */
         <div className="group relative overflow-hidden rounded-2xl border border-outline-variant/15 bg-surface-container-lowest">
-          <img
+          <Image
             src={displayUrl}
-            alt={label}
+            alt={label || "Uploaded image"}
+            width={800}
+            height={400}
             className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           {/* Overlay gradient khi hover */}

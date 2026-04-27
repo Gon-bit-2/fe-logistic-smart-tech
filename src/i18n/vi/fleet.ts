@@ -15,7 +15,7 @@ export const fleetScreenCopy = {
     electricVehicles: "Xe điện / hybrid",
     totalVehicles: "Tổng số xe",
   },
-  operationalDashboard: "Bảng điều hành vận hành",
+  operationalDashboard: "Bảng điều hành",
   systemPerformance: "Hiệu suất hệ thống",
   systemPerformanceText:
     "Hiệu suất sử dụng đội xe tăng 8,4% so với tuần trước. Các phương tiện xe điện duy trì thời gian hoạt động tối đa không gián đoạn.",

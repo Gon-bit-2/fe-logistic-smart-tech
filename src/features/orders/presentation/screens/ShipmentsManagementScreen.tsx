@@ -4,27 +4,28 @@ import { useDeferredValue, useEffect, useState } from "react";
 import {
   ArrowRight,
   Boxes,
-  MoreVertical,
   Plus,
   Search,
   Truck,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   EmptyState,
   ErrorState,
   IntegrationPendingState,
-  LoadingState,
 } from "@/components/ui/data-states";
+import { Link } from "@/i18n/routing";
 import {
   SectionCard,
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
+import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/formatters";
 
-import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 export interface ShipmentsManagementScreenProps {
   readonly _unused?: never;
@@ -34,6 +35,8 @@ export default function ShipmentsManagementScreen(
   _props: Readonly<ShipmentsManagementScreenProps>,
 ) {
   void _props;
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const {
     getOrderStatusLabel,
     shipmentFilters,
@@ -41,11 +44,11 @@ export default function ShipmentsManagementScreen(
   } = useI18nCopy();
 
   const [activeFilterIndex, setActiveFilterIndex] = useState(0);
-  const activeFilter = shipmentFilters[activeFilterIndex] ?? shipmentFilters[0];
   const [searchTerm, setSearchTerm] = useState("");
   const [renderTimestamp, setRenderTimestamp] = useState<number | null>(null);
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const ordersQuery = useOrdersListQuery();
+  const cancelOrderMutation = useCancelOrder();
   const orders = ordersQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
 
@@ -101,6 +104,26 @@ export default function ShipmentsManagementScreen(
       value: String(orders.filter((order) => order.status === "DELIVERED").length),
     },
   ];
+
+  async function handleCancelOrder(orderId: string) {
+    const didConfirm = window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?");
+
+    if (!didConfirm) {
+      return;
+    }
+
+    setActionError(null);
+    setActionSuccess(null);
+
+    try {
+      await cancelOrderMutation.mutateAsync(orderId);
+      setActionSuccess("Đơn hàng đã được hủy thành công.");
+    } catch (error) {
+      setActionError(
+        error instanceof Error ? error.message : "Không thể hủy đơn hàng vào lúc này.",
+      );
+    }
+  }
 
   return (
     <div className="space-y-7">
@@ -230,11 +253,19 @@ export default function ShipmentsManagementScreen(
         </label>
       </div>
 
+      {actionSuccess ? (
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+          {actionSuccess}
+        </div>
+      ) : null}
+      {actionError ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {actionError}
+        </div>
+      ) : null}
+
       {ordersQuery.isLoading ? (
-        <LoadingState
-          title={shipmentsManagementCopy.listLoadingTitle}
-          description={shipmentsManagementCopy.listLoadingDescription}
-        />
+        <TableSkeleton columns={7} rows={5} />
       ) : null}
 
       {ordersQuery.isError ? (
@@ -313,13 +344,26 @@ export default function ShipmentsManagementScreen(
                       <td className="px-6 py-5 text-[0.72rem] font-semibold text-on-surface">
                         {formatDate(order.estimatedArrival)}
                       </td>
-                      <td className="px-6 py-5 text-right">
-                        <button
-                          type="button"
-                          className="text-on-surface/35 transition-colors hover:text-primary"
-                        >
-                          <MoreVertical className="size-4" />
-                        </button>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <Link
+                            href={`/dashboard/admin/orders/${order.id}`}
+                            className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-[0.68rem] font-bold text-primary transition-colors hover:bg-primary/10"
+                          >
+                            Xem chi tiết
+                          </Link>
+                          {(order.status === "PENDING" || order.status === "ASSIGNED") ? (
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              disabled={cancelOrderMutation.isPending}
+                              onClick={() => void handleCancelOrder(order.id)}
+                            >
+                              {cancelOrderMutation.isPending ? "Đang hủy..." : "Hủy đơn"}
+                            </Button>
+                          ) : null}
+                        </div>
                       </td>
                     </tr>
                   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EmissionTimeline() {
   const { data, isLoading, isError } = useEmissionAnalytics();
@@ -13,7 +14,11 @@ export default function EmissionTimeline() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-on-surface-variant">Đang tải lịch sử...</p>
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
       ) : isError ? (
         <p className="text-sm text-error">Lỗi tải lịch sử.</p>
       ) : !data || data.length === 0 ? (
