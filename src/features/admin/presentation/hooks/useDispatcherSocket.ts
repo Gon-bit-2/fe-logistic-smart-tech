@@ -13,6 +13,9 @@ import {
 } from "@/features/tracking/presentation/lib/tracking-socket.manager";
 
 type DispatcherTripRoomId = number | string;
+type DashboardTripCreatedEvent = {
+  id: number;
+};
 
 function normalizeTripRoomId(tripId: DispatcherTripRoomId) {
   const numericTripId = Number(tripId);
@@ -44,7 +47,7 @@ export function useDispatcherSocket(tripIds: readonly DispatcherTripRoomId[] = [
     [tripIds],
   );
 
-  const handleTripCreated = useEffectEvent((payload: any) => {
+  const handleTripCreated = useEffectEvent((payload: DashboardTripCreatedEvent) => {
     // Invalidate queries to refresh data on dashboard
     queryClient.invalidateQueries({ queryKey: ["orders", "list"] });
     queryClient.invalidateQueries({ queryKey: ["trips", "list"] });

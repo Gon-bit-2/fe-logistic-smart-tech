@@ -8,6 +8,22 @@ import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOr
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
+import type { OrderStatus } from "@/features/orders/domain/types/order.types";
+
+const ORDER_STATUSES = new Set<OrderStatus>([
+  "PENDING",
+  "ASSIGNED",
+  "PICKED_UP",
+  "IN_TRANSIT",
+  "ARRIVED_AT_HUB",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED",
+  "CANCELLED",
+]);
+
+function parseOrderStatus(value: string): OrderStatus | undefined {
+  return ORDER_STATUSES.has(value as OrderStatus) ? (value as OrderStatus) : undefined;
+}
 
 function getWarehouseOrderTone(status: string) {
   switch (status) {
@@ -40,7 +56,7 @@ export default function WarehouseOrdersPage() {
     page,
     limit: 10,
     search: search || undefined,
-    status: (status as any) || undefined,
+    status: parseOrderStatus(status),
   });
 
   const orders = result?.data || [];

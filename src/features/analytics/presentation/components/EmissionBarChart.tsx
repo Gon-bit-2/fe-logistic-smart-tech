@@ -1,9 +1,10 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import type { EmissionAnalyticsDTO } from "@/features/analytics/domain/types/analytics.types";
 
 type EmissionBarChartProps = {
-  data: any[];
+  data: EmissionAnalyticsDTO[];
 };
 
 export default function EmissionBarChart({ data }: EmissionBarChartProps) {

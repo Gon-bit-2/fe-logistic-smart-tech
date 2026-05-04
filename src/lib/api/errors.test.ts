@@ -9,6 +9,8 @@ describe("errors utility", () => {
       expect(error.message).toBe("Test error");
       expect(error.name).toBe("ApiError");
       expect(error.code).toBeNull();
+      expect(error.errorCode).toBeNull();
+      expect(error.requestId).toBeNull();
       expect(error.status).toBeNull();
     });
 
@@ -18,10 +20,14 @@ describe("errors utility", () => {
         code: "ERR_CUSTOM",
         status: 400,
         details: { foo: "bar" },
+        errorCode: "Error.Custom",
         issues: [{ message: "Invalid foo", path: "foo" }],
+        requestId: "req-1",
       });
       expect(error.message).toBe("Full error");
       expect(error.code).toBe("ERR_CUSTOM");
+      expect(error.errorCode).toBe("Error.Custom");
+      expect(error.requestId).toBe("req-1");
       expect(error.status).toBe(400);
       expect(error.details).toEqual({ foo: "bar" });
       expect(error.issues).toHaveLength(1);
@@ -115,6 +121,28 @@ describe("errors utility", () => {
         });
         const normalized = normalizeApiError(error);
         expect(normalized.status).toBe(403);
+        expect(normalized.errorCode).toBe("Error.Forbidden");
+        expect(normalized.message).toBe(
+          "You do not have permission to perform this action.",
+        );
+      });
+
+      it("should preserve backend request metadata", () => {
+        const error = new AxiosError("Forbidden", "ERR_BAD_REQUEST", undefined, undefined, {
+          status: 403,
+          data: {
+            errorCode: "Error.PermissionDenied.NotYourHub",
+            message: "Error.PermissionDenied.NotYourHub",
+            requestId: "req-abc",
+          },
+          statusText: "Forbidden",
+          headers: {},
+          config: { headers: new AxiosHeaders() },
+        });
+        const normalized = normalizeApiError(error);
+        expect(normalized.status).toBe(403);
+        expect(normalized.errorCode).toBe("Error.PermissionDenied.NotYourHub");
+        expect(normalized.requestId).toBe("req-abc");
         expect(normalized.message).toBe(
           "You do not have permission to perform this action.",
         );
@@ -137,6 +165,26 @@ describe("errors utility", () => {
         expect(normalized.message).toBe("Invalid email, Password too short");
         expect(normalized.issues).toHaveLength(2);
         expect(normalized.issues?.[0].path).toBe("email");
+      });
+
+      it("should extract validation issues from backend errors field", () => {
+        const error = new AxiosError("Bad Request", "ERR_BAD_REQUEST", undefined, undefined, {
+          status: 400,
+          data: {
+            message: "Validation failed",
+            errors: [
+              { message: "Invalid hub", path: "hubId" },
+            ],
+          },
+          statusText: "Bad Request",
+          headers: {},
+          config: { headers: new AxiosHeaders() },
+        });
+        const normalized = normalizeApiError(error);
+        expect(normalized.message).toBe("Validation failed");
+        expect(normalized.issues).toEqual([
+          { message: "Invalid hub", path: "hubId" },
+        ]);
       });
     });
   });

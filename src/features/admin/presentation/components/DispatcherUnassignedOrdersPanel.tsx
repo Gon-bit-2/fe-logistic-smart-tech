@@ -11,6 +11,7 @@ import { useFleetVehiclesQuery } from "@/features/fleet/presentation/hooks/useFl
 import { manualCreateTripRequest } from "@/features/trips/infrastructure/api/trip.api";
 import { OrderDTO } from "@/features/orders/domain/types/order.types";
 import { cn } from "@/lib/utils";
+import { normalizeApiError } from "@/lib/api/errors";
 import type { DispatcherUnassignedOrdersPanelProps } from "../types/panels.types";
 
 export default function DispatcherUnassignedOrdersPanel({
@@ -23,6 +24,7 @@ export default function DispatcherUnassignedOrdersPanel({
 
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
   const [isDispatching, setIsDispatching] = useState(false);
+  const [dispatchError, setDispatchError] = useState<string | null>(null);
   const [showDrawer, setShowDrawer] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<number | "">("");
 
@@ -59,6 +61,7 @@ export default function DispatcherUnassignedOrdersPanel({
     if (!selectedVehicle || selectedOrders.size === 0) return;
     try {
       setIsDispatching(true);
+      setDispatchError(null);
       // Giả định driverId lấy từ vehicle hoặc mock là 1 tài xế mặc định
       await manualCreateTripRequest({
         hubId: 1, // Mock hub
@@ -71,8 +74,8 @@ export default function DispatcherUnassignedOrdersPanel({
       setSelectedOrders(new Set());
       setSelectedVehicle("");
       refetch();
-    } catch (err: any) {
-      alert("Lỗi khi tạo chuyến: " + (err.message || "Unknown error"));
+    } catch (err: unknown) {
+      setDispatchError(normalizeApiError(err).message);
     } finally {
       setIsDispatching(false);
     }
@@ -258,6 +261,22 @@ export default function DispatcherUnassignedOrdersPanel({
                   })}
                 </select>
               </div>
+
+              {dispatchError ? (
+                <ErrorState
+                  className="rounded-lg p-4"
+                  title="Không thể tạo chuyến"
+                  description={dispatchError}
+                  action={
+                    <button
+                      onClick={() => setDispatchError(null)}
+                      className="text-sm font-semibold text-primary underline"
+                    >
+                      Đóng
+                    </button>
+                  }
+                />
+              ) : null}
             </div>
 
             <div className="p-5 border-t border-slate-100 flex gap-3 bg-slate-50 mt-auto">

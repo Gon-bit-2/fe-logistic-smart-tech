@@ -46,9 +46,21 @@ import { ApiError } from "@/lib/api/errors";
 
 const tripKeys = {
   all: ["trips"] as const,
+  assignmentInbox: ["trips", "assignment-request-inbox"] as const,
+  dispatchBoard: ["trips", "dispatch-board"] as const,
   detail: (tripId: string) => [...tripKeys.all, "detail", tripId] as const,
+  driverAssignmentRequests: ["trips", "driver-assignment-requests"] as const,
+  driverDispatchBoard: ["trips", "driver-dispatch-board"] as const,
   list: (params?: TripListParams) => [...tripKeys.all, "list", params] as const,
 };
+
+function invalidateTripCollections(queryClient: ReturnType<typeof useQueryClient>) {
+  queryClient.invalidateQueries({ queryKey: [...tripKeys.all, "list"] });
+  queryClient.invalidateQueries({ queryKey: tripKeys.dispatchBoard });
+  queryClient.invalidateQueries({ queryKey: tripKeys.driverDispatchBoard });
+  queryClient.invalidateQueries({ queryKey: tripKeys.driverAssignmentRequests });
+  queryClient.invalidateQueries({ queryKey: tripKeys.assignmentInbox });
+}
 
 export function useTripsQuery(params?: TripListParams) {
   return useQuery<PaginatedResult<TripViewModel>, ApiError>({
@@ -75,7 +87,7 @@ export function useUpdateTripStatus() {
   >({
     mutationFn: ({ payload, tripId }) => updateTripStatusUseCase(tripId, payload),
     onSuccess: (trip) => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
       queryClient.setQueryData(tripKeys.detail(trip.id), trip);
     },
   });
@@ -123,7 +135,9 @@ export function useCreateDriverAssignmentRequest() {
   return useMutation<DriverAssignmentRequest, ApiError, { orderId: number }>({
     mutationFn: (payload) => createDriverAssignmentRequestUseCase(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      queryClient.invalidateQueries({ queryKey: tripKeys.driverAssignmentRequests });
+      queryClient.invalidateQueries({ queryKey: tripKeys.dispatchBoard });
+      queryClient.invalidateQueries({ queryKey: tripKeys.driverDispatchBoard });
     },
   });
 }
@@ -147,7 +161,7 @@ export function useApproveAssignmentRequest() {
     mutationFn: ({ payload, requestId }) =>
       approveAssignmentRequestUseCase(requestId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
     },
   });
 }
@@ -163,7 +177,8 @@ export function useRejectAssignmentRequest() {
     mutationFn: ({ payload, requestId }) =>
       rejectAssignmentRequestUseCase(requestId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      queryClient.invalidateQueries({ queryKey: tripKeys.assignmentInbox });
+      queryClient.invalidateQueries({ queryKey: tripKeys.driverAssignmentRequests });
     },
   });
 }
@@ -174,7 +189,7 @@ export function useDispatchApprove() {
   return useMutation<TripViewModel | null, ApiError, DispatchApproveInput>({
     mutationFn: dispatchApproveUseCase,
     onSuccess: (trip) => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
       if (trip) {
         queryClient.setQueryData(tripKeys.detail(trip.id), trip);
       }
@@ -194,7 +209,7 @@ export function useManualCreateTrip() {
   return useMutation<ManualTripResult, ApiError, ManualTripInput>({
     mutationFn: (payload) => manualCreateTripUseCase(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
     },
   });
 }
@@ -209,7 +224,7 @@ export function useAssignVehicleToTrip() {
   >({
     mutationFn: ({ payload, tripId }) => assignVehicleToTripUseCase(tripId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
     },
   });
 }
@@ -224,7 +239,7 @@ export function useAddOrdersToTrip() {
   >({
     mutationFn: ({ payload, tripId }) => addOrdersToTripUseCase(tripId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tripKeys.all });
+      invalidateTripCollections(queryClient);
     },
   });
 }
