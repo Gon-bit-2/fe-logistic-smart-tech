@@ -21,7 +21,7 @@ export const fleetScreenCopy = {
     "Fleet utilization increased 8.4% from last week. Electric vehicles maintained maximum uninterrupted uptime.",
   title: "Fleet operations",
   vehicleEmptyDescription:
-    "The system has not recorded any active vehicles at this time.",
+    "The system has not recorded active vehicles at this time.",
   vehicleEmptyTitle: "No vehicles to display",
   vehicleErrorDescription:
     "Error loading vehicle list. Check your network connection or contact support.",

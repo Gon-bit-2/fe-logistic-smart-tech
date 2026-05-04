@@ -25,6 +25,7 @@ import DispatcherFleetStatusPanel from "@/features/admin/presentation/components
 import { useDispatcherSocket } from "@/features/admin/presentation/hooks/useDispatcherSocket";
 import { useTripsQuery } from "@/features/trips/presentation/hooks/useTrips";
 import type { DispatcherDashboardScreenProps } from "../types/screens.types";
+import type { OrderDTO } from "@/features/orders/domain/types/order.types";
 
 export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,
@@ -40,8 +41,8 @@ export default function DispatcherDashboardScreen(
     [tripsQuery.data?.data],
   );
 
-  // Initialize real-time socket connection for dispatch view
-  useDispatcherSocket(activeTripIds);
+  // Initialize real-time socket connection for dispatch view.
+  const dispatcherSocket = useDispatcherSocket(activeTripIds);
 
   const { metrics, ordersQuery, vehiclesQuery, orders } =
     useDispatcherMetrics();
@@ -75,6 +76,14 @@ export default function DispatcherDashboardScreen(
         title={adminScreenCopy.title}
         description={adminScreenCopy.description}
       />
+
+      {!dispatcherSocket.isConnected && activeTripIds.length > 0 ? (
+        <ErrorState
+          className="py-4"
+          title="Realtime tracking đang gián đoạn"
+          description="Dashboard vẫn hiển thị dữ liệu gần nhất. Vị trí tài xế sẽ tự đồng bộ lại khi WebSocket kết nối lại."
+        />
+      ) : null}
 
       <div className="grid gap-6 md:grid-cols-3">
         <MetricCard
@@ -149,7 +158,7 @@ export default function DispatcherDashboardScreen(
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {orders.slice(0, 5).map((order: any) => (
+                {orders.slice(0, 5).map((order: OrderDTO) => (
                   <tr
                     key={order.id}
                     className="hover:bg-slate-50 transition-colors bg-white"

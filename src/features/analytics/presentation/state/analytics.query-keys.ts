@@ -1,5 +1,7 @@
 import type { AnalyticsParams } from "@/features/analytics/domain/types/analytics.types";
 
+export const ANALYTICS_STALE_TIME_MS = 5 * 60_000;
+
 export const analyticsKeys = {
   all: ["analytics"] as const,
   dashboard: (params?: AnalyticsParams) => [...analyticsKeys.all, "dashboard", params] as const,

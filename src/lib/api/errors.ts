@@ -105,21 +105,27 @@ function normalizePayloadMessage(payload: unknown): {
 export class ApiError extends Error {
   code: string | null;
   details?: unknown;
+  errorCode: string | null;
   issues?: ValidationIssue[];
+  requestId: string | null;
   status: ApiErrorStatus | null;
 
   constructor(params: {
     code?: string | null;
     details?: unknown;
+    errorCode?: string | null;
     issues?: ValidationIssue[];
     message: string;
+    requestId?: string | null;
     status?: ApiErrorStatus | null;
   }) {
     super(params.message);
     this.name = "ApiError";
     this.code = params.code ?? null;
     this.details = params.details;
+    this.errorCode = params.errorCode ?? null;
     this.issues = params.issues;
+    this.requestId = params.requestId ?? null;
     this.status = params.status ?? null;
   }
 }
@@ -166,11 +172,27 @@ export function normalizeApiError(error: unknown): ApiError {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status ?? null;
     const responseData = error.response?.data;
+    const responseRecord = isRecord(responseData) ? responseData : null;
     const normalized = normalizePayloadMessage(
-      isRecord(responseData) && "message" in responseData
-        ? responseData.message
+      responseRecord && "message" in responseRecord
+        ? responseRecord.message
         : responseData,
     );
+    const responseErrors =
+      responseRecord && "errors" in responseRecord
+        ? normalizePayloadMessage(responseRecord.errors)
+        : null;
+    const issues = normalized.issues ?? responseErrors?.issues;
+    const errorCode =
+      responseRecord && typeof responseRecord.errorCode === "string"
+        ? responseRecord.errorCode
+        : looksLikeMachineStatusMessage(normalized.message)
+          ? normalized.message
+          : null;
+    const requestId =
+      responseRecord && typeof responseRecord.requestId === "string"
+        ? responseRecord.requestId
+        : null;
 
     const fallbackMessage =
       error.code === "ERR_NETWORK"
@@ -182,7 +204,8 @@ export function normalizeApiError(error: unknown): ApiError {
     return new ApiError({
       code: error.code ?? null,
       details: normalized.details ?? responseData,
-      issues: normalized.issues,
+      errorCode,
+      issues,
       message:
         ((looksLikeMachineStatusMessage(normalized.message) ||
           normalized.message.trim().length === 0) &&
@@ -191,6 +214,7 @@ export function normalizeApiError(error: unknown): ApiError {
           : normalized.message) ||
         getStatusFallbackMessage(status) ||
         fallbackMessage,
+      requestId,
       status,
     });
   }

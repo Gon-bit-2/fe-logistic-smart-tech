@@ -1,9 +1,10 @@
 "use client";
 
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import type { OrderAnalyticsDTO } from "@/features/analytics/domain/types/analytics.types";
 
 type OrderTrendChartProps = {
-  data: any[];
+  data: OrderAnalyticsDTO[];
 };
 
 export default function OrderTrendChart({ data }: OrderTrendChartProps) {

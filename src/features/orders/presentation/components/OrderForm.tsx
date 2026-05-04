@@ -223,8 +223,8 @@ export default function OrderForm({
           form.receiverPhone.trim() &&
           form.pickup.isResolved &&
           form.delivery.isResolved &&
-          Number(form.packageWeightKg) > 0,
-          form.packageDimensions.trim(),
+          Number(form.packageWeightKg) > 0 &&
+          form.packageDimensions.trim() &&
           !dimensionsError,
       ),
     [
