@@ -61,7 +61,9 @@ export default function TripRouteMap({
   const mapRef = useRef<GoongMap | null>(null);
   const markerRef = useRef<GoongMarker[]>([]);
   const liveMarkerRef = useRef<GoongMarker | null>(null);
-  const [isScriptReady, setIsScriptReady] = useState(false);
+  const [isScriptReady, setIsScriptReady] = useState(() =>
+    Boolean(getGoongGlobal()),
+  );
   const [mapError, setMapError] = useState<string | null>(null);
 
   const routePoints = useMemo<GoongCoordinate[]>(() => {
@@ -117,9 +119,6 @@ export default function TripRouteMap({
 
   useEffect(() => {
     ensureGoongCssLoaded();
-    if (getGoongGlobal()) {
-      setIsScriptReady(true);
-    }
   }, []);
 
   useEffect(() => {
@@ -130,7 +129,9 @@ export default function TripRouteMap({
     const goong = getGoongGlobal();
 
     if (!goong) {
-      setMapError("Goong GL JS đã tải nhưng chưa khởi tạo được thư viện bản đồ.");
+      queueMicrotask(() => {
+        setMapError("Goong GL JS đã tải nhưng chưa khởi tạo được thư viện bản đồ.");
+      });
       return;
     }
 
@@ -161,7 +162,9 @@ export default function TripRouteMap({
         map.resize();
       });
     } catch (error) {
-      setMapError(getGoongMapsErrorMessage(error));
+      queueMicrotask(() => {
+        setMapError(getGoongMapsErrorMessage(error));
+      });
     }
   }, [isScriptReady, mapCenter.lat, mapCenter.lng]);
 
@@ -311,13 +314,15 @@ export default function TripRouteMap({
 
   return (
     <div className={cn("relative h-full min-h-[320px] overflow-hidden rounded-3xl", className)}>
-      <Script
-        src={GOONG_GL_JS_SRC}
-        strategy="afterInteractive"
-        onError={() => setMapError("Không thể tải Goong GL JS từ CDN.")}
-        onLoad={() => setIsScriptReady(true)}
-        onReady={() => setIsScriptReady(true)}
-      />
+      {GOONG_MAPS_TILES_KEY ? (
+        <Script
+          src={GOONG_GL_JS_SRC}
+          strategy="afterInteractive"
+          onError={() => setMapError("Không thể tải Goong GL JS từ CDN.")}
+          onLoad={() => setIsScriptReady(true)}
+          onReady={() => setIsScriptReady(true)}
+        />
+      ) : null}
 
       {!GOONG_MAPS_TILES_KEY ? (
         <MapFallback

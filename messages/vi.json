@@ -68,6 +68,7 @@
       "scanStation": "Trạm Quét Mã",
       "orders": "Đơn hàng",
       "trips": "Chuyến xe",
+      "wallet": "Đối soát COD",
       "role": "Role"
     }
   },
@@ -80,6 +81,7 @@
     "nav": {
       "workspace": "Không gian tài xế",
       "vehicle": "Phương tiện",
+      "wallet": "Ví COD",
       "trips": "Chuyến đi",
       "notifications": "Thông báo",
       "role": "Role"

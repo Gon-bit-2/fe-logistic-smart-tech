@@ -29,7 +29,6 @@ export default function GuestGuard({ children }: GuestGuardProps) {
 
       const localizedDestination = localizePath(destination, locale);
       router.replace(localizedDestination);
-      window.location.replace(localizedDestination);
     }
   }, [isHydrated, locale, status, user, router]);
 

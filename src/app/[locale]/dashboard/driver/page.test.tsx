@@ -148,7 +148,7 @@ describe("DriverPage", () => {
   it("renders request queue and submits a driver assignment request", async () => {
     renderWithProviders(<DriverPage />);
 
-    expect(screen.getByText("Request của tôi")).toBeInTheDocument();
+    expect(screen.getByText("Yêu cầu của tôi")).toBeInTheDocument();
     expect(screen.getByText("ORD-098")).toBeInTheDocument();
     expect(screen.getAllByText("ORD-101").length).toBeGreaterThan(0);
 

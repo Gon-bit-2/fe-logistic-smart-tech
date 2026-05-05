@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 import { Bolt, Truck, Zap } from "lucide-react";
+import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import {
-  EmptyState,
   ErrorState,
   LoadingState,
 } from "@/components/ui/data-states";
@@ -132,7 +132,7 @@ export default function DispatcherDashboardScreen(
               {adminScreenCopy.recentOrders}
             </h2>
             <Button asChild variant="outline" size="sm">
-              <a href="/dashboard/admin/orders">{adminScreenCopy.viewAll}</a>
+              <Link href="/dashboard/admin/orders">{adminScreenCopy.viewAll}</Link>
             </Button>
           </div>
 
@@ -185,7 +185,7 @@ export default function DispatcherDashboardScreen(
                         variant="outline"
                         className="h-8"
                       >
-                        <a href={`/tracking/${order.reference}`}>Theo dõi</a>
+                        <Link href={`/tracking/${order.reference}`}>Theo dõi</Link>
                       </Button>
                     </td>
                   </tr>

@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from "react";
+import { createElement, type ComponentPropsWithoutRef } from "react";
 import {
   BadgeCheck,
   Bell,
@@ -71,11 +71,9 @@ export default function AppIcon({
 }: Readonly<AppIconProps>) {
   const Icon = resolveIcon(name);
 
-  return (
-    <Icon
-      aria-hidden={props["aria-label"] ? undefined : true}
-      className={cn("size-5 shrink-0", className)}
-      {...props}
-    />
-  );
+  return createElement(Icon, {
+    "aria-hidden": props["aria-label"] ? undefined : true,
+    className: cn("size-5 shrink-0", className),
+    ...props,
+  });
 }

@@ -30,10 +30,12 @@ export default function CustomerTopBar() {
   const searchParams = useSearchParams();
   const { user } = useAuth();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const shouldOpenNotifications = searchParams.get("notifications") === "1";
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(
+    () => shouldOpenNotifications,
+  );
   const bellContainerRef = useRef<HTMLDivElement | null>(null);
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
-  const shouldOpenNotifications = searchParams.get("notifications") === "1";
   const customerNavItems: CustomerNavItem[] = [
     {
       href: "/overview",
@@ -76,14 +78,6 @@ export default function CustomerTopBar() {
       label: t("nav.role"),
     },
   ];
-
-  useEffect(() => {
-    if (!shouldOpenNotifications) {
-      return;
-    }
-
-    setIsNotificationsOpen(true);
-  }, [shouldOpenNotifications]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {

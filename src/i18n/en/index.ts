@@ -11,3 +11,4 @@ export * from "@/i18n/en/profile";
 export * from "@/i18n/en/roleRequests";
 export * from "@/i18n/en/tracking";
 export * from "@/i18n/en/warehouses";
+export * from "@/i18n/en/wallet";

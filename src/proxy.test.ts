@@ -1,6 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { NextRequest } from "next/server";
 import { proxy } from "./proxy";
+
+vi.mock("next-intl/middleware", () => ({
+  default: () => (request: NextRequest) => {
+    const { pathname, search } = request.nextUrl;
+
+    if (!/^\/(en|vi)(\/|$)/.test(pathname)) {
+      return Response.redirect(new URL(`/vi${pathname}${search}`, request.url));
+    }
+
+    return new Response(null, {
+      headers: new Headers(),
+    });
+  },
+}));
 
 function createAccessToken(roleName: string, roleId: number) {
   const payload = Buffer.from(
@@ -103,6 +117,19 @@ describe("proxy", () => {
 
     expect(response.headers.get("location")).toBe(
       "http://localhost/en/dashboard/driver?orderId=21",
+    );
+  });
+
+  it("redirects legacy customer segment routes to canonical customer roots", () => {
+    const request = createRequest(
+      "/vi/customer/orders/create?draft=1",
+      createAccessToken("customer", 2),
+    );
+
+    const response = proxy(request);
+
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/vi/orders/create?draft=1",
     );
   });
 });

@@ -48,6 +48,16 @@ const CUSTOMER_DASHBOARD_REDIRECTS = {
   "/dashboard/customer/roles": "/role-requests",
 } as const;
 
+const CUSTOMER_ROUTE_REDIRECTS = {
+  "/customer": "/overview",
+  "/customer/notifications": "/notifications",
+  "/customer/orders": "/orders",
+  "/customer/orders/create": "/orders/create",
+  "/customer/overview": "/overview",
+  "/customer/profile": "/profile",
+  "/customer/role-requests": "/role-requests",
+} as const;
+
 /**
  * next-intl middleware xử lý locale detection, redirect locale prefix,
  * và set header x-next-intl-locale để server components nhận đúng locale.
@@ -74,6 +84,20 @@ function getCustomerDashboardRedirect(pathname: string) {
   return (
     CUSTOMER_DASHBOARD_REDIRECTS[
       normalizedPath as keyof typeof CUSTOMER_DASHBOARD_REDIRECTS
+    ] ?? null
+  );
+}
+
+/** Lấy redirect path nếu là customer route cũ có segment /customer */
+function getCustomerRouteRedirect(pathname: string) {
+  const normalizedPath =
+    pathname.endsWith("/") && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
+
+  return (
+    CUSTOMER_ROUTE_REDIRECTS[
+      normalizedPath as keyof typeof CUSTOMER_ROUTE_REDIRECTS
     ] ?? null
   );
 }
@@ -126,6 +150,12 @@ export function proxy(request: NextRequest) {
       callbackUrl.searchParams.set(key, value);
     });
     return NextResponse.rewrite(callbackUrl);
+  }
+
+  const customerRouteRedirect = getCustomerRouteRedirect(normalizedPathname);
+
+  if (customerRouteRedirect) {
+    return redirectToPath(request, customerRouteRedirect, locale);
   }
 
   // Route không cần bảo vệ → chạy intlMiddleware để set locale headers

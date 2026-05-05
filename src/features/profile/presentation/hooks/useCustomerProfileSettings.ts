@@ -147,9 +147,11 @@ export function useCustomerProfileSettings() {
       return;
     }
 
-    setForm(toProfileDraft(profileQuery.data));
-    setSaveState("idle");
-    setLoadedUserId(profileQuery.data.id);
+    queueMicrotask(() => {
+      setForm(toProfileDraft(profileQuery.data));
+      setSaveState("idle");
+      setLoadedUserId(profileQuery.data.id);
+    });
   }, [loadedUserId, profileQuery.data]);
 
   const sourceDraft = useMemo(

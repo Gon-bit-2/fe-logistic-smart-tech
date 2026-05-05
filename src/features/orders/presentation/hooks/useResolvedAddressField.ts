@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MapAutocompletePrediction,
@@ -102,17 +102,17 @@ export function useResolvedAddressField(
     },
   });
 
-  function setQuery(query: string) {
+  const setQuery = useCallback((query: string) => {
     onChange(createUnresolvedDraft(query));
-  }
+  }, [onChange]);
 
-  async function selectPrediction(prediction: MapAutocompletePrediction) {
+  const selectPrediction = useCallback(async (prediction: MapAutocompletePrediction) => {
     try {
       await detailMutation.mutateAsync(prediction);
     } catch {
       onChange(createUnresolvedDraft(getPredictionLabel(prediction)));
     }
-  }
+  }, [detailMutation, onChange]);
 
   return useMemo(
     () => ({
@@ -137,6 +137,8 @@ export function useResolvedAddressField(
       predictionsQuery.data,
       predictionsQuery.error?.message,
       predictionsQuery.isFetching,
+      selectPrediction,
+      setQuery,
       value.isResolved,
       value.query,
     ],

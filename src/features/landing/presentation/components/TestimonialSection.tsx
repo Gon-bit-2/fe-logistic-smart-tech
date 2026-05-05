@@ -87,7 +87,7 @@ export default function TestimonialSection() {
                   </div>
 
                   <p className="mt-6 flex-1 text-base leading-8 text-on-surface">
-                    "{item.quote}"
+                    &ldquo;{item.quote}&rdquo;
                   </p>
 
                   <div className="mt-8 rounded-[1.4rem] bg-surface-container-low p-4">

@@ -1,12 +1,12 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/routing";
-import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import {
   Bell,
+  WalletCards,
   Home,
   Route,
   ShieldCheck,
@@ -28,10 +28,12 @@ export default function DriverTopBar() {
   const searchParams = useSearchParams();
   const { user } = useAuth();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const shouldOpenNotifications = searchParams.get("notifications") === "1";
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(
+    () => shouldOpenNotifications,
+  );
   const bellContainerRef = useRef<HTMLDivElement | null>(null);
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
-  const shouldOpenNotifications = searchParams.get("notifications") === "1";
   const driverNavItems: DriverNavItem[] = [
     {
       href: "/dashboard/driver",
@@ -45,6 +47,13 @@ export default function DriverTopBar() {
       isActive: (currentPathname) =>
         currentPathname.startsWith("/dashboard/driver/vehicle"),
       label: t("nav.vehicle"),
+    },
+    {
+      href: "/dashboard/driver/wallet",
+      icon: <WalletCards className="size-4" />,
+      isActive: (currentPathname) =>
+        currentPathname.startsWith("/dashboard/driver/wallet"),
+      label: t("nav.wallet"),
     },
     {
       href: "/dashboard/driver/trips",
@@ -68,14 +77,6 @@ export default function DriverTopBar() {
       label: t("nav.role"),
     },
   ];
-
-  useEffect(() => {
-    if (!shouldOpenNotifications) {
-      return;
-    }
-
-    setIsNotificationsOpen(true);
-  }, [shouldOpenNotifications]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {

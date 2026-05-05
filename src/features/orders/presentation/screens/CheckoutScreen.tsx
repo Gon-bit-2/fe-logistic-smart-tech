@@ -132,7 +132,9 @@ export default function CheckoutScreen({
     }
 
     autoIntentAttemptRef.current = paymentAttemptKey;
-    setError(null);
+    queueMicrotask(() => {
+      setError(null);
+    });
 
     void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
       setError(

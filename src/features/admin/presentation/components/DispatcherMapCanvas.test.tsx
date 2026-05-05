@@ -11,11 +11,11 @@ vi.mock("next/script", async () => {
   const React = await import("react");
 
   return {
-    default: ({
+    default: function MockNextScript({
       onReady,
     }: {
       onReady?: () => void;
-    }) => {
+    }) {
       React.useEffect(() => {
         onReady?.();
       }, [onReady]);

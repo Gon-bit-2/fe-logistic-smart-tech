@@ -33,7 +33,13 @@ vi.mock("@/i18n/routing", () => ({
       },
       children,
     ),
+  getPathname: vi.fn(),
   redirect: vi.fn(),
+  routing: {
+    defaultLocale: "vi",
+    localePrefix: "always",
+    locales: ["vi", "en"],
+  },
   usePathname: nextNavigationMock.usePathname,
   useRouter: nextNavigationMock.useRouter,
 }));

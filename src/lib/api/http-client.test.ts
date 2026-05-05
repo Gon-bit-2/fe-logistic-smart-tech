@@ -26,8 +26,29 @@ class MockAxiosHeaders {
   }
 }
 
+type MockAxiosInstance = ReturnType<typeof vi.fn> & {
+  __requestHandler?: (config: unknown) => Promise<{
+    headers: MockAxiosHeaders;
+  }>;
+  __responseFulfilled?: (response: unknown) => unknown;
+  __responseRejected?: (error: unknown) => Promise<unknown>;
+  delete: ReturnType<typeof vi.fn>;
+  get: ReturnType<typeof vi.fn>;
+  interceptors: {
+    request: {
+      use: ReturnType<typeof vi.fn>;
+    };
+    response: {
+      use: ReturnType<typeof vi.fn>;
+    };
+  };
+  patch: ReturnType<typeof vi.fn>;
+  post: ReturnType<typeof vi.fn>;
+  put: ReturnType<typeof vi.fn>;
+};
+
 function createAxiosInstance() {
-  const instance: any = vi.fn();
+  const instance = vi.fn() as MockAxiosInstance;
 
   instance.interceptors = {
     request: {
@@ -104,9 +125,9 @@ describe("http-client", () => {
     const config = {
       headers: new MockAxiosHeaders(),
     };
-    const nextConfig = await (httpClient as any).__requestHandler(config);
+    const nextConfig = await httpClientMock.__requestHandler?.(config);
 
-    expect(nextConfig.headers.get("authorization")).toBe(`Bearer ${accessToken}`);
+    expect(nextConfig?.headers.get("authorization")).toBe(`Bearer ${accessToken}`);
   });
 
   it("refreshes an expiring access token before sending the request", async () => {
@@ -148,14 +169,14 @@ describe("http-client", () => {
       headers: new MockAxiosHeaders(),
       url: "/maps/places/autocomplete",
     };
-    const nextConfig = await (httpClient as any).__requestHandler(config);
+    const nextConfig = await httpClientMock.__requestHandler?.(config);
 
     expect(restoreSession).toHaveBeenCalledTimes(1);
     expect(setAuthSessionTokens).toHaveBeenCalledWith({
       accessToken: newAccessToken,
     });
     expect(clearAuthSession).not.toHaveBeenCalled();
-    expect(nextConfig.headers.get("authorization")).toBe(`Bearer ${newAccessToken}`);
+    expect(nextConfig?.headers.get("authorization")).toBe(`Bearer ${newAccessToken}`);
   });
 
   it("refreshes the session and retries the failed request on 401", async () => {
@@ -217,7 +238,7 @@ describe("http-client", () => {
       },
     };
 
-    await expect((httpClient as any).__responseRejected(error)).resolves.toEqual({
+    await expect(httpClientMock.__responseRejected?.(error)).resolves.toEqual({
       data: { ok: true },
     });
 

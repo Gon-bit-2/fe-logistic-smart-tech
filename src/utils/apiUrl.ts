@@ -69,6 +69,10 @@ export const API_PAYMENT_ORDER = (orderId: string | number) =>
 export const API_PAYMENT_COD_CONFIRM = (orderId: string | number) =>
   `/payments/cod-confirm/${orderId}`;
 
+// wallet api endpoints
+export const API_WALLET_MY_WALLET = "/wallet/my-wallet";
+export const API_WALLET_RECONCILE_COD = "/wallet/reconcile-cod";
+
 // upload api endpoints
 export const API_UPLOAD_POD = "/upload/pod";
 export const API_UPLOAD_MULTIPLE_POD = "/upload/multiple-pod";

@@ -9,6 +9,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:838
 const appBaseUrl = `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT ?? "3100"}`;
 const accessTokenKey = "emerald-logistics.access-token";
 const refreshTokenKey = "emerald-logistics.refresh-token";
+const seededAccessTokens = new WeakMap<Page, string>();
 
 const sampleDashboard = {
   totalOrders: 1284,
@@ -103,6 +104,19 @@ export async function registerMockApiRoutes(page: Page) {
     }
 
     const accessToken = createMockAccessToken("customer");
+    seededAccessTokens.set(page, accessToken);
+    await page.context().addCookies([
+      {
+        name: accessTokenKey,
+        value: accessToken,
+        url: appBaseUrl,
+      },
+      {
+        name: refreshTokenKey,
+        value: "mock-refresh-token",
+        url: appBaseUrl,
+      },
+    ]);
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -113,14 +127,36 @@ export async function registerMockApiRoutes(page: Page) {
     });
   });
 
-  await page.route("**/api/auth/session", async (route) => {
+  await page.route("**/api/auth/session**", async (route) => {
     const method = route.request().method();
+    const pathname = new URL(route.request().url()).pathname;
+
+    if (pathname === "/api/auth/session/login" && method === "POST") {
+      const accessToken = createMockAccessToken("customer");
+      seededAccessTokens.set(page, accessToken);
+      await page.context().addCookies([
+        {
+          name: accessTokenKey,
+          value: accessToken,
+          url: appBaseUrl,
+        },
+        {
+          name: refreshTokenKey,
+          value: "mock-refresh-token",
+          url: appBaseUrl,
+        },
+      ]);
+      return fulfillJson(route, 200, { accessToken });
+    }
+
+    if (pathname !== "/api/auth/session") {
+      return route.fallback();
+    }
 
     if (method === "GET") {
-      const accessToken = getCookieValue(
-        route.request().headers().cookie,
-        accessTokenKey,
-      );
+      const accessToken =
+        getCookieValue(route.request().headers().cookie, accessTokenKey) ??
+        seededAccessTokens.get(page);
 
       if (!accessToken) {
         return route.fulfill({
@@ -185,21 +221,11 @@ export async function registerMockApiRoutes(page: Page) {
 
     if (method === "POST" && pathname === "/orders/quote") {
       return fulfillJson(route, 200, {
-        quote: {
-          totalWeight: 0.6,
-          totalVolume: 0.006,
-          shippingFee: 42500,
-          estimatedCo2Saved: 0.0625,
-          distance: 5.2,
-          duration: 1200,
-        },
-        routes: [
-          {
-            distance: { text: "5.2 km", value: 5200 },
-            duration: { text: "20 mins", value: 1200 },
-            overview_polyline: { points: "_p~iF~ps|U_ulLnnqC_mqNvxq`@" },
-          },
-        ],
+        distanceMeters: 5200,
+        durationSeconds: 1200,
+        estimatedCo2Saved: 0.0625,
+        polyline: "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
+        shippingFee: 42500,
       });
     }
 
@@ -213,6 +239,25 @@ export async function registerMockApiRoutes(page: Page) {
           reference: sampleOrder.reference,
           status: "PENDING",
         },
+      });
+    }
+
+    if (method === "POST" && pathname === `/payments/create-intent/${sampleOrder.id}`) {
+      return fulfillJson(route, 200, {
+        amount: 13750,
+        clientSecret: "pi_mock_secret_checkout",
+        transactionId: "txn-mock-checkout",
+      });
+    }
+
+    if (method === "GET" && pathname === `/payments/order/${sampleOrder.id}`) {
+      return fulfillJson(route, 200, {
+        amount: 137.5,
+        method: "STRIPE",
+        orderId: sampleOrder.id,
+        paidAt: null,
+        status: "PENDING",
+        transactionId: "txn-mock-checkout",
       });
     }
 
@@ -304,11 +349,17 @@ export async function seedAuthenticatedSession(
   role: "admin" | "customer" = "customer",
 ) {
   const accessToken = createMockAccessToken(role);
+  seededAccessTokens.set(page, accessToken);
 
   await page.context().addCookies([
     {
       name: accessTokenKey,
       value: accessToken,
+      url: appBaseUrl,
+    },
+    {
+      name: refreshTokenKey,
+      value: "mock-refresh-token",
       url: appBaseUrl,
     },
   ]);
