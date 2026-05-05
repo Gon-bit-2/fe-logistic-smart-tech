@@ -51,7 +51,9 @@ export default function DispatcherMapCanvas({
   const mapRef = useRef<GoongMap | null>(null);
   const hubMarkersRef = useRef<GoongMarker[]>([]);
   const orderMarkersRef = useRef<GoongMarker[]>([]);
-  const [isScriptReady, setIsScriptReady] = useState(false);
+  const [isScriptReady, setIsScriptReady] = useState(() =>
+    Boolean(getGoongGlobal()),
+  );
   const [mapError, setMapError] = useState<string | null>(null);
   const { data: fleetData, isLoading: isFleetLoading } = useFleetVehiclesQuery({
     isActive: true,
@@ -61,8 +63,8 @@ export default function DispatcherMapCanvas({
   });
   const { data: hubData, isLoading: isHubLoading } = useHubsQuery();
 
-  const hubs = hubData?.data || [];
-  const pendingOrders = orderData?.data || [];
+  const hubs = useMemo(() => hubData?.data ?? [], [hubData?.data]);
+  const pendingOrders = useMemo(() => orderData?.data ?? [], [orderData?.data]);
   const totalVehicles = fleetData?.totalItems || fleetData?.data?.length || 0;
   const mapPoints = useMemo<Coordinate[]>(() => {
     const hubPoints = hubs
@@ -115,9 +117,6 @@ export default function DispatcherMapCanvas({
 
   useEffect(() => {
     ensureGoongCssLoaded();
-    if (getGoongGlobal()) {
-      setIsScriptReady(true);
-    }
   }, []);
 
   useEffect(() => {
@@ -128,7 +127,9 @@ export default function DispatcherMapCanvas({
     const goong = getGoongGlobal();
 
     if (!goong) {
-      setMapError("Goong GL JS đã tải nhưng không khởi tạo được thư viện bản đồ.");
+      queueMicrotask(() => {
+        setMapError("Goong GL JS đã tải nhưng không khởi tạo được thư viện bản đồ.");
+      });
       return;
     }
 
@@ -159,7 +160,9 @@ export default function DispatcherMapCanvas({
         map.resize();
       });
     } catch (error) {
-      setMapError(getGoongMapsErrorMessage(error));
+      queueMicrotask(() => {
+        setMapError(getGoongMapsErrorMessage(error));
+      });
     }
   }, [isScriptReady, mapCenter.lat, mapCenter.lng]);
 
@@ -283,19 +286,21 @@ export default function DispatcherMapCanvas({
 
   return (
     <div className={cn("relative h-full w-full overflow-hidden", className)}>
-      <Script
-        src={GOONG_GL_JS_SRC}
-        strategy="afterInteractive"
-        onError={() => {
-          setMapError("Không thể tải Goong GL JS từ CDN.");
-        }}
-        onLoad={() => {
-          setIsScriptReady(true);
-        }}
-        onReady={() => {
-          setIsScriptReady(true);
-        }}
-      />
+      {GOONG_MAPS_TILES_KEY ? (
+        <Script
+          src={GOONG_GL_JS_SRC}
+          strategy="afterInteractive"
+          onError={() => {
+            setMapError("Không thể tải Goong GL JS từ CDN.");
+          }}
+          onLoad={() => {
+            setIsScriptReady(true);
+          }}
+          onReady={() => {
+            setIsScriptReady(true);
+          }}
+        />
+      ) : null}
 
       {isLoading ? (
         <MapFallback

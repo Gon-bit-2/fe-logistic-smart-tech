@@ -7,6 +7,7 @@ import {
   PackageSearch,
   Route,
   Truck,
+  WalletCards,
   Warehouse,
 } from "lucide-react";
 import type { AdminNavItem, AdminShellConfig } from "@/features/admin/domain/types/admin.types";
@@ -24,6 +25,7 @@ export const adminNavItems: ReadonlyArray<AdminNavItem> = [
   { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Shipments" },
   { href: "/dashboard/admin/trips", icon: Route, label: "Trips" },
   { href: "/dashboard/admin/fleet", icon: Truck, label: "Fleet" },
+  { href: "/dashboard/admin/wallet", icon: WalletCards, label: "COD reconciliation" },
   { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Sustainability" },
   { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Warehouses" },
   { href: "/dashboard/admin/language", icon: Languages, label: "Language" },
@@ -50,6 +52,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     searchPlaceholder: "Search vehicle or driver...",
     supportLabel: "Support",
     title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
+  "/dashboard/admin/wallet": {
+    initials: "COD",
+    searchPlaceholder: "Search drivers or COD receipts...",
+    supportLabel: "Support",
+    title: "Precision admin",
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },

@@ -135,7 +135,9 @@ export default function OrderRouteMap({
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<GoongMap | null>(null);
   const markerRefs = useRef<GoongMarker[]>([]);
-  const [isScriptReady, setIsScriptReady] = useState(false);
+  const [isScriptReady, setIsScriptReady] = useState(() =>
+    Boolean(getGoongGlobal()),
+  );
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
 
@@ -180,7 +182,9 @@ export default function OrderRouteMap({
     const goong = getGoongGlobal();
 
     if (!goong) {
-      setMapError("Goong GL JS đã tải nhưng không khởi tạo được thư viện bản đồ.");
+      queueMicrotask(() => {
+        setMapError("Goong GL JS đã tải nhưng không khởi tạo được thư viện bản đồ.");
+      });
       return;
     }
 
@@ -213,7 +217,9 @@ export default function OrderRouteMap({
         map.resize();
       });
     } catch (nextError) {
-      setMapError(getGoongMapsErrorMessage(nextError));
+      queueMicrotask(() => {
+        setMapError(getGoongMapsErrorMessage(nextError));
+      });
     }
   }, [hasVisiblePoint, isScriptReady, viewportPoints]);
 
@@ -266,7 +272,9 @@ export default function OrderRouteMap({
     try {
       syncRouteLayer(map, routePoints);
     } catch (nextError) {
-      setMapError(getGoongMapsErrorMessage(nextError));
+      queueMicrotask(() => {
+        setMapError(getGoongMapsErrorMessage(nextError));
+      });
     }
   }, [mapReady, routePoints]);
 
@@ -307,7 +315,9 @@ export default function OrderRouteMap({
     removeRouteLayer(mapRef.current);
     mapRef.current.remove();
     mapRef.current = null;
-    setMapReady(false);
+    queueMicrotask(() => {
+      setMapReady(false);
+    });
   }, [hasVisiblePoint]);
 
   useEffect(() => {
@@ -363,16 +373,18 @@ export default function OrderRouteMap({
 
   return (
     <div className={cn("relative h-full w-full overflow-hidden", className)}>
-      <Script
-        src={GOONG_GL_JS_SRC}
-        strategy="afterInteractive"
-        onError={() => {
-          setMapError("Không thể tải Goong GL JS từ CDN.");
-        }}
-        onReady={() => {
-          setIsScriptReady(true);
-        }}
-      />
+      {GOONG_MAPS_TILES_KEY && hasVisiblePoint ? (
+        <Script
+          src={GOONG_GL_JS_SRC}
+          strategy="afterInteractive"
+          onError={() => {
+            setMapError("Không thể tải Goong GL JS từ CDN.");
+          }}
+          onReady={() => {
+            setIsScriptReady(true);
+          }}
+        />
+      ) : null}
 
       <div
         ref={mapContainerRef}

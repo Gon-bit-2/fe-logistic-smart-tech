@@ -170,11 +170,11 @@ describe("CustomerProfileScreen", () => {
     expect(screen.getByText("123 Nguyen Van Linh, Quan 7")).toBeInTheDocument();
 
     activateTab("Quyền & thông báo");
-    expect(screen.getByRole("link", { name: "Mở inbox" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Mở hộp thông báo" })).toHaveAttribute(
       "href",
       "/overview?notifications=1",
     );
-    expect(screen.getByRole("link", { name: "Mở role center" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Mở trung tâm vai trò" })).toHaveAttribute(
       "href",
       "/role-requests",
     );

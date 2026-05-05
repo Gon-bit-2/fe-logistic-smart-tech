@@ -9,30 +9,6 @@ import type {
 } from "@/features/fleet/domain/types/fleet-operations.types";
 
 export async function listFleetVehiclesRequest(params?: VehicleListParams) {
-  if (!params?.type) {
-    const types = ["VAN", "TRUCK"];
-    const responses = await Promise.all(
-      types.map((type) =>
-        httpClient.get<ApiListResponse<FleetVehicleRecord>>(API_VEHICLES, {
-          params: {
-            limit: 100,
-            page: 1,
-            ...params,
-            type,
-          },
-        }),
-      ),
-    );
-
-    const combinedData = responses.flatMap((r) => r.data.data);
-    const totalItems = responses.reduce((acc, r) => acc + r.data.totalItems, 0);
-
-    return {
-      data: combinedData,
-      totalItems,
-    };
-  }
-
   const response = await httpClient.get<ApiListResponse<FleetVehicleRecord>>(
     API_VEHICLES,
     {

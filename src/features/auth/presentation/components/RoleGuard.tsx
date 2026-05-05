@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "@/i18n/routing";
 import AppIcon from "@/components/ui/app-icon";
 import {
+  extractAuthUserFromToken,
   getDashboardHrefForRole,
 } from "@/features/auth/application/services/auth-session";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
-import type { UserRole } from "@/features/auth/domain/types/auth.types";
 import type { RoleGuardProps } from "@/features/auth/presentation/types";
 
 export default function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
   const router = useRouter();
-  const { isHydrated, status, user } = useAuthStore();
-  const isAuthorized = isHydrated && user && allowedRoles.includes(user.role);
+  const { accessToken, isHydrated, status, user } = useAuthStore();
+  const resolvedUser = useMemo(
+    () => user ?? (accessToken ? extractAuthUserFromToken(accessToken) : null),
+    [accessToken, user],
+  );
+  const isAuthorized =
+    isHydrated && resolvedUser && allowedRoles.includes(resolvedUser.role);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -23,10 +28,10 @@ export default function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
       return;
     }
 
-    if (user && !allowedRoles.includes(user.role)) {
-      router.replace(getDashboardHrefForRole(user.role));
+    if (resolvedUser && !allowedRoles.includes(resolvedUser.role)) {
+      router.replace(getDashboardHrefForRole(resolvedUser.role));
     }
-  }, [isHydrated, status, user, allowedRoles, router]);
+  }, [isHydrated, status, resolvedUser, allowedRoles, router]);
 
   if (!isHydrated || !isAuthorized) {
     return (

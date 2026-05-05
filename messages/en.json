@@ -68,6 +68,7 @@
       "scanStation": "Scan station",
       "orders": "Orders",
       "trips": "Trips",
+      "wallet": "COD reconcile",
       "role": "Role"
     }
   },
@@ -80,6 +81,7 @@
     "nav": {
       "workspace": "Driver workspace",
       "vehicle": "Vehicle",
+      "wallet": "COD wallet",
       "trips": "Trips",
       "notifications": "Notifications",
       "role": "Role"

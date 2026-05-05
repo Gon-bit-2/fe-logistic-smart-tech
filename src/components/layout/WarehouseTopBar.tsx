@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/routing";
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/routing";
@@ -11,6 +12,7 @@ import {
   Package,
   ShieldCheck,
   Truck,
+  WalletCards,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import AuthUserMenu from "@/components/layout/AuthUserMenu";
@@ -23,7 +25,7 @@ import { formatEnumLabel } from "@/utils/formatters";
 
 type WarehouseNavItem = {
   href: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   isActive: (pathname: string) => boolean;
   label: string;
 };
@@ -34,10 +36,12 @@ export default function WarehouseTopBar() {
   const searchParams = useSearchParams();
   const { user } = useAuth();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const shouldOpenNotifications = searchParams.get("notifications") === "1";
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(
+    () => shouldOpenNotifications,
+  );
   const bellContainerRef = useRef<HTMLDivElement | null>(null);
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
-  const shouldOpenNotifications = searchParams.get("notifications") === "1";
   const warehouseNavItems: WarehouseNavItem[] = [
     {
       href: "/dashboard/warehouse",
@@ -58,20 +62,18 @@ export default function WarehouseTopBar() {
       label: t("nav.trips"),
     },
     {
+      href: "/dashboard/warehouse/wallet",
+      icon: <WalletCards className="size-4" />,
+      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/wallet"),
+      label: t("nav.wallet"),
+    },
+    {
       href: "/dashboard/warehouse/roles",
       icon: <ShieldCheck className="size-4" />,
       isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/roles"),
       label: t("nav.role"),
     },
   ];
-
-  useEffect(() => {
-    if (!shouldOpenNotifications) {
-      return;
-    }
-
-    setIsNotificationsOpen(true);
-  }, [shouldOpenNotifications]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {

@@ -7,6 +7,7 @@ import {
   PackageSearch,
   Route,
   Truck,
+  WalletCards,
   Warehouse,
 } from "lucide-react";
 import type { AdminNavItem, AdminShellConfig } from "@/features/admin/domain/types/admin.types";
@@ -24,6 +25,7 @@ export const adminNavItems: ReadonlyArray<AdminNavItem> = [
   { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Lô hàng" },
   { href: "/dashboard/admin/trips", icon: Route, label: "Chuyến đi" },
   { href: "/dashboard/admin/fleet", icon: Truck, label: "Đội xe" },
+  { href: "/dashboard/admin/wallet", icon: WalletCards, label: "Đối soát COD" },
   { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Bền vững" },
   { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Kho hàng" },
   { href: "/dashboard/admin/language", icon: Languages, label: "Ngôn ngữ" },
@@ -48,6 +50,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
   "/dashboard/admin/fleet": {
     initials: "FO",
     searchPlaceholder: "Tìm mã xe hoặc tài xế...",
+    supportLabel: "Hỗ trợ",
+    title: "Khối quản trị Precision",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
+  "/dashboard/admin/wallet": {
+    initials: "COD",
+    searchPlaceholder: "Tìm tài xế hoặc biên nhận COD...",
     supportLabel: "Hỗ trợ",
     title: "Khối quản trị Precision",
     topBarVariant: "standard",

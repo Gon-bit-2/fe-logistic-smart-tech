@@ -148,8 +148,10 @@ export default function TripsManagementScreen({
       return;
     }
 
-    setSelectedDriverId(selectedTrip.driverId);
-    setSelectedVehicleId(selectedTrip.vehicleId);
+    queueMicrotask(() => {
+      setSelectedDriverId(selectedTrip.driverId);
+      setSelectedVehicleId(selectedTrip.vehicleId);
+    });
   }, [dispatchMode, selectedTrip]);
 
   const filteredTrips = (tripsQuery.data?.data ?? []).filter((trip) => {

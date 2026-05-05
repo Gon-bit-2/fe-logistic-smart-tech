@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useState } from "react";
 import {
   ArrowRight,
   Boxes,
@@ -45,16 +45,12 @@ export default function ShipmentsManagementScreen(
 
   const [activeFilterIndex, setActiveFilterIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [renderTimestamp, setRenderTimestamp] = useState<number | null>(null);
+  const [renderTimestamp] = useState(() => Date.now());
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const ordersQuery = useOrdersListQuery();
   const cancelOrderMutation = useCancelOrder();
   const orders = ordersQuery.data?.data ?? [];
   const normalizedSearchTerm = deferredSearchTerm.trim().toLowerCase();
-
-  useEffect(() => {
-    setRenderTimestamp(Date.now());
-  }, []);
 
   const filteredOrders = orders.filter((order) => {
     const statusLabel = getOrderStatusLabel(order.status);
@@ -63,7 +59,7 @@ export default function ShipmentsManagementScreen(
         ? true
         : activeFilterIndex === 1
           ? order.status !== "DELIVERED" && order.status !== "CANCELLED"
-          : order.estimatedArrival && renderTimestamp !== null
+          : order.estimatedArrival
             ? order.status !== "DELIVERED" &&
               new Date(order.estimatedArrival).getTime() < renderTimestamp
             : false;

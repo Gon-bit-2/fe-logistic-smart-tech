@@ -51,7 +51,9 @@ export default function OtpVerificationForm() {
       return;
     }
 
-    setNow(Date.now());
+    queueMicrotask(() => {
+      setNow(Date.now());
+    });
 
     const interval = window.setInterval(() => {
       setNow(Date.now());

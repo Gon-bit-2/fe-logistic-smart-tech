@@ -11,7 +11,7 @@ describe("validateTrackingEventInput", () => {
         source: "WEB_APP" as never,
         status: "PICKED_UP",
       }),
-    ).toThrow("Nguồn tracking event không hợp lệ");
+    ).toThrow("Nguồn cập nhật hành trình không hợp lệ");
   });
 
   it("rejects delivered events without receiver name", () => {
@@ -43,7 +43,7 @@ describe("validateTrackingEventInput", () => {
         source: "DRIVER_APP",
         status: "DELIVERED",
       }),
-    ).toThrow("ít nhất 1 ảnh POD");
+    ).toThrow("ít nhất 1 ảnh biên nhận");
   });
 
   it("rejects delivered events with invalid package condition", () => {
