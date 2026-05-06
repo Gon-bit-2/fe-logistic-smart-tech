@@ -198,8 +198,16 @@ export function useDispatchApprove() {
 }
 
 export function useOptimizeTripRoute() {
+  const queryClient = useQueryClient();
+
   return useMutation<OptimizeTripRouteResult, ApiError, string | number>({
     mutationFn: (tripId) => optimizeTripRouteUseCase(tripId),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({
+        queryKey: tripKeys.detail(String(result.tripId)),
+      });
+      queryClient.invalidateQueries({ queryKey: [...tripKeys.all, "list"] });
+    },
   });
 }
 
