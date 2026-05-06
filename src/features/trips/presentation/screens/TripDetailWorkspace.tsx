@@ -316,7 +316,6 @@ export default function TripDetailWorkspace({
 
               <TripRouteMap
                 currentLocation={liveLocationPoint}
-                polyline={optimizeRoute.data?.polyline ?? null}
                 stops={trip.stops}
               />
 
@@ -623,23 +622,23 @@ export default function TripDetailWorkspace({
                     <div>
                       <p className="text-xs text-slate-500">Khoảng cách</p>
                       <p className="mt-1 font-semibold text-slate-900">
-                        {optimizeRoute.data.distance != null
-                          ? `${(optimizeRoute.data.distance / 1000).toFixed(1)} km`
+                        {optimizeRoute.data.totalDistance != null
+                          ? `${optimizeRoute.data.totalDistance.toFixed(1)} km`
                           : "N/A"}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-slate-500">Thời lượng</p>
                       <p className="mt-1 font-semibold text-slate-900">
-                        {optimizeRoute.data.duration != null
-                          ? `${Math.round(optimizeRoute.data.duration / 60)} phút`
+                        {optimizeRoute.data.totalDuration != null
+                          ? `${Math.round(optimizeRoute.data.totalDuration / 60)} phút`
                           : "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500">Waypoint</p>
+                      <p className="text-xs text-slate-500">Điểm dừng</p>
                       <p className="mt-1 font-semibold text-slate-900">
-                        {optimizeRoute.data.waypoints?.length ?? 0}
+                        {optimizeRoute.data.stops.length || trip.stops.length}
                       </p>
                     </div>
                   </div>

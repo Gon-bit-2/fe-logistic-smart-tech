@@ -333,7 +333,7 @@ export default function DriverVehiclePage() {
               </p>
               <p className="mt-2 text-sm text-emerald-900">
                 {optimizeTripRoute.data
-                  ? `${optimizeTripRoute.data.message} • ${formatDistance(optimizeTripRoute.data.distance)} • ${formatDuration(optimizeTripRoute.data.duration)}`
+                  ? `Đã tối ưu bằng ${optimizeTripRoute.data.provider}${optimizeTripRoute.data.fallbackUsed ? " dự phòng" : ""} • ${formatDistance(optimizeTripRoute.data.totalDistance)} • ${formatDuration(optimizeTripRoute.data.totalDuration)}`
                   : "Bạn có thể tối ưu route ngay trên trang này hoặc chuyển sang chi tiết chuyến để cập nhật POD, COD và GPS."}
               </p>
             </div>

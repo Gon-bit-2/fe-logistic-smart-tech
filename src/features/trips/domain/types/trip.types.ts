@@ -386,15 +386,20 @@ export type DispatchApproveInput = {
 };
 
 export type OptimizeTripRouteResult = {
-  distance?: number;
-  duration?: number;
-  message: string;
-  polyline?: string | null;
-  waypoints?: Array<{
-    lat?: number;
-    lng?: number;
-    orderId?: number | string;
+  fallbackUsed: boolean;
+  provider: "OSRM" | "HAVERSINE";
+  stops: Array<{
+    actualArrivalTime?: string | null;
+    expectedArrivalTime?: string | null;
+    hubId?: number | null;
+    id: number;
+    orderId?: number | null;
+    stopSequence: number;
+    stopType: DispatchStopInput["stopType"];
   }>;
+  totalDistance: number;
+  totalDuration: number;
+  tripId: number;
 };
 
 export type ManualTripInput = {

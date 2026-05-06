@@ -101,9 +101,9 @@ export async function forgotPassword(input: ForgotPasswordInput) {
     API_AUTH_FORGOT_PASSWORD,
     {
       code: input.code,
-      confirmPassword: input.confirmPassword,
+      confirmNewPassword: input.confirmPassword,
       email: input.email,
-      password: input.password,
+      newPassword: input.password,
     },
   );
 
