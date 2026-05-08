@@ -49,11 +49,11 @@ test("renders admin and customer dashboards with mocked backend data", async ({
   page,
 }) => {
   await seedAuthenticatedSession(page, "admin");
-  await page.goto("/vi/dashboard/admin");
+  await page.goto("/vi/admin");
   await expect(page.getByText("Trung tâm điều hành vận hành thông minh")).toBeVisible();
   await expect(page.getByText("ELG-2026-0001").first()).toBeVisible();
 
-  await page.goto("/vi/dashboard/admin/analytics");
+  await page.goto("/vi/admin/analytics");
   await expect(page.getByText("Hiệu suất Đội xe")).toBeVisible();
   await expect(page.getByText("Xe 51A-12345")).toBeVisible();
 

@@ -77,7 +77,7 @@ export default function WarehouseOrderDetailScreen({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-3">
           <Link
-            href="/dashboard/warehouse/orders"
+            href="/warehouse/orders"
             className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 transition-colors hover:text-emerald-900"
           >
             <ArrowLeft className="size-4" />

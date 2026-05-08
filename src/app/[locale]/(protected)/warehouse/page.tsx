@@ -363,7 +363,7 @@ export default function WarehouseScannerPage() {
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <Link
-            href="/dashboard/warehouse/notifications"
+            href="/warehouse/notifications"
             className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-colors hover:border-emerald-200 hover:bg-emerald-50/40"
           >
             <div className="flex items-center gap-3">
@@ -379,7 +379,7 @@ export default function WarehouseScannerPage() {
           </Link>
 
           <Link
-            href="/dashboard/warehouse/roles"
+            href="/warehouse/roles"
             className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-colors hover:border-emerald-200 hover:bg-emerald-50/40"
           >
             <div className="flex items-center gap-3">

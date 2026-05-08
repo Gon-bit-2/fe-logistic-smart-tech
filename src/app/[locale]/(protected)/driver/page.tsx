@@ -273,7 +273,7 @@ export default function DriverPage() {
                       ) : null}
                     </div>
                     <Button asChild className="rounded-xl">
-                      <Link href={`/dashboard/driver/trips/${boardQuery.data.activeTrip.id}`}>
+                      <Link href={`/driver/trips/${boardQuery.data.activeTrip.id}`}>
                         Mở chi tiết chuyến
                       </Link>
                     </Button>
@@ -296,7 +296,7 @@ export default function DriverPage() {
                   ) : null}
                   {boardQuery.data.activeTrip.status === "IN_PROGRESS" ? (
                     <Button asChild variant="outline">
-                      <Link href={`/dashboard/driver/trips/${boardQuery.data.activeTrip.id}`}>
+                      <Link href={`/driver/trips/${boardQuery.data.activeTrip.id}`}>
                         Mở màn POD và tuyến đường
                       </Link>
                     </Button>
@@ -334,7 +334,7 @@ export default function DriverPage() {
               description="Khi điều phối viên phân chuyến hoặc duyệt yêu cầu nhận đơn, khu vực này sẽ hiển thị điểm dừng kế tiếp và nút xử lý nhanh."
               action={
                 <Button asChild variant="outline">
-                  <Link href="/dashboard/driver/trips">Mở danh sách chuyến</Link>
+                  <Link href="/driver/trips">Mở danh sách chuyến</Link>
                 </Button>
               }
             />

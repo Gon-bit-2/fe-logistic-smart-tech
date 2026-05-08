@@ -77,14 +77,14 @@ function getRoleRequestCta(role: UserRole, payload: NotificationPayload) {
   if (payload.assignmentRequestId != null) {
     if (role === "warehouse_staff") {
       return {
-        ctaHref: "/dashboard/warehouse/trips",
+        ctaHref: "/warehouse/trips",
         ctaLabel: "Mở queue điều phối",
       };
     }
 
     if (role === "driver") {
       return {
-        ctaHref: "/dashboard/driver",
+        ctaHref: "/driver",
         ctaLabel: "Mở dashboard tài xế",
       };
     }
@@ -98,7 +98,7 @@ function getRoleRequestCta(role: UserRole, payload: NotificationPayload) {
   }
 
   return {
-    ctaHref: role === "admin" ? "/dashboard/admin/role-requests" : getRoleRequestHrefForRole(role),
+    ctaHref: role === "admin" ? "/admin/role-requests" : getRoleRequestHrefForRole(role),
     ctaLabel: role === "admin" ? "Mở queue duyệt" : "Mở trung tâm role",
   };
 }

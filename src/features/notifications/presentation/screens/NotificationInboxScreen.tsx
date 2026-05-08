@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotificationsQuery } from "@/features/notifications/presentation/hooks/useNotifications";
+import { useNotificationSocket } from "@/features/notifications/presentation/hooks/useNotificationSocket";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
@@ -46,6 +47,7 @@ export default function NotificationInboxScreen() {
   );
   
   const notificationsQuery = useNotificationsQuery(role, params);
+  useNotificationSocket(role);
   const markReadMutation = useMarkNotificationRead();
   const markAllMutation = useMarkAllNotificationsRead();
   

@@ -24,13 +24,16 @@ import { routing } from "@/i18n/routing";
 
 const ACCESS_TOKEN_KEY = "emerald-logistics.access-token";
 const PROTECTED_PATHS = [
+  "/admin",
   "/checkout",
+  "/driver",
   "/dashboard",
   "/notifications",
   "/orders",
   "/overview",
   "/profile",
   "/role-requests",
+  "/warehouse",
 ] as const;
 const CUSTOMER_ROOT_PATHS = [
   "/checkout",
@@ -46,6 +49,13 @@ const CUSTOMER_DASHBOARD_REDIRECTS = {
   "/dashboard/customer/orders": "/orders",
   "/dashboard/customer/settings": "/profile",
   "/dashboard/customer/roles": "/role-requests",
+} as const;
+
+const LEGACY_DASHBOARD_REDIRECTS = {
+  "/dashboard/admin": "/admin",
+  "/dashboard/driver": "/driver",
+  "/dashboard/warehouse": "/warehouse",
+  ...CUSTOMER_DASHBOARD_REDIRECTS,
 } as const;
 
 const CUSTOMER_ROUTE_REDIRECTS = {
@@ -64,14 +74,18 @@ const CUSTOMER_ROUTE_REDIRECTS = {
  */
 const intlMiddleware = createIntlMiddleware(routing);
 
+function isPathWithin(pathname: string, prefix: string) {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
+
 /** Kiểm tra path có cần xác thực hay không */
 function isProtectedPath(pathname: string) {
-  return PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+  return PROTECTED_PATHS.some((path) => isPathWithin(pathname, path));
 }
 
 /** Kiểm tra path thuộc nhóm route customer */
 function isCustomerRootPath(pathname: string) {
-  return CUSTOMER_ROOT_PATHS.some((path) => pathname.startsWith(path));
+  return CUSTOMER_ROOT_PATHS.some((path) => isPathWithin(pathname, path));
 }
 
 /** Lấy redirect path nếu là legacy customer dashboard URL */
@@ -86,6 +100,26 @@ function getCustomerDashboardRedirect(pathname: string) {
       normalizedPath as keyof typeof CUSTOMER_DASHBOARD_REDIRECTS
     ] ?? null
   );
+}
+
+/** Lấy canonical path mới nếu là legacy /dashboard URL */
+function getLegacyDashboardRedirect(pathname: string) {
+  const normalizedPath =
+    pathname.endsWith("/") && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
+
+  for (const [legacyPrefix, canonicalPrefix] of Object.entries(
+    LEGACY_DASHBOARD_REDIRECTS,
+  ).sort(([left], [right]) => right.length - left.length)) {
+    if (
+      isPathWithin(normalizedPath, legacyPrefix)
+    ) {
+      return `${canonicalPrefix}${normalizedPath.slice(legacyPrefix.length)}`;
+    }
+  }
+
+  return null;
 }
 
 /** Lấy redirect path nếu là customer route cũ có segment /customer */
@@ -120,8 +154,10 @@ function redirectToPath(
   request: NextRequest,
   destination: string,
   locale: Locale,
+  status?: 307 | 308,
 ) {
-  return NextResponse.redirect(createLocalizedUrl(request, destination, locale));
+  const url = createLocalizedUrl(request, destination, locale);
+  return status ? NextResponse.redirect(url, status) : NextResponse.redirect(url);
 }
 
 /**
@@ -158,6 +194,13 @@ export function proxy(request: NextRequest) {
     return redirectToPath(request, customerRouteRedirect, locale);
   }
 
+  const legacyDashboardRedirect =
+    getLegacyDashboardRedirect(normalizedPathname);
+
+  if (legacyDashboardRedirect) {
+    return redirectToPath(request, legacyDashboardRedirect, locale, 308);
+  }
+
   // Route không cần bảo vệ → chạy intlMiddleware để set locale headers
   if (!isProtectedPath(normalizedPathname)) {
     return intlMiddleware(request);
@@ -178,9 +221,9 @@ export function proxy(request: NextRequest) {
     return redirectToPath(request, "/auth/login", locale);
   }
 
-  // Redirect /dashboard → dashboard tương ứng theo role
+  // Redirect /dashboard → workspace tương ứng theo role
   if (normalizedPathname === "/dashboard") {
-    return redirectToPath(request, getDashboardHrefForRole(role), locale);
+    return redirectToPath(request, getDashboardHrefForRole(role), locale, 308);
   }
 
   // Admin có quyền truy cập mọi route → chạy intlMiddleware để set locale
@@ -207,36 +250,24 @@ export function proxy(request: NextRequest) {
     return redirectToPath(request, getDashboardHrefForRole(role), locale);
   }
 
-  // Route không phải dashboard → cho qua với intlMiddleware
-  if (!normalizedPathname.startsWith("/dashboard")) {
-    return intlMiddleware(request);
-  }
-
-  // Kiểm tra quyền truy cập các workspace dashboard cụ thể
+  // Kiểm tra quyền truy cập các workspace cụ thể
   if (
-    normalizedPathname.startsWith("/dashboard/admin") &&
+    isPathWithin(normalizedPathname, "/admin") &&
     !ROUTE_PERMISSIONS.ADMIN.includes(role)
   ) {
     return redirectToPath(request, getDashboardHrefForRole(role), locale);
   }
 
   if (
-    normalizedPathname.startsWith("/dashboard/driver") &&
+    isPathWithin(normalizedPathname, "/driver") &&
     !ROUTE_PERMISSIONS.DRIVER.includes(role)
   ) {
     return redirectToPath(request, getDashboardHrefForRole(role), locale);
   }
 
   if (
-    normalizedPathname.startsWith("/dashboard/warehouse") &&
+    isPathWithin(normalizedPathname, "/warehouse") &&
     !ROUTE_PERMISSIONS.WAREHOUSE.includes(role)
-  ) {
-    return redirectToPath(request, getDashboardHrefForRole(role), locale);
-  }
-
-  if (
-    normalizedPathname.startsWith("/dashboard/customer") &&
-    !ROUTE_PERMISSIONS.CUSTOMER.includes(role)
   ) {
     return redirectToPath(request, getDashboardHrefForRole(role), locale);
   }

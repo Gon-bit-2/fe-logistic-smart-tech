@@ -20,11 +20,11 @@ export default function GuestGuard({ children }: GuestGuardProps) {
       if (user?.role === "customer") {
         destination = "/overview";
       } else if (user?.role === "driver") {
-        destination = "/dashboard/driver";
+        destination = "/driver";
       } else if (user?.role === "admin") {
-        destination = "/dashboard/admin";
+        destination = "/admin";
       } else if (user?.role === "warehouse_staff") {
-        destination = "/dashboard/warehouse";
+        destination = "/warehouse";
       }
 
       const localizedDestination = localizePath(destination, locale);

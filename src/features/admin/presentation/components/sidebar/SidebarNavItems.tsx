@@ -12,9 +12,9 @@ export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsPr
   const isEcosystem = config.topBarVariant === "ecosystem";
 
   const navItems = isDashboard
-    ? adminNavItems.filter((item) => item.href !== "/dashboard/admin/warehouses")
+    ? adminNavItems.filter((item) => item.href !== "/admin/warehouses")
     : isEcosystem
-      ? adminNavItems.filter((item) => item.href !== "/dashboard/admin/fleet")
+      ? adminNavItems.filter((item) => item.href !== "/admin/fleet")
       : adminNavItems;
 
   if (isDashboard) {

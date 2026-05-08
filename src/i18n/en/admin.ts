@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Activity,
   ClipboardCheck,
   LayoutDashboard,
   Languages,
@@ -13,33 +14,34 @@ import {
 import type { AdminNavItem, AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 
 const ecosystemTopTabs = [
-  { href: "/dashboard/admin", label: "Dashboard" },
-  { href: "/dashboard/admin/orders", label: "Shipments" },
-  { href: "/dashboard/admin/warehouses", label: "Warehouses" },
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/orders", label: "Shipments" },
+  { href: "/admin/warehouses", label: "Warehouses" },
 ] as const;
 
 export const adminNavItems: ReadonlyArray<AdminNavItem> = [
-  { href: "/dashboard/admin", icon: LayoutDashboard, label: "Overview" },
-  { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Analytics" },
-  { href: "/dashboard/admin/role-requests", icon: ClipboardCheck, label: "Role Requests" },
-  { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Shipments" },
-  { href: "/dashboard/admin/trips", icon: Route, label: "Trips" },
-  { href: "/dashboard/admin/fleet", icon: Truck, label: "Fleet" },
-  { href: "/dashboard/admin/wallet", icon: WalletCards, label: "COD reconciliation" },
-  { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Sustainability" },
-  { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Warehouses" },
-  { href: "/dashboard/admin/language", icon: Languages, label: "Language" },
+  { href: "/admin", icon: LayoutDashboard, label: "Overview" },
+  { href: "/admin/analytics", icon: BarChart3, label: "Analytics" },
+  { href: "/admin/observability", icon: Activity, label: "Production ops" },
+  { href: "/admin/role-requests", icon: ClipboardCheck, label: "Role Requests" },
+  { href: "/admin/orders", icon: PackageSearch, label: "Shipments" },
+  { href: "/admin/trips", icon: Route, label: "Trips" },
+  { href: "/admin/fleet", icon: Truck, label: "Fleet" },
+  { href: "/admin/wallet", icon: WalletCards, label: "COD reconciliation" },
+  { href: "/admin/sustainability", icon: Leaf, label: "Sustainability" },
+  { href: "/admin/warehouses", icon: Warehouse, label: "Warehouses" },
+  { href: "/admin/language", icon: Languages, label: "Language" },
 ];
 
 export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
-  "/dashboard/admin": {
+  "/admin": {
     initials: "SC",
     searchPlaceholder: "Search shipments...",
     title: "Admin dashboard",
     topBarVariant: "dashboard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/analytics": {
+  "/admin/analytics": {
     initials: "SA",
     searchPlaceholder: "Search insights...",
     supportLabel: "Support",
@@ -47,7 +49,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/fleet": {
+  "/admin/fleet": {
     initials: "FO",
     searchPlaceholder: "Search vehicle or driver...",
     supportLabel: "Support",
@@ -55,7 +57,15 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/wallet": {
+  "/admin/observability": {
+    initials: "OBS",
+    searchPlaceholder: "Search queues, endpoints, or audit...",
+    supportLabel: "Support",
+    title: "Precision Admin",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
+  "/admin/wallet": {
     initials: "COD",
     searchPlaceholder: "Search drivers or COD receipts...",
     supportLabel: "Support",
@@ -63,14 +73,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/orders": {
+  "/admin/orders": {
     initials: "SM",
     searchPlaceholder: "Filter shipments...",
     title: "Dispatch center",
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/trips": {
+  "/admin/trips": {
     initials: "TR",
     searchPlaceholder: "Search trip or plate...",
     supportLabel: "Support",
@@ -78,7 +88,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/notifications": {
+  "/admin/notifications": {
     initials: "NT",
     searchPlaceholder: "Search notifications...",
     supportLabel: "Support",
@@ -86,7 +96,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/role-requests": {
+  "/admin/role-requests": {
     initials: "RR",
     searchPlaceholder: "Search role requests...",
     supportLabel: "Support",
@@ -94,21 +104,21 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/sustainability": {
+  "/admin/sustainability": {
     initials: "SI",
     searchPlaceholder: "Search global tracking...",
     title: "Precision Admin",
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/warehouses": {
+  "/admin/warehouses": {
     initials: "IH",
     searchPlaceholder: "Search warehouses...",
     title: "Dispatch center",
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/language": {
+  "/admin/language": {
     initials: "LG",
     searchPlaceholder: "Search languages...",
     supportLabel: "Support",

@@ -103,7 +103,7 @@ export default function AdminTopBar({
         <div className="flex min-h-16 flex-wrap items-center justify-between gap-4 px-4 py-3 md:px-8">
           <div className="flex flex-wrap items-center gap-5 md:gap-8">
             <Link
-              href="/dashboard/admin"
+              href="/admin"
               className="text-[0.95rem] font-bold tracking-tight text-primary"
             >
               {adminTopBarCopy.ecosystemBrand}

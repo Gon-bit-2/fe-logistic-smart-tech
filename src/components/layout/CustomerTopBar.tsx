@@ -40,15 +40,13 @@ export default function CustomerTopBar() {
     {
       href: "/overview",
       icon: <LayoutDashboard className="size-4" />,
-      isActive: (pathname) =>
-        pathname === "/overview" || pathname === "/dashboard/customer",
+      isActive: (pathname) => pathname === "/overview",
       label: t("nav.overview"),
     },
     {
       href: "/orders",
       icon: <Package className="size-4" />,
-      isActive: (pathname) =>
-        pathname === "/orders" || pathname === "/dashboard/customer/orders",
+      isActive: (pathname) => pathname === "/orders",
       label: t("nav.orders"),
     },
     {
@@ -66,15 +64,13 @@ export default function CustomerTopBar() {
     {
       href: "/profile",
       icon: <UserRound className="size-4" />,
-      isActive: (pathname) =>
-        pathname === "/profile" || pathname === "/dashboard/customer/settings",
+      isActive: (pathname) => pathname === "/profile",
       label: t("nav.profile"),
     },
     {
       href: "/role-requests",
       icon: <ShieldCheck className="size-4" />,
-      isActive: (pathname) =>
-        pathname === "/role-requests" || pathname === "/dashboard/customer/roles",
+      isActive: (pathname) => pathname === "/role-requests",
       label: t("nav.role"),
     },
   ];

@@ -51,7 +51,7 @@ describe("ProfileQuickAccess", () => {
     mockAuthenticatedCustomer();
 
     renderWithProviders(<ProfileQuickAccess />, {
-      pathname: "/dashboard/customer/orders",
+      pathname: "/orders",
     });
 
     expect(
