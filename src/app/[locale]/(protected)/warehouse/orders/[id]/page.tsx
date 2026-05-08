@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import WarehouseOrderDetailScreen from "@/features/orders/presentation/screens/WarehouseOrderDetailScreen";
 
 export async function generateMetadata(
-  props: PageProps<"/[locale]/dashboard/warehouse/orders/[id]">,
+  props: PageProps<"/[locale]/warehouse/orders/[id]">,
 ): Promise<Metadata> {
   const { id } = await props.params;
 
@@ -13,7 +13,7 @@ export async function generateMetadata(
 }
 
 export default async function WarehouseOrderDetailPage(
-  props: PageProps<"/[locale]/dashboard/warehouse/orders/[id]">,
+  props: PageProps<"/[locale]/warehouse/orders/[id]">,
 ) {
   const { id } = await props.params;
 

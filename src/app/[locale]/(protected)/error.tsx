@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import ErrorExperience from "@/components/ui/error-experience";
 import { getDashboardErrorContent } from "@/lib/error-experience";
 
-export default function DashboardError({
+export default function ProtectedError({
   error,
   reset,
 }: Readonly<{
@@ -12,7 +12,7 @@ export default function DashboardError({
   reset: () => void;
 }>) {
   useEffect(() => {
-    console.error("Dashboard Error Boundary caught:", error);
+    console.error("Protected route error boundary caught:", error);
   }, [error]);
 
   const content = getDashboardErrorContent(error);

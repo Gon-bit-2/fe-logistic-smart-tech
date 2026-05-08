@@ -35,7 +35,7 @@ describe("AdminTopBar", () => {
   it("renders the notification bell with unread badge and admin href", () => {
     const { container } = renderWithProviders(
       <AdminTopBar
-        pathname="/dashboard/admin"
+        pathname="/admin"
         config={{
           initials: "AD",
           searchPlaceholder: "Search",
@@ -47,7 +47,7 @@ describe("AdminTopBar", () => {
 
     expect(screen.getByText("4")).toBeInTheDocument();
     expect(
-      container.querySelector('a[href="/dashboard/admin/notifications"]'),
+      container.querySelector('a[href="/admin/notifications"]'),
     ).not.toBeNull();
   });
 });

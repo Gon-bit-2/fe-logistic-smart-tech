@@ -102,13 +102,13 @@ export default function WarehouseOrdersPage() {
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/dashboard/warehouse?mode=inbound"
+              href="/warehouse?mode=inbound"
               className="inline-flex h-10 items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 text-[14px] font-semibold text-emerald-800 transition-colors hover:border-emerald-300 hover:bg-emerald-50"
             >
               Nhập kho
             </Link>
             <Link
-              href="/dashboard/warehouse?mode=outbound"
+              href="/warehouse?mode=outbound"
               className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-emerald-700"
             >
               Xuất kho
@@ -233,7 +233,7 @@ export default function WarehouseOrdersPage() {
                         <td className="px-6 py-4">
                           <div className="flex flex-wrap gap-2">
                             <Link
-                              href={`/dashboard/warehouse/orders/${order.id}`}
+                              href={`/warehouse/orders/${order.id}`}
                               className="inline-flex h-8 items-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-xs font-semibold text-emerald-800 transition-colors hover:bg-emerald-100"
                             >
                               Xem chi tiết

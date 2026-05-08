@@ -17,7 +17,7 @@ export default function AdminShell({ children }: Readonly<AdminShellProps>) {
           .find((item) => pathname.startsWith(`${item}/`));
   const config =
     (matchedPath ? adminShellConfigByPath[matchedPath] : undefined) ??
-    adminShellConfigByPath["/dashboard/admin"];
+    adminShellConfigByPath["/admin"];
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
 

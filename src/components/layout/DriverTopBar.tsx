@@ -36,44 +36,44 @@ export default function DriverTopBar() {
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
   const driverNavItems: DriverNavItem[] = [
     {
-      href: "/dashboard/driver",
+      href: "/driver",
       icon: <Home className="size-4" />,
-      isActive: (currentPathname) => currentPathname === "/dashboard/driver",
+      isActive: (currentPathname) => currentPathname === "/driver",
       label: t("nav.workspace"),
     },
     {
-      href: "/dashboard/driver/vehicle",
+      href: "/driver/vehicle",
       icon: <Truck className="size-4" />,
       isActive: (currentPathname) =>
-        currentPathname.startsWith("/dashboard/driver/vehicle"),
+        currentPathname.startsWith("/driver/vehicle"),
       label: t("nav.vehicle"),
     },
     {
-      href: "/dashboard/driver/wallet",
+      href: "/driver/wallet",
       icon: <WalletCards className="size-4" />,
       isActive: (currentPathname) =>
-        currentPathname.startsWith("/dashboard/driver/wallet"),
+        currentPathname.startsWith("/driver/wallet"),
       label: t("nav.wallet"),
     },
     {
-      href: "/dashboard/driver/trips",
+      href: "/driver/trips",
       icon: <Route className="size-4" />,
       isActive: (currentPathname) =>
-        currentPathname.startsWith("/dashboard/driver/trips"),
+        currentPathname.startsWith("/driver/trips"),
       label: t("nav.trips"),
     },
     {
-      href: "/dashboard/driver/notifications",
+      href: "/driver/notifications",
       icon: <Bell className="size-4" />,
       isActive: (currentPathname) =>
-        currentPathname.startsWith("/dashboard/driver/notifications"),
+        currentPathname.startsWith("/driver/notifications"),
       label: t("nav.notifications"),
     },
     {
-      href: "/dashboard/driver/roles",
+      href: "/driver/roles",
       icon: <ShieldCheck className="size-4" />,
       isActive: (currentPathname) =>
-        currentPathname.startsWith("/dashboard/driver/roles"),
+        currentPathname.startsWith("/driver/roles"),
       label: t("nav.role"),
     },
   ];
@@ -109,7 +109,7 @@ export default function DriverTopBar() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
             <Link
-              href="/dashboard/driver"
+              href="/driver"
               className="text-base font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700 md:text-lg"
             >
               {t("brand")}

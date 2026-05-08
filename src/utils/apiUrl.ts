@@ -60,6 +60,7 @@ export const API_TRACKING_PUBLIC = (trackingCode: string) =>
   `/tracking-events/public/${encodeURIComponent(trackingCode)}`;
 export const API_TRACKING_INTERNAL = "/tracking-events";
 export const API_TRACKING_NAMESPACE = "/tracking";
+export const API_NOTIFICATIONS_NAMESPACE = "/notifications";
 
 // payments api endpoints
 export const API_PAYMENT_CREATE_INTENT = (orderId: string | number) =>
@@ -117,6 +118,16 @@ export const API_NOTIFICATIONS_UNREAD_COUNT = "/notifications/unread-count";
 export const API_NOTIFICATIONS_MARK_READ = (id: string | number) =>
   `/notifications/${id}/read`;
 export const API_NOTIFICATIONS_MARK_ALL_READ = "/notifications/read-all";
+export const API_NOTIFICATION_PREFERENCES = "/notifications/preferences";
+
+// observability api endpoints
+export const API_ADMIN_OBSERVABILITY_QUEUES = "/admin/observability/queues";
+export const API_ADMIN_OBSERVABILITY_FAILED_JOBS = (name: string) =>
+  `/admin/observability/queues/${encodeURIComponent(name)}/failed-jobs`;
+export const API_ADMIN_OBSERVABILITY_SLOW_ENDPOINTS =
+  "/admin/observability/slow-endpoints";
+export const API_ADMIN_OBSERVABILITY_AUDIT_LOGS =
+  "/admin/observability/audit-logs";
 
 // role requests api endpoints
 export const API_ROLE_REQUESTS = "/role-requests";

@@ -343,7 +343,7 @@ export default function ShipmentsManagementScreen(
                       <td className="px-6 py-5">
                         <div className="flex flex-wrap justify-end gap-2">
                           <Link
-                            href={`/dashboard/admin/orders/${order.id}`}
+                            href={`/admin/orders/${order.id}`}
                             className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-[0.68rem] font-bold text-primary transition-colors hover:bg-primary/10"
                           >
                             Xem chi tiết

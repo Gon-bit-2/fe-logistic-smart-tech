@@ -49,7 +49,7 @@ describe("AdminOrderDetailScreen", () => {
 
     expect(screen.getByRole("link", { name: "Quay lại danh sách lô hàng" })).toHaveAttribute(
       "href",
-      expect.stringContaining("/dashboard/admin/orders"),
+      expect.stringContaining("/admin/orders"),
     );
     expect(screen.getByText("GT-ORD-20260021")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Xem tracking công khai" })).toHaveAttribute(

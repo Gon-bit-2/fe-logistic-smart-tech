@@ -114,7 +114,7 @@ export default function DriverVehiclePage() {
           description="Hiện chưa có chuyến nào gắn với tài khoản driver này, nên hệ thống chưa thể hiển thị dữ liệu xe thực tế."
           action={
             <Button asChild>
-              <Link href="/dashboard/driver/trips">Mở danh sách chuyến</Link>
+              <Link href="/driver/trips">Mở danh sách chuyến</Link>
             </Button>
           }
         />
@@ -166,7 +166,7 @@ export default function DriverVehiclePage() {
               Tối ưu lộ trình
             </Button>
             <Button asChild>
-              <Link href={`/dashboard/driver/trips/${selectedTrip.id}`}>
+              <Link href={`/driver/trips/${selectedTrip.id}`}>
                 Mở chuyến #{selectedTrip.id}
               </Link>
             </Button>
@@ -275,7 +275,7 @@ export default function DriverVehiclePage() {
 
             <Button asChild variant="outline" className="h-auto min-h-32 rounded-2xl">
               <Link
-                href={`/dashboard/driver/trips/${selectedTrip.id}`}
+                href={`/driver/trips/${selectedTrip.id}`}
                 className="flex flex-col items-center justify-center gap-3"
               >
                 <div className="rounded-xl bg-primary/10 p-4 text-primary">

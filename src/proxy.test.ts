@@ -67,11 +67,8 @@ describe("proxy", () => {
     );
   });
 
-  it("lets admins access other dashboard workspaces", () => {
-    const request = createRequest(
-      "/vi/dashboard/driver",
-      createAccessToken("admin", 1),
-    );
+  it("lets admins access other protected workspaces", () => {
+    const request = createRequest("/vi/driver", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
@@ -86,21 +83,45 @@ describe("proxy", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it("still redirects dashboard root to the admin workspace", () => {
+  it("redirects dashboard root to the canonical admin workspace", () => {
     const request = createRequest("/en/dashboard", createAccessToken("admin", 1));
 
     const response = proxy(request);
 
+    expect(response.status).toBe(308);
+    expect(response.headers.get("location")).toBe("http://localhost/en/admin");
+  });
+
+  it("redirects legacy dashboard workspace URLs to canonical paths", () => {
+    const request = createRequest(
+      "/vi/dashboard/admin/orders?status=pending",
+      createAccessToken("admin", 1),
+    );
+
+    const response = proxy(request);
+
+    expect(response.status).toBe(308);
     expect(response.headers.get("location")).toBe(
-      "http://localhost/en/dashboard/admin",
+      "http://localhost/vi/admin/orders?status=pending",
     );
   });
 
-  it("redirects non-admin users away from restricted dashboard workspaces", () => {
+  it("redirects legacy customer dashboard URLs to canonical customer paths", () => {
     const request = createRequest(
-      "/vi/dashboard/driver",
+      "/vi/dashboard/customer/orders/create?draft=1",
       createAccessToken("customer", 2),
     );
+
+    const response = proxy(request);
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/vi/orders/create?draft=1",
+    );
+  });
+
+  it("redirects non-admin users away from restricted workspaces", () => {
+    const request = createRequest("/vi/driver", createAccessToken("customer", 2));
 
     const response = proxy(request);
 
@@ -116,7 +137,7 @@ describe("proxy", () => {
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBe(
-      "http://localhost/en/dashboard/driver?orderId=21",
+      "http://localhost/en/driver?orderId=21",
     );
   });
 

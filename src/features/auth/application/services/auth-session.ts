@@ -8,31 +8,31 @@ import {
 } from "@/features/auth/domain/types/auth.types";
 
 const ROLE_REDIRECTS: Record<UserRole, string> = {
-  admin: "/dashboard/admin",
+  admin: "/admin",
   customer: "/overview",
-  driver: "/dashboard/driver",
-  warehouse_staff: "/dashboard/warehouse",
+  driver: "/driver",
+  warehouse_staff: "/warehouse",
 };
 
 const NOTIFICATION_REDIRECTS: Record<UserRole, string> = {
-  admin: "/dashboard/admin/notifications",
+  admin: "/admin/notifications",
   customer: "/notifications",
-  driver: "/dashboard/driver/notifications",
-  warehouse_staff: "/dashboard/warehouse/notifications",
+  driver: "/driver/notifications",
+  warehouse_staff: "/warehouse/notifications",
 };
 
 const ROLE_REQUEST_REDIRECTS: Record<UserRole, string> = {
-  admin: "/dashboard/admin/role-requests",
+  admin: "/admin/role-requests",
   customer: "/role-requests",
-  driver: "/dashboard/driver/roles",
-  warehouse_staff: "/dashboard/warehouse/roles",
+  driver: "/driver/roles",
+  warehouse_staff: "/warehouse/roles",
 };
 
 const PROFILE_REDIRECTS: Record<UserRole, string> = {
-  admin: "/dashboard/admin",
+  admin: "/admin",
   customer: "/profile",
-  driver: "/dashboard/driver",
-  warehouse_staff: "/dashboard/warehouse",
+  driver: "/driver",
+  warehouse_staff: "/warehouse",
 };
 
 function base64UrlToUtf8(value: string): string {

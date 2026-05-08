@@ -16,8 +16,7 @@ import { formatEnumLabel } from "@/utils/formatters";
 
 function shouldHideQuickAccess(pathname: string) {
   return (
-    pathname.startsWith("/dashboard/customer") ||
-    pathname.startsWith("/dashboard/warehouse") ||
+    pathname.startsWith("/warehouse") ||
     pathname.startsWith("/overview") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/profile") ||
@@ -27,7 +26,7 @@ function shouldHideQuickAccess(pathname: string) {
 
 function getOffsetClass(pathname: string) {
   if (
-    pathname.startsWith("/dashboard/admin") ||
+    pathname.startsWith("/admin") ||
     pathname.startsWith("/overview") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/checkout") ||

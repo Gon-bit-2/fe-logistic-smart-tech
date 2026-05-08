@@ -52,16 +52,16 @@ describe("WarehouseOrdersPage", () => {
 
     expect(screen.getByRole("link", { name: "Nhập kho" })).toHaveAttribute(
       "href",
-      expect.stringContaining("/dashboard/warehouse?mode=inbound"),
+      expect.stringContaining("/warehouse?mode=inbound"),
     );
     expect(screen.getByRole("link", { name: "Xuất kho" })).toHaveAttribute(
       "href",
-      expect.stringContaining("/dashboard/warehouse?mode=outbound"),
+      expect.stringContaining("/warehouse?mode=outbound"),
     );
     expect(screen.getAllByText("Chờ xác nhận").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: "Xem chi tiết" })).toHaveAttribute(
       "href",
-      expect.stringContaining("/dashboard/warehouse/orders/1"),
+      expect.stringContaining("/warehouse/orders/1"),
     );
     expect(screen.getByRole("button", { name: "Hủy đơn" })).toBeInTheDocument();
   });

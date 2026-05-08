@@ -32,7 +32,7 @@ export const footerCopy = {
 export const operationsTopBarCopy = {
   brand: "Precision Logistics",
   items: [
-    { href: "/dashboard/admin", id: "dashboard", label: "Bảng điều khiển" },
+    { href: "/admin", id: "dashboard", label: "Bảng điều khiển" },
     { href: "/orders/create", id: "shipments", label: "Lô hàng" },
     { href: "/tracking", id: "tracking", label: "Theo dõi" },
   ],

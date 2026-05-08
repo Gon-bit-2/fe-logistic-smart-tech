@@ -108,13 +108,13 @@ export default function DriverWalletScreen() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild>
-              <Link href="/dashboard/driver/trips">
+              <Link href="/driver/trips">
                 <Route className="mr-2 size-4" />
                 {walletScreenCopy.actions.openTrips}
               </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/dashboard/driver/vehicle">
+              <Link href="/driver/vehicle">
                 {walletScreenCopy.actions.openVehicle}
               </Link>
             </Button>

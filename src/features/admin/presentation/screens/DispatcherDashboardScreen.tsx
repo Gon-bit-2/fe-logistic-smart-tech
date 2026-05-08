@@ -132,7 +132,7 @@ export default function DispatcherDashboardScreen(
               {adminScreenCopy.recentOrders}
             </h2>
             <Button asChild variant="outline" size="sm">
-              <Link href="/dashboard/admin/orders">{adminScreenCopy.viewAll}</Link>
+              <Link href="/admin/orders">{adminScreenCopy.viewAll}</Link>
             </Button>
           </div>
 

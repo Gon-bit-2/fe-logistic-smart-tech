@@ -1171,7 +1171,7 @@ export default function TripsManagementScreen({
                           </button>
                         ) : null}
                         <Link
-                          href={`/dashboard/driver/trips/${trip.id}`}
+                          href={`/driver/trips/${trip.id}`}
                           className="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white"
                         >
                           Mở chi tiết
@@ -1297,7 +1297,7 @@ function DriverTripsPanel({
                     </button>
                   ) : null}
                   <Link
-                    href={`/dashboard/driver/trips/${trip.id}`}
+                    href={`/driver/trips/${trip.id}`}
                     className="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white"
                   >
                     Mở chi tiết

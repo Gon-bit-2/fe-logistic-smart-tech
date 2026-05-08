@@ -44,33 +44,33 @@ export default function WarehouseTopBar() {
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
   const warehouseNavItems: WarehouseNavItem[] = [
     {
-      href: "/dashboard/warehouse",
+      href: "/warehouse",
       icon: <Home className="size-4" />,
-      isActive: (pathname) => pathname === "/dashboard/warehouse",
+      isActive: (pathname) => pathname === "/warehouse",
       label: t("nav.scanStation"),
     },
     {
-      href: "/dashboard/warehouse/orders",
+      href: "/warehouse/orders",
       icon: <Package className="size-4" />,
-      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/orders"),
+      isActive: (pathname) => pathname.startsWith("/warehouse/orders"),
       label: t("nav.orders"),
     },
     {
-      href: "/dashboard/warehouse/trips",
+      href: "/warehouse/trips",
       icon: <Truck className="size-4" />,
-      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/trips"),
+      isActive: (pathname) => pathname.startsWith("/warehouse/trips"),
       label: t("nav.trips"),
     },
     {
-      href: "/dashboard/warehouse/wallet",
+      href: "/warehouse/wallet",
       icon: <WalletCards className="size-4" />,
-      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/wallet"),
+      isActive: (pathname) => pathname.startsWith("/warehouse/wallet"),
       label: t("nav.wallet"),
     },
     {
-      href: "/dashboard/warehouse/roles",
+      href: "/warehouse/roles",
       icon: <ShieldCheck className="size-4" />,
-      isActive: (pathname) => pathname.startsWith("/dashboard/warehouse/roles"),
+      isActive: (pathname) => pathname.startsWith("/warehouse/roles"),
       label: t("nav.role"),
     },
   ];
@@ -106,7 +106,7 @@ export default function WarehouseTopBar() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
             <Link
-              href="/dashboard/warehouse"
+              href="/warehouse"
               className="text-base md:text-lg font-black tracking-tight text-emerald-950 transition-colors hover:text-emerald-700"
             >
               {t("brand")}

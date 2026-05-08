@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import AuthGuard from "@/features/auth/presentation/components/AuthGuard";
 
-export default function DashboardLayout({
+export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: ReactNode;

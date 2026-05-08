@@ -48,7 +48,7 @@ describe("ShipmentsManagementScreen", () => {
 
     expect(screen.getByRole("link", { name: "Xem chi tiết" })).toHaveAttribute(
       "href",
-      expect.stringContaining("/dashboard/admin/orders/15"),
+      expect.stringContaining("/admin/orders/15"),
     );
     expect(screen.getByRole("button", { name: "Hủy đơn" })).toBeInTheDocument();
   });

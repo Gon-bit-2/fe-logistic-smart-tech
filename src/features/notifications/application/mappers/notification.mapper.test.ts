@@ -47,6 +47,6 @@ describe("notification.mapper", () => {
 
     expect(viewModel.title).toBe("Cập nhật yêu cầu vai trò");
     expect(viewModel.content).toContain("Warehouse Staff");
-    expect(viewModel.ctaHref).toBe("/dashboard/warehouse/roles");
+    expect(viewModel.ctaHref).toBe("/warehouse/roles");
   });
 });

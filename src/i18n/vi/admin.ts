@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Activity,
   ClipboardCheck,
   LayoutDashboard,
   Languages,
@@ -13,33 +14,34 @@ import {
 import type { AdminNavItem, AdminShellConfig } from "@/features/admin/domain/types/admin.types";
 
 const ecosystemTopTabs = [
-  { href: "/dashboard/admin", label: "Bảng điều khiển" },
-  { href: "/dashboard/admin/orders", label: "Lô hàng" },
-  { href: "/dashboard/admin/warehouses", label: "Kho hàng" },
+  { href: "/admin", label: "Bảng điều khiển" },
+  { href: "/admin/orders", label: "Lô hàng" },
+  { href: "/admin/warehouses", label: "Kho hàng" },
 ] as const;
 
 export const adminNavItems: ReadonlyArray<AdminNavItem> = [
-  { href: "/dashboard/admin", icon: LayoutDashboard, label: "Tổng quan" },
-  { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Phân tích" },
-  { href: "/dashboard/admin/role-requests", icon: ClipboardCheck, label: "Yêu cầu phân quyền" },
-  { href: "/dashboard/admin/orders", icon: PackageSearch, label: "Lô hàng" },
-  { href: "/dashboard/admin/trips", icon: Route, label: "Chuyến đi" },
-  { href: "/dashboard/admin/fleet", icon: Truck, label: "Đội xe" },
-  { href: "/dashboard/admin/wallet", icon: WalletCards, label: "Đối soát COD" },
-  { href: "/dashboard/admin/sustainability", icon: Leaf, label: "Bền vững" },
-  { href: "/dashboard/admin/warehouses", icon: Warehouse, label: "Kho hàng" },
-  { href: "/dashboard/admin/language", icon: Languages, label: "Ngôn ngữ" },
+  { href: "/admin", icon: LayoutDashboard, label: "Tổng quan" },
+  { href: "/admin/analytics", icon: BarChart3, label: "Phân tích" },
+  { href: "/admin/observability", icon: Activity, label: "Vận hành production" },
+  { href: "/admin/role-requests", icon: ClipboardCheck, label: "Yêu cầu phân quyền" },
+  { href: "/admin/orders", icon: PackageSearch, label: "Lô hàng" },
+  { href: "/admin/trips", icon: Route, label: "Chuyến đi" },
+  { href: "/admin/fleet", icon: Truck, label: "Đội xe" },
+  { href: "/admin/wallet", icon: WalletCards, label: "Đối soát COD" },
+  { href: "/admin/sustainability", icon: Leaf, label: "Bền vững" },
+  { href: "/admin/warehouses", icon: Warehouse, label: "Kho hàng" },
+  { href: "/admin/language", icon: Languages, label: "Ngôn ngữ" },
 ];
 
 export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
-  "/dashboard/admin": {
+  "/admin": {
     initials: "SC",
     searchPlaceholder: "Tìm kiếm lô hàng...",
     title: "Bảng điều khiển quản trị",
     topBarVariant: "dashboard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/analytics": {
+  "/admin/analytics": {
     initials: "SA",
     searchPlaceholder: "Tìm kiếm insight...",
     supportLabel: "Hỗ trợ",
@@ -47,7 +49,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/fleet": {
+  "/admin/fleet": {
     initials: "FO",
     searchPlaceholder: "Tìm mã xe hoặc tài xế...",
     supportLabel: "Hỗ trợ",
@@ -55,7 +57,15 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/wallet": {
+  "/admin/observability": {
+    initials: "OBS",
+    searchPlaceholder: "Tìm queue, endpoint hoặc audit...",
+    supportLabel: "Hỗ trợ",
+    title: "Khối quản trị Precision",
+    topBarVariant: "standard",
+    topTabs: ecosystemTopTabs,
+  },
+  "/admin/wallet": {
     initials: "COD",
     searchPlaceholder: "Tìm tài xế hoặc biên nhận COD...",
     supportLabel: "Hỗ trợ",
@@ -63,14 +73,14 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/orders": {
+  "/admin/orders": {
     initials: "SM",
     searchPlaceholder: "Lọc lô hàng...",
     title: "Trung tâm điều phối",
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/trips": {
+  "/admin/trips": {
     initials: "TR",
     searchPlaceholder: "Tìm chuyến hoặc biển số...",
     supportLabel: "Hỗ trợ",
@@ -78,7 +88,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/notifications": {
+  "/admin/notifications": {
     initials: "NT",
     searchPlaceholder: "Tìm thông báo...",
     supportLabel: "Hỗ trợ",
@@ -86,7 +96,7 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/role-requests": {
+  "/admin/role-requests": {
     initials: "RR",
     searchPlaceholder: "Tìm yêu cầu phân quyền...",
     supportLabel: "Hỗ trợ",
@@ -94,21 +104,21 @@ export const adminShellConfigByPath: Record<string, AdminShellConfig> = {
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/sustainability": {
+  "/admin/sustainability": {
     initials: "SI",
     searchPlaceholder: "Tìm kiếm theo dõi toàn cục...",
     title: "Khối quản trị Precision",
     topBarVariant: "standard",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/warehouses": {
+  "/admin/warehouses": {
     initials: "IH",
     searchPlaceholder: "Tìm kiếm kho hàng...",
     title: "Trung tâm điều phối",
     topBarVariant: "ecosystem",
     topTabs: ecosystemTopTabs,
   },
-  "/dashboard/admin/language": {
+  "/admin/language": {
     initials: "LG",
     searchPlaceholder: "Tìm ngôn ngữ...",
     supportLabel: "Hỗ trợ",

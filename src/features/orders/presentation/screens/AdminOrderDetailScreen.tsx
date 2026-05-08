@@ -80,7 +80,7 @@ export default function AdminOrderDetailScreen({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-3">
           <Link
-            href="/dashboard/admin/orders"
+            href="/admin/orders"
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
           >
             <ArrowLeft className="size-4" />
