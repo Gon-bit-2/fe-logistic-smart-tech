@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLandingReveal } from "@/features/landing/presentation/components/useLandingReveal";
+import { useViewportSceneMount } from "@/features/landing/presentation/components/useDeferredSceneMount";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -37,10 +38,12 @@ export default function SustainabilitySection() {
   const impactStats = t.raw("impactStats") as ImpactStat[];
   const commitments = t.raw("commitments") as string[];
   const sectionRef = useRef<HTMLElement>(null);
+  const sceneViewportRef = useRef<HTMLDivElement>(null);
   const sceneStateRef = useRef<SustainabilitySceneState>({
     carbonLevel: 0.2,
     val: 0,
   });
+  const shouldMountScene = useViewportSceneMount(sceneViewportRef, "280px 0px");
 
   useLandingReveal(sectionRef);
 
@@ -143,13 +146,17 @@ export default function SustainabilitySection() {
           </Card>
         </div>
 
-        <div data-reveal className="relative mx-auto w-full max-w-[720px]">
+        <div ref={sceneViewportRef} data-reveal className="relative mx-auto w-full max-w-[720px]">
           <div className="absolute inset-0 rounded-[2.4rem] bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.2),transparent_56%)] blur-3xl" />
           <div className="relative aspect-square overflow-hidden rounded-[2.6rem] border border-white/60 bg-white/38 shadow-[0_44px_120px_-54px_rgba(0,73,48,0.45)] backdrop-blur-xl">
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.55),rgba(255,255,255,0.22))]" />
             <div className="absolute inset-6 rounded-[2rem] border border-primary/10" />
             <div className="absolute inset-0">
-              <SustainabilityParticleScene sceneStateRef={sceneStateRef} />
+              {shouldMountScene ? (
+                <SustainabilityParticleScene sceneStateRef={sceneStateRef} />
+              ) : (
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.18),transparent_58%)]" />
+              )}
             </div>
 
             <div className="absolute left-6 top-6 rounded-2xl border border-white/65 bg-white/78 px-4 py-3 shadow-lg backdrop-blur-xl">

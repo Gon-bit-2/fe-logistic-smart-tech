@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useIdleSceneMount } from "@/features/landing/presentation/components/useDeferredSceneMount";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -34,6 +35,7 @@ export default function HeroSection() {
   const t = useTranslations("landing.hero");
   const containerRef = useRef<HTMLElement>(null);
   const sceneStateRef = useRef<HeroSceneState>({ progress: 0 });
+  const shouldMountScene = useIdleSceneMount();
 
   useGSAP(
     () => {
@@ -68,7 +70,11 @@ export default function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#03140f]"
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <HeroLogisticsScene sceneStateRef={sceneStateRef} />
+        {shouldMountScene ? (
+          <HeroLogisticsScene sceneStateRef={sceneStateRef} />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(111,251,190,0.18),transparent_58%)]" />
+        )}
       </div>
 
       <div className="pointer-events-none absolute left-[-10%] top-[15%] z-0 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />

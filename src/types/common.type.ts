@@ -1,3 +1,5 @@
+import type { AuthProfile } from "@/features/auth/domain/types/auth.types";
+
 export type ValidationIssue = {
   message: string;
   path?: string;
@@ -8,6 +10,11 @@ export type ApiErrorStatus = 401 | 403 | 404 | 409 | 422 | number;
 export type SessionTokens = {
   accessToken: string;
   refreshToken?: string | null;
+};
+
+export type SessionBootstrapPayload = {
+  accessToken: string;
+  profile: AuthProfile;
 };
 
 export type PaginatedResult<T> = {

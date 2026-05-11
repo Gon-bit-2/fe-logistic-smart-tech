@@ -45,11 +45,9 @@ describe("useCheckout", () => {
       isPending: false,
     });
 
-    const { result } = renderHookWithProviders(() => useCheckout(), {
-      searchParams: {
-        orderId: sampleOrder.id,
-      },
-    });
+    const { result } = renderHookWithProviders(() =>
+      useCheckout({ orderId: sampleOrder.id }),
+    );
 
     await waitFor(() => {
       expect(result.current.order?.id).toBe(sampleOrder.id);
@@ -62,7 +60,9 @@ describe("useCheckout", () => {
   it("surfaces checkout load errors from the order query", async () => {
     resolveCheckoutOrderUseCase.mockRejectedValue(new Error("Không tải được order"));
 
-    const { result } = renderHookWithProviders(() => useCheckout(), {
+    const { result } = renderHookWithProviders(
+      () => useCheckout({ orderId: sampleOrder.id }),
+      {
       queryClient: new QueryClient({
         defaultOptions: {
           queries: {
@@ -70,10 +70,8 @@ describe("useCheckout", () => {
           },
         },
       }),
-      searchParams: {
-        orderId: sampleOrder.id,
       },
-    });
+    );
 
     await waitFor(() => {
       expect(result.current.loadError).toBe("Không tải được order");

@@ -11,7 +11,9 @@ type JwtPayload = {
   exp?: number;
 };
 
-function getBackendBaseUrl() {
+type HeaderSource = Pick<Headers, "get"> | Pick<NextRequest["headers"], "get">;
+
+export function getBackendBaseUrl() {
   const baseUrl = normalizePublicEnvValue(API_BASE_URL);
 
   if (!baseUrl) {
@@ -119,14 +121,15 @@ export function clearSessionCookies(response: NextResponse) {
   });
 }
 
-export function getForwardedAuthHeaders(request: NextRequest) {
+export function createForwardedAuthHeaders(headerSource?: HeaderSource) {
   const headers = new Headers({
     Accept: "application/json",
     "Content-Type": "application/json",
   });
 
-  const userAgent = request.headers.get("user-agent");
-  const forwardedFor = request.headers.get("x-forwarded-for");
+  const userAgent = headerSource?.get("user-agent");
+  const forwardedFor = headerSource?.get("x-forwarded-for");
+  const forwardedProto = headerSource?.get("x-forwarded-proto");
 
   if (userAgent) {
     headers.set("user-agent", userAgent);
@@ -136,7 +139,15 @@ export function getForwardedAuthHeaders(request: NextRequest) {
     headers.set("x-forwarded-for", forwardedFor);
   }
 
+  if (forwardedProto) {
+    headers.set("x-forwarded-proto", forwardedProto);
+  }
+
   return headers;
+}
+
+export function getForwardedAuthHeaders(request: NextRequest) {
+  return createForwardedAuthHeaders(request.headers);
 }
 
 export async function callBackendAuthEndpoint(

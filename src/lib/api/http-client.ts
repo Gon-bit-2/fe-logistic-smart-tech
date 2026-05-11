@@ -1,9 +1,9 @@
 import axios, { AxiosHeaders } from "axios";
 import type { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
-import { clearAuthSession, getAuthSessionSnapshot, setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
+import { clearAuthSession, getAuthSessionSnapshot, setAuthSession } from "@/features/auth/presentation/state/auth.store";
 import { isAccessTokenExpiringSoon } from "@/features/auth/application/services/auth-session";
 import { restoreSession } from "@/lib/api/session-client";
-import type { SessionTokens } from "@/types/common.type";
+import type { SessionBootstrapPayload } from "@/types/common.type";
 import { API_BASE_URL } from "./env";
 import { ApiError, normalizeApiError } from "./errors";
 
@@ -85,7 +85,7 @@ export const httpClient = axios.create({
   headers: defaultHeaders,
 });
 
-let refreshPromise: Promise<SessionTokens> | null = null;
+let refreshPromise: Promise<SessionBootstrapPayload> | null = null;
 
 async function refreshSessionTokens() {
   const tokens = await restoreSession();
@@ -104,7 +104,7 @@ async function getRefreshPromise() {
   if (!refreshPromise) {
     refreshPromise = refreshSessionTokens()
       .then((tokens) => {
-        setAuthSessionTokens(tokens);
+        setAuthSession(tokens);
         return tokens;
       })
       .catch((error) => {

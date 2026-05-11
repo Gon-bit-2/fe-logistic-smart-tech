@@ -6,9 +6,9 @@ import {
   callBackendAuthEndpoint,
   clearSessionCookies,
   getForwardedAuthHeaders,
-  isTokenExpired,
 } from "@/lib/api/server-session";
-import type { SessionTokens } from "@/types/common.type";
+import { resolveTrustedSessionFromRequest } from "@/lib/api/trusted-session";
+import type { SessionBootstrapPayload } from "@/types/common.type";
 
 function toEmptySessionResponse() {
   const response = new NextResponse(null, {
@@ -23,41 +23,17 @@ function toEmptySessionResponse() {
 }
 
 export async function GET(request: NextRequest) {
-  const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE_KEY)?.value ?? null;
-  const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE_KEY)?.value ?? null;
+  const session = await resolveTrustedSessionFromRequest(request);
 
-  if (accessToken && !isTokenExpired(accessToken, 30)) {
-    return NextResponse.json(
-      { accessToken } satisfies SessionTokens,
-      {
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      },
-    );
-  }
-
-  if (!refreshToken) {
+  if (!session) {
     return toEmptySessionResponse();
   }
 
-  const backendResponse = await callBackendAuthEndpoint(
-    request,
-    "/auth/refresh-token",
-    {
-      body: JSON.stringify({ refreshToken }),
-      headers: getForwardedAuthHeaders(request),
-      method: "POST",
-    },
-  );
-
-  if (!backendResponse.ok) {
-    return toEmptySessionResponse();
-  }
-
-  const tokens = (await backendResponse.json()) as SessionTokens;
   const response = NextResponse.json(
-    { accessToken: tokens.accessToken } satisfies SessionTokens,
+    {
+      accessToken: session.accessToken,
+      profile: session.profile,
+    } satisfies SessionBootstrapPayload,
     {
       headers: {
         "Cache-Control": "no-store",
@@ -65,7 +41,12 @@ export async function GET(request: NextRequest) {
     },
   );
 
-  applySessionCookies(response, request, tokens);
+  if (session.refreshed) {
+    applySessionCookies(response, request, {
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+    });
+  }
 
   return response;
 }

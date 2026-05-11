@@ -8,9 +8,9 @@ import type {
   RegisterDraft,
 } from "@/features/auth/domain/types/auth.types";
 import type { AuthUser } from "@/features/auth/domain/types/auth.types";
-import { extractAuthUserFromToken } from "@/features/auth/application/services/auth-session";
+import { toAuthUser } from "@/features/auth/application/services/auth-session";
 import { restoreSession } from "@/lib/api/session-client";
-import type { SessionTokens } from "@/types/common.type";
+import type { SessionBootstrapPayload } from "@/types/common.type";
 
 type AuthState = {
   accessToken: string | null;
@@ -27,7 +27,7 @@ type AuthSnapshot = AuthState & {
   clearSession: () => void;
   initialize: () => Promise<void>;
   isAuthenticated: boolean;
-  setAuthSessionTokens: (tokens: SessionTokens) => void;
+  setAuthSession: (session: SessionBootstrapPayload) => void;
   setOtpChallengeMeta: (challenge: OtpChallengeMeta | null) => void;
   setPendingPasswordReset: (passwordReset: ForgotPasswordDraft | null) => void;
   setPendingRegistration: (registration: RegisterDraft | null) => void;
@@ -77,15 +77,16 @@ const actions = {
     hasInitialized = true;
 
     initializePromise = restoreSession()
-      .then((tokens) => {
-        const accessToken = tokens?.accessToken ?? null;
+      .then((session) => {
+        const accessToken = session?.accessToken ?? null;
+        const user = session ? toAuthUser(session.profile) : null;
 
         setState({
           accessToken,
           status: computeStatus({
             accessToken,
           }),
-          user: accessToken ? extractAuthUserFromToken(accessToken) : null,
+          user,
         });
       })
       .catch(() => {
@@ -103,11 +104,11 @@ const actions = {
     return initializePromise;
   },
 
-  setAuthSessionTokens(tokens: SessionTokens) {
+  setAuthSession(session: SessionBootstrapPayload) {
     setState({
-      accessToken: tokens.accessToken,
+      accessToken: session.accessToken,
       status: "authenticated",
-      user: extractAuthUserFromToken(tokens.accessToken),
+      user: toAuthUser(session.profile),
     });
   },
 
@@ -183,8 +184,8 @@ export function getAuthSessionSnapshot() {
   return snapshot;
 }
 
-export function setAuthSessionTokens(tokens: SessionTokens) {
-  actions.setAuthSessionTokens(tokens);
+export function setAuthSession(session: SessionBootstrapPayload) {
+  actions.setAuthSession(session);
 }
 
 export function clearAuthSession() {

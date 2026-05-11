@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import AppIcon from "@/components/ui/app-icon";
+import { getDashboardHrefForRole } from "@/features/auth/application/services/auth-session";
 import { useAuthStore } from "@/features/auth/presentation/state/auth.store";
 import { localizePath, type Locale } from "@/i18n/config";
 import type { GuestGuardProps } from "@/features/auth/presentation/types";
@@ -14,20 +15,11 @@ export default function GuestGuard({ children }: GuestGuardProps) {
   const { status, isHydrated, user } = useAuthStore();
 
   useEffect(() => {
-    if (isHydrated && status === "authenticated") {
-      let destination = "/";
-
-      if (user?.role === "customer") {
-        destination = "/overview";
-      } else if (user?.role === "driver") {
-        destination = "/driver";
-      } else if (user?.role === "admin") {
-        destination = "/admin";
-      } else if (user?.role === "warehouse_staff") {
-        destination = "/warehouse";
-      }
-
-      const localizedDestination = localizePath(destination, locale);
+    if (isHydrated && status === "authenticated" && user) {
+      const localizedDestination = localizePath(
+        getDashboardHrefForRole(user.role),
+        locale,
+      );
       router.replace(localizedDestination);
     }
   }, [isHydrated, locale, status, user, router]);

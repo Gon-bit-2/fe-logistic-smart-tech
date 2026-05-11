@@ -1,19 +1,27 @@
-import { Suspense } from "react";
 import CheckoutScreen from "@/features/orders/presentation/screens/CheckoutScreen";
 import CustomerShell from "@/components/layout/CustomerShell";
 
-export default function CheckoutPage() {
+type CheckoutPageProps = {
+  searchParams: Promise<{
+    orderId?: string | string[];
+    reference?: string | string[];
+  }>;
+};
+
+function readSingleValue(value?: string | string[]) {
+  return Array.isArray(value) ? (value[0] ?? null) : value ?? null;
+}
+
+export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
+  const params = await searchParams;
+
   return (
     <CustomerShell>
-      <Suspense
-        fallback={
-          <div className="mx-auto max-w-5xl px-6 py-12 text-on-surface md:px-8">
-            Đang tải trang thanh toán...
-          </div>
-        }
-      >
-        <CheckoutScreen showTopBar={false} />
-      </Suspense>
+      <CheckoutScreen
+        orderId={readSingleValue(params.orderId)}
+        reference={readSingleValue(params.reference)}
+        showTopBar={false}
+      />
     </CustomerShell>
   );
 }
