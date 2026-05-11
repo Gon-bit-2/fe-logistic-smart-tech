@@ -88,6 +88,18 @@ export type AuthUser = {
   roleId: number;
 };
 
+export type AuthProfileRoleDto = {
+  id: number;
+  name: string;
+  permissions?: Array<{
+    id: number;
+    method: string;
+    module: string;
+    name: string;
+    path: string;
+  }>;
+};
+
 export type AuthProfileDto = {
   avatar?: string | null;
   avatarUrl?: string | null;
@@ -96,7 +108,8 @@ export type AuthProfileDto = {
   hubId?: number | null;
   id: number;
   phone?: string | null;
-  roleId: number;
+  role?: AuthProfileRoleDto | null;
+  roleId?: number | null;
   roleName?: string | null;
 };
 

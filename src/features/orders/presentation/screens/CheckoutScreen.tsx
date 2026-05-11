@@ -44,6 +44,8 @@ type StripePaymentFormProps = {
 };
 
 type CheckoutScreenProps = Readonly<{
+  orderId?: string | null;
+  reference?: string | null;
   showTopBar?: boolean;
 }>;
 
@@ -94,11 +96,22 @@ function StripePaymentForm({
 }
 
 export default function CheckoutScreen({
+  orderId = null,
+  reference = null,
   showTopBar = true,
 }: CheckoutScreenProps) {
   const { checkoutCopy } = useI18nCopy();
   const router = useRouter();
-  const { order, orderId, isLoading, loadError, paymentRecord } = useCheckout();
+  const {
+    order,
+    orderId: resolvedOrderId,
+    isLoading,
+    loadError,
+    paymentRecord,
+  } = useCheckout({
+    orderId,
+    reference,
+  });
   const createPaymentIntent = useCreatePaymentIntent();
   const [error, setError] = useState<string | null>(null);
   const autoIntentAttemptRef = useRef<string | null>(null);
@@ -111,14 +124,14 @@ export default function CheckoutScreen({
   const isPaymentCompleted = effectivePaymentRecord?.status === "COMPLETED";
   const isCodPayment = paymentMethod === "COD";
   const paymentAttemptKey = [
-    orderId ?? "missing-order",
+    resolvedOrderId ?? "missing-order",
     pricing?.currency ?? "missing-currency",
     pricing?.total ?? "missing-total",
     effectivePaymentRecord?.status ?? "missing-status",
   ].join(":");
 
   useEffect(() => {
-    if (!order || !orderId || isPaymentCompleted || isCodPayment) {
+    if (!order || !resolvedOrderId || isPaymentCompleted || isCodPayment) {
       autoIntentAttemptRef.current = null;
       return;
     }
@@ -136,7 +149,7 @@ export default function CheckoutScreen({
       setError(null);
     });
 
-    void createPaymentIntent.mutateAsync(orderId).catch((caughtError) => {
+    void createPaymentIntent.mutateAsync(resolvedOrderId).catch((caughtError) => {
       setError(
         caughtError instanceof Error
           ? caughtError.message
@@ -149,16 +162,20 @@ export default function CheckoutScreen({
     isCodPayment,
     isPaymentCompleted,
     order,
-    orderId,
+    resolvedOrderId,
     paymentAttemptKey,
     pricing,
   ]);
 
   useEffect(() => {
-    if (orderId && clientSecret && autoIntentAttemptRef.current !== paymentAttemptKey) {
+    if (
+      resolvedOrderId &&
+      clientSecret &&
+      autoIntentAttemptRef.current !== paymentAttemptKey
+    ) {
       autoIntentAttemptRef.current = paymentAttemptKey;
     }
-  }, [clientSecret, orderId, paymentAttemptKey]);
+  }, [clientSecret, paymentAttemptKey, resolvedOrderId]);
 
   const stripeOptions = useMemo(
     () =>
@@ -262,7 +279,7 @@ export default function CheckoutScreen({
                       ? "Stripe chưa được cấu hình trên frontend. Hãy thiết lập NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
                       : createPaymentIntent.isPending
                       ? "Đang chuẩn bị cổng thanh toán..."
-                      : !orderId
+                      : !resolvedOrderId
                       ? "Không tìm thấy orderId hợp lệ để khởi tạo thanh toán."
                       : "Thanh toán trực tuyến hiện chưa sẵn sàng. Vui lòng thử lại sau."}
                   </div>

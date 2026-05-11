@@ -6,7 +6,7 @@ import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { parseGoogleCallbackParams } from "@/features/auth/application/services/auth.utils";
 import { exchangeGoogleSession } from "@/features/auth/infrastructure/api/auth.api";
-import { setAuthSessionTokens } from "@/features/auth/presentation/state/auth.store";
+import { setAuthSession } from "@/features/auth/presentation/state/auth.store";
 import { useI18nCopy } from "@/i18n/useCopy";
 
 export default function GoogleCallbackHandler() {
@@ -37,14 +37,14 @@ export default function GoogleCallbackHandler() {
     let isCancelled = false;
 
     void exchangeGoogleSession(sessionToken)
-      .then((tokens) => {
+      .then((session) => {
         if (isCancelled) {
           return;
         }
 
-        setAuthSessionTokens(tokens);
+        setAuthSession(session);
         startTransition(() => {
-          router.replace("/orders/create");
+          router.replace("/dashboard");
         });
       })
       .catch(() => {

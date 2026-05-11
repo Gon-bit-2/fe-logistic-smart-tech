@@ -4,9 +4,9 @@ import { googleCallbackCopy } from "@/i18n/vi";
 import { renderWithProviders } from "@/test/render";
 import GoogleCallbackHandler from "./GoogleCallbackHandler";
 
-const { exchangeGoogleSession, setAuthSessionTokens } = vi.hoisted(() => ({
+const { exchangeGoogleSession, setAuthSession } = vi.hoisted(() => ({
   exchangeGoogleSession: vi.fn(),
-  setAuthSessionTokens: vi.fn(),
+  setAuthSession: vi.fn(),
 }));
 
 vi.mock("@/features/auth/infrastructure/api/auth.api", () => ({
@@ -17,19 +17,30 @@ vi.mock("@/features/auth/presentation/state/auth.store", async () => {
   const actual = await vi.importActual<object>("@/features/auth/presentation/state/auth.store");
   return {
     ...actual,
-    setAuthSessionTokens,
+    setAuthSession,
   };
 });
 
 describe("GoogleCallbackHandler", () => {
   beforeEach(() => {
     exchangeGoogleSession.mockReset();
-    setAuthSessionTokens.mockReset();
+    setAuthSession.mockReset();
   });
 
-  it("redeems the callback session and redirects to order creation", async () => {
+  it("redeems the callback session and redirects to dashboard", async () => {
     exchangeGoogleSession.mockResolvedValue({
       accessToken: "access-token",
+      profile: {
+        avatarUrl: null,
+        email: "customer@emerald.com",
+        fullName: "Customer",
+        hubId: null,
+        id: 1,
+        initials: "CU",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
     });
 
     const { router } = renderWithProviders(<GoogleCallbackHandler />, {
@@ -40,10 +51,21 @@ describe("GoogleCallbackHandler", () => {
 
     await waitFor(() => {
       expect(exchangeGoogleSession).toHaveBeenCalledWith("session-token");
-      expect(setAuthSessionTokens).toHaveBeenCalledWith({
+      expect(setAuthSession).toHaveBeenCalledWith({
         accessToken: "access-token",
+        profile: {
+          avatarUrl: null,
+          email: "customer@emerald.com",
+          fullName: "Customer",
+          hubId: null,
+          id: 1,
+          initials: "CU",
+          phone: null,
+          role: "customer",
+          roleId: 2,
+        },
       });
-      expect(router.replace).toHaveBeenCalledWith("/orders/create");
+      expect(router.replace).toHaveBeenCalledWith("/dashboard");
     });
   });
 

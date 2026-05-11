@@ -1,16 +1,20 @@
 import type { ReactNode } from "react";
 import AdminShell from "@/features/admin/presentation/components/AdminShell";
-import RoleGuard from "@/features/auth/presentation/components/RoleGuard";
+import { requireRole } from "@/features/auth/application/services/server-auth";
 import { ROUTE_PERMISSIONS } from "@/features/auth/domain/constants/rbac.config";
+import type { Locale } from "@/i18n/config";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
+  params,
 }: Readonly<{
   children: ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  await requireRole(locale as Locale, ROUTE_PERMISSIONS.ADMIN);
+
   return (
-    <RoleGuard allowedRoles={ROUTE_PERMISSIONS.ADMIN}>
-      <AdminShell>{children}</AdminShell>
-    </RoleGuard>
+    <AdminShell>{children}</AdminShell>
   );
 }

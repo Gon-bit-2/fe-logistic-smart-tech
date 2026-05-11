@@ -114,7 +114,7 @@ describe("http-client", () => {
       getAuthSessionSnapshot: vi.fn(() => ({
         accessToken,
       })),
-      setAuthSessionTokens: vi.fn(),
+      setAuthSession: vi.fn(),
     }));
     vi.doMock("@/lib/api/session-client", () => ({
       restoreSession: vi.fn(),
@@ -134,10 +134,21 @@ describe("http-client", () => {
     const httpClientMock = createAxiosInstance();
     const create = vi.fn().mockReturnValue(httpClientMock);
     const clearAuthSession = vi.fn();
-    const setAuthSessionTokens = vi.fn();
+    const setAuthSession = vi.fn();
     const newAccessToken = createAccessToken(60 * 60);
     const restoreSession = vi.fn().mockResolvedValue({
       accessToken: newAccessToken,
+      profile: {
+        avatarUrl: null,
+        email: "customer@emerald.com",
+        fullName: "Customer",
+        hubId: null,
+        id: 1,
+        initials: "CU",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
     });
 
     vi.doMock("axios", () => ({
@@ -157,7 +168,7 @@ describe("http-client", () => {
       getAuthSessionSnapshot: vi.fn(() => ({
         accessToken: createAccessToken(-10),
       })),
-      setAuthSessionTokens,
+      setAuthSession,
     }));
     vi.doMock("@/lib/api/session-client", () => ({
       restoreSession,
@@ -172,8 +183,19 @@ describe("http-client", () => {
     const nextConfig = await httpClientMock.__requestHandler?.(config);
 
     expect(restoreSession).toHaveBeenCalledTimes(1);
-    expect(setAuthSessionTokens).toHaveBeenCalledWith({
+    expect(setAuthSession).toHaveBeenCalledWith({
       accessToken: newAccessToken,
+      profile: {
+        avatarUrl: null,
+        email: "customer@emerald.com",
+        fullName: "Customer",
+        hubId: null,
+        id: 1,
+        initials: "CU",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
     });
     expect(clearAuthSession).not.toHaveBeenCalled();
     expect(nextConfig?.headers.get("authorization")).toBe(`Bearer ${newAccessToken}`);
@@ -186,9 +208,20 @@ describe("http-client", () => {
     const getAuthSessionSnapshot = vi.fn(() => ({
       accessToken: null,
     }));
-    const setAuthSessionTokens = vi.fn();
+    const setAuthSession = vi.fn();
     const restoreSession = vi.fn().mockResolvedValue({
       accessToken: "new-access-token",
+      profile: {
+        avatarUrl: null,
+        email: "customer@emerald.com",
+        fullName: "Customer",
+        hubId: null,
+        id: 1,
+        initials: "CU",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
     });
 
     httpClientMock.mockResolvedValue({
@@ -210,7 +243,7 @@ describe("http-client", () => {
     vi.doMock("@/features/auth/presentation/state/auth.store", () => ({
       clearAuthSession,
       getAuthSessionSnapshot,
-      setAuthSessionTokens,
+      setAuthSession,
     }));
     vi.doMock("@/lib/api/session-client", () => ({
       restoreSession,
@@ -243,8 +276,19 @@ describe("http-client", () => {
     });
 
     expect(restoreSession).toHaveBeenCalledTimes(1);
-    expect(setAuthSessionTokens).toHaveBeenCalledWith({
+    expect(setAuthSession).toHaveBeenCalledWith({
       accessToken: "new-access-token",
+      profile: {
+        avatarUrl: null,
+        email: "customer@emerald.com",
+        fullName: "Customer",
+        hubId: null,
+        id: 1,
+        initials: "CU",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
     });
     expect(clearAuthSession).not.toHaveBeenCalled();
     expect(httpClientMock).toHaveBeenCalledTimes(1);

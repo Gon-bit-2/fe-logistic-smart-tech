@@ -16,20 +16,16 @@ vi.mock("next-intl/middleware", () => ({
   },
 }));
 
-function createAccessToken(roleName: string, roleId: number) {
-  const payload = Buffer.from(
-    JSON.stringify({
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-      roleId,
-      roleName,
-      userId: 1,
-    }),
-  ).toString("base64url");
-
-  return `header.${payload}.signature`;
-}
-
-function createRequest(pathname: string, accessToken?: string) {
+function createRequest(
+  pathname: string,
+  {
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken?: string;
+    refreshToken?: string;
+  } = {},
+) {
   const url = `http://localhost${pathname}`;
 
   return {
@@ -37,7 +33,9 @@ function createRequest(pathname: string, accessToken?: string) {
       get: (key: string) =>
         key === "emerald-logistics.access-token" && accessToken
           ? { value: accessToken }
-          : undefined,
+          : key === "emerald-logistics.refresh-token" && refreshToken
+            ? { value: refreshToken }
+            : undefined,
     },
     nextUrl: new URL(url),
     url,
@@ -67,35 +65,40 @@ describe("proxy", () => {
     );
   });
 
-  it("lets admins access other protected workspaces", () => {
-    const request = createRequest("/vi/driver", createAccessToken("admin", 1));
+  it("allows protected requests with an access token to continue", () => {
+    const request = createRequest("/vi/driver", {
+      accessToken: "header.payload.signature",
+    });
 
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it("lets admins access customer root routes without forcing a customer redirect", () => {
-    const request = createRequest("/vi/orders", createAccessToken("admin", 1));
+  it("allows protected requests with only a refresh token to continue", () => {
+    const request = createRequest("/vi/orders", {
+      refreshToken: "refresh-token",
+    });
 
     const response = proxy(request);
 
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it("redirects dashboard root to the canonical admin workspace", () => {
-    const request = createRequest("/en/dashboard", createAccessToken("admin", 1));
+  it("lets dashboard root continue to the actual page when session cookies exist", () => {
+    const request = createRequest("/en/dashboard", {
+      accessToken: "header.payload.signature",
+    });
 
     const response = proxy(request);
 
-    expect(response.status).toBe(308);
-    expect(response.headers.get("location")).toBe("http://localhost/en/admin");
+    expect(response.headers.get("location")).toBeNull();
   });
 
   it("redirects legacy dashboard workspace URLs to canonical paths", () => {
     const request = createRequest(
       "/vi/dashboard/admin/orders?status=pending",
-      createAccessToken("admin", 1),
+      { accessToken: "header.payload.signature" },
     );
 
     const response = proxy(request);
@@ -109,7 +112,7 @@ describe("proxy", () => {
   it("redirects legacy customer dashboard URLs to canonical customer paths", () => {
     const request = createRequest(
       "/vi/dashboard/customer/orders/create?draft=1",
-      createAccessToken("customer", 2),
+      { accessToken: "header.payload.signature" },
     );
 
     const response = proxy(request);
@@ -120,31 +123,18 @@ describe("proxy", () => {
     );
   });
 
-  it("redirects non-admin users away from restricted workspaces", () => {
-    const request = createRequest("/vi/driver", createAccessToken("customer", 2));
+  it("redirects protected workspaces to login when session cookies are missing", () => {
+    const request = createRequest("/vi/driver");
 
     const response = proxy(request);
 
-    expect(response.headers.get("location")).toBe("http://localhost/vi/overview");
-  });
-
-  it("redirects drivers away from customer checkout routes", () => {
-    const request = createRequest(
-      "/en/checkout?orderId=21",
-      createAccessToken("driver", 3),
-    );
-
-    const response = proxy(request);
-
-    expect(response.headers.get("location")).toBe(
-      "http://localhost/en/driver?orderId=21",
-    );
+    expect(response.headers.get("location")).toBe("http://localhost/vi/auth/login");
   });
 
   it("redirects legacy customer segment routes to canonical customer roots", () => {
     const request = createRequest(
       "/vi/customer/orders/create?draft=1",
-      createAccessToken("customer", 2),
+      { accessToken: "header.payload.signature" },
     );
 
     const response = proxy(request);

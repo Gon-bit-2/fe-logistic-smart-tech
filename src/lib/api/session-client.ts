@@ -1,5 +1,5 @@
 import { ApiError } from "@/lib/api/errors";
-import type { SessionTokens } from "@/types/common.type";
+import type { SessionBootstrapPayload } from "@/types/common.type";
 
 async function parseJsonSafe(response: Response) {
   try {
@@ -44,7 +44,7 @@ export async function restoreSession() {
     return toApiError(response, payload);
   }
 
-  return payload as SessionTokens;
+  return payload as SessionBootstrapPayload;
 }
 
 export async function destroySession() {

@@ -1,8 +1,7 @@
 "use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useState, type ComponentType, type ReactNode } from "react";
 import { initializeAuthStore } from "@/features/auth/presentation/state/auth.store";
 import { createQueryClient } from "@/lib/query-client";
 
@@ -31,6 +30,38 @@ function stripExtensionAttributes(root: Document | Element) {
   });
 }
 
+type ReactQueryDevtoolsComponent = ComponentType<{
+  initialIsOpen?: boolean;
+}>;
+
+function DevelopmentQueryDevtools() {
+  const [Devtools, setDevtools] = useState<ReactQueryDevtoolsComponent | null>(null);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") {
+      return;
+    }
+
+    let isCancelled = false;
+
+    void import("@tanstack/react-query-devtools").then((module) => {
+      if (!isCancelled) {
+        setDevtools(() => module.ReactQueryDevtools);
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  if (!Devtools) {
+    return null;
+  }
+
+  return <Devtools initialIsOpen={false} />;
+}
+
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => createQueryClient());
 
@@ -40,6 +71,10 @@ export function Providers({ children }: { children: ReactNode }) {
 
   useLayoutEffect(() => {
     stripExtensionAttributes(document);
+
+    if (process.env.NODE_ENV !== "development") {
+      return;
+    }
 
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -68,9 +103,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === "development" && (
-        <ReactQueryDevtools initialIsOpen={false} />
-      )}
+      <DevelopmentQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -51,30 +51,28 @@ export function normalizeUserRole(
   roleName?: string | null,
   roleId?: number | null,
 ): UserRole | null {
+  if (roleName) {
+    const normalized = roleName.trim().toLowerCase();
+
+    if (normalized === "admin") {
+      return "admin";
+    }
+
+    if (normalized === "customer") {
+      return "customer";
+    }
+
+    if (normalized === "driver") {
+      return "driver";
+    }
+
+    if (normalized === "warehouse_staff") {
+      return "warehouse_staff";
+    }
+  }
+
   if (roleId != null && ROLE_ID_MAP[roleId]) {
     return ROLE_ID_MAP[roleId];
-  }
-
-  if (!roleName) {
-    return null;
-  }
-
-  const normalized = roleName.trim().toLowerCase();
-
-  if (normalized === "admin") {
-    return "admin";
-  }
-
-  if (normalized === "customer") {
-    return "customer";
-  }
-
-  if (normalized === "driver") {
-    return "driver";
-  }
-
-  if (normalized === "warehouse_staff") {
-    return "warehouse_staff";
   }
 
   return null;
@@ -173,8 +171,34 @@ export function extractAuthUserFromToken(token: string): AuthUser | null {
   };
 }
 
-export function toAuthProfile(dto: AuthProfileDto): AuthProfile {
-  const role = normalizeUserRole(dto.roleName, dto.roleId) ?? "customer";
+export function toAuthUser(profile: Pick<AuthProfile, "hubId" | "id" | "role" | "roleId">) {
+  return {
+    hubId: profile.hubId,
+    id: profile.id,
+    role: profile.role,
+    roleId: profile.roleId,
+  } satisfies AuthUser;
+}
+
+type ToAuthProfileOptions = {
+  verifiedAccessToken?: string | null;
+};
+
+export function toAuthProfile(
+  dto: AuthProfileDto,
+  options: ToAuthProfileOptions = {},
+): AuthProfile {
+  const verifiedTokenPayload = options.verifiedAccessToken
+    ? decodeAccessTokenPayload(options.verifiedAccessToken)
+    : null;
+  const roleId = dto.role?.id ?? dto.roleId ?? verifiedTokenPayload?.roleId ?? null;
+  const roleName = dto.role?.name ?? dto.roleName ?? verifiedTokenPayload?.roleName ?? null;
+  const role = normalizeUserRole(roleName, roleId);
+
+  if (!role || roleId == null) {
+    throw new Error("Received an auth profile with an unsupported role.");
+  }
+
   const fullName = dto.fullName?.trim() || dto.email;
   const initials =
     fullName
@@ -193,6 +217,6 @@ export function toAuthProfile(dto: AuthProfileDto): AuthProfile {
     initials,
     phone: dto.phone ?? null,
     role,
-    roleId: dto.roleId,
+    roleId,
   };
 }

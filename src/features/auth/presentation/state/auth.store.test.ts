@@ -4,7 +4,7 @@ import {
   clearOtpFlowState,
   getAuthSessionSnapshot,
   initializeAuthStore,
-  setAuthSessionTokens,
+  setAuthSession,
   setPendingPasswordReset,
   setPendingRegistration,
 } from "./auth.store";
@@ -13,6 +13,18 @@ import { restoreSession } from "@/lib/api/session-client";
 vi.mock("@/lib/api/session-client", () => ({
   restoreSession: vi.fn(),
 }));
+
+const trustedProfile = {
+  avatarUrl: null,
+  email: "customer@emerald.com",
+  fullName: "Customer",
+  hubId: null,
+  id: 1,
+  initials: "CU",
+  phone: null,
+  role: "customer" as const,
+  roleId: 2,
+};
 
 describe("Auth Store", () => {
   beforeEach(() => {
@@ -36,6 +48,7 @@ describe("Auth Store", () => {
     it("hydrates to authenticated state when the server returns an access token", async () => {
       vi.mocked(restoreSession).mockResolvedValue({
         accessToken: "header.eyJ1c2VySWQiOjEsInJvbGVJZCI6MiwiZXhwIjo0MTAyNDQ0ODAwLCJyb2xlTmFtZSI6IkNVU1RPTUVSIn0.signature",
+        profile: trustedProfile,
       });
 
       await initializeAuthStore();
@@ -45,26 +58,35 @@ describe("Auth Store", () => {
       expect(snapshot.status).toBe("authenticated");
       expect(snapshot.accessToken).toContain("header.");
       expect(snapshot.isAuthenticated).toBe(true);
+      expect(snapshot.user).toEqual({
+        hubId: null,
+        id: 1,
+        role: "customer",
+        roleId: 2,
+      });
     });
   });
 
-  describe("setAuthSessionTokens", () => {
+  describe("setAuthSession", () => {
     it("updates in-memory auth state", () => {
-      setAuthSessionTokens({
+      setAuthSession({
         accessToken: "header.eyJ1c2VySWQiOjEsInJvbGVJZCI6MiwiZXhwIjo0MTAyNDQ0ODAwLCJyb2xlTmFtZSI6IkNVU1RPTUVSIn0.signature",
+        profile: trustedProfile,
       });
 
       const snapshot = getAuthSessionSnapshot();
       expect(snapshot.status).toBe("authenticated");
       expect(snapshot.isAuthenticated).toBe(true);
       expect(snapshot.accessToken).toContain("header.");
+      expect(snapshot.user?.role).toBe("customer");
     });
   });
 
   describe("clearAuthSession", () => {
     it("resets the auth state", () => {
-      setAuthSessionTokens({
+      setAuthSession({
         accessToken: "header.eyJ1c2VySWQiOjEsInJvbGVJZCI6MiwiZXhwIjo0MTAyNDQ0ODAwLCJyb2xlTmFtZSI6IkNVU1RPTUVSIn0.signature",
+        profile: trustedProfile,
       });
       expect(getAuthSessionSnapshot().status).toBe("authenticated");
 

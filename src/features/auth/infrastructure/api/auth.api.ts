@@ -14,7 +14,7 @@ import type {
 } from "@/features/auth/domain/types/auth.types";
 import { httpClient } from "@/lib/api/http-client";
 import { ApiError } from "@/lib/api/errors";
-import type { SessionTokens } from "@/types/common.type";
+import type { SessionBootstrapPayload } from "@/types/common.type";
 import {
   API_AUTH_OTP,
   API_AUTH_REGISTER,
@@ -111,7 +111,7 @@ export async function forgotPassword(input: ForgotPasswordInput) {
 }
 
 export async function login(input: AuthLoginInput) {
-  return requestSessionRoute<SessionTokens>(API_SESSION_LOGIN, {
+  return requestSessionRoute<SessionBootstrapPayload>(API_SESSION_LOGIN, {
     body: JSON.stringify(input),
     method: "POST",
   });
@@ -165,7 +165,7 @@ export async function getGoogleLoginLink() {
 }
 
 export async function exchangeGoogleSession(sessionToken: string) {
-  return requestSessionRoute<SessionTokens>(API_SESSION_GOOGLE, {
+  return requestSessionRoute<SessionBootstrapPayload>(API_SESSION_GOOGLE, {
     body: JSON.stringify({ sessionToken }),
     method: "POST",
   });

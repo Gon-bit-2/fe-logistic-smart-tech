@@ -48,7 +48,20 @@ describe("LoginForm", () => {
   });
 
   it("submits login credentials and redirects to the operations workspace", async () => {
-    loginMutation.mutateAsync.mockResolvedValue(undefined);
+    loginMutation.mutateAsync.mockResolvedValue({
+      accessToken: "access-token",
+      profile: {
+        avatarUrl: null,
+        email: "ops@emerald.com",
+        fullName: "Ops",
+        hubId: null,
+        id: 1,
+        initials: "OP",
+        phone: null,
+        role: "customer",
+        roleId: 2,
+      },
+    });
 
     const { router } = renderWithProviders(<LoginForm />);
 
