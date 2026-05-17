@@ -45,8 +45,8 @@ export default function AuthUserMenu({
   profileLabel,
   triggerClassName,
 }: AuthUserMenuProps) {
-  const { isLoggingOut, logout, user } = useAuth();
-  const profileQuery = useAuthProfileQuery(Boolean(user));
+  const { accessToken, isLoggingOut, logout, user } = useAuth();
+  const profileQuery = useAuthProfileQuery(Boolean(accessToken && user));
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fullName = profileQuery.data?.fullName ?? defaultFullName;
