@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
-import OperationsTopBar from "@/components/layout/OperationsTopBar";
+import TrackingTopBar from "@/components/layout/TrackingTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ export default function TrackingLookupScreen() {
 
   return (
     <div className="min-h-screen bg-surface">
-      <OperationsTopBar active="tracking" />
+      <TrackingTopBar />
       <main className="mx-auto max-w-4xl px-6 py-12 md:py-20">
         <div className="mb-16 text-center">
           <h1 className="mb-8 text-4xl font-black tracking-tight text-on-surface md:text-5xl">

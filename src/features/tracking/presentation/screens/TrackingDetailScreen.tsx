@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/routing";
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
-import OperationsTopBar from "@/components/layout/OperationsTopBar";
+import TrackingTopBar from "@/components/layout/TrackingTopBar";
 import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import type { UserRole } from "@/features/auth/domain/types/auth.types";
@@ -137,7 +137,7 @@ export default function TrackingDetailScreen({
 
   return (
     <div className="min-h-screen bg-surface">
-      <OperationsTopBar active="tracking" />
+      <TrackingTopBar />
       <main className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-12">
           <div className="rounded-xl bg-surface-container-lowest p-2 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
