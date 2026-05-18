@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { isConflictError, isNotFoundError } from "@/lib/api/errors";
+import { useTranslations } from "next-intl";
 import {
   useCreateLanguage,
   useDeleteLanguage,
@@ -9,6 +9,7 @@ import {
   useUpdateLanguage,
 } from "@/features/language/presentation/hooks/useLanguages";
 import type { LanguageDto } from "@/features/language/domain/types/language.types";
+import { useLocalizedApiErrorMessage } from "@/i18n/localized-error";
 
 const emptyLanguage: LanguageDto = {
   code: "",
@@ -17,6 +18,8 @@ const emptyLanguage: LanguageDto = {
 };
 
 export default function LanguageManagementScreen() {
+  const t = useTranslations("language.management");
+  const getErrorMessage = useLocalizedApiErrorMessage();
   const [form, setForm] = useState<LanguageDto>(emptyLanguage);
   const [editingId, setEditingId] = useState<string | null>(null);
   const languagesQuery = useLanguagesQuery();
@@ -26,17 +29,7 @@ export default function LanguageManagementScreen() {
 
   const activeError =
     createLanguage.error ?? updateLanguage.error ?? deleteLanguage.error ?? null;
-  const fallbackErrorMessage =
-    activeError && typeof activeError === "object" && "message" in activeError
-      ? String(activeError.message)
-      : null;
-  const conflict = isConflictError(activeError);
-  const notFound = isNotFoundError(activeError);
-  const errorMessage = conflict
-    ? "Mã ngôn ngữ đã tồn tại."
-    : notFound
-      ? "Ngôn ngữ không tồn tại."
-      : fallbackErrorMessage;
+  const errorMessage = activeError ? getErrorMessage(activeError) : null;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -58,11 +51,10 @@ export default function LanguageManagementScreen() {
           Admin Languages
         </p>
         <h1 className="mt-2 text-4xl font-black tracking-tight text-on-surface">
-          Quản trị ngôn ngữ hệ thống
+          {t("title")}
         </h1>
         <p className="mt-2 max-w-3xl text-sm text-on-surface/60">
-          Đồng bộ trực tiếp với module `/language`, bao gồm xử lý chuẩn cho lỗi
-          `404` và `409`.
+          {t("description")}
         </p>
       </div>
 
@@ -74,7 +66,7 @@ export default function LanguageManagementScreen() {
           <div className="grid gap-4">
             <label className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                ID
+                {t("id")}
               </span>
               <input
                 value={form.id}
@@ -82,13 +74,13 @@ export default function LanguageManagementScreen() {
                   setForm((current) => ({ ...current, id: event.target.value }))
                 }
                 className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
-                placeholder="vi"
+                placeholder={t("idPlaceholder")}
               />
             </label>
 
             <label className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                Name
+                {t("name")}
               </span>
               <input
                 value={form.name}
@@ -96,13 +88,13 @@ export default function LanguageManagementScreen() {
                   setForm((current) => ({ ...current, name: event.target.value }))
                 }
                 className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
-                placeholder="Vietnamese"
+                placeholder={t("namePlaceholder")}
               />
             </label>
 
             <label className="space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                Code
+                {t("code")}
               </span>
               <input
                 value={form.code}
@@ -110,7 +102,7 @@ export default function LanguageManagementScreen() {
                   setForm((current) => ({ ...current, code: event.target.value }))
                 }
                 className="h-12 w-full rounded-xl border border-outline-variant/20 bg-background px-4"
-                placeholder="vi-VN"
+                placeholder={t("codePlaceholder")}
               />
             </label>
           </div>
@@ -120,7 +112,7 @@ export default function LanguageManagementScreen() {
               type="submit"
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white"
             >
-              {editingId ? "Cập nhật" : "Tạo ngôn ngữ"}
+              {editingId ? t("update") : t("createLanguage")}
             </button>
             {editingId ? (
               <button
@@ -131,7 +123,7 @@ export default function LanguageManagementScreen() {
                 }}
                 className="rounded-xl border border-outline-variant/20 px-5 py-3 text-sm font-semibold"
               >
-                Hủy chỉnh sửa
+                {t("cancelEdit")}
               </button>
             ) : null}
           </div>
@@ -146,18 +138,18 @@ export default function LanguageManagementScreen() {
         <section className="rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-black tracking-tight text-on-surface">
-              Danh sách ngôn ngữ
+              {t("listTitle")}
             </h2>
             <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">
-              {languagesQuery.data?.totalItems ?? 0}
+              {t("countLabel", { count: languagesQuery.data?.totalItems ?? 0 })}
             </span>
           </div>
 
           {languagesQuery.isPending ? (
-            <p className="text-sm text-on-surface/60">Đang tải dữ liệu...</p>
+            <p className="text-sm text-on-surface/60">{t("loading")}</p>
           ) : (
             <div className="space-y-3">
-              {languagesQuery.data?.data.map((language) => (
+              {languagesQuery.data?.data.length ? languagesQuery.data.data.map((language) => (
                 <div
                   key={language.id}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-outline-variant/10 bg-background px-4 py-3"
@@ -177,18 +169,20 @@ export default function LanguageManagementScreen() {
                       }}
                       className="rounded-lg border border-outline-variant/20 px-3 py-2 text-xs font-semibold"
                     >
-                      Sửa
+                      {t("edit")}
                     </button>
                     <button
                       type="button"
                       onClick={() => void deleteLanguage.mutateAsync(language.id)}
                       className="rounded-lg bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive"
                     >
-                      Xóa
+                      {t("delete")}
                     </button>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <p className="text-sm text-on-surface/60">{t("empty")}</p>
+              )}
             </div>
           )}
         </section>

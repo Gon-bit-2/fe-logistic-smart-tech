@@ -8,7 +8,93 @@
   "language": {
     "vi": "Tiếng Việt",
     "en": "English",
-    "switcherLabel": "Change language"
+    "switcherLabel": "Change language",
+    "management": {
+      "cancelEdit": "Cancel editing",
+      "code": "Code",
+      "codePlaceholder": "en-US",
+      "countLabel": "{count}",
+      "createLanguage": "Create language",
+      "delete": "Delete",
+      "description": "Synced directly with the `/language` module and backed by stable error codes for locale-aware error messages.",
+      "edit": "Edit",
+      "empty": "No languages yet.",
+      "id": "ID",
+      "idPlaceholder": "en",
+      "listTitle": "Languages",
+      "loading": "Loading data...",
+      "name": "Name",
+      "namePlaceholder": "English",
+      "title": "System language management",
+      "update": "Update"
+    }
+  },
+  "errors": {
+    "api": {
+      "fallback": "The request could not be completed. Please try again later.",
+      "status": {
+        "400": "The request is invalid. Please check the submitted data.",
+        "401": "Your session has expired. Please log in again.",
+        "403": "You do not have permission to perform this action.",
+        "404": "The requested resource was not found.",
+        "409": "The data conflicts with the current state.",
+        "422": "The submitted data is invalid. Please check the form fields.",
+        "500": "The server encountered an error. Please try again later.",
+        "503": "The service is not ready. Please try again later."
+      },
+      "codes": {
+        "Error": {
+          "Auth": {
+            "SessionExpired": "Your session has expired. Please log in again."
+          },
+          "Forbidden": "You do not have permission to perform this action.",
+          "InvalidAccessToken": "Your session is invalid. Please log in again.",
+          "Language": {
+            "Conflict": "The language code already exists.",
+            "NotFound": "The language does not exist."
+          },
+          "MissingAccessToken": "You need to log in to continue.",
+          "Network": {
+            "RequestFailed": "Unable to reach the service. Please check your connection and try again.",
+            "Timeout": "The service took too long to respond. Please try again later."
+          },
+          "PermissionDenied": "You do not have permission to perform this action.",
+          "Resource": {
+            "NotFound": "The requested resource was not found."
+          }
+        }
+      }
+    }
+  },
+  "orders": {
+    "status": {
+      "ARRIVED_AT_HUB": "Arrived at hub",
+      "ASSIGNED": "Assigned",
+      "CANCELLED": "Cancelled",
+      "DELIVERED": "Delivered",
+      "IN_TRANSIT": "In transit",
+      "OUT_FOR_DELIVERY": "Out for delivery",
+      "PENDING": "Pending",
+      "PICKED_UP": "Picked up"
+    },
+    "stopStatus": {
+      "completed": "Completed",
+      "current": "Current",
+      "pending": "Pending"
+    }
+  },
+  "payments": {
+    "method": {
+      "COD": "COD",
+      "STRIPE": "Stripe"
+    },
+    "status": {
+      "COMPLETED": "Paid",
+      "FAILED": "Payment failed",
+      "PENDING": "Payment pending",
+      "REFUNDED": "Refunded",
+      "unknown": "No payment"
+    }
   },
   "navbar": {
     "brand": "Emerald Logistics",

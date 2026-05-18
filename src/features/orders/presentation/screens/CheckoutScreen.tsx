@@ -10,7 +10,7 @@ import AppIcon from "@/components/ui/app-icon";
 import { Button } from "@/components/ui/button";
 import type { OrderPricing } from "@/features/orders/domain/types/order.types";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
-import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
 import { useI18nCopy } from "@/i18n/useCopy";
 import { normalizePublicEnvValue } from "@/lib/api/env";
@@ -101,6 +101,7 @@ export default function CheckoutScreen({
   showTopBar = true,
 }: CheckoutScreenProps) {
   const { checkoutCopy } = useI18nCopy();
+  const { getPaymentStatusLabel } = usePaymentLabels();
   const router = useRouter();
   const {
     order,

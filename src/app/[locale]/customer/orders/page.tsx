@@ -5,19 +5,20 @@ import { useDeferredValue, useState } from "react";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
-import {
-  getPaymentMethodLabel,
-  getPaymentStatusLabel,
-} from "@/features/payments/presentation/utils/payment-labels";
+import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 import { formatDate } from "@/utils/formatters";
 
-function formatOrderPaymentLabel(method?: string | null, status?: string | null) {
+function formatOrderPaymentLabel(
+  labels: ReturnType<typeof usePaymentLabels>,
+  method?: string | null,
+  status?: string | null,
+) {
   if (!method && !status) {
-    return "Chưa có thanh toán";
+    return labels.getPaymentStatusLabel(null);
   }
 
-  const methodLabel = getPaymentMethodLabel(method);
-  const statusLabel = getPaymentStatusLabel(status);
+  const methodLabel = labels.getPaymentMethodLabel(method);
+  const statusLabel = labels.getPaymentStatusLabel(status);
 
   return methodLabel ? `${methodLabel} • ${statusLabel}` : statusLabel;
 }
@@ -51,6 +52,7 @@ function canCancelOrder(order: {
 }
 
 export default function CustomerOrdersPage() {
+  const paymentLabels = usePaymentLabels();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "">("");
   const [actionError, setActionError] = useState<string | null>(null);
@@ -146,7 +148,11 @@ export default function CustomerOrdersPage() {
                     </td>
                     <td className="p-4 text-[14px] font-semibold text-slate-700">{order.status}</td>
                     <td className="p-4 text-[14px] text-slate-700">
-                      {formatOrderPaymentLabel(order.payment?.method, order.payment?.status)}
+                      {formatOrderPaymentLabel(
+                        paymentLabels,
+                        order.payment?.method,
+                        order.payment?.status,
+                      )}
                     </td>
                     <td className="p-4 text-[14px]">
                       <div className="flex gap-2">

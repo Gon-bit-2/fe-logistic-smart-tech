@@ -8,11 +8,15 @@ import { nextNavigationMock, resetNextNavigationMocks } from "@/test/next-naviga
 vi.mock("next/navigation", () => nextNavigationMock);
 vi.mock("next-intl", async (importOriginal) => {
   const actual = await importOriginal<typeof import("next-intl")>();
+  const t = ((key: string) => key) as ((key: string) => string) & {
+    has: (key: string) => boolean;
+  };
+  t.has = () => true;
 
   return {
     ...actual,
     useLocale: () => "vi",
-    useTranslations: () => (key: string) => key,
+    useTranslations: () => t,
   };
 });
 vi.mock("@/i18n/routing", () => ({

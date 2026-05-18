@@ -72,13 +72,15 @@ describe("errors utility", () => {
         const normalized = normalizeApiError(error);
         expect(normalized.message).toBe("Network request failed");
         expect(normalized.code).toBe("ERR_NETWORK");
+        expect(normalized.errorCode).toBe("Error.Network.RequestFailed");
       });
 
       it("should map request timeouts to a readable message", () => {
         const error = new AxiosError("timeout of 15000ms exceeded", "ECONNABORTED");
         const normalized = normalizeApiError(error);
-        expect(normalized.message).toBe("Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD.");
+        expect(normalized.message).toBe("The request timed out. Please try again later.");
         expect(normalized.code).toBe("ECONNABORTED");
+        expect(normalized.errorCode).toBe("Error.Network.Timeout");
       });
 
       it("should handle 401 Unauthorized", () => {

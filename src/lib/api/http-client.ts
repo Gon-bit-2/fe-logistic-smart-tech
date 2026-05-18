@@ -92,6 +92,7 @@ async function refreshSessionTokens() {
 
   if (!tokens?.accessToken) {
     throw new ApiError({
+      errorCode: "Error.Auth.SessionExpired",
       message: "Your session has expired. Please log in again.",
       status: 401,
     });

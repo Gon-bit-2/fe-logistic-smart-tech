@@ -26,10 +26,10 @@ import {
   useTripDetailQuery,
   useUpdateTripStatus,
 } from "@/features/trips/presentation/hooks/useTrips";
-import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import type { TrackingPackageCondition } from "@/features/tracking/domain/types/tracking.types";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useOrderLabels } from "@/i18n/status-labels";
 import { formatDate } from "@/utils/formatters";
 import { getTripStatusLabel as getTripBadgeLabel } from "@/features/trips/presentation/lib/trip-status";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,8 @@ function isTerminalOrderStatus(status?: OrderStatus | string | null) {
 export default function TripDetailWorkspace({
   tripId,
 }: Readonly<TripDetailWorkspaceProps>) {
-  const { getOrderStatusLabel } = useI18nCopy();
+  const { getOrderStatusLabel } = useOrderLabels();
+  const { getPaymentStatusLabel } = usePaymentLabels();
   const router = useRouter();
   const tripQuery = useTripDetailQuery(tripId);
   const trip = tripQuery.data ?? null;

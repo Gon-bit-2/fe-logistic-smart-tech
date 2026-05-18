@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -7,12 +6,6 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
 import { Providers } from "../providers";
 import "../globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 type LocaleLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -50,7 +43,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   return (
     <html
       lang={locale as Locale}
-      className={`${inter.variable} h-full font-sans antialiased`}
+      className="h-full font-sans antialiased"
       suppressHydrationWarning
     >
       <head>
