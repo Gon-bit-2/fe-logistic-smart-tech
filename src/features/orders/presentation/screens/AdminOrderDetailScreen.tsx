@@ -7,12 +7,9 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
 import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrderDetailQuery } from "@/features/orders/presentation/hooks/useOrderDetail";
-import {
-  getPaymentMethodLabel,
-  getPaymentStatusLabel,
-} from "@/features/payments/presentation/utils/payment-labels";
+import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 import InternalTrackingWorkspace from "@/features/tracking/presentation/screens/InternalTrackingWorkspace";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useOrderLabels } from "@/i18n/status-labels";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 
 type AdminOrderDetailScreenProps = Readonly<{
@@ -44,7 +41,8 @@ function getAdminOrderTone(status: string) {
 export default function AdminOrderDetailScreen({
   orderId,
 }: AdminOrderDetailScreenProps) {
-  const { getOrderStatusLabel } = useI18nCopy();
+  const { getOrderStatusLabel } = useOrderLabels();
+  const { getPaymentMethodLabel, getPaymentStatusLabel } = usePaymentLabels();
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const orderQuery = useOrderDetailQuery(orderId);

@@ -183,12 +183,18 @@ export function normalizeApiError(error: unknown): ApiError {
         ? normalizePayloadMessage(responseRecord.errors)
         : null;
     const issues = normalized.issues ?? responseErrors?.issues;
+    const transportErrorCode =
+      error.code === "ERR_NETWORK"
+        ? "Error.Network.RequestFailed"
+        : error.code === "ECONNABORTED"
+          ? "Error.Network.Timeout"
+          : null;
     const errorCode =
       responseRecord && typeof responseRecord.errorCode === "string"
         ? responseRecord.errorCode
         : looksLikeMachineStatusMessage(normalized.message)
           ? normalized.message
-          : null;
+          : transportErrorCode;
     const requestId =
       responseRecord && typeof responseRecord.requestId === "string"
         ? responseRecord.requestId
@@ -198,7 +204,7 @@ export function normalizeApiError(error: unknown): ApiError {
       error.code === "ERR_NETWORK"
         ? "Network request failed"
         : error.code === "ECONNABORTED"
-          ? "Cổng thanh toán phản hồi quá chậm. Vui lòng thử lại hoặc chọn COD."
+          ? "The request timed out. Please try again later."
         : error.message || getStatusFallbackMessage(status);
 
     return new ApiError({

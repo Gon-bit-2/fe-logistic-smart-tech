@@ -8,7 +8,93 @@
   "language": {
     "vi": "Tiếng Việt",
     "en": "English",
-    "switcherLabel": "Đổi ngôn ngữ"
+    "switcherLabel": "Đổi ngôn ngữ",
+    "management": {
+      "cancelEdit": "Hủy chỉnh sửa",
+      "code": "Code",
+      "codePlaceholder": "vi-VN",
+      "countLabel": "{count}",
+      "createLanguage": "Tạo ngôn ngữ",
+      "delete": "Xóa",
+      "description": "Đồng bộ trực tiếp với module `/language`, dùng error code ổn định để hiển thị lỗi theo ngôn ngữ hiện tại.",
+      "edit": "Sửa",
+      "empty": "Chưa có ngôn ngữ nào.",
+      "id": "ID",
+      "idPlaceholder": "vi",
+      "listTitle": "Danh sách ngôn ngữ",
+      "loading": "Đang tải dữ liệu...",
+      "name": "Name",
+      "namePlaceholder": "Vietnamese",
+      "title": "Quản trị ngôn ngữ hệ thống",
+      "update": "Cập nhật"
+    }
+  },
+  "errors": {
+    "api": {
+      "fallback": "Yêu cầu không thể hoàn tất. Vui lòng thử lại sau.",
+      "status": {
+        "400": "Yêu cầu không hợp lệ. Vui lòng kiểm tra lại dữ liệu.",
+        "401": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+        "403": "Bạn không có quyền thực hiện thao tác này.",
+        "404": "Không tìm thấy dữ liệu cần truy cập.",
+        "409": "Dữ liệu đang bị xung đột với trạng thái hiện tại.",
+        "422": "Dữ liệu chưa hợp lệ. Vui lòng kiểm tra lại các trường đã nhập.",
+        "500": "Máy chủ đang gặp lỗi. Vui lòng thử lại sau.",
+        "503": "Dịch vụ hiện chưa sẵn sàng. Vui lòng thử lại sau."
+      },
+      "codes": {
+        "Error": {
+          "Auth": {
+            "SessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."
+          },
+          "Forbidden": "Bạn không có quyền thực hiện thao tác này.",
+          "InvalidAccessToken": "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.",
+          "Language": {
+            "Conflict": "Mã ngôn ngữ đã tồn tại.",
+            "NotFound": "Ngôn ngữ không tồn tại."
+          },
+          "MissingAccessToken": "Bạn cần đăng nhập để tiếp tục.",
+          "Network": {
+            "RequestFailed": "Không thể kết nối đến dịch vụ. Vui lòng kiểm tra mạng và thử lại.",
+            "Timeout": "Dịch vụ phản hồi quá chậm. Vui lòng thử lại sau."
+          },
+          "PermissionDenied": "Bạn không có quyền thực hiện thao tác này.",
+          "Resource": {
+            "NotFound": "Không tìm thấy dữ liệu cần truy cập."
+          }
+        }
+      }
+    }
+  },
+  "orders": {
+    "status": {
+      "ARRIVED_AT_HUB": "Đã nhập kho",
+      "ASSIGNED": "Đã xếp chuyến",
+      "CANCELLED": "Đã huỷ",
+      "DELIVERED": "Giao thành công",
+      "IN_TRANSIT": "Đang trung chuyển",
+      "OUT_FOR_DELIVERY": "Đang đi giao",
+      "PENDING": "Chờ xác nhận",
+      "PICKED_UP": "Đã nhận hàng"
+    },
+    "stopStatus": {
+      "completed": "Hoàn tất",
+      "current": "Đang diễn ra",
+      "pending": "Chờ xử lý"
+    }
+  },
+  "payments": {
+    "method": {
+      "COD": "COD",
+      "STRIPE": "Stripe"
+    },
+    "status": {
+      "COMPLETED": "Đã thanh toán",
+      "FAILED": "Thanh toán chưa thành công",
+      "PENDING": "Chờ thanh toán",
+      "REFUNDED": "Đã hoàn tiền",
+      "unknown": "Chưa có thanh toán"
+    }
   },
   "navbar": {
     "brand": "Emerald Logistics",

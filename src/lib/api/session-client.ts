@@ -10,18 +10,26 @@ async function parseJsonSafe(response: Response) {
 }
 
 function toApiError(response: Response, payload: unknown) {
+  const payloadRecord =
+    typeof payload === "object" && payload !== null
+      ? (payload as Record<string, unknown>)
+      : null;
+  const errorCode =
+    payloadRecord && typeof payloadRecord.errorCode === "string"
+      ? payloadRecord.errorCode
+      : response.status === 401
+        ? "Error.Auth.SessionExpired"
+        : null;
   const message =
-    typeof payload === "object" &&
-    payload !== null &&
-    "message" in payload &&
-    typeof payload.message === "string"
-      ? payload.message
+    payloadRecord && typeof payloadRecord.message === "string"
+      ? payloadRecord.message
       : response.status === 401
         ? "Your session has expired. Please log in again."
         : "Request failed";
 
   throw new ApiError({
     details: payload,
+    errorCode,
     message,
     status: response.status,
   });

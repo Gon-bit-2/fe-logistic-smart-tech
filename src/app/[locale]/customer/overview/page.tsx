@@ -4,9 +4,10 @@ import { Link } from "@/i18n/routing";
 import { useMemo } from "react";
 import { Bell, ShieldCheck } from "lucide-react";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
-import { getPaymentStatusLabel } from "@/features/payments/presentation/utils/payment-labels";
+import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 
 export default function CustomerDashboardPage() {
+  const { getPaymentStatusLabel } = usePaymentLabels();
   const ordersQuery = useOrdersListQuery();
   const latestOrder = ordersQuery.data?.data[0] ?? null;
 
