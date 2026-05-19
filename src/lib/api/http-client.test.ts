@@ -82,7 +82,9 @@ function createAccessToken(expOffsetSeconds: number) {
     roleName: "customer",
     userId: 1,
   };
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+    "base64url",
+  );
 
   return `header.${encodedPayload}.signature`;
 }
@@ -100,10 +102,12 @@ describe("http-client", () => {
     vi.doMock("axios", () => ({
       default: {
         create,
-        isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+        isAxiosError: (error: unknown) =>
+          Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       },
       create,
-      isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+      isAxiosError: (error: unknown) =>
+        Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       AxiosHeaders: MockAxiosHeaders,
     }));
     vi.doMock("@/lib/api/env", () => ({
@@ -127,7 +131,9 @@ describe("http-client", () => {
     };
     const nextConfig = await httpClientMock.__requestHandler?.(config);
 
-    expect(nextConfig?.headers.get("authorization")).toBe(`Bearer ${accessToken}`);
+    expect(nextConfig?.headers.get("authorization")).toBe(
+      `Bearer ${accessToken}`,
+    );
   });
 
   it("refreshes an expiring access token before sending the request", async () => {
@@ -154,10 +160,12 @@ describe("http-client", () => {
     vi.doMock("axios", () => ({
       default: {
         create,
-        isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+        isAxiosError: (error: unknown) =>
+          Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       },
       create,
-      isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+      isAxiosError: (error: unknown) =>
+        Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       AxiosHeaders: MockAxiosHeaders,
     }));
     vi.doMock("@/lib/api/env", () => ({
@@ -198,7 +206,9 @@ describe("http-client", () => {
       },
     });
     expect(clearAuthSession).not.toHaveBeenCalled();
-    expect(nextConfig?.headers.get("authorization")).toBe(`Bearer ${newAccessToken}`);
+    expect(nextConfig?.headers.get("authorization")).toBe(
+      `Bearer ${newAccessToken}`,
+    );
   });
 
   it("refreshes the session and retries the failed request on 401", async () => {
@@ -231,10 +241,12 @@ describe("http-client", () => {
     vi.doMock("axios", () => ({
       default: {
         create,
-        isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+        isAxiosError: (error: unknown) =>
+          Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       },
       create,
-      isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+      isAxiosError: (error: unknown) =>
+        Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
       AxiosHeaders: MockAxiosHeaders,
     }));
     vi.doMock("@/lib/api/env", () => ({

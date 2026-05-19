@@ -14,7 +14,7 @@ import { useResolvedTrackingOrder } from "@/features/orders/presentation/hooks/u
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { usePublicTrackingQuery } from "@/features/tracking/presentation/hooks/usePublicTrackingQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { ApiError, isApiError } from "@/lib/api/errors";
 
 type TrackingDetailScreenProps = Readonly<{
@@ -43,10 +43,7 @@ function canOpenOnlineCheckout(order: {
   return true;
 }
 
-function canCancelOrder(
-  order: { status: string },
-  role?: UserRole | null,
-) {
+function canCancelOrder(order: { status: string }, role?: UserRole | null) {
   if (order.status !== "PENDING" && order.status !== "ASSIGNED") {
     return false;
   }
@@ -54,10 +51,20 @@ function canCancelOrder(
   return role === "customer" || role === "warehouse_staff";
 }
 
+function fallbackTrackingLabel(value: string) {
+  return value
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
+
 export default function TrackingDetailScreen({
   trackingCode,
 }: TrackingDetailScreenProps) {
-  const { getTrackingStatusLabel, trackingDetailCopy } = useI18nCopy();
+  const t = useTranslations("tracking.detail");
+  const tStatus = useTranslations("tracking.status");
   const { user } = useAuthSession();
   const router = useRouter();
   const [trackingId, setTrackingId] = useState(trackingCode);
@@ -70,8 +77,7 @@ export default function TrackingDetailScreen({
   const resolvedOrder = resolvedOrderQuery.data ?? null;
   const isNotFound =
     isApiError(trackingQuery.error) && trackingQuery.error.status === 404;
-  const queryMessage =
-    trackingQuery.error?.message ?? trackingDetailCopy.fallbackError;
+  const queryMessage = trackingQuery.error?.message ?? t("fallbackError");
   const isCustomerOrderUnavailable =
     resolvedOrderQuery.error instanceof ApiError &&
     resolvedOrderQuery.error.status != null &&
@@ -82,7 +88,7 @@ export default function TrackingDetailScreen({
       return;
     }
 
-    const didConfirm = window.confirm(trackingDetailCopy.cancelConfirm);
+    const didConfirm = window.confirm(t("cancelConfirm"));
 
     if (!didConfirm) {
       return;
@@ -93,21 +99,17 @@ export default function TrackingDetailScreen({
 
     try {
       await cancelOrderMutation.mutateAsync(resolvedOrder.id);
-      setActionSuccess(trackingDetailCopy.cancelSuccess);
+      setActionSuccess(t("cancelSuccess"));
     } catch (error) {
-      setActionError(
-        error instanceof Error
-          ? error.message
-          : trackingDetailCopy.cancelError,
-      );
+      setActionError(error instanceof Error ? error.message : t("cancelError"));
     }
   }
 
   async function handleShareTracking() {
     const shareUrl = `${window.location.origin}/tracking/${trackingCode.trim()}`;
     const sharePayload = {
-      title: trackingDetailCopy.shareTitle,
-      text: trackingDetailCopy.shareText(trackingCode.trim()),
+      title: t("shareTitle"),
+      text: t("shareText", { trackingCode: trackingCode.trim() }),
       url: shareUrl,
     };
 
@@ -117,20 +119,20 @@ export default function TrackingDetailScreen({
     try {
       if (typeof navigator.share === "function") {
         await navigator.share(sharePayload);
-        setActionSuccess(trackingDetailCopy.shareSuccess);
+        setActionSuccess(t("shareSuccess"));
         return;
       }
 
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(shareUrl);
-        setActionSuccess(trackingDetailCopy.copySuccess);
+        setActionSuccess(t("copySuccess"));
         return;
       }
 
-      throw new Error(trackingDetailCopy.shareUnavailable);
+      throw new Error(t("shareUnavailable"));
     } catch (error) {
       setActionError(
-        error instanceof Error ? error.message : trackingDetailCopy.shareUnavailable,
+        error instanceof Error ? error.message : t("shareUnavailable"),
       );
     }
   }
@@ -164,13 +166,13 @@ export default function TrackingDetailScreen({
         {trackingQuery.isPending ? (
           <section className="rounded-xl bg-surface-container-lowest p-10 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-              {trackingDetailCopy.loadingEyebrow}
+              {t("loadingEyebrow")}
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-              {trackingDetailCopy.loadingTitle}
+              {t("loadingTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
-              {trackingDetailCopy.loadingDescription}
+              {t("loadingDescription")}
             </p>
           </section>
         ) : tracking ? (
@@ -178,7 +180,7 @@ export default function TrackingDetailScreen({
             <div className="grid gap-6 bg-surface-container-low p-8 md:grid-cols-3">
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                  {trackingDetailCopy.trackingCodeLabel}
+                  {t("trackingCodeLabel")}
                 </p>
                 <p className="mt-1 text-lg font-black text-on-surface">
                   {tracking.trackingCode}
@@ -189,22 +191,20 @@ export default function TrackingDetailScreen({
                   Trạng thái hiện tại
                 </p>
                 <p className="mt-1 text-lg font-semibold text-on-surface">
-                  {getTrackingStatusLabel(tracking.currentStatus)}
+                  {tStatus.has(tracking.currentStatus as any)
+                    ? tStatus(tracking.currentStatus as any)
+                    : fallbackTrackingLabel(tracking.currentStatus)}
                 </p>
-                <p className="text-sm text-outline">
-                  {trackingDetailCopy.currentStatusHint}
-                </p>
+                <p className="text-sm text-outline">{t("currentStatusHint")}</p>
               </div>
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                  {trackingDetailCopy.receiverLabel}
+                  {t("receiverLabel")}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-on-surface">
                   {tracking.recipientName ?? "Đang chờ xác nhận giao hàng"}
                 </p>
-                <p className="text-sm text-outline">
-                  {trackingDetailCopy.receiverHint}
-                </p>
+                <p className="text-sm text-outline">{t("receiverHint")}</p>
               </div>
             </div>
 
@@ -215,22 +215,22 @@ export default function TrackingDetailScreen({
                     {canOpenOnlineCheckout(resolvedOrder) ? (
                       <>
                         <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-                          {trackingDetailCopy.paymentPendingEyebrow}
+                          {t("paymentPendingEyebrow")}
                         </p>
                         <p className="text-sm font-semibold text-on-surface">
-                          {trackingDetailCopy.paymentPendingTitle}
+                          {t("paymentPendingTitle")}
                         </p>
                         <p className="text-sm text-on-surface-variant">
-                          {trackingDetailCopy.paymentPendingDescription}
+                          {t("paymentPendingDescription")}
                         </p>
                       </>
                     ) : (
                       <>
                         <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                          {trackingDetailCopy.customerActionsEyebrow}
+                          {t("customerActionsEyebrow")}
                         </p>
                         <p className="text-sm text-on-surface-variant">
-                          {trackingDetailCopy.customerActionsDescription}
+                          {t("customerActionsDescription")}
                         </p>
                       </>
                     )}
@@ -251,7 +251,7 @@ export default function TrackingDetailScreen({
                         href={`/checkout?orderId=${resolvedOrder.id}`}
                         className="inline-flex h-11 items-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
                       >
-                        {trackingDetailCopy.payNow}
+                        {t("payNow")}
                       </Link>
                     ) : null}
                     {canCancelOrder(resolvedOrder, user?.role) ? (
@@ -262,8 +262,8 @@ export default function TrackingDetailScreen({
                         onClick={() => void handleCancelOrder()}
                       >
                         {cancelOrderMutation.isPending
-                          ? trackingDetailCopy.cancelling
-                          : trackingDetailCopy.cancelOrder}
+                          ? t("cancelling")
+                          : t("cancelOrder")}
                       </Button>
                     ) : null}
                   </div>
@@ -284,14 +284,10 @@ export default function TrackingDetailScreen({
         ) : (
           <section className="rounded-xl bg-surface-container-lowest p-10 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-              {isNotFound
-                ? trackingDetailCopy.notFoundEyebrow
-                : trackingDetailCopy.errorEyebrow}
+              {isNotFound ? t("notFoundEyebrow") : t("errorEyebrow")}
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-              {isNotFound
-                ? trackingDetailCopy.notFoundTitle
-                : trackingDetailCopy.errorTitle}
+              {isNotFound ? t("notFoundTitle") : t("errorTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
               {queryMessage}
@@ -301,13 +297,13 @@ export default function TrackingDetailScreen({
                 onClick={() => trackingQuery.refetch()}
                 className="bg-gradient-to-br from-primary to-primary-container text-white"
               >
-                {trackingDetailCopy.retry}
+                {t("retry")}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push("/tracking")}
               >
-                {trackingDetailCopy.searchAnother}
+                {t("searchAnother")}
               </Button>
             </div>
           </section>
@@ -315,16 +311,16 @@ export default function TrackingDetailScreen({
 
         <div className="mt-10 flex flex-col items-center gap-4 text-center text-sm text-outline">
           <p>
-            {trackingDetailCopy.helpText}{" "}
+            {t("helpText")}{" "}
             <Link className="font-black text-tertiary" href="/tracking">
-              {trackingDetailCopy.helpCenter}
+              {t("helpCenter")}
             </Link>{" "}
-            {trackingDetailCopy.supportSuffix}
+            {t("supportSuffix")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button variant="outline" className="font-semibold">
               <AppIcon name="print" className="text-base" />
-              {trackingDetailCopy.printLabels}
+              {t("printLabels")}
             </Button>
             <Button
               variant="outline"
@@ -332,7 +328,7 @@ export default function TrackingDetailScreen({
               onClick={() => void handleShareTracking()}
             >
               <AppIcon name="share" className="text-base" />
-              {trackingDetailCopy.shareTracking}
+              {t("shareTracking")}
             </Button>
           </div>
         </div>

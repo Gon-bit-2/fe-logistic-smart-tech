@@ -4,11 +4,14 @@ import { Link } from "@/i18n/routing";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Bell, Camera, Loader2, Search, ShieldCheck } from "lucide-react";
-import type { OrderDTO, OrderStatus } from "@/features/orders/domain/types/order.types";
+import type {
+  OrderDTO,
+  OrderStatus,
+} from "@/features/orders/domain/types/order.types";
 import { resolveOrderByTrackingCodeUseCase } from "@/features/orders/application/use-cases/order.use-cases";
 import { useCreateTrackingEvent } from "@/features/tracking/presentation/hooks/useCreateTrackingEvent";
 import { normalizeApiError } from "@/lib/api/errors";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 type ScannerTab = "inbound" | "outbound";
 type ScannerStatus =
@@ -58,6 +61,15 @@ function normalizeTrackingCode(value: string) {
   return value.trim();
 }
 
+function fallbackTrackingLabel(value: string) {
+  return value
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
+
 function getDefaultDescription(tab: ScannerTab) {
   return tab === "inbound"
     ? "Kiện hàng đã nhập kho"
@@ -84,7 +96,7 @@ function getStatusTone(status: OrderStatus) {
 }
 
 export default function WarehouseScannerPage() {
-  const { getTrackingStatusLabel } = useI18nCopy();
+  const tStatus = useTranslations("tracking.status");
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<ScannerTab>("inbound");
   const [scannerStatus, setScannerStatus] = useState<ScannerStatus>("idle");
@@ -178,7 +190,9 @@ export default function WarehouseScannerPage() {
     isResolvingRef.current = true;
 
     try {
-      const order = await resolveOrderByTrackingCodeUseCase(normalizedTrackingCode);
+      const order = await resolveOrderByTrackingCodeUseCase(
+        normalizedTrackingCode,
+      );
       setResolvedOrder(order);
       setDescription(getDefaultDescription(activeTab));
       setScannerStatus("resolved");
@@ -272,7 +286,9 @@ export default function WarehouseScannerPage() {
         ? await BarcodeDetectorApi.getSupportedFormats()
         : [];
       const selectedFormats = supportedFormats.filter((format) =>
-        DESIRED_BARCODE_FORMATS.includes(format as (typeof DESIRED_BARCODE_FORMATS)[number]),
+        DESIRED_BARCODE_FORMATS.includes(
+          format as (typeof DESIRED_BARCODE_FORMATS)[number],
+        ),
       );
 
       detectorRef.current = new BarcodeDetectorApi(
@@ -300,7 +316,9 @@ export default function WarehouseScannerPage() {
         return;
       }
 
-      setErrorMessage("Không thể khởi động camera lúc này. Hãy thử lại hoặc nhập mã thủ công.");
+      setErrorMessage(
+        "Không thể khởi động camera lúc này. Hãy thử lại hoặc nhập mã thủ công.",
+      );
     }
   }
 
@@ -327,7 +345,9 @@ export default function WarehouseScannerPage() {
       });
 
       const trackingLabel =
-        resolvedOrder.trackingCode ?? resolvedOrder.reference ?? `ORD-${resolvedOrder.id}`;
+        resolvedOrder.trackingCode ??
+        resolvedOrder.reference ??
+        `ORD-${resolvedOrder.id}`;
 
       resetResolvedOrder();
       setScannerStatus("idle");
@@ -357,8 +377,12 @@ export default function WarehouseScannerPage() {
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] flex-col bg-[#F0FDF4] py-5 md:py-7">
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
         <div className="mb-6 pt-4 text-center">
-          <h1 className="text-[28px] font-bold text-emerald-900">Trạm Quét Mã Kho</h1>
-          <p className="mt-1 text-[14px] text-slate-600">Trung tâm phân phối miền Nam</p>
+          <h1 className="text-[28px] font-bold text-emerald-900">
+            Trạm Quét Mã Kho
+          </h1>
+          <p className="mt-1 text-[14px] text-slate-600">
+            Trung tâm phân phối miền Nam
+          </p>
         </div>
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -372,7 +396,9 @@ export default function WarehouseScannerPage() {
               </div>
               <div>
                 <p className="text-sm font-bold text-emerald-900">Thông báo</p>
-                <p className="text-xs text-slate-600">Mở hộp thông báo phê duyệt và vận hành</p>
+                <p className="text-xs text-slate-600">
+                  Mở hộp thông báo phê duyệt và vận hành
+                </p>
               </div>
             </div>
             <span className="text-sm font-bold text-emerald-700">Mở</span>
@@ -387,8 +413,12 @@ export default function WarehouseScannerPage() {
                 <ShieldCheck className="size-5" />
               </div>
               <div>
-                <p className="text-sm font-bold text-emerald-900">Yêu cầu vai trò</p>
-                <p className="text-xs text-slate-600">Đăng ký và theo dõi yêu cầu vai trò</p>
+                <p className="text-sm font-bold text-emerald-900">
+                  Yêu cầu vai trò
+                </p>
+                <p className="text-xs text-slate-600">
+                  Đăng ký và theo dõi yêu cầu vai trò
+                </p>
               </div>
             </div>
             <span className="text-sm font-bold text-emerald-700">Mở</span>
@@ -467,7 +497,8 @@ export default function WarehouseScannerPage() {
                           : "Chạm để mở camera quét mã"}
                       </p>
                       <p className="text-sm text-emerald-100/85">
-                        Ưu tiên camera sau, đọc trực tiếp mã theo dõi trên kiện hàng.
+                        Ưu tiên camera sau, đọc trực tiếp mã theo dõi trên kiện
+                        hàng.
                       </p>
                     </div>
                   </div>
@@ -518,7 +549,9 @@ export default function WarehouseScannerPage() {
                       type="text"
                       placeholder="Quét hoặc nhập mã theo dõi..."
                       className="h-12 w-full rounded-lg border border-slate-300 bg-white pl-10 pr-4 text-[15px] font-mono text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      onChange={(event) => setTrackingCodeInput(event.target.value)}
+                      onChange={(event) =>
+                        setTrackingCodeInput(event.target.value)
+                      }
                       value={trackingCodeInput}
                     />
                   </div>
@@ -548,9 +581,12 @@ export default function WarehouseScannerPage() {
 
           <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-4">
-              <h2 className="text-xl font-bold text-emerald-900">Xác nhận kiện hàng</h2>
+              <h2 className="text-xl font-bold text-emerald-900">
+                Xác nhận kiện hàng
+              </h2>
               <p className="mt-1 text-sm text-slate-600">
-                Kiểm tra đơn hàng vừa quét trước khi cập nhật trạng thái vận hành.
+                Kiểm tra đơn hàng vừa quét trước khi cập nhật trạng thái vận
+                hành.
               </p>
             </div>
 
@@ -571,7 +607,9 @@ export default function WarehouseScannerPage() {
                         resolvedOrder.status,
                       )}`}
                     >
-                      {getTrackingStatusLabel(resolvedOrder.status)}
+                      {tStatus.has(resolvedOrder.status)
+                        ? tStatus(resolvedOrder.status as any)
+                        : fallbackTrackingLabel(resolvedOrder.status)}
                     </span>
                   </div>
 
@@ -655,8 +693,8 @@ export default function WarehouseScannerPage() {
                   Chưa có kiện hàng nào được chọn
                 </h3>
                 <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-600">
-                  Quét camera hoặc dùng máy quét USB để lấy mã theo dõi, hệ thống sẽ
-                  tra cứu đơn rồi hiển thị khối xác nhận tại đây.
+                  Quét camera hoặc dùng máy quét USB để lấy mã theo dõi, hệ
+                  thống sẽ tra cứu đơn rồi hiển thị khối xác nhận tại đây.
                 </p>
               </div>
             )}

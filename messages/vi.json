@@ -81,6 +81,221 @@
       "completed": "Hoàn tất",
       "current": "Đang diễn ra",
       "pending": "Chờ xử lý"
+    },
+    "serviceTierOptions": {
+      "express": {
+        "label": "Giao hàng hoả tốc",
+        "description": "Dịch vụ vận chuyển nhanh với mức ưu tiên cao nhất, đảm bảo xử lý và điều phối tức thì."
+      },
+      "eco_green": {
+        "label": "Chuyến ghép xanh",
+        "description": "Giải pháp giao hàng ghép chuyến, tối ưu hóa lộ trình nhằm giảm thiểu khí thải carbon.",
+        "highlight": "Ít phát thải CO2"
+      },
+      "standard": {
+        "label": "Giao hàng tiêu chuẩn",
+        "description": "Dịch vụ vận chuyển tiêu chuẩn với chi phí hợp lý, đáp ứng nhu cầu giao hàng thông thường."
+      }
+    },
+    "form": {
+      "addressAutocompleteEmpty": "Không tìm thấy gợi ý phù hợp.",
+      "addressAutocompleteHint": "Nhập tối thiểu 2 ký tự và chọn một địa chỉ từ danh sách gợi ý.",
+      "addressAutocompleteLoading": "Đang tìm địa chỉ...",
+      "addressAutocompleteRequired": "Vui lòng chọn một địa chỉ từ gợi ý.",
+      "addressAutocompleteSuggestion": "Địa chỉ gợi ý",
+      "addressSelected": "Đã chốt tọa độ",
+      "contactName": "Tên liên hệ",
+      "contactPhone": "Số điện thoại liên hệ",
+      "createTitle": "Tạo đơn hàng mới",
+      "customer": "Khách hàng",
+      "declaredValue": "Giá trị khai báo",
+      "deliveryAddress": "Địa chỉ giao hàng",
+      "dimensions": "Kích thước (cm)",
+      "dimensionsHint": "Nhập theo dạng Dài x Rộng x Cao. Ví dụ: 40x30x20 hoặc 40 × 30 × 20 cm.",
+      "dimensionsInvalid": "Kích thước kiện hàng không hợp lệ. Ví dụ: 40x30x20 cm.",
+      "dimensionsPlaceholder": "Ví dụ: 40x30x20",
+      "dimensionsRequired": "Vui lòng nhập kích thước kiện hàng.",
+      "estimatedArrival": "Thời gian dự kiến đến",
+      "itemDescription": "Mô tả hàng hoá",
+      "localMockQuote": "Chờ lấy báo giá từ hệ thống",
+      "orderCreated": "Đơn hàng đã được tạo",
+      "ordersEyebrow": "Đơn hàng",
+      "paymentMethod": "Phương thức thanh toán",
+      "pricingSourceDescription": "Chi phí vận chuyển, các loại thuế phí và mức tiết kiệm carbon được tính toán tự động từ hệ thống.",
+      "pricingSourceLabel": "Nguồn báo giá",
+      "receiverName": "Tên người nhận",
+      "receiverPhone": "Số điện thoại người nhận",
+      "resolvingAddress": "Đang lấy tọa độ...",
+      "selectServiceTier": "Chọn gói dịch vụ",
+      "selectPaymentMethod": "Chọn phương thức thanh toán",
+      "stepLabels": {
+        "0": "Điểm đi/đến",
+        "1": "Chi tiết",
+        "2": "Dịch vụ"
+      },
+      "submitDisabledAddress": "Chọn đủ địa chỉ từ autocomplete để tiếp tục.",
+      "submitDisabledQuote": "Hệ thống cần báo giá thành công trước khi tạo đơn.",
+      "submitLoading": "Đang xử lý...",
+      "subtitle": "Thiết lập tuyến đường, hồ sơ kiện hàng và gói dịch vụ.",
+      "totalQuoted": "tổng báo giá",
+      "weight": "Khối lượng (kg)",
+      "pickupAddress": "Địa chỉ lấy hàng"
+    },
+    "paymentMethodOptions": {
+      "STRIPE": {
+        "label": "Thanh toán trực tuyến",
+        "description": "Thanh toán trực tuyến ngay sau khi tạo đơn để đưa lô hàng vào luồng xử lý nhanh."
+      },
+      "COD": {
+        "label": "COD khi nhận hàng",
+        "description": "Tài xế thu tiền mặt khi giao thành công và hệ thống sẽ đối soát COD nội bộ."
+      }
+    },
+    "serviceTierSelector": {
+      "apiQuote": "Báo giá tự động"
+    },
+    "routePreview": {
+      "distance": "Khoảng cách",
+      "declaredValue": "Giá trị khai báo",
+      "delivery": "Điểm giao",
+      "deliveryMissing": "Chưa thiết lập điểm giao",
+      "dimensions": "Kích thước",
+      "draftSummary": "Tóm tắt bản nháp",
+      "duration": "Thời lượng",
+      "eta": "ETA",
+      "mapLoadingDescription": "Đang đồng bộ tuyến đường thật từ hệ thống bản đồ.",
+      "mapMarkerOnlyDescription": "Đã chốt địa chỉ. Bản đồ đang hiển thị các điểm dừng thực tế.",
+      "mapPendingDescription": "Bản đồ thật sẽ hiển thị sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
+      "newShipment": "Lô hàng mới",
+      "pending": "Đang chờ",
+      "pendingQuote": "Chờ báo giá",
+      "quoteError": "Không lấy được báo giá",
+      "quotePendingDescription": "Bản đồ tuyến đường thật sẽ xuất hiện sau khi bạn chốt đủ địa chỉ và khối lượng hàng.",
+      "quoteReady": "Đã nhận báo giá",
+      "pickup": "Điểm lấy",
+      "pickupMissing": "Chưa thiết lập điểm lấy",
+      "pricingSourceDescription": "Hệ thống sẽ cập nhật chi phí vận chuyển chính xác và các chỉ số bảo vệ môi trường sau khi phân tích xong lộ trình.",
+      "pricingSourceLabel": "Nguồn báo giá",
+      "routePreview": "Xem trước tuyến đường",
+      "service": "Dịch vụ",
+      "shippingFee": "Cước vận chuyển",
+      "weight": "Khối lượng"
+    },
+    "checkout": {
+      "awaitingQuote": "Đang chờ báo giá",
+      "cardNumber": "Số thẻ",
+      "cardNumberPlaceholder": "0000 0000 0000 0000",
+      "cardPayment": "Thanh toán bằng thẻ",
+      "cardPaymentDescription": "Thanh toán an toàn ngay bây giờ để lô hàng được giải phóng tức thì.",
+      "codTrackingCta": "Theo dõi đơn hàng",
+      "cashOnDelivery": "Thanh toán khi nhận hàng",
+      "cashOnDeliveryDescription": "Thanh toán khi kiện hàng đến điểm nhận cuối cùng.",
+      "checkoutErrorEyebrow": "Lỗi thanh toán",
+      "checkoutErrorTitle": "Không có đơn hàng khả dụng để thanh toán",
+      "confirmCodOrder": "Xác nhận đơn COD",
+      "cvc": "CVC",
+      "cvcPlaceholder": "123",
+      "ecoDiscount": "Ưu đãi dịch vụ xanh",
+      "emptyOrderDescription": "Không tìm thấy đơn hàng cần thanh toán. Vui lòng thử lại từ màn hình quản lý đơn.",
+      "expiryDate": "Ngày hết hạn",
+      "expiryPlaceholder": "MM / YY",
+      "insuranceDescription": "Mọi lô hàng đều được bảo hiểm tối đa 500,00 USD cho hư hại hoặc mất mát trong quá trình vận chuyển.",
+      "insuranceTitle": "Đã bao gồm bảo hiểm",
+      "loadOrder": "Đang tải đơn hàng để thanh toán...",
+      "logisticsFee": "Phí vận chuyển",
+      "orderSummary": "Tóm tắt đơn hàng",
+      "payAndConfirmOrder": "Thanh toán và xác nhận đơn",
+      "paymentDetails": "Chi tiết thanh toán",
+      "pendingApiQuote": "Đang chờ báo giá từ hệ thống",
+      "pricingDescription": "Hệ thống đang tiến hành lấy báo giá chính thức. Vui lòng chờ trong giây lát.",
+      "processing": "Đang xử lý...",
+      "redirectToCodTracking": "Đơn hàng này dùng COD. Theo dõi tiến trình giao nhận và thu hộ từ màn hình theo dõi.",
+      "shippingAndHandling": "Phí xử lý",
+      "sustainableChoice": "Lựa chọn bền vững",
+      "sustainabilityMissing": "Mức tiết kiệm CO2 cho lô hàng này sẽ được hiển thị sau khi hệ thống xử lý hoàn tất dữ liệu môi trường.",
+      "sustainabilityValue": "Đơn hàng này giúp giảm thiểu {value}kg lượng CO2 phát thải vào môi trường.",
+      "title": "Thanh toán",
+      "totalAmount": "Tổng thanh toán",
+      "vat": "Thuế VAT",
+      "orderSubtitle": "Hoàn tất lô hàng {reference} và xác nhận lịch trình giao nhận của bạn."
+    },
+    "creationWorkspace": {
+      "ctaLabel": "Tạo đơn hàng và tiếp tục"
+    },
+    "timeline": {
+      "eyebrow": "Theo dõi"
+    },
+    "statusFilters": {
+      "all": "Tất cả",
+      "pending": "Chờ xử lý",
+      "inTransit": "Đang vận chuyển",
+      "delivered": "Đã giao"
+    },
+    "serviceTierFilters": {
+      "green": "Xanh",
+      "express": "Hoả tốc",
+      "standard": "Tiêu chuẩn"
+    },
+    "management": {
+      "actions": "Thao tác",
+      "customer": "Khách hàng",
+      "date": "Ngày",
+      "description": "1.284 lô hàng đang hoạt động trên các tuyến vận hành toàn cầu",
+      "ecoImpact": "Tác động xanh",
+      "exportData": "Xuất dữ liệu",
+      "exportSnapshot": "Xuất ảnh chụp dữ liệu",
+      "logisticsStatus": "Trạng thái giao nhận",
+      "orderId": "Mã đơn hàng",
+      "pageSummary": "Trang 1 / 64",
+      "priority": "Mức ưu tiên",
+      "recentReduction": "Giảm 8% so với tháng trước",
+      "refineView": "Tinh chỉnh góc nhìn hệ sinh thái",
+      "route": "Tuyến đường",
+      "serviceTier": "Gói dịch vụ",
+      "showing": "Hiển thị 100 / 1.284 đơn hàng",
+      "status": "Trạng thái",
+      "title": "Quản lý đơn hàng"
+    },
+    "shipmentFilters": {
+      "all": "Tất cả lô hàng",
+      "active": "Đang hoạt động",
+      "delayed": "Bị trễ"
+    },
+    "shipmentsManagement": {
+      "activeShipmentsSummary": "Hiển thị {visibleCount} / {totalCount} lô hàng phù hợp",
+      "addShipment": "Thêm lô hàng",
+      "carbonReport": "Xem báo cáo carbon",
+      "ecoImpactDescription": "Bạn đã bù đắp 12,4 tấn CO2 trong tuần này.",
+      "ecoImpactTitle": "Điểm tác động xanh",
+      "filterPlaceholder": "Lọc theo mã, xe hoặc tuyến...",
+      "headings": {
+        "0": "Mã theo dõi",
+        "1": "Tuyến đường",
+        "2": "Mã xe",
+        "3": "Trạng thái",
+        "4": "ETA",
+        "5": "Hành động"
+      },
+      "listEmptyDescription": "Không tìm thấy lô hàng nào phù hợp với điều kiện tìm kiếm.",
+      "listEmptyTitle": "Chưa có lô hàng để hiển thị",
+      "listErrorDescription": "Lỗi khi tải danh sách lô hàng. Vui lòng kiểm tra lại kết nối hoặc thử lại sau.",
+      "listErrorTitle": "Không tải được dữ liệu lô hàng",
+      "listLoadingDescription": "Đang tải danh sách lô hàng...",
+      "listLoadingTitle": "Đang tải lô hàng",
+      "liveMapButton": "Mở bản đồ toàn màn hình",
+      "liveMapEyebrow": "Bản đồ mạng lưới trực tuyến",
+      "mapPendingDescription": "Bản đồ điều phối theo thời gian thực sẽ hiển thị sau khi hệ thống nhận được dữ liệu lộ trình chính thức.",
+      "mapPendingTitle": "Bản đồ điều phối đang chờ kết nối",
+      "networkEfficiency": "Hiệu suất mạng lưới",
+      "networkEfficiencyDetail": "Các tuyến tối ưu carbon đang hoạt động",
+      "summaryLabels": {
+        "delivered": "Đã giao",
+        "inTransit": "Đang vận chuyển",
+        "total": "Tổng lô hàng"
+      },
+      "subtitle": "Giám sát thời gian thực cho mạng lưới phân phối chính xác.",
+      "title": "Quản lý lô hàng",
+      "vehiclePending": "Đang chờ phân xe"
     }
   },
   "payments": {
@@ -101,10 +316,22 @@
     "loginLabel": "Đăng nhập",
     "registerLabel": "Đăng ký",
     "navItems": [
-      { "href": "#features", "label": "Tính năng" },
-      { "href": "#solutions", "label": "Giải pháp" },
-      { "href": "/tracking", "label": "Tra cứu đơn hàng" },
-      { "href": "#sustainability", "label": "Bền vững" }
+      {
+        "href": "#features",
+        "label": "Tính năng"
+      },
+      {
+        "href": "#solutions",
+        "label": "Giải pháp"
+      },
+      {
+        "href": "/tracking",
+        "label": "Tra cứu đơn hàng"
+      },
+      {
+        "href": "#sustainability",
+        "label": "Bền vững"
+      }
     ]
   },
   "footer": {
@@ -112,10 +339,22 @@
     "copyright": "© 2026 Emerald Logistics. Chính xác trong từng nhịp vận hành.",
     "shareLabel": "Chia sẻ",
     "links": [
-      { "href": "#", "label": "Chính sách bảo mật" },
-      { "href": "#", "label": "Điều khoản dịch vụ" },
-      { "href": "#", "label": "Báo cáo carbon" },
-      { "href": "#", "label": "Mạng lưới toàn cầu" }
+      {
+        "href": "#",
+        "label": "Chính sách bảo mật"
+      },
+      {
+        "href": "#",
+        "label": "Điều khoản dịch vụ"
+      },
+      {
+        "href": "#",
+        "label": "Báo cáo carbon"
+      },
+      {
+        "href": "#",
+        "label": "Mạng lưới toàn cầu"
+      }
     ]
   },
   "operationsTopBar": {
@@ -124,9 +363,21 @@
     "profileLabel": "Hồ sơ",
     "logoutLabel": "Đăng xuất",
     "items": [
-      { "href": "/dashboard/admin", "id": "dashboard", "label": "Bảng điều khiển" },
-      { "href": "/orders/create", "id": "shipments", "label": "Lô hàng" },
-      { "href": "/tracking", "id": "tracking", "label": "Theo dõi" }
+      {
+        "href": "/dashboard/admin",
+        "id": "dashboard",
+        "label": "Bảng điều khiển"
+      },
+      {
+        "href": "/orders/create",
+        "id": "shipments",
+        "label": "Lô hàng"
+      },
+      {
+        "href": "/tracking",
+        "id": "tracking",
+        "label": "Theo dõi"
+      }
     ]
   },
   "customerTopBar": {
@@ -191,10 +442,22 @@
       "description": "Hệ thống vận hành liên tục, đảm bảo thông suốt và đáp ứng mọi nhu cầu khắt khe nhất của khách hàng.",
       "title": "Mạng lưới logistics rộng khắp và đáng tin cậy",
       "items": [
-        { "label": "Tỉnh thành phục vụ", "value": "63" },
-        { "label": "Chuyến đi được giám sát mỗi ngày", "value": "24k+" },
-        { "label": "Uptime nền tảng", "value": "99.95%" },
-        { "label": "Đối tác vận tải tích hợp", "value": "150+" }
+        {
+          "label": "Tỉnh thành phục vụ",
+          "value": "63"
+        },
+        {
+          "label": "Chuyến đi được giám sát mỗi ngày",
+          "value": "24k+"
+        },
+        {
+          "label": "Uptime nền tảng",
+          "value": "99.95%"
+        },
+        {
+          "label": "Đối tác vận tải tích hợp",
+          "value": "150+"
+        }
       ]
     },
     "socialProof": {
@@ -204,9 +467,18 @@
       "ecosystemEyebrow": "Hệ sinh thái tin cậy",
       "ecosystemDescription": "Tăng trưởng bền vững chỉ xảy ra khi dữ liệu, vận hành và đối tác cùng nhìn về một mục tiêu chung.",
       "stats": [
-        { "label": "Doanh nghiệp đang vận hành", "value": "500+" },
-        { "label": "Điểm trung chuyển và kho liên kết", "value": "18" },
-        { "label": "Tỷ lệ giao đúng hẹn trung bình", "value": "99.2%" }
+        {
+          "label": "Doanh nghiệp đang vận hành",
+          "value": "500+"
+        },
+        {
+          "label": "Điểm trung chuyển và kho liên kết",
+          "value": "18"
+        },
+        {
+          "label": "Tỷ lệ giao đúng hẹn trung bình",
+          "value": "99.2%"
+        }
       ],
       "partnerGroups": [
         "Bán lẻ & FMCG",
@@ -258,14 +530,35 @@
         }
       ],
       "dashboardStats": [
-        { "label": "Đơn đang được điều phối", "value": "1,284" },
-        { "label": "Tỷ lệ lấp đầy tải trọng", "value": "93%" },
-        { "label": "Cảnh báo được xử lý tự động", "value": "76%" }
+        {
+          "label": "Đơn đang được điều phối",
+          "value": "1,284"
+        },
+        {
+          "label": "Tỷ lệ lấp đầy tải trọng",
+          "value": "93%"
+        },
+        {
+          "label": "Cảnh báo được xử lý tự động",
+          "value": "76%"
+        }
       ],
       "boardMetrics": [
-        { "fill": "86%", "label": "Xe đang đúng ETA", "value": "142/165" },
-        { "fill": "73%", "label": "Đơn được tự động gợi ý tuyến", "value": "927" },
-        { "fill": "58%", "label": "Rủi ro được cảnh báo sớm", "value": "41 case" }
+        {
+          "fill": "86%",
+          "label": "Xe đang đúng ETA",
+          "value": "142/165"
+        },
+        {
+          "fill": "73%",
+          "label": "Đơn được tự động gợi ý tuyến",
+          "value": "927"
+        },
+        {
+          "fill": "58%",
+          "label": "Rủi ro được cảnh báo sớm",
+          "value": "41 case"
+        }
       ]
     },
     "sustainability": {
@@ -281,9 +574,18 @@
       "emissionScoreLabel": "Điểm phát thải",
       "emissionScoreDescription": "Tối ưu xanh trên mỗi km vận hành",
       "impactStats": [
-        { "label": "CO2 cắt giảm mỗi năm", "value": "12.6k tấn" },
-        { "label": "Chuyến đi được phân tích", "value": "4.8M" },
-        { "label": "Mức tiết kiệm nhiên liệu", "value": "18%" }
+        {
+          "label": "CO2 cắt giảm mỗi năm",
+          "value": "12.6k tấn"
+        },
+        {
+          "label": "Chuyến đi được phân tích",
+          "value": "4.8M"
+        },
+        {
+          "label": "Mức tiết kiệm nhiên liệu",
+          "value": "18%"
+        }
       ],
       "commitments": [
         "Đo lường phát thải theo từng chuyến xe và tuyến đường",
@@ -297,9 +599,18 @@
       "title": "Khách hàng nói gì về Emerald Logistics",
       "resultLabel": "Tác động ghi nhận",
       "metrics": [
-        { "label": "Doanh nghiệp mở rộng sau 6 tháng", "value": "87%" },
-        { "label": "Thời gian phản hồi sự cố", "value": "-43%" },
-        { "label": "Chi phí vận hành giảm trung bình", "value": "22%" }
+        {
+          "label": "Doanh nghiệp mở rộng sau 6 tháng",
+          "value": "87%"
+        },
+        {
+          "label": "Thời gian phản hồi sự cố",
+          "value": "-43%"
+        },
+        {
+          "label": "Chi phí vận hành giảm trung bình",
+          "value": "22%"
+        }
       ],
       "testimonials": [
         {
@@ -340,10 +651,125 @@
         "Tích hợp linh hoạt với quy trình hiện có của doanh nghiệp"
       ],
       "trustStats": [
-        { "label": "Doanh nghiệp đang dùng", "value": "500+" },
-        { "label": "NPS khách hàng B2B", "value": "71" },
-        { "label": "Thời gian go-live trung bình", "value": "14 ngày" }
+        {
+          "label": "Doanh nghiệp đang dùng",
+          "value": "500+"
+        },
+        {
+          "label": "NPS khách hàng B2B",
+          "value": "71"
+        },
+        {
+          "label": "Thời gian go-live trung bình",
+          "value": "14 ngày"
+        }
       ]
+    }
+  },
+  "tracking": {
+    "status": {
+      "ARRIVED_AT_HUB": "Đã nhập kho",
+      "ASSIGNED": "Đã xếp chuyến",
+      "CANCELLED": "Đã huỷ",
+      "DELIVERED": "Giao thành công",
+      "IN_TRANSIT": "Đang trung chuyển",
+      "OUT_FOR_DELIVERY": "Đang đi giao",
+      "PENDING": "Chờ xác nhận",
+      "PICKED_UP": "Đã nhận hàng"
+    },
+    "event": {
+      "ETA_UPDATE": "Cập nhật ETA",
+      "EXCEPTION": "Sự cố",
+      "NOTE": "Ghi chú vận hành",
+      "POD": "Biên nhận giao hàng",
+      "SCAN": "Quét kiện hàng",
+      "STATUS_CHANGE": "Cập nhật trạng thái"
+    },
+    "stepStatus": {
+      "completed": "Hoàn tất",
+      "current": "Hiện tại",
+      "pending": "Chờ xử lý"
+    },
+    "proofOfDelivery": {
+      "fallbackCondition": "Cần chữ ký điện tử",
+      "imageAlt": "Biên nhận giao hàng",
+      "pendingCapture": "Chờ ghi nhận",
+      "pendingImageAlt": "Biên nhận giao hàng đang chờ cập nhật",
+      "pendingRecipient": "Đang chờ xác nhận người nhận",
+      "recipientLabel": "Người nhận",
+      "title": "Biên nhận giao hàng",
+      "trackingCodeLabel": "Mã theo dõi",
+      "eyebrow": "Biên nhận"
+    },
+    "timeline": {
+      "currentStepHint": "Đang xử lý cho chặng giao hàng tiếp theo.",
+      "eyebrow": "Theo dõi trực tiếp",
+      "title": "Các cột mốc lô hàng"
+    },
+    "lookup": {
+      "apiDrivenEyebrow": "Kết nối hệ thống",
+      "apiDrivenDescription": "Hệ thống đang sử dụng dữ liệu trực tuyến. Vui lòng nhập mã theo dõi chính thức từ hệ thống vận hành.",
+      "apiDrivenTitle": "Tra cứu đơn hàng trực tuyến",
+      "inputPlaceholder": "Nhập mã theo dõi",
+      "title": "Theo dõi hành trình đơn hàng",
+      "trackButton": "Theo dõi đơn hàng"
+    },
+    "detail": {
+      "cancelConfirm": "Bạn có chắc chắn muốn hủy đơn hàng này không?",
+      "cancelError": "Không thể hủy đơn hàng vào lúc này.",
+      "cancelOrder": "Hủy đơn",
+      "cancelSuccess": "Đơn hàng đã được hủy thành công.",
+      "cancelling": "Đang hủy...",
+      "copySuccess": "Đã sao chép liên kết theo dõi.",
+      "customerActionsDescription": "Bạn có thể tiếp tục thanh toán, hủy đơn ở giai đoạn sớm hoặc chia sẻ liên kết theo dõi.",
+      "customerActionsEyebrow": "Thao tác khách hàng",
+      "currentStatusHint": "Hành trình đơn hàng công khai",
+      "errorEyebrow": "Lỗi theo dõi",
+      "errorTitle": "Không thể tải dữ liệu hành trình lô hàng",
+      "fallbackError": "Hệ thống đang tạm thời gián đoạn. Vui lòng thử lại sau.",
+      "helpCenter": "Trung tâm hỗ trợ",
+      "helpText": "Cần trợ giúp? Truy cập",
+      "loadingDescription": "Hệ thống đang đồng bộ dữ liệu hành trình mới nhất.",
+      "loadingEyebrow": "Đang tải",
+      "loadingTitle": "Đang tải dữ liệu hành trình mới nhất",
+      "locationPending": "Chưa có cập nhật vị trí",
+      "notFoundEyebrow": "Không tìm thấy",
+      "notFoundTitle": "Không tìm thấy lô hàng công khai với mã theo dõi này",
+      "printLabels": "In nhãn",
+      "paymentPendingDescription": "Đơn hàng này đang chờ thanh toán trực tuyến. Hoàn tất thanh toán để kích hoạt luồng xử lý tiếp theo.",
+      "paymentPendingEyebrow": "Thanh toán",
+      "paymentPendingTitle": "Đơn hàng đang chờ thanh toán",
+      "payNow": "Thanh toán ngay",
+      "receiverHint": "Một số thông tin nhạy cảm đã được ẩn để bảo mật.",
+      "receiverLabel": "Người nhận",
+      "retry": "Thử lại",
+      "searchAnother": "Tìm lô hàng khác",
+      "shareSuccess": "Đã mở luồng chia sẻ mã theo dõi.",
+      "shareText": "Theo dõi đơn hàng {trackingCode} tại liên kết này.",
+      "shareTracking": "Chia sẻ theo dõi",
+      "shareTitle": "Chia sẻ mã theo dõi",
+      "shareUnavailable": "Không thể chia sẻ liên kết theo dõi trên thiết bị hiện tại.",
+      "supportSuffix": "hoặc liên hệ hỗ trợ 24/7.",
+      "trackingCodeLabel": "Mã theo dõi"
+    },
+    "internal": {
+      "accessErrorEyebrow": "Lỗi truy cập",
+      "accessErrorTitle": "Bạn không có quyền xem dòng thời gian nội bộ của đơn hàng này",
+      "connectHint": "Vui lòng cung cấp mã đơn hàng để xem chi tiết hành trình vận chuyển nội bộ.",
+      "currentStatusLabel": "Trạng thái hiện tại",
+      "dataSourceLabel": "Nguồn dữ liệu",
+      "dataSourceValue": "Hệ thống nội bộ",
+      "driverEyebrow": "Tài xế",
+      "fallbackError": "Hệ thống đang tạm thời gián đoạn. Không thể truy xuất dữ liệu vận hành.",
+      "loadingDescription": "Đang đồng bộ dữ liệu vận hành nội bộ.",
+      "loadingEyebrow": "Đang tải",
+      "loadingTitle": "Đang tải dữ liệu hành trình nội bộ",
+      "missingOrderDescription": "Vui lòng truy cập thông qua hệ thống quản lý để xem chi tiết hành trình vận chuyển nội bộ.",
+      "title": "Không gian điều hành lộ trình",
+      "trackingCodeLabel": "Mã theo dõi",
+      "trackingErrorEyebrow": "Lỗi theo dõi",
+      "trackingErrorTitle": "Không thể tải dòng thời gian nội bộ của lô hàng",
+      "viewLiveTracking": "Đang xem luồng theo dõi nội bộ trực tiếp cho {trackingCode}."
     }
   }
 }

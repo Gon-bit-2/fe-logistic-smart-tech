@@ -81,6 +81,221 @@
       "completed": "Completed",
       "current": "Current",
       "pending": "Pending"
+    },
+    "serviceTierOptions": {
+      "express": {
+        "label": "Express delivery",
+        "description": "Fast delivery with the highest priority for immediate handling and dispatch."
+      },
+      "eco_green": {
+        "label": "Green consolidated trip",
+        "description": "Consolidated green shipping that optimizes routing to reduce carbon emissions.",
+        "highlight": "Lower CO2 emissions"
+      },
+      "standard": {
+        "label": "Standard delivery",
+        "description": "Standard delivery at a practical cost for everyday shipping needs."
+      }
+    },
+    "form": {
+      "addressAutocompleteEmpty": "No matching suggestions found.",
+      "addressAutocompleteHint": "Enter at least 2 characters and select an address from suggestions.",
+      "addressAutocompleteLoading": "Searching addresses...",
+      "addressAutocompleteRequired": "Please select an address from suggestions.",
+      "addressAutocompleteSuggestion": "Suggested address",
+      "addressSelected": "Coordinates confirmed",
+      "contactName": "Contact name",
+      "contactPhone": "Contact phone",
+      "createTitle": "Create new order",
+      "customer": "Customer",
+      "declaredValue": "Declared value",
+      "deliveryAddress": "Delivery address",
+      "dimensions": "Dimensions (cm)",
+      "dimensionsHint": "Enter Length x Width x Height. Example: 40x30x20 or 40 × 30 × 20 cm.",
+      "dimensionsInvalid": "Invalid package dimensions. Example: 40x30x20 cm.",
+      "dimensionsPlaceholder": "Example: 40x30x20",
+      "dimensionsRequired": "Please enter the package dimensions.",
+      "estimatedArrival": "Estimated arrival",
+      "itemDescription": "Item description",
+      "localMockQuote": "Waiting for system quote",
+      "orderCreated": "Order created",
+      "ordersEyebrow": "Orders",
+      "paymentMethod": "Payment method",
+      "pricingSourceDescription": "Shipping cost, taxes, fees, and carbon savings are calculated automatically by the system.",
+      "pricingSourceLabel": "Quote source",
+      "receiverName": "Receiver name",
+      "receiverPhone": "Receiver phone",
+      "resolvingAddress": "Resolving coordinates...",
+      "selectServiceTier": "Select service tier",
+      "selectPaymentMethod": "Select payment method",
+      "stepLabels": {
+        "0": "Pickup/delivery",
+        "1": "Details",
+        "2": "Service"
+      },
+      "submitDisabledAddress": "Select complete addresses from autocomplete to continue.",
+      "submitDisabledQuote": "The system needs a successful quote before creating the order.",
+      "submitLoading": "Processing...",
+      "subtitle": "Set up route, package profile, and service tier.",
+      "totalQuoted": "total quote",
+      "weight": "Weight (kg)",
+      "pickupAddress": "Pickup address"
+    },
+    "paymentMethodOptions": {
+      "STRIPE": {
+        "label": "Online payment",
+        "description": "Pay online right after creating the order to move the shipment into processing faster."
+      },
+      "COD": {
+        "label": "Cash on delivery",
+        "description": "The driver collects cash on successful delivery and the system reconciles COD internally."
+      }
+    },
+    "serviceTierSelector": {
+      "apiQuote": "Auto quote"
+    },
+    "routePreview": {
+      "distance": "Distance",
+      "declaredValue": "Declared value",
+      "delivery": "Delivery point",
+      "deliveryMissing": "Delivery point not set",
+      "dimensions": "Dimensions",
+      "draftSummary": "Draft summary",
+      "duration": "Duration",
+      "eta": "ETA",
+      "mapLoadingDescription": "Syncing the real route from the map system.",
+      "mapMarkerOnlyDescription": "Address confirmed. The map is showing actual stops.",
+      "mapPendingDescription": "The real map will appear after addresses and shipment weight are completed.",
+      "newShipment": "New shipment",
+      "pending": "Pending",
+      "pendingQuote": "Waiting for quote",
+      "quoteError": "Unable to fetch quote",
+      "quotePendingDescription": "The real route map will appear after addresses and shipment weight are completed.",
+      "quoteReady": "Quote received",
+      "pickup": "Pickup point",
+      "pickupMissing": "Pickup point not set",
+      "pricingSourceDescription": "The system will update exact shipping cost and environmental indicators after route analysis.",
+      "pricingSourceLabel": "Quote source",
+      "routePreview": "Route preview",
+      "service": "Service",
+      "shippingFee": "Shipping fee",
+      "weight": "Weight"
+    },
+    "checkout": {
+      "awaitingQuote": "Waiting for quote",
+      "cardNumber": "Card number",
+      "cardNumberPlaceholder": "0000 0000 0000 0000",
+      "cardPayment": "Card payment",
+      "cardPaymentDescription": "Pay securely now so the shipment can be released immediately.",
+      "codTrackingCta": "Track order",
+      "cashOnDelivery": "Cash on delivery",
+      "cashOnDeliveryDescription": "Pay when the package reaches the final receiver.",
+      "checkoutErrorEyebrow": "Payment error",
+      "checkoutErrorTitle": "No order is available for payment",
+      "confirmCodOrder": "Confirm COD order",
+      "cvc": "CVC",
+      "cvcPlaceholder": "123",
+      "ecoDiscount": "Green service discount",
+      "emptyOrderDescription": "No order was found for payment. Please try again from order management.",
+      "expiryDate": "Expiry date",
+      "expiryPlaceholder": "MM / YY",
+      "insuranceDescription": "Every shipment is insured up to USD 500.00 against damage or loss during transport.",
+      "insuranceTitle": "Insurance included",
+      "loadOrder": "Loading order for payment...",
+      "logisticsFee": "Logistics fee",
+      "orderSummary": "Order summary",
+      "payAndConfirmOrder": "Pay and confirm order",
+      "paymentDetails": "Payment details",
+      "pendingApiQuote": "Waiting for system quote",
+      "pricingDescription": "The system is fetching an official quote. Please wait a moment.",
+      "processing": "Processing...",
+      "redirectToCodTracking": "This order uses COD. Track delivery and collection progress from tracking.",
+      "shippingAndHandling": "Handling fee",
+      "sustainableChoice": "Sustainable choice",
+      "sustainabilityMissing": "CO2 savings for this shipment will be shown after the system finishes processing environmental data.",
+      "sustainabilityValue": "This order helps reduce {value}kg of CO2 emissions.",
+      "title": "Checkout",
+      "totalAmount": "Total payment",
+      "vat": "VAT",
+      "orderSubtitle": "Complete shipment {reference} and confirm your delivery schedule."
+    },
+    "creationWorkspace": {
+      "ctaLabel": "Create order and continue"
+    },
+    "timeline": {
+      "eyebrow": "Tracking"
+    },
+    "statusFilters": {
+      "all": "All",
+      "pending": "Pending",
+      "inTransit": "In transit",
+      "delivered": "Delivered"
+    },
+    "serviceTierFilters": {
+      "green": "Green",
+      "express": "Express",
+      "standard": "Standard"
+    },
+    "management": {
+      "actions": "Actions",
+      "customer": "Customer",
+      "date": "Date",
+      "description": "1,284 active shipments across global operating routes",
+      "ecoImpact": "Green impact",
+      "exportData": "Export data",
+      "exportSnapshot": "Export snapshot",
+      "logisticsStatus": "Operations status",
+      "orderId": "Order ID",
+      "pageSummary": "Page 1 / 64",
+      "priority": "Priority",
+      "recentReduction": "Down 8% from last month",
+      "refineView": "Refine ecosystem view",
+      "route": "Route",
+      "serviceTier": "Service tier",
+      "showing": "Showing 100 / 1,284 orders",
+      "status": "Status",
+      "title": "Order management"
+    },
+    "shipmentFilters": {
+      "all": "All shipments",
+      "active": "Active",
+      "delayed": "Delayed"
+    },
+    "shipmentsManagement": {
+      "activeShipmentsSummary": "Showing {visibleCount} / {totalCount} matching shipments",
+      "addShipment": "Add shipment",
+      "carbonReport": "View carbon report",
+      "ecoImpactDescription": "You offset 12.4 tons of CO2 this week.",
+      "ecoImpactTitle": "Green impact score",
+      "filterPlaceholder": "Filter by code, vehicle, or route...",
+      "headings": {
+        "0": "Tracking code",
+        "1": "Route",
+        "2": "Vehicle ID",
+        "3": "Status",
+        "4": "ETA",
+        "5": "Actions"
+      },
+      "listEmptyDescription": "No shipments match the current search criteria.",
+      "listEmptyTitle": "No shipments to display",
+      "listErrorDescription": "Error loading shipment list. Check your connection or try again later.",
+      "listErrorTitle": "Unable to load shipment data",
+      "listLoadingDescription": "Loading shipment list...",
+      "listLoadingTitle": "Loading shipments",
+      "liveMapButton": "Open full-screen map",
+      "liveMapEyebrow": "Live network map",
+      "mapPendingDescription": "Real-time dispatch mapping will appear after the system receives official route data.",
+      "mapPendingTitle": "Dispatch map waiting for connection",
+      "networkEfficiency": "Network efficiency",
+      "networkEfficiencyDetail": "Carbon-optimized routes are active",
+      "summaryLabels": {
+        "delivered": "Delivered",
+        "inTransit": "In transit",
+        "total": "Total shipments"
+      },
+      "subtitle": "Real-time monitoring for the precision distribution network.",
+      "title": "Shipment management",
+      "vehiclePending": "Waiting for vehicle assignment"
     }
   },
   "payments": {
@@ -101,10 +316,22 @@
     "loginLabel": "Log in",
     "registerLabel": "Sign up",
     "navItems": [
-      { "href": "#features", "label": "Features" },
-      { "href": "#solutions", "label": "Solutions" },
-      { "href": "/tracking", "label": "Track shipment" },
-      { "href": "#sustainability", "label": "Sustainability" }
+      {
+        "href": "#features",
+        "label": "Features"
+      },
+      {
+        "href": "#solutions",
+        "label": "Solutions"
+      },
+      {
+        "href": "/tracking",
+        "label": "Track shipment"
+      },
+      {
+        "href": "#sustainability",
+        "label": "Sustainability"
+      }
     ]
   },
   "footer": {
@@ -112,10 +339,22 @@
     "copyright": "© 2026 Emerald Logistics. Precision in every operating rhythm.",
     "shareLabel": "Share",
     "links": [
-      { "href": "#", "label": "Privacy policy" },
-      { "href": "#", "label": "Terms of service" },
-      { "href": "#", "label": "Carbon report" },
-      { "href": "#", "label": "Global network" }
+      {
+        "href": "#",
+        "label": "Privacy policy"
+      },
+      {
+        "href": "#",
+        "label": "Terms of service"
+      },
+      {
+        "href": "#",
+        "label": "Carbon report"
+      },
+      {
+        "href": "#",
+        "label": "Global network"
+      }
     ]
   },
   "operationsTopBar": {
@@ -124,9 +363,21 @@
     "profileLabel": "Profile",
     "logoutLabel": "Log out",
     "items": [
-      { "href": "/dashboard/admin", "id": "dashboard", "label": "Dashboard" },
-      { "href": "/orders/create", "id": "shipments", "label": "Shipments" },
-      { "href": "/tracking", "id": "tracking", "label": "Tracking" }
+      {
+        "href": "/dashboard/admin",
+        "id": "dashboard",
+        "label": "Dashboard"
+      },
+      {
+        "href": "/orders/create",
+        "id": "shipments",
+        "label": "Shipments"
+      },
+      {
+        "href": "/tracking",
+        "id": "tracking",
+        "label": "Tracking"
+      }
     ]
   },
   "customerTopBar": {
@@ -191,10 +442,22 @@
       "description": "An always-on operating network built to keep shipments moving and meet demanding customer requirements.",
       "title": "A broad and reliable logistics network",
       "items": [
-        { "label": "Provinces served", "value": "63" },
-        { "label": "Trips monitored daily", "value": "24k+" },
-        { "label": "Platform uptime", "value": "99.95%" },
-        { "label": "Integrated carrier partners", "value": "150+" }
+        {
+          "label": "Provinces served",
+          "value": "63"
+        },
+        {
+          "label": "Trips monitored daily",
+          "value": "24k+"
+        },
+        {
+          "label": "Platform uptime",
+          "value": "99.95%"
+        },
+        {
+          "label": "Integrated carrier partners",
+          "value": "150+"
+        }
       ]
     },
     "socialProof": {
@@ -204,9 +467,18 @@
       "ecosystemEyebrow": "Trusted ecosystem",
       "ecosystemDescription": "Sustainable growth happens when data, operations, and partners work toward the same goal.",
       "stats": [
-        { "label": "Active businesses", "value": "500+" },
-        { "label": "Connected hubs and warehouses", "value": "18" },
-        { "label": "Average on-time delivery rate", "value": "99.2%" }
+        {
+          "label": "Active businesses",
+          "value": "500+"
+        },
+        {
+          "label": "Connected hubs and warehouses",
+          "value": "18"
+        },
+        {
+          "label": "Average on-time delivery rate",
+          "value": "99.2%"
+        }
       ],
       "partnerGroups": [
         "Retail & FMCG",
@@ -258,14 +530,35 @@
         }
       ],
       "dashboardStats": [
-        { "label": "Orders in dispatch", "value": "1,284" },
-        { "label": "Load utilization", "value": "93%" },
-        { "label": "Alerts handled automatically", "value": "76%" }
+        {
+          "label": "Orders in dispatch",
+          "value": "1,284"
+        },
+        {
+          "label": "Load utilization",
+          "value": "93%"
+        },
+        {
+          "label": "Alerts handled automatically",
+          "value": "76%"
+        }
       ],
       "boardMetrics": [
-        { "fill": "86%", "label": "Vehicles on ETA", "value": "142/165" },
-        { "fill": "73%", "label": "Orders with suggested routing", "value": "927" },
-        { "fill": "58%", "label": "Risks flagged early", "value": "41 cases" }
+        {
+          "fill": "86%",
+          "label": "Vehicles on ETA",
+          "value": "142/165"
+        },
+        {
+          "fill": "73%",
+          "label": "Orders with suggested routing",
+          "value": "927"
+        },
+        {
+          "fill": "58%",
+          "label": "Risks flagged early",
+          "value": "41 cases"
+        }
       ]
     },
     "sustainability": {
@@ -281,9 +574,18 @@
       "emissionScoreLabel": "Emission score",
       "emissionScoreDescription": "Greener optimization for every operating kilometer",
       "impactStats": [
-        { "label": "CO2 reduced per year", "value": "12.6k tons" },
-        { "label": "Trips analyzed", "value": "4.8M" },
-        { "label": "Fuel savings", "value": "18%" }
+        {
+          "label": "CO2 reduced per year",
+          "value": "12.6k tons"
+        },
+        {
+          "label": "Trips analyzed",
+          "value": "4.8M"
+        },
+        {
+          "label": "Fuel savings",
+          "value": "18%"
+        }
       ],
       "commitments": [
         "Measure emissions by trip and route",
@@ -297,9 +599,18 @@
       "title": "What customers say about Emerald Logistics",
       "resultLabel": "Recorded impact",
       "metrics": [
-        { "label": "Businesses scaled after 6 months", "value": "87%" },
-        { "label": "Incident response time", "value": "-43%" },
-        { "label": "Average operating cost reduction", "value": "22%" }
+        {
+          "label": "Businesses scaled after 6 months",
+          "value": "87%"
+        },
+        {
+          "label": "Incident response time",
+          "value": "-43%"
+        },
+        {
+          "label": "Average operating cost reduction",
+          "value": "22%"
+        }
       ],
       "testimonials": [
         {
@@ -340,10 +651,125 @@
         "Flexible integration with existing business workflows"
       ],
       "trustStats": [
-        { "label": "Active businesses", "value": "500+" },
-        { "label": "B2B customer NPS", "value": "71" },
-        { "label": "Average go-live time", "value": "14 days" }
+        {
+          "label": "Active businesses",
+          "value": "500+"
+        },
+        {
+          "label": "B2B customer NPS",
+          "value": "71"
+        },
+        {
+          "label": "Average go-live time",
+          "value": "14 days"
+        }
       ]
+    }
+  },
+  "tracking": {
+    "status": {
+      "ARRIVED_AT_HUB": "Arrived at transit hub",
+      "ASSIGNED": "Assigned",
+      "CANCELLED": "Cancelled",
+      "DELIVERED": "Delivered",
+      "IN_TRANSIT": "In transit",
+      "OUT_FOR_DELIVERY": "Out for delivery",
+      "PENDING": "Pending",
+      "PICKED_UP": "Picked up"
+    },
+    "event": {
+      "ETA_UPDATE": "ETA update",
+      "EXCEPTION": "Exception",
+      "NOTE": "Operations note",
+      "POD": "Proof of delivery",
+      "SCAN": "Package scan",
+      "STATUS_CHANGE": "Status update"
+    },
+    "stepStatus": {
+      "completed": "Completed",
+      "current": "Current",
+      "pending": "Pending"
+    },
+    "proofOfDelivery": {
+      "fallbackCondition": "Electronic signature required",
+      "imageAlt": "Proof of delivery",
+      "pendingCapture": "Pending capture",
+      "pendingImageAlt": "Proof of delivery pending update",
+      "pendingRecipient": "Waiting for receiver confirmation",
+      "recipientLabel": "Receiver",
+      "title": "Proof of delivery",
+      "trackingCodeLabel": "Tracking code",
+      "eyebrow": "POD"
+    },
+    "timeline": {
+      "currentStepHint": "Processing for the next delivery leg.",
+      "eyebrow": "Live tracking",
+      "title": "Shipment milestones"
+    },
+    "lookup": {
+      "apiDrivenEyebrow": "System connection",
+      "apiDrivenDescription": "The system is using live data. Please enter the official tracking code from operations.",
+      "apiDrivenTitle": "Online shipment lookup",
+      "inputPlaceholder": "Enter tracking code",
+      "title": "Track your shipment journey",
+      "trackButton": "Track shipment"
+    },
+    "detail": {
+      "cancelConfirm": "Are you sure you want to cancel this order?",
+      "cancelError": "Unable to cancel the order right now.",
+      "cancelOrder": "Cancel order",
+      "cancelSuccess": "Order cancelled successfully.",
+      "cancelling": "Cancelling...",
+      "copySuccess": "Tracking link copied.",
+      "customerActionsDescription": "You can continue payment, cancel early-stage orders, or share the tracking link.",
+      "customerActionsEyebrow": "Customer actions",
+      "currentStatusHint": "Public order journey",
+      "errorEyebrow": "Tracking error",
+      "errorTitle": "Unable to load shipment journey data",
+      "fallbackError": "The system is temporarily unavailable. Please try again later.",
+      "helpCenter": "Help center",
+      "helpText": "Need help? Visit",
+      "loadingDescription": "The system is syncing the latest journey data.",
+      "loadingEyebrow": "Loading",
+      "loadingTitle": "Loading latest journey data",
+      "locationPending": "No location update yet",
+      "notFoundEyebrow": "Not found",
+      "notFoundTitle": "No public shipment was found for this tracking code",
+      "printLabels": "Print labels",
+      "paymentPendingDescription": "This order is waiting for online payment. Complete payment to activate the next processing flow.",
+      "paymentPendingEyebrow": "Payment",
+      "paymentPendingTitle": "Order is waiting for payment",
+      "payNow": "Pay now",
+      "receiverHint": "Some sensitive information is hidden for security.",
+      "receiverLabel": "Receiver",
+      "retry": "Try again",
+      "searchAnother": "Find another shipment",
+      "shareSuccess": "Tracking share flow opened.",
+      "shareText": "Track order {trackingCode} at this link.",
+      "shareTracking": "Share tracking",
+      "shareTitle": "Share tracking code",
+      "shareUnavailable": "Tracking link sharing is unavailable on this device.",
+      "supportSuffix": "or contact 24/7 support.",
+      "trackingCodeLabel": "Tracking code"
+    },
+    "internal": {
+      "accessErrorEyebrow": "Access error",
+      "accessErrorTitle": "You do not have permission to view this order's internal timeline",
+      "connectHint": "Provide an Order ID to view the internal shipment journey.",
+      "currentStatusLabel": "Current status",
+      "dataSourceLabel": "Data source",
+      "dataSourceValue": "Internal API",
+      "driverEyebrow": "Driver",
+      "fallbackError": "The system is temporarily unavailable. Unable to retrieve operations data.",
+      "loadingDescription": "Syncing internal operations data.",
+      "loadingEyebrow": "Loading",
+      "loadingTitle": "Loading internal journey data",
+      "missingOrderDescription": "Please access through the management system to view the internal shipment journey.",
+      "title": "Route execution workspace",
+      "trackingCodeLabel": "Tracking code",
+      "trackingErrorEyebrow": "Tracking error",
+      "trackingErrorTitle": "Unable to load the shipment internal timeline",
+      "viewLiveTracking": "Viewing live internal tracking for {trackingCode}."
     }
   }
 }
