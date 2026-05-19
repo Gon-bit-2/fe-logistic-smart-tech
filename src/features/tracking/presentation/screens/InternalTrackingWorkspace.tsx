@@ -3,7 +3,7 @@
 import ProofOfDeliveryCard from "@/features/tracking/presentation/components/ProofOfDeliveryCard";
 import TrackingTimeline from "@/features/tracking/presentation/components/TrackingTimeline";
 import { useInternalTrackingQuery } from "@/features/tracking/presentation/hooks/useInternalTrackingQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { isApiError } from "@/lib/api/errors";
 import { hasApiBaseUrl } from "@/lib/api/env";
 
@@ -11,10 +11,20 @@ type InternalTrackingWorkspaceProps = {
   orderId?: string;
 };
 
+function fallbackTrackingLabel(value: string) {
+  return value
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
+
 export default function InternalTrackingWorkspace({
   orderId,
 }: InternalTrackingWorkspaceProps) {
-  const { getTrackingStatusLabel, internalTrackingCopy } = useI18nCopy();
+  const t = useTranslations("tracking.internal");
+  const tStatus = useTranslations("tracking.status");
   const effectiveOrderId = orderId?.trim() ?? "";
   const trackingQuery = useInternalTrackingQuery(
     effectiveOrderId,
@@ -25,19 +35,19 @@ export default function InternalTrackingWorkspace({
     isApiError(trackingQuery.error) &&
     (trackingQuery.error.status === 401 || trackingQuery.error.status === 403);
   const queryMessage =
-    trackingQuery.error?.message ?? internalTrackingCopy.fallbackError;
+    trackingQuery.error?.message ?? t("fallbackError");
 
   if (!effectiveOrderId) {
     return (
       <section className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
         <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-          {internalTrackingCopy.driverEyebrow}
+          {t("driverEyebrow")}
         </p>
         <h1 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-          {internalTrackingCopy.title}
+          {t("title")}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
-          {internalTrackingCopy.missingOrderDescription}
+          {t("missingOrderDescription")}
         </p>
       </section>
     );
@@ -47,28 +57,28 @@ export default function InternalTrackingWorkspace({
     <div className="space-y-6">
       <div>
         <p className="text-xs font-black tracking-[0.3em] text-primary uppercase">
-          {internalTrackingCopy.driverEyebrow}
+          {t("driverEyebrow")}
         </p>
         <h1 className="mt-2 text-4xl font-black tracking-tight text-on-surface">
-          {internalTrackingCopy.title}
+          {t("title")}
         </h1>
         <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
           {tracking
-            ? internalTrackingCopy.viewLiveTracking(tracking.trackingCode)
-            : internalTrackingCopy.connectHint}
+            ? t("viewLiveTracking", { trackingCode: tracking.trackingCode })
+            : t("connectHint")}
         </p>
       </div>
 
       {trackingQuery.isPending ? (
         <section className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
           <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-            {internalTrackingCopy.loadingEyebrow}
+            {t("loadingEyebrow")}
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-            {internalTrackingCopy.loadingTitle}
+            {t("loadingTitle")}
           </h2>
           <p className="mt-3 text-sm leading-6 text-on-surface-variant">
-            {internalTrackingCopy.loadingDescription}
+            {t("loadingDescription")}
           </p>
         </section>
       ) : tracking ? (
@@ -77,7 +87,7 @@ export default function InternalTrackingWorkspace({
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                  {internalTrackingCopy.trackingCodeLabel}
+                  {t("trackingCodeLabel")}
                 </p>
                 <p className="mt-1 text-lg font-black text-on-surface">
                   {tracking.trackingCode}
@@ -85,18 +95,18 @@ export default function InternalTrackingWorkspace({
               </div>
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                  {internalTrackingCopy.currentStatusLabel}
+                  {t("currentStatusLabel")}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-on-surface">
-                  {getTrackingStatusLabel(tracking.currentStatus)}
+                  {tStatus.has(tracking.currentStatus as any) ? tStatus(tracking.currentStatus as any) : fallbackTrackingLabel(tracking.currentStatus)}
                 </p>
               </div>
               <div>
                 <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                  {internalTrackingCopy.dataSourceLabel}
+                  {t("dataSourceLabel")}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-on-surface">
-                  {internalTrackingCopy.dataSourceValue}
+                  {t("dataSourceValue")}
                 </p>
               </div>
             </div>
@@ -116,13 +126,13 @@ export default function InternalTrackingWorkspace({
         <section className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
           <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
             {permissionError
-              ? internalTrackingCopy.accessErrorEyebrow
-              : internalTrackingCopy.trackingErrorEyebrow}
+              ? t("accessErrorEyebrow")
+              : t("trackingErrorEyebrow")}
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
             {permissionError
-              ? internalTrackingCopy.accessErrorTitle
-              : internalTrackingCopy.trackingErrorTitle}
+              ? t("accessErrorTitle")
+              : t("trackingErrorTitle")}
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
             {queryMessage}

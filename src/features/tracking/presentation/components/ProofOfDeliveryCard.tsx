@@ -1,5 +1,5 @@
 import AppIcon from "@/components/ui/app-icon";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 type ProofOfDeliveryCardProps = {
@@ -15,15 +15,15 @@ export default function ProofOfDeliveryCard({
   recipient,
   trackingCode,
 }: ProofOfDeliveryCardProps) {
-  const { proofOfDeliveryCopy } = useI18nCopy();
+  const t = useTranslations("tracking.proofOfDelivery");
   return (
     <section className="rounded-xl bg-surface-container-lowest p-6 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
       <div className="mb-5">
         <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-          {proofOfDeliveryCopy.eyebrow}
+          {t("eyebrow")}
         </p>
         <h3 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-          {proofOfDeliveryCopy.title}
+          {t("title")}
         </h3>
       </div>
 
@@ -32,7 +32,7 @@ export default function ProofOfDeliveryCard({
           {podImageUrl ? (
             <Image
               src={podImageUrl}
-              alt={proofOfDeliveryCopy.imageAlt}
+              alt={t("imageAlt")}
               width={640}
               height={360}
               className="aspect-video h-full w-full object-cover"
@@ -47,10 +47,10 @@ export default function ProofOfDeliveryCard({
                   />
                 </div>
                 <div className="mt-4 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black tracking-[0.14em] text-outline uppercase">
-                  {proofOfDeliveryCopy.pendingCapture}
+                  {t("pendingCapture")}
                 </div>
                 <p className="mt-3 text-sm font-medium text-on-surface-variant">
-                  {proofOfDeliveryCopy.pendingImageAlt}
+                  {t("pendingImageAlt")}
                 </p>
               </div>
             </div>
@@ -63,7 +63,7 @@ export default function ProofOfDeliveryCard({
               className="text-4xl text-outline-variant"
             />
             <p className="mt-2 text-[10px] font-black tracking-[0.14em] text-outline uppercase">
-              {podPackageCondition ?? proofOfDeliveryCopy.fallbackCondition}
+              {podPackageCondition ?? t("fallbackCondition")}
             </p>
           </div>
         </div>
@@ -71,16 +71,16 @@ export default function ProofOfDeliveryCard({
 
       <div className="mt-5 rounded-xl bg-primary/6 px-4 py-4">
         <div className="text-sm font-semibold text-on-surface-variant">
-          {proofOfDeliveryCopy.trackingCodeLabel}
+          {t("trackingCodeLabel")}
         </div>
         <div className="mt-1 text-lg font-black text-on-surface">
           {trackingCode}
         </div>
         <div className="mt-4 text-sm font-semibold text-on-surface-variant">
-          {proofOfDeliveryCopy.recipientLabel}
+          {t("recipientLabel")}
         </div>
         <div className="mt-1 text-lg font-bold text-on-surface">
-          {recipient ?? proofOfDeliveryCopy.pendingRecipient}
+          {recipient ?? t("pendingRecipient")}
         </div>
       </div>
     </section>
