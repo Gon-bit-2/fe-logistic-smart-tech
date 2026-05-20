@@ -12,7 +12,8 @@ import {
   Warehouse,
 } from "lucide-react";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
+import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import {
   useAddOrdersToTrip,
   useApproveAssignmentRequest,
@@ -86,7 +87,7 @@ function getTripCapacity(vehicle: DispatchBoardVehicle | undefined, trip?: Dispa
 export default function TripsManagementScreen({
   scope,
 }: Readonly<TripsManagementScreenProps>) {
-  const { getOrderStatusLabel } = useI18nCopy();
+  const tOrderStatus = useTranslations("orders.status");
   const isDriverView = scope === "driver";
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedHubId, setSelectedHubId] = useState("");
@@ -731,7 +732,7 @@ export default function TripsManagementScreen({
                           </div>
                           <div className="justify-self-start lg:justify-self-end">
                             <StatusBadge
-                              label={getOrderStatusLabel(order.status)}
+                              label={tOrderStatus(order.status as OrderStatus)}
                               tone={getOrderTone(order.status)}
                             />
                           </div>

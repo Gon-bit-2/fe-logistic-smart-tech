@@ -43,7 +43,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError } from "@/lib/api/errors";
 import { cn } from "@/lib/utils";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatEnumLabel } from "@/utils/formatters";
 import type { AddressBookDraftInput } from "@/features/profile/domain/types/profile.types";
 import {
@@ -52,23 +52,21 @@ import {
   validateAddressDraft,
 } from "@/features/profile/presentation/hooks/useCustomerProfileSettings";
 
-type ProfileScreenCopy = ReturnType<typeof useI18nCopy>["profileScreenCopy"];
-
 function getProfileLoadErrorMessage(
   error: unknown,
-  profileScreenCopy: ProfileScreenCopy,
+  t: ReturnType<typeof useTranslations<"profile">>,
 ) {
   if (error instanceof ApiError) {
     if (error.status === 401) {
-      return profileScreenCopy.loadErrorUnauthorized;
+      return t("loadErrorUnauthorized");
     }
 
     if (error.status === 403) {
-      return profileScreenCopy.loadErrorForbidden;
+      return t("loadErrorForbidden");
     }
   }
 
-  return profileScreenCopy.loadErrorFallback;
+  return t("loadErrorFallback");
 }
 
 function ProfileMetaItem({
@@ -140,21 +138,19 @@ function ActionCard({
 }
 
 function AddressBookDialog({
-  copy,
   isPending = false,
   onOpenChange,
   onSave,
   open,
   value,
 }: Readonly<{
-  copy: ProfileScreenCopy;
   isPending?: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (value: AddressBookDraftInput) => Promise<boolean>;
   open: boolean;
   value: AddressBookDraftInput;
 }>) {
-  const profileScreenCopy = copy;
+  const t = useTranslations("profile");
   const [draft, setDraft] = useState<AddressBookDraftInput>(value);
   const errors = useMemo(() => validateAddressDraft(draft), [draft]);
   const hasErrors = Object.values(errors).some(Boolean);
@@ -184,24 +180,24 @@ function AddressBookDialog({
           <DialogHeader>
             <DialogTitle>
               {value.id
-                ? profileScreenCopy.addressBook.dialogEditTitle
-                : profileScreenCopy.addressBook.dialogCreateTitle}
+                ? t("addressBook.dialogEditTitle")
+                : t("addressBook.dialogCreateTitle")}
             </DialogTitle>
             <DialogDescription>
-              {profileScreenCopy.addressBook.dialogDescription}
+              {t("addressBook.dialogDescription")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="mt-6 grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="address-label">
-                {profileScreenCopy.addressBook.fields.label}
+                {t("addressBook.fields.label")}
               </Label>
               <Input
                 id="address-label"
                 value={draft.label}
                 onChange={(event) => updateField("label", event.target.value)}
-                placeholder={profileScreenCopy.addressBook.placeholders.label}
+                placeholder={t("addressBook.placeholders.label")}
                 className="h-10 rounded-lg border border-slate-300 bg-white px-3"
               />
               {errors.label ? (
@@ -214,7 +210,7 @@ function AddressBookDialog({
             <div className="grid gap-4 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="address-contact">
-                  {profileScreenCopy.addressBook.fields.contactName}
+                  {t("addressBook.fields.contactName")}
                 </Label>
                 <Input
                   id="address-contact"
@@ -223,7 +219,7 @@ function AddressBookDialog({
                     updateField("contactName", event.target.value)
                   }
                   placeholder={
-                    profileScreenCopy.addressBook.placeholders.contactName
+                    t("addressBook.placeholders.contactName")
                   }
                   className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                 />
@@ -236,13 +232,13 @@ function AddressBookDialog({
 
               <div className="grid gap-2">
                 <Label htmlFor="address-phone">
-                  {profileScreenCopy.addressBook.fields.phone}
+                  {t("addressBook.fields.phone")}
                 </Label>
                 <Input
                   id="address-phone"
                   value={draft.phone}
                   onChange={(event) => updateField("phone", event.target.value)}
-                  placeholder={profileScreenCopy.addressBook.placeholders.phone}
+                  placeholder={t("addressBook.placeholders.phone")}
                   className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                 />
                 {errors.phone ? (
@@ -255,14 +251,14 @@ function AddressBookDialog({
 
             <div className="grid gap-2">
               <Label htmlFor="address-line">
-                {profileScreenCopy.addressBook.fields.addressLine}
+                {t("addressBook.fields.addressLine")}
               </Label>
               <Textarea
                 id="address-line"
                 value={draft.address}
                 onChange={(event) => updateField("address", event.target.value)}
                 placeholder={
-                  profileScreenCopy.addressBook.placeholders.addressLine
+                  t("addressBook.placeholders.addressLine")
                 }
                 className="min-h-24 rounded-lg border border-slate-300 bg-white px-3 py-2.5"
               />
@@ -282,7 +278,7 @@ function AddressBookDialog({
                 }
                 className="size-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
               />
-              {profileScreenCopy.addressBook.fields.setAsDefault}
+              {t("addressBook.fields.setAsDefault")}
             </label>
           </div>
         </div>
@@ -295,7 +291,7 @@ function AddressBookDialog({
             className="h-10 rounded-lg border-slate-200 bg-white text-slate-700"
             onClick={() => handleOpenChange(false)}
           >
-            {profileScreenCopy.addressBook.cancel}
+            {t("addressBook.cancel")}
           </Button>
           <Button
             type="button"
@@ -308,10 +304,10 @@ function AddressBookDialog({
             }}
           >
             {isPending
-              ? profileScreenCopy.account.savePending
+              ? t("account.savePending")
               : value.id
-                ? profileScreenCopy.addressBook.save
-                : profileScreenCopy.addressBook.create}
+                ? t("addressBook.save")
+                : t("addressBook.create")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -320,7 +316,7 @@ function AddressBookDialog({
 }
 
 export default function CustomerProfileScreen() {
-  const { profileScreenCopy } = useI18nCopy();
+  const t = useTranslations("profile");
   const {
     addresses,
     addressesQuery,
@@ -363,7 +359,7 @@ export default function CustomerProfileScreen() {
           title="Không thể tải hồ sơ"
           description={getProfileLoadErrorMessage(
             profileQuery.error,
-            profileScreenCopy,
+            t,
           )}
           action={
             <Button
@@ -391,10 +387,10 @@ export default function CustomerProfileScreen() {
               Customer space
             </p>
             <h1 className="mt-2 text-[28px] font-bold text-emerald-900">
-              {profileScreenCopy.title}
+              {t("title")}
             </h1>
             <p className="mt-2 max-w-3xl text-[14px] leading-6 text-slate-600">
-              {profileScreenCopy.description}
+              {t("description")}
             </p>
           </div>
           <Badge
@@ -408,26 +404,26 @@ export default function CustomerProfileScreen() {
             )}
           >
             {saveState === "saved"
-              ? profileScreenCopy.account.syncReady
+              ? t("account.syncReady")
               : saveState === "saving"
-                ? profileScreenCopy.account.savePending
-                : profileScreenCopy.account.syncPending}
+                ? t("account.savePending")
+                : t("account.syncPending")}
           </Badge>
         </div>
 
         <Tabs defaultValue="account" className="w-full">
           <TabsList>
             <TabsTrigger value="account">
-              {profileScreenCopy.tabs.account}
+              {t("tabs.account")}
             </TabsTrigger>
             <TabsTrigger value="addresses">
-              {profileScreenCopy.tabs.addressBook}
+              {t("tabs.addressBook")}
             </TabsTrigger>
             <TabsTrigger value="access">
-              {profileScreenCopy.tabs.access}
+              {t("tabs.access")}
             </TabsTrigger>
             <TabsTrigger value="security">
-              {profileScreenCopy.tabs.security}
+              {t("tabs.security")}
             </TabsTrigger>
           </TabsList>
 
@@ -463,40 +459,40 @@ export default function CustomerProfileScreen() {
                 <CardContent className="space-y-6 px-6 py-6">
                   <div className="rounded-lg border border-emerald-100 bg-emerald-50/80 p-4">
                     <p className="text-sm font-semibold text-emerald-900">
-                      {profileScreenCopy.account.syncDescription}
+                      {t("account.syncDescription")}
                     </p>
                     <p className="mt-2 text-sm text-emerald-800/80">
                       {saveState === "saved"
-                        ? profileScreenCopy.account.savedState
+                        ? t("account.savedState")
                         : saveState === "saving"
-                          ? profileScreenCopy.account.savePending
+                          ? t("account.savePending")
                           : isDirty
-                            ? profileScreenCopy.account.dirtyState
-                            : profileScreenCopy.account.cleanState}
+                            ? t("account.dirtyState")
+                            : t("account.cleanState")}
                     </p>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <ProfileMetaItem
                       icon={<IdCard className="size-4" />}
-                      label={profileScreenCopy.account.profileId}
+                      label={t("account.profileId")}
                       value={`#${profile.id}`}
                     />
                     <ProfileMetaItem
                       icon={<ShieldCheck className="size-4" />}
-                      label={profileScreenCopy.account.role}
+                      label={t("account.role")}
                       value={formatEnumLabel(profile.role)}
                     />
                     <ProfileMetaItem
                       icon={<MapPinned className="size-4" />}
-                      label={profileScreenCopy.account.hubId}
+                      label={t("account.hubId")}
                       value={
                         profile.hubId ? `Hub #${profile.hubId}` : "Chưa gán hub"
                       }
                     />
                     <ProfileMetaItem
                       icon={<Mail className="size-4" />}
-                      label={profileScreenCopy.account.emailLabel}
+                      label={t("account.emailLabel")}
                       value={profile.email}
                     />
                   </div>
@@ -506,16 +502,16 @@ export default function CustomerProfileScreen() {
               <Card className="rounded-lg border border-slate-200 bg-white py-0 shadow-sm">
                 <CardHeader className="px-6 pt-6">
                   <CardTitle className="text-[20px] font-semibold text-emerald-900">
-                    {profileScreenCopy.account.cardTitle}
+                    {t("account.cardTitle")}
                   </CardTitle>
                   <CardDescription className="text-[14px] leading-6 text-slate-600">
-                    {profileScreenCopy.account.cardDescription}
+                    {t("account.cardDescription")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5 px-6 pb-6">
                   <div className="grid gap-2">
                     <Label htmlFor="profile-full-name">
-                      {profileScreenCopy.account.fullNameLabel}
+                      {t("account.fullNameLabel")}
                     </Label>
                     <Input
                       id="profile-full-name"
@@ -524,20 +520,20 @@ export default function CustomerProfileScreen() {
                         updateField("fullName", event.target.value)
                       }
                       placeholder={
-                        profileScreenCopy.account.fullNamePlaceholder
+                        t("account.fullNamePlaceholder")
                       }
                       className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                     />
                     {formErrors.fullName ? (
                       <p className="text-xs font-medium text-red-600">
-                        {profileScreenCopy.account.validationName}
+                        {t("account.validationName")}
                       </p>
                     ) : null}
                   </div>
 
                   <div className="grid gap-2">
                     <Label htmlFor="profile-phone">
-                      {profileScreenCopy.account.phoneLabel}
+                      {t("account.phoneLabel")}
                     </Label>
                     <Input
                       id="profile-phone"
@@ -545,19 +541,19 @@ export default function CustomerProfileScreen() {
                       onChange={(event) =>
                         updateField("phone", event.target.value)
                       }
-                      placeholder={profileScreenCopy.account.phonePlaceholder}
+                      placeholder={t("account.phonePlaceholder")}
                       className="h-10 rounded-lg border border-slate-300 bg-white px-3"
                     />
                     {formErrors.phone ? (
                       <p className="text-xs font-medium text-red-600">
-                        {profileScreenCopy.account.validationPhone}
+                        {t("account.validationPhone")}
                       </p>
                     ) : null}
                   </div>
 
                   <div className="grid gap-2">
                     <Label htmlFor="profile-email">
-                      {profileScreenCopy.account.emailLabel}
+                      {t("account.emailLabel")}
                     </Label>
                     <Input
                       id="profile-email"
@@ -566,7 +562,7 @@ export default function CustomerProfileScreen() {
                       className="h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-500"
                     />
                     <p className="text-xs font-medium text-slate-500">
-                      {profileScreenCopy.account.emailHint}
+                      {t("account.emailHint")}
                     </p>
                   </div>
                 </CardContent>
@@ -578,7 +574,7 @@ export default function CustomerProfileScreen() {
                     className="h-10 rounded-lg border-slate-200 bg-white text-slate-700"
                     onClick={resetProfileDraft}
                   >
-                    {profileScreenCopy.account.reset}
+                    {t("account.reset")}
                   </Button>
                   <Button
                     type="button"
@@ -587,8 +583,8 @@ export default function CustomerProfileScreen() {
                     onClick={() => void saveProfileDraft()}
                   >
                     {isSavingProfile
-                      ? profileScreenCopy.account.savePending
-                      : profileScreenCopy.account.save}
+                      ? t("account.savePending")
+                      : t("account.save")}
                   </Button>
                 </CardFooter>
               </Card>
@@ -601,10 +597,10 @@ export default function CustomerProfileScreen() {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <CardTitle className="text-[20px] font-semibold text-emerald-900">
-                      {profileScreenCopy.addressBook.title}
+                      {t("addressBook.title")}
                     </CardTitle>
                     <CardDescription className="mt-2 text-[14px] leading-6 text-slate-600">
-                      {profileScreenCopy.addressBook.description}
+                      {t("addressBook.description")}
                     </CardDescription>
                   </div>
                   <Button
@@ -616,7 +612,7 @@ export default function CustomerProfileScreen() {
                       setIsAddressDialogOpen(true);
                     }}
                   >
-                    {profileScreenCopy.addressBook.add}
+                    {t("addressBook.add")}
                   </Button>
                 </div>
               </CardHeader>
@@ -624,14 +620,14 @@ export default function CustomerProfileScreen() {
                 {addressesQuery.isPending ? (
                   <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/70 p-4">
                     <LoadingState
-                      title={profileScreenCopy.addressBook.loading}
+                      title={t("addressBook.loading")}
                       description="Hệ thống đang đồng bộ danh sách địa chỉ hiện tại."
                     />
                   </div>
                 ) : addressesQuery.isError ? (
                   <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/70 p-4">
                     <ErrorState
-                      title={profileScreenCopy.addressBook.loadError}
+                      title={t("addressBook.loadError")}
                       description={addressesQuery.error.message}
                       action={
                         <Button
@@ -646,9 +642,9 @@ export default function CustomerProfileScreen() {
                 ) : addresses.length === 0 ? (
                   <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/70 p-4">
                     <EmptyState
-                      title={profileScreenCopy.addressBook.emptyTitle}
+                      title={t("addressBook.emptyTitle")}
                       description={
-                        profileScreenCopy.addressBook.emptyDescription
+                        t("addressBook.emptyDescription")
                       }
                     />
                   </div>
@@ -667,7 +663,7 @@ export default function CustomerProfileScreen() {
                               </h3>
                               {address.isDefault ? (
                                 <Badge className="h-6 rounded-full bg-emerald-100 px-2.5 text-[11px] font-bold uppercase text-emerald-800">
-                                  {profileScreenCopy.addressBook.defaultBadge}
+                                  {t("addressBook.defaultBadge")}
                                 </Badge>
                               ) : null}
                             </div>
@@ -693,7 +689,7 @@ export default function CustomerProfileScreen() {
                                   void setDefaultAddress(address.id)
                                 }
                               >
-                                {profileScreenCopy.addressBook.setDefault}
+                                {t("addressBook.setDefault")}
                               </Button>
                             ) : null}
                             <Button
@@ -716,7 +712,7 @@ export default function CustomerProfileScreen() {
                               }}
                             >
                               <PencilLine className="mr-2 size-4" />
-                              {profileScreenCopy.addressBook.edit}
+                              {t("addressBook.edit")}
                             </Button>
                             <Button
                               type="button"
@@ -725,7 +721,7 @@ export default function CustomerProfileScreen() {
                               className="h-9 rounded-lg"
                               onClick={() => void deleteAddress(address.id)}
                             >
-                              {profileScreenCopy.addressBook.delete}
+                              {t("addressBook.delete")}
                             </Button>
                           </div>
                         </div>
@@ -741,29 +737,29 @@ export default function CustomerProfileScreen() {
             <Card className="rounded-lg border border-slate-200 bg-white py-0 shadow-sm">
               <CardHeader className="px-6 pt-6">
                 <CardTitle className="text-[20px] font-semibold text-emerald-900">
-                  {profileScreenCopy.access.title}
+                  {t("access.title")}
                 </CardTitle>
                 <CardDescription className="text-[14px] leading-6 text-slate-600">
-                  {profileScreenCopy.access.description}
+                  {t("access.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-6 px-6 pb-6 md:grid-cols-2">
                 <ActionCard
                   href="/overview?notifications=1"
                   icon={<Bell className="size-5" />}
-                  title={profileScreenCopy.access.notificationsTitle}
+                  title={t("access.notificationsTitle")}
                   description={
-                    profileScreenCopy.access.notificationsDescription
+                    t("access.notificationsDescription")
                   }
-                  ctaLabel={profileScreenCopy.access.notificationsCta}
+                  ctaLabel={t("access.notificationsCta")}
                   primary
                 />
                 <ActionCard
                   href="/role-requests"
                   icon={<ShieldCheck className="size-5" />}
-                  title={profileScreenCopy.access.rolesTitle}
-                  description={profileScreenCopy.access.rolesDescription}
-                  ctaLabel={profileScreenCopy.access.rolesCta}
+                  title={t("access.rolesTitle")}
+                  description={t("access.rolesDescription")}
+                  ctaLabel={t("access.rolesCta")}
                 />
               </CardContent>
             </Card>
@@ -773,10 +769,10 @@ export default function CustomerProfileScreen() {
             <Card className="rounded-lg border border-slate-200 bg-white py-0 shadow-sm">
               <CardHeader className="px-6 pt-6">
                 <CardTitle className="text-[20px] font-semibold text-emerald-900">
-                  {profileScreenCopy.security.title}
+                  {t("security.title")}
                 </CardTitle>
                 <CardDescription className="text-[14px] leading-6 text-slate-600">
-                  {profileScreenCopy.security.description}
+                  {t("security.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-6 px-6 pb-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -787,10 +783,10 @@ export default function CustomerProfileScreen() {
                     </div>
                     <div className="space-y-2">
                       <h3 className="text-[16px] font-semibold text-emerald-900">
-                        {profileScreenCopy.security.emailTitle}
+                        {t("security.emailTitle")}
                       </h3>
                       <p className="text-[14px] leading-6 text-slate-600">
-                        {profileScreenCopy.security.emailDescription}
+                        {t("security.emailDescription")}
                       </p>
                     </div>
                   </div>
@@ -810,10 +806,10 @@ export default function CustomerProfileScreen() {
                     </div>
                     <div className="space-y-2">
                       <h3 className="text-[16px] font-semibold text-emerald-900">
-                        {profileScreenCopy.security.resetTitle}
+                        {t("security.resetTitle")}
                       </h3>
                       <p className="text-[14px] leading-6 text-slate-600">
-                        {profileScreenCopy.security.resetDescription}
+                        {t("security.resetDescription")}
                       </p>
                     </div>
                   </div>
@@ -822,7 +818,7 @@ export default function CustomerProfileScreen() {
                     className="mt-5 h-10 rounded-lg bg-emerald-500 px-4 font-bold text-white hover:bg-emerald-600"
                   >
                     <Link href="/auth/forgot-password">
-                      {profileScreenCopy.security.resetCta}
+                      {t("security.resetCta")}
                     </Link>
                   </Button>
                 </div>
@@ -833,7 +829,6 @@ export default function CustomerProfileScreen() {
       </div>
 
       <AddressBookDialog
-        copy={profileScreenCopy}
         isPending={isAddressMutating}
         open={isAddressDialogOpen}
         value={addressDialogValue}

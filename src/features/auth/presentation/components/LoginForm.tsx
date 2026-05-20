@@ -2,7 +2,7 @@
 
 import { Link } from "@/i18n/routing";
 import { startTransition } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import AppIcon from "@/components/ui/app-icon";
@@ -14,7 +14,6 @@ import { useLoginMutation } from "@/features/auth/presentation/hooks/useLoginMut
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
 import type { AuthFormMode } from "@/features/auth/domain/types/auth.types";
 import { localizePath, type Locale } from "@/i18n/config";
-import { useI18nCopy } from "@/i18n/useCopy";
 
 type LoginFormProps = {
   mode?: AuthFormMode;
@@ -24,7 +23,7 @@ const authInputClass =
   "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
 
 export default function LoginForm({ mode = "login" }: LoginFormProps) {
-  const { loginFormCopy } = useI18nCopy();
+  const tLoginForm = useTranslations("auth.loginForm");
   const isRegister = mode === "register";
   const router = useRouter();
   const locale = useLocale() as Locale;
@@ -59,7 +58,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           password: form.password,
         });
 
-        setStatus(loginFormCopy.registerSuccessStatus);
+        setStatus(tLoginForm("registerSuccessStatus"));
         startTransition(() => {
           router.push(`${localizePath("/auth/otp", locale)}?mode=register`);
         });
@@ -71,7 +70,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         password: form.password,
       });
 
-      setStatus(loginFormCopy.loginSuccessStatus);
+      setStatus(tLoginForm("loginSuccessStatus"));
       startTransition(() => {
         router.push(localizePath("/dashboard", locale));
       });
@@ -81,14 +80,23 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
     }
   }
 
+  // Define static google options equivalent since we can't map translations easily via a list if it's dynamic
+  // Though originally it was `loginFormCopy.googleOptions.map`
+  const rawGoogleOptions = tLoginForm.raw("googleOptions") as { label: string }[];
+  const googleOptions = [
+    { label: rawGoogleOptions[0].label, icon: "google" as const },
+    { label: rawGoogleOptions[1].label, icon: "github" as const },
+    { label: rawGoogleOptions[2].label, icon: "microsoft" as const }
+  ];
+
   return (
     <div className="space-y-6 sm:space-y-8">
       <header className="space-y-2">
         <h1 className="text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
-          {loginFormCopy.headerTitle}
+          {tLoginForm("headerTitle")}
         </h1>
         <p className="text-sm leading-6 text-on-surface-variant">
-          {loginFormCopy.headerDescription}
+          {tLoginForm("headerDescription")}
         </p>
       </header>
 
@@ -101,7 +109,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
               : "border-b-2 border-primary text-primary"
           }`}
         >
-          {loginFormCopy.loginLabel}
+          {tLoginForm("loginLabel")}
         </Link>
         <Link
           href="/auth/register"
@@ -111,7 +119,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
               : "text-outline hover:text-primary"
           }`}
         >
-          {loginFormCopy.registerLabel}
+          {tLoginForm("registerLabel")}
         </Link>
       </div>
 
@@ -120,7 +128,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           <>
             <label className="block space-y-2">
               <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                {loginFormCopy.fullNameLabel}
+                {tLoginForm("fullNameLabel")}
               </span>
               <Input
                 value={form.fullName}
@@ -131,13 +139,13 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                   }))
                 }
                 className={authInputClass}
-                placeholder={loginFormCopy.fullNamePlaceholder}
+                placeholder={tLoginForm("fullNamePlaceholder")}
               />
             </label>
 
             <label className="block space-y-2">
               <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                {loginFormCopy.organizationLabel}
+                {tLoginForm("organizationLabel")}
               </span>
               <Input
                 value={form.organization}
@@ -148,13 +156,13 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                   }))
                 }
                 className={authInputClass}
-                placeholder={loginFormCopy.organizationPlaceholder}
+                placeholder={tLoginForm("organizationPlaceholder")}
               />
             </label>
 
             <label className="block space-y-2">
               <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-                {loginFormCopy.phoneLabel}
+                {tLoginForm("phoneLabel")}
               </span>
               <Input
                 value={form.phone}
@@ -162,7 +170,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
                   setForm((current) => ({ ...current, phone: event.target.value }))
                 }
                 className={authInputClass}
-                placeholder={loginFormCopy.phonePlaceholder}
+                placeholder={tLoginForm("phonePlaceholder")}
               />
             </label>
           </>
@@ -170,7 +178,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
 
         <label className="block space-y-2">
           <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {loginFormCopy.emailLabel}
+            {tLoginForm("emailLabel")}
           </span>
           <Input
             value={form.email}
@@ -178,7 +186,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
               setForm((current) => ({ ...current, email: event.target.value }))
             }
             className={authInputClass}
-            placeholder={loginFormCopy.emailPlaceholder}
+            placeholder={tLoginForm("emailPlaceholder")}
             type="email"
           />
         </label>
@@ -186,11 +194,11 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         <div className="block space-y-2">
           <div className="flex flex-col items-start gap-2 px-1 sm:flex-row sm:items-end sm:justify-between">
             <label htmlFor="password-input" className="text-[10px] font-black tracking-[0.16em] text-outline uppercase cursor-pointer">
-              {loginFormCopy.passwordLabel}
+              {tLoginForm("passwordLabel")}
             </label>
             {!isRegister ? (
               <span className="text-[10px] font-black tracking-[0.16em] text-tertiary uppercase">
-                <Link href="/auth/forgot-password">{loginFormCopy.forgotKeyLabel}</Link>
+                <Link href="/auth/forgot-password">{tLoginForm("forgotKeyLabel")}</Link>
               </span>
             ) : null}
           </div>
@@ -201,7 +209,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
               setForm((current) => ({ ...current, password: event.target.value }))
             }
             className={authInputClass}
-            placeholder={loginFormCopy.passwordPlaceholder}
+            placeholder={tLoginForm("passwordPlaceholder")}
             type="password"
           />
         </div>
@@ -216,7 +224,7 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
             type="checkbox"
           />
           <span className="text-sm text-on-surface-variant">
-            {loginFormCopy.activeSessionLabel}
+            {tLoginForm("activeSessionLabel")}
           </span>
         </label>
 
@@ -226,10 +234,10 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           type="submit"
         >
           {isSubmitting
-            ? loginFormCopy.submitLoading
+            ? tLoginForm("submitLoading")
             : isRegister
-              ? loginFormCopy.submitRegister
-              : loginFormCopy.submitLogin}
+              ? tLoginForm("submitRegister")
+              : tLoginForm("submitLogin")}
         </Button>
       </form>
 
@@ -255,23 +263,23 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
         <Separator />
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="bg-surface-container-lowest px-4 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {loginFormCopy.orEnterWith}
+            {tLoginForm("orEnterWith")}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-        {loginFormCopy.googleOptions.map((item) => (
+        {googleOptions.map((item) => (
           <button
             key={item.label}
             type="button"
             disabled={
-              item.label !== loginFormCopy.googleOptions[0].label ||
+              item.label !== googleOptions[0].label ||
               googleLoginMutation.isPending ||
               isSubmitting
             }
             onClick={() => {
-              if (item.label === loginFormCopy.googleOptions[0].label) {
+              if (item.label === googleOptions[0].label) {
                 setStatus(null);
                 googleLoginMutation.mutate();
               }
@@ -280,9 +288,9 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
           >
             <AppIcon name={item.icon} className="text-on-surface-variant" />
             <div className="mt-2 text-[10px] font-black tracking-[0.08em] text-outline uppercase">
-              {item.label === loginFormCopy.googleOptions[0].label &&
+              {item.label === googleOptions[0].label &&
               googleLoginMutation.isPending
-                ? loginFormCopy.connectGoogleLabel
+                ? tLoginForm("connectGoogleLabel")
                 : item.label}
             </div>
           </button>
@@ -291,12 +299,12 @@ export default function LoginForm({ mode = "login" }: LoginFormProps) {
 
       <footer className="space-y-5 pt-4">
         <p className="text-center text-[10px] font-medium tracking-[0.14em] text-outline-variant uppercase">
-          {loginFormCopy.footerCopyright}
+          {tLoginForm("footerCopyright")}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-          <Link href="/auth/login">{loginFormCopy.privacyLabel}</Link>
-          <Link href="/auth/register">{loginFormCopy.apiDocsLabel}</Link>
-          <Link href="/tracking">{loginFormCopy.supportLabel}</Link>
+          <Link href="/auth/login">{tLoginForm("privacyLabel")}</Link>
+          <Link href="/auth/register">{tLoginForm("apiDocsLabel")}</Link>
+          <Link href="/tracking">{tLoginForm("supportLabel")}</Link>
         </div>
       </footer>
     </div>

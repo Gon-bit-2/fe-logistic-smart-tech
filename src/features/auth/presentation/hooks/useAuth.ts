@@ -8,10 +8,10 @@ import { useRegisterWithOtpMutation } from "@/features/auth/presentation/hooks/u
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
 import { getAuthSessionSnapshot } from "@/features/auth/presentation/state/auth.store";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 export function useAuth() {
-  const { authRuntimeCopy } = useI18nCopy();
+  const tAuthRuntime = useTranslations("auth.runtime");
   const auth = useAuthSession();
   const loginMutation = useLoginMutation();
   const requestOtpMutation = useRequestRegisterOtpMutation();
@@ -31,7 +31,7 @@ export function useAuth() {
       const { pendingRegistration } = getAuthSessionSnapshot();
 
       if (!pendingRegistration) {
-        throw new Error(authRuntimeCopy.missingPendingRegistration);
+        throw new Error(tAuthRuntime("missingPendingRegistration"));
       }
 
       return requestOtpMutation.mutateAsync(pendingRegistration);

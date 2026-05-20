@@ -44,6 +44,7 @@ describe("useRoleRequests mutations", () => {
 
     await act(async () => {
       await result.current.mutateAsync({
+        hubId: 1,
         reason: "Tôi muốn làm tài xế",
         targetRoleName: "DRIVER",
       });

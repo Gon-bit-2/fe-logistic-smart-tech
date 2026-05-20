@@ -7,14 +7,14 @@ import {
   clearOtpFlowState,
   getAuthSessionSnapshot,
 } from "@/features/auth/presentation/state/auth.store";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 type ForgotPasswordMutationInput = {
   code: string;
 };
 
 export function useForgotPasswordMutation() {
-  const { authRuntimeCopy } = useI18nCopy();
+  const tAuthRuntime = useTranslations("auth.runtime");
 
   return useMutation<unknown, ApiError, ForgotPasswordMutationInput>({
     mutationFn: async ({ code }: ForgotPasswordMutationInput) => {
@@ -22,7 +22,7 @@ export function useForgotPasswordMutation() {
 
       if (!pendingPasswordReset) {
         throw new ApiError({
-          message: authRuntimeCopy.missingForgotPasswordSession,
+          message: tAuthRuntime("missingForgotPasswordSession"),
         });
       }
 

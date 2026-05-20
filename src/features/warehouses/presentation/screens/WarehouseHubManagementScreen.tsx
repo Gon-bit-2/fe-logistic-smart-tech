@@ -14,7 +14,7 @@ import {
 } from "@/features/warehouses/presentation/hooks/useHubsQuery";
 import { useImageUpload } from "@/lib/hooks/useImageUpload";
 import ImageUploadField from "@/components/ui/ImageUploadField";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 export interface WarehouseHubManagementScreenProps {
   readonly _unused?: never;
@@ -24,7 +24,7 @@ export default function WarehouseHubManagementScreen(
   _props: Readonly<WarehouseHubManagementScreenProps>,
 ) {
   void _props;
-  const { warehouseHubScreenCopy } = useI18nCopy();
+  const tHub = useTranslations("warehouse.hub");
   const hubsQuery = useHubsQuery();
   const [selectedHubId, setSelectedHubId] = useState<string>("");
   const [form, setForm] = useState({
@@ -77,8 +77,8 @@ export default function WarehouseHubManagementScreen(
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow={warehouseHubScreenCopy.readyForInput}
-        title={warehouseHubScreenCopy.pageTitle}
+        eyebrow={tHub("readyForInput")}
+        title={tHub("pageTitle")}
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">

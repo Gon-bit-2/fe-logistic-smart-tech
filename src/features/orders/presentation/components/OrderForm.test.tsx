@@ -1,7 +1,8 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleOrder } from "../../../../../tests/fixtures/api";
-import { orderFormCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const orderFormCopy = viMessages.orders.form;
 import { renderWithProviders } from "@/test/render";
 import OrderForm from "./OrderForm";
 

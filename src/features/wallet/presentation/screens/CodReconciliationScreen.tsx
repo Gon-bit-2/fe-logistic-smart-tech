@@ -10,7 +10,7 @@ import {
   SectionCard,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useReconcileCod } from "@/features/wallet/presentation/hooks/useWallet";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/utils/formatters";
 
 const INITIAL_FORM = {
@@ -21,7 +21,7 @@ const INITIAL_FORM = {
 };
 
 export default function CodReconciliationScreen() {
-  const { walletScreenCopy } = useI18nCopy();
+  const tWallet = useTranslations("wallet");
   const reconcileCod = useReconcileCod();
   const [form, setForm] = useState(INITIAL_FORM);
   const [message, setMessage] = useState<string | null>(null);
@@ -50,16 +50,16 @@ export default function CodReconciliationScreen() {
       driverId,
       referenceId: form.referenceId,
     });
-    setMessage(walletScreenCopy.reconciliation.successMessage);
+    setMessage(tWallet("reconciliation.successMessage"));
     setForm(INITIAL_FORM);
   }
 
   return (
     <div className="space-y-7">
       <PageHeader
-        eyebrow={walletScreenCopy.reconciliation.eyebrow}
-        title={walletScreenCopy.reconciliation.title}
-        description={walletScreenCopy.reconciliation.description}
+        eyebrow={tWallet("reconciliation.eyebrow")}
+        title={tWallet("reconciliation.title")}
+        description={tWallet("reconciliation.description")}
       />
 
       <div className="grid gap-6 xl:grid-cols-[1fr_0.8fr]">
@@ -68,7 +68,7 @@ export default function CodReconciliationScreen() {
             <div className="grid gap-5 md:grid-cols-2">
               <label className="space-y-2">
                 <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                  {walletScreenCopy.fields.driverId}
+                  {tWallet("fields.driverId")}
                 </span>
                 <Input
                   inputMode="numeric"
@@ -85,7 +85,7 @@ export default function CodReconciliationScreen() {
               </label>
               <label className="space-y-2">
                 <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                  {walletScreenCopy.fields.amount}
+                  {tWallet("fields.amount")}
                 </span>
                 <Input
                   inputMode="decimal"
@@ -104,7 +104,7 @@ export default function CodReconciliationScreen() {
 
             <label className="block space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                {walletScreenCopy.fields.referenceId}
+                {tWallet("fields.referenceId")}
               </span>
               <Input
                 onChange={(event) =>
@@ -119,7 +119,7 @@ export default function CodReconciliationScreen() {
 
             <label className="block space-y-2">
               <span className="text-xs font-black uppercase tracking-[0.14em] text-on-surface/45">
-                {walletScreenCopy.fields.description}
+                {tWallet("fields.description")}
               </span>
               <Textarea
                 onChange={(event) =>
@@ -149,20 +149,20 @@ export default function CodReconciliationScreen() {
               ) : (
                 <Banknote className="mr-2 size-4" />
               )}
-              {walletScreenCopy.actions.reconcile}
+              {tWallet("actions.reconcile")}
             </Button>
           </form>
         </SectionCard>
 
         <SectionCard className="p-6">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-primary">
-            {walletScreenCopy.reconciliation.previewEyebrow}
+            {tWallet("reconciliation.previewEyebrow")}
           </p>
           <h2 className="mt-3 text-2xl font-black tracking-tight text-on-surface">
             {formatCurrency(Number.isFinite(amount) ? amount : 0, "VND")}
           </h2>
           <p className="mt-4 text-sm leading-6 text-on-surface/60">
-            {walletScreenCopy.reconciliation.previewDescription}
+            {tWallet("reconciliation.previewDescription")}
           </p>
         </SectionCard>
       </div>

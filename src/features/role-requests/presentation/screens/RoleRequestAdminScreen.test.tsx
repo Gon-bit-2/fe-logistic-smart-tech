@@ -67,8 +67,8 @@ describe("RoleRequestAdminScreen", () => {
   it("requires a hub before approving warehouse staff requests", () => {
     renderWithProviders(<RoleRequestAdminScreen />);
 
-    expect(screen.getByText("Trung tâm phụ trách")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Duyệt" })).toBeDisabled();
+    expect(screen.getByText("admin.hubLabel")).toBeInTheDocument();
+    expect(screen.getByText("admin.approveButton")).toBeDisabled();
   });
 
   it("submits approve payload with hubId for warehouse staff requests", () => {
@@ -77,7 +77,7 @@ describe("RoleRequestAdminScreen", () => {
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "3" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Duyệt" }));
+    fireEvent.click(screen.getByText("admin.approveButton"));
 
     expect(approveMutation).toHaveBeenCalledWith({
       requestId: "88",
@@ -102,11 +102,7 @@ describe("RoleRequestAdminScreen", () => {
     renderWithProviders(<RoleRequestAdminScreen />);
 
     expect(screen.getByText("Không thể tải hàng chờ yêu cầu vai trò")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Hàng chờ yêu cầu vai trò đang tạm thời không khả dụng. Vui lòng thử lại sau hoặc kiểm tra hệ thống nền.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText("admin.loadErrorFallback")).toBeInTheDocument();
     expect(
       screen.queryByText(/Invalid `prisma\.roleRequest\.findMany\(\)` invocation/i),
     ).not.toBeInTheDocument();

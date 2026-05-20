@@ -13,26 +13,24 @@ import { PageHeader, SectionCard } from "@/features/admin/presentation/component
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotificationsQuery } from "@/features/notifications/presentation/hooks/useNotifications";
 import { useNotificationSocket } from "@/features/notifications/presentation/hooks/useNotificationSocket";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
 import { cn } from "@/lib/utils";
 
-type NotificationScreenCopy = ReturnType<typeof useI18nCopy>["notificationScreenCopy"];
-
 function getNotificationLoadErrorMessage(
   error: unknown,
-  notificationScreenCopy: NotificationScreenCopy,
+  t: ReturnType<typeof useTranslations<"notifications">>,
 ) {
   if (error instanceof ApiError) {
-    if (error.status === 401) return notificationScreenCopy.loadErrorUnauthorized;
-    if (error.status === 403) return notificationScreenCopy.loadErrorForbidden;
+    if (error.status === 401) return t("loadErrorUnauthorized");
+    if (error.status === 403) return t("loadErrorForbidden");
   }
-  return notificationScreenCopy.loadErrorFallback;
+  return t("loadErrorFallback");
 }
 
 export default function NotificationInboxScreen() {
-  const { notificationScreenCopy } = useI18nCopy();
+  const t = useTranslations("notifications");
   const { user } = useAuthSession();
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
   
@@ -69,7 +67,7 @@ export default function NotificationInboxScreen() {
         title="Không thể tải notifications"
         description={getNotificationLoadErrorMessage(
           notificationsQuery.error,
-          notificationScreenCopy,
+          t,
         )}
         action={
           <Button variant="outline" onClick={() => void notificationsQuery.refetch()}>
@@ -84,8 +82,8 @@ export default function NotificationInboxScreen() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <PageHeader
         eyebrow="Inbox"
-        title={notificationScreenCopy.title}
-        description={notificationScreenCopy.description}
+        title={t("title")}
+        description={t("description")}
         actions={
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center rounded-2xl bg-slate-100/80 p-1.5 shadow-inner">
@@ -99,7 +97,7 @@ export default function NotificationInboxScreen() {
                     : "text-slate-500 hover:text-slate-900",
                 )}
               >
-                {notificationScreenCopy.allTab}
+                {t("allTab")}
               </button>
               <button
                 type="button"
@@ -111,7 +109,7 @@ export default function NotificationInboxScreen() {
                     : "text-slate-500 hover:text-slate-900",
                 )}
               >
-                {notificationScreenCopy.unreadTab}
+                {t("unreadTab")}
                 {hasUnread && (
                   <span className="ml-2 inline-flex size-2 rounded-full bg-red-500" />
                 )}
@@ -128,7 +126,7 @@ export default function NotificationInboxScreen() {
               onClick={() => void markAllMutation.mutateAsync()}
             >
               <CheckCheck className="mr-2 size-4" />
-              {notificationScreenCopy.markAll}
+              {t("markAll")}
             </Button>
           </div>
         }
@@ -137,8 +135,8 @@ export default function NotificationInboxScreen() {
       {notifications.length === 0 ? (
         <div className="flex min-h-[400px] items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/50">
           <EmptyState
-            title={notificationScreenCopy.emptyTitle}
-            description={notificationScreenCopy.emptyDescription}
+            title={t("emptyTitle")}
+            description={t("emptyDescription")}
           />
         </div>
       ) : (
@@ -227,7 +225,7 @@ export default function NotificationInboxScreen() {
                       disabled={markReadMutation.isPending}
                       onClick={() => void markReadMutation.mutateAsync(notification.id)}
                     >
-                      {notificationScreenCopy.markOne}
+                      {t("markOne")}
                     </Button>
                   )}
                 </div>

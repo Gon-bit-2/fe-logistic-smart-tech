@@ -15,7 +15,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeleton";
@@ -29,7 +29,7 @@ export default function InventoryManagementScreen(
   _props: Readonly<InventoryManagementScreenProps>,
 ) {
   void _props;
-  const { inventoryScreenCopy } = useI18nCopy();
+  const tInventory = useTranslations("warehouse.inventory");
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const hubsQuery = useHubsQuery();
@@ -50,29 +50,29 @@ export default function InventoryManagementScreen(
   return (
     <div className="space-y-7">
       <PageHeader
-        title={inventoryScreenCopy.hubTitle}
-        description={inventoryScreenCopy.hubSubtitle}
+        title={tInventory("hubTitle")}
+        description={tInventory("hubSubtitle")}
       />
 
       <div className="grid gap-5 xl:grid-cols-3">
         <MetricTile
           icon={<Boxes className="size-4 text-primary" />}
-          label={inventoryScreenCopy.metricTotalStock}
+          label={tInventory("metricTotalStock")}
           value={String(hubs.length)}
-          supporting={inventoryScreenCopy.stockSupporting}
+          supporting={tInventory("stockSupporting")}
         />
         <MetricTile
           bordered
           icon={<Warehouse className="size-4 text-tertiary" />}
-          label={inventoryScreenCopy.metricStorageCapacity}
+          label={tInventory("metricStorageCapacity")}
           value={String(activeHubs)}
           supporting="trung tâm đang hoạt động"
         />
         <MetricTile
           icon={<Factory className="size-4 text-tertiary" />}
-          label={inventoryScreenCopy.metricPendingDispatch}
+          label={tInventory("metricPendingDispatch")}
           value={String(hubsWithCoordinates)}
-          chips={inventoryScreenCopy.stockChips}
+          chips={tInventory.raw("stockChips") as string[]}
         />
       </div>
 
@@ -81,7 +81,7 @@ export default function InventoryManagementScreen(
           <div className="flex items-center gap-3">
             <div className="h-6 w-1 rounded-full bg-primary" />
             <h2 className="text-[1rem] font-bold tracking-tight text-on-surface">
-              {inventoryScreenCopy.activeInventoryLedger}
+              {tInventory("activeInventoryLedger")}
             </h2>
           </div>
 
@@ -92,7 +92,7 @@ export default function InventoryManagementScreen(
                 className="h-10 w-full rounded-[0.65rem] bg-white pl-9 pr-4 text-[0.72rem] text-on-surface outline-none ring-0 shadow-[0_18px_28px_-24px_rgba(6,78,59,0.35)] placeholder:text-on-surface/35 focus:ring-2 focus:ring-primary/15"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder={inventoryScreenCopy.searchPlaceholder}
+                placeholder={tInventory("searchPlaceholder")}
                 type="text"
               />
             </label>
@@ -101,7 +101,7 @@ export default function InventoryManagementScreen(
               className="inline-flex items-center justify-center gap-2 rounded-[0.65rem] bg-surface-container-high px-4 py-2.5 text-[0.68rem] font-bold text-on-surface/60 transition-colors hover:bg-surface-container-highest"
             >
               <Filter className="size-4" />
-              {inventoryScreenCopy.filters}
+              {tInventory("filters")}
             </button>
           </div>
         </div>
@@ -115,8 +115,8 @@ export default function InventoryManagementScreen(
         {hubsQuery.isError ? (
           <div className="p-5">
             <ErrorState
-              title={inventoryScreenCopy.emptyTitle}
-              description={inventoryScreenCopy.emptyDescription}
+              title={tInventory("emptyTitle")}
+              description={tInventory("emptyDescription")}
             />
           </div>
         ) : null}
@@ -126,8 +126,8 @@ export default function InventoryManagementScreen(
         filteredHubs.length === 0 ? (
           <div className="p-5">
             <EmptyState
-              title={inventoryScreenCopy.emptyTitle}
-              description={inventoryScreenCopy.emptyDescription}
+              title={tInventory("emptyTitle")}
+              description={tInventory("emptyDescription")}
             />
           </div>
         ) : null}
@@ -139,7 +139,7 @@ export default function InventoryManagementScreen(
             <table className="min-w-full">
               <thead>
                 <tr className="border-b border-outline-variant/15">
-                  {inventoryScreenCopy.headings.map((heading) => (
+                  {(tInventory.raw("headings") as string[]).map((heading) => (
                     <th
                       key={heading}
                       className="px-6 py-4 text-left text-[0.55rem] font-black uppercase tracking-[0.2em] text-on-surface/35"
@@ -172,7 +172,7 @@ export default function InventoryManagementScreen(
                       {typeof hub.latitude === "number" &&
                       typeof hub.longitude === "number"
                         ? `${hub.latitude}, ${hub.longitude}`
-                        : inventoryScreenCopy.hubVehiclePending}
+                        : tInventory("hubVehiclePending")}
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge
@@ -196,14 +196,14 @@ export default function InventoryManagementScreen(
             type="button"
             className="text-[0.68rem] font-bold text-primary transition-opacity hover:opacity-80"
           >
-            {inventoryScreenCopy.recordsButton}
+            {tInventory("recordsButton")}
           </button>
         </div>
       </SectionCard>
 
       <IntegrationPendingState
-        title={inventoryScreenCopy.integrationPendingTitle}
-        description={inventoryScreenCopy.integrationPendingDescription}
+        title={tInventory("integrationPendingTitle")}
+        description={tInventory("integrationPendingDescription")}
       />
     </div>
   );
@@ -260,7 +260,7 @@ function MetricTile({
         {chips?.length ? (
           <div className="mt-3 flex flex-wrap gap-2">
             {chips.map((chip, index) => (
-              <span
+               <span
                 key={chip}
                 className={cn(
                   "rounded-full px-2 py-1 text-[0.62rem] font-bold uppercase",

@@ -7,10 +7,10 @@ import { useSearchParams } from "next/navigation";
 import { parseGoogleCallbackParams } from "@/features/auth/application/services/auth.utils";
 import { exchangeGoogleSession } from "@/features/auth/infrastructure/api/auth.api";
 import { setAuthSession } from "@/features/auth/presentation/state/auth.store";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 export default function GoogleCallbackHandler() {
-  const { googleCallbackCopy } = useI18nCopy();
+  const tGoogle = useTranslations("auth.googleCallback");
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackParams = parseGoogleCallbackParams(searchParams);
@@ -20,8 +20,8 @@ export default function GoogleCallbackHandler() {
   const message = callbackParams.errorMessage
     ? callbackParams.errorMessage
     : !callbackParams.sessionToken
-      ? googleCallbackCopy.incompleteSession
-      : googleCallbackCopy.loginSuccess;
+      ? tGoogle("incompleteSession")
+      : tGoogle("loginSuccess");
 
   useEffect(() => {
     if (isError) {
@@ -70,7 +70,7 @@ export default function GoogleCallbackHandler() {
     <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-black tracking-tight text-on-surface">
-          {isError ? googleCallbackCopy.errorTitle : googleCallbackCopy.successTitle}
+          {isError ? tGoogle("errorTitle") : tGoogle("successTitle")}
         </h1>
         <p className="text-sm leading-6 text-on-surface-variant">{message}</p>
       </header>
@@ -83,16 +83,16 @@ export default function GoogleCallbackHandler() {
         }`}
       >
         {isError
-          ? googleCallbackCopy.errorCard
-          : googleCallbackCopy.secureSessionCard}
+          ? tGoogle("errorCard")
+          : tGoogle("secureSessionCard")}
       </div>
 
       <footer className="flex items-center justify-between border-t border-outline-variant/10 pt-6 text-sm text-on-surface-variant">
         <Link href="/auth/login" className="font-semibold text-primary">
-          {googleCallbackCopy.backToLogin}
+          {tGoogle("backToLogin")}
         </Link>
         <Link href="/tracking" className="font-semibold">
-          {googleCallbackCopy.support}
+          {tGoogle("support")}
         </Link>
       </footer>
     </div>

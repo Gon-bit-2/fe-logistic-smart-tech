@@ -38,8 +38,8 @@ describe("AdminTopBar", () => {
         pathname="/admin"
         config={{
           initials: "AD",
-          searchPlaceholder: "Search",
-          title: "Admin",
+          searchPlaceholderKey: "searchPlaceholder",
+          titleKey: "dashboard",
           topBarVariant: "dashboard",
         }}
       />,

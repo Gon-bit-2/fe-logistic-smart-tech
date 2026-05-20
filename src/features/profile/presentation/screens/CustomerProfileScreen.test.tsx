@@ -121,7 +121,7 @@ describe("CustomerProfileScreen", () => {
     });
 
     expect(screen.getByText("Không thể tải hồ sơ")).toBeInTheDocument();
-    expect(screen.getByText("Bạn không có quyền truy cập hồ sơ này.")).toBeInTheDocument();
+    expect(screen.getByText("loadErrorForbidden")).toBeInTheDocument();
   });
 
   it("renders account information with read-only email", () => {
@@ -131,7 +131,7 @@ describe("CustomerProfileScreen", () => {
       pathname: "/profile",
     });
 
-    expect(screen.getByRole("heading", { name: "Hồ sơ & cài đặt" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "title" })).toBeInTheDocument();
     expect(screen.getByDisplayValue("Cong ty Emerald")).toBeInTheDocument();
     expect(screen.getByDisplayValue("0900111222")).toBeInTheDocument();
     expect(screen.getByDisplayValue("customer@emerald.vn")).toBeDisabled();
@@ -164,23 +164,23 @@ describe("CustomerProfileScreen", () => {
       pathname: "/profile",
     });
 
-    activateTab("Danh bạ địa chỉ");
+    activateTab("tabs.addressBook");
     expect(screen.getByText("Kho chinh")).toBeInTheDocument();
-    expect(screen.getByText("Mặc định")).toBeInTheDocument();
+    expect(screen.getByText("addressBook.defaultBadge")).toBeInTheDocument();
     expect(screen.getByText("123 Nguyen Van Linh, Quan 7")).toBeInTheDocument();
 
-    activateTab("Quyền & thông báo");
-    expect(screen.getByRole("link", { name: "Mở hộp thông báo" })).toHaveAttribute(
+    activateTab("tabs.access");
+    expect(screen.getByRole("link", { name: "access.notificationsCta" })).toHaveAttribute(
       "href",
       "/overview?notifications=1",
     );
-    expect(screen.getByRole("link", { name: "Mở trung tâm vai trò" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "access.rolesCta" })).toHaveAttribute(
       "href",
       "/role-requests",
     );
 
-    activateTab("Bảo mật");
-    expect(screen.getByRole("link", { name: "Mở luồng bảo mật" })).toHaveAttribute(
+    activateTab("tabs.security");
+    expect(screen.getByRole("link", { name: "security.resetCta" })).toHaveAttribute(
       "href",
       "/auth/forgot-password",
     );

@@ -15,7 +15,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useDispatcherMetrics } from "@/features/admin/presentation/hooks/useDispatcherMetrics";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatDate } from "@/utils/formatters";
 import { isActiveTripStatus } from "@/features/trips/presentation/lib/trip-status";
 
@@ -31,7 +31,8 @@ export default function DispatcherDashboardScreen(
   _props: Readonly<DispatcherDashboardScreenProps>,
 ) {
   void _props;
-  const { adminScreenCopy, getOrderStatusLabel } = useI18nCopy();
+  const t = useTranslations("admin.screen");
+  const tOrders = useTranslations("orders");
   const tripsQuery = useTripsQuery();
   const activeTripIds = useMemo(
     () =>
@@ -50,8 +51,8 @@ export default function DispatcherDashboardScreen(
   if (ordersQuery.isPending && vehiclesQuery.isPending) {
     return (
       <LoadingState
-        title={adminScreenCopy.loadingTitle}
-        description={adminScreenCopy.loadingDescription}
+        title={t("loadingTitle")}
+        description={t("loadingDescription")}
       />
     );
   }
@@ -59,7 +60,7 @@ export default function DispatcherDashboardScreen(
   if (!orders.length && ordersQuery.isError) {
     return (
       <ErrorState
-        title={adminScreenCopy.emptyTitle}
+        title={t("emptyTitle")}
         description={ordersQuery.error.message}
         action={
           <Button onClick={() => void ordersQuery.refetch()} variant="outline">
@@ -73,8 +74,8 @@ export default function DispatcherDashboardScreen(
   return (
     <div className="space-y-6">
       <PageHeader
-        title={adminScreenCopy.title}
-        description={adminScreenCopy.description}
+        title={t("title")}
+        description={t("description")}
       />
 
       {!dispatcherSocket.isConnected && activeTripIds.length > 0 ? (
@@ -88,17 +89,17 @@ export default function DispatcherDashboardScreen(
       <div className="grid gap-6 md:grid-cols-3">
         <MetricCard
           icon={<Zap className="size-6 text-[#064E3B]" />}
-          label={adminScreenCopy.metrics.activeOrders}
+          label={t("metrics.activeOrders")}
           value={String(metrics.activeOrders)}
         />
         <MetricCard
           icon={<Truck className="size-6 text-[#064E3B]" />}
-          label={adminScreenCopy.metrics.availableVehicles}
+          label={t("metrics.availableVehicles")}
           value={String(metrics.availableVehicles)}
         />
         <MetricCard
           icon={<Bolt className="size-6 text-[#064E3B]" />}
-          label={adminScreenCopy.metrics.electricVehicles}
+          label={t("metrics.electricVehicles")}
           value={String(metrics.electricVehicles)}
         />
       </div>
@@ -129,10 +130,10 @@ export default function DispatcherDashboardScreen(
         <SectionCard className="overflow-hidden p-0">
           <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5 bg-white">
             <h2 className="text-xl font-semibold tracking-tight text-[#064E3B]">
-              {adminScreenCopy.recentOrders}
+              {t("recentOrders")}
             </h2>
             <Button asChild variant="outline" size="sm">
-              <Link href="/admin/orders">{adminScreenCopy.viewAll}</Link>
+              <Link href="/admin/orders">{t("viewAll")}</Link>
             </Button>
           </div>
 
@@ -141,19 +142,19 @@ export default function DispatcherDashboardScreen(
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
                   <th className="px-6 py-4 font-semibold text-slate-600">
-                    {adminScreenCopy.trackingId}
+                    {t("trackingId")}
                   </th>
                   <th className="px-6 py-4 font-semibold text-slate-600">
-                    {adminScreenCopy.customer}
+                    {t("customer")}
                   </th>
                   <th className="px-6 py-4 font-semibold text-slate-600">
                     Trạng thái
                   </th>
                   <th className="px-6 py-4 font-semibold text-slate-600">
-                    {adminScreenCopy.currentEta}
+                    {t("currentEta")}
                   </th>
                   <th className="px-6 py-4 font-semibold text-slate-600">
-                    {adminScreenCopy.actions}
+                    {t("actions")}
                   </th>
                 </tr>
               </thead>
@@ -171,7 +172,7 @@ export default function DispatcherDashboardScreen(
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge
-                        label={getOrderStatusLabel(order.status)}
+                        label={tOrders(`status.${order.status}`)}
                         tone="neutral"
                       />
                     </td>

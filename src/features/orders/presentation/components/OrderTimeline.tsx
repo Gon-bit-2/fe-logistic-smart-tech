@@ -1,20 +1,25 @@
-import { useI18nCopy } from "@/i18n/useCopy";
 import { formatDate } from "@/utils/formatters";
 import type { OrderDTO } from "@/features/orders/domain/types/order.types";
+import { useTranslations } from "next-intl";
 
 type OrderTimelineProps = {
   order: OrderDTO;
 };
 
 export default function OrderTimeline({ order }: OrderTimelineProps) {
-  const { getOrderStatusLabel, orderTimelineCopy } = useI18nCopy();
+  const t = useTranslations("orders.timeline");
+  const tStatus = useTranslations("orders.status");
+
+  const getOrderStatusLabel = (status: string) => {
+    return tStatus.has(status as any) ? tStatus(status as any) : status;
+  };
 
   return (
     <section className="rounded-[1.5rem] border border-border bg-card p-6">
       <div className="mb-5 flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-black tracking-[0.28em] text-primary uppercase">
-            {orderTimelineCopy.eyebrow}
+            {t("eyebrow")}
           </p>
           <h3 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
             {order.reference}

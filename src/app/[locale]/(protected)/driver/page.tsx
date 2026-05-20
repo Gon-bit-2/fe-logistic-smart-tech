@@ -25,7 +25,8 @@ import {
   SectionCard,
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
+import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 import {
   useCreateDriverAssignmentRequest,
   useDriverDispatchBoardQuery,
@@ -76,7 +77,7 @@ function getAssignmentStatusConfig(status?: string | null) {
 }
 
 export default function DriverPage() {
-  const { getOrderStatusLabel } = useI18nCopy();
+  const tOrderStatus = useTranslations("orders.status");
   const [searchTerm, setSearchTerm] = useState("");
   const tripsQuery = useTripsQuery({ limit: 50, page: 1 });
   const boardQuery = useDriverDispatchBoardQuery();
@@ -265,7 +266,7 @@ export default function DriverPage() {
                       </p>
                       <p>
                         {nextStop.order?.status
-                          ? getOrderStatusLabel(nextStop.order.status)
+                          ? tOrderStatus(nextStop.order.status as OrderStatus)
                           : nextStop.stopType}
                       </p>
                       {nextStop.expectedArrivalTime ? (
@@ -471,7 +472,7 @@ export default function DriverPage() {
                         Trạng thái đơn
                       </p>
                       <p className="mt-2 text-sm font-semibold text-slate-900">
-                        {getOrderStatusLabel(order.status)}
+                        {tOrderStatus(order.status as OrderStatus)}
                       </p>
                     </div>
                     <div>

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/data-states";
 import { PageHeader, SectionCard } from "@/features/admin/presentation/components/admin-primitives";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import type { AnalyticsDateRange } from "@/features/analytics/domain/types/analytics.types";
 import { useDashboardAnalytics } from "@/features/analytics/presentation/hooks/useDashboardAnalytics";
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
@@ -37,7 +37,7 @@ export default function AnalyticsDashboardScreen(
   _props: Readonly<AnalyticsDashboardScreenProps>,
 ) {
   void _props;
-  const { analyticsScreenCopy } = useI18nCopy();
+  const tAnalytics = useTranslations("analytics.screen");
   const [dateRange, setDateRange] = useState<AnalyticsDateRange>("30d");
   const filterOptions: ReadonlyArray<{ label: string; value: AnalyticsDateRange }> = [
     { label: "7 ngày", value: "7d" },
@@ -60,8 +60,8 @@ export default function AnalyticsDashboardScreen(
   return (
     <div className="space-y-8">
       <PageHeader
-        title={analyticsScreenCopy.title}
-        description={analyticsScreenCopy.subtitle}
+        title={tAnalytics("title")}
+        description={tAnalytics("subtitle")}
         actions={
           <div className="flex flex-wrap items-center gap-3 rounded-[1.6rem] bg-surface-container-low p-2">
             {filterOptions.map((filter) => (

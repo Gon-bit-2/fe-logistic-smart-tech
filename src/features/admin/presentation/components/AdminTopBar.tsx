@@ -8,7 +8,7 @@ import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types
 import { getNotificationsHrefForRole } from "@/features/auth/application/services/auth-session";
 import { useAuthSession } from "@/features/auth/presentation/hooks/useAuthSession";
 import { useUnreadNotificationsCount } from "@/features/notifications/presentation/hooks/useNotifications";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { AdminTopBarProps } from "../types/layout.types";
 
@@ -16,7 +16,9 @@ export default function AdminTopBar({
   config,
   pathname,
 }: Readonly<AdminTopBarProps>) {
-  const { adminTopBarCopy } = useI18nCopy();
+  const tTopBar = useTranslations("admin.topBar");
+  const tShell = useTranslations("admin.shell");
+  const tNav = useTranslations("admin.nav.labels");
   const { user } = useAuthSession();
   const unreadQuery = useUnreadNotificationsCount(Boolean(user));
   const unreadCount = unreadQuery.data?.totalUnread ?? 0;
@@ -37,7 +39,7 @@ export default function AdminTopBar({
                 <input
                   className="h-9 w-full rounded-full border-none bg-surface-container-low pl-10 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface/35 focus:ring-2 focus:ring-primary/15"
                   defaultValue=""
-                  placeholder={config.searchPlaceholder}
+                  placeholder={tShell(config.searchPlaceholderKey as any)}
                   type="text"
                 />
               </label>
@@ -56,7 +58,7 @@ export default function AdminTopBar({
                         : "border-transparent text-on-surface/50 hover:text-primary",
                     )}
                   >
-                    {item.label}
+                    {tNav(item.labelKey as any)}
                   </Link>
                 ))}
               </nav>
@@ -85,10 +87,10 @@ export default function AdminTopBar({
             </button>
             <div className="hidden h-6 w-px bg-outline-variant/30 md:block" />
             <AuthUserMenu
-              defaultFullName={adminTopBarCopy.adminLabel}
+              defaultFullName={tTopBar("adminLabel")}
               fallbackInitials={adminInitials}
-              logoutLabel={adminTopBarCopy.logoutLabel}
-              profileLabel={adminTopBarCopy.profileLabel}
+              logoutLabel={tTopBar("logoutLabel")}
+              profileLabel={tTopBar("profileLabel")}
               triggerClassName="border-primary-container bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
             />
           </div>
@@ -106,7 +108,7 @@ export default function AdminTopBar({
               href="/admin"
               className="text-[0.95rem] font-bold tracking-tight text-primary"
             >
-              {adminTopBarCopy.ecosystemBrand}
+              {tTopBar("ecosystemBrand")}
             </Link>
 
             {config.topTabs?.length ? (
@@ -122,7 +124,7 @@ export default function AdminTopBar({
                         : "border-transparent text-on-surface/50 hover:text-primary",
                     )}
                   >
-                    {item.label}
+                    {tNav(item.labelKey as any)}
                   </Link>
                 ))}
               </nav>
@@ -157,10 +159,10 @@ export default function AdminTopBar({
               <CircleHelp className="size-[1.125rem]" />
             </button>
             <AuthUserMenu
-              defaultFullName={adminTopBarCopy.adminLabel}
+              defaultFullName={tTopBar("adminLabel")}
               fallbackInitials={adminInitials}
-              logoutLabel={adminTopBarCopy.logoutLabel}
-              profileLabel={adminTopBarCopy.profileLabel}
+              logoutLabel={tTopBar("logoutLabel")}
+              profileLabel={tTopBar("profileLabel")}
               triggerClassName="border-primary-fixed/35 bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
             />
           </div>
@@ -174,7 +176,7 @@ export default function AdminTopBar({
       <div className="flex min-h-16 flex-col gap-4 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-8">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-4 md:gap-8">
           <div className="text-xl font-bold tracking-tight text-primary">
-            Precision Logistics
+            {tShell(config.titleKey as any)}
           </div>
 
           {showSearch ? (
@@ -183,7 +185,7 @@ export default function AdminTopBar({
               <input
                 className="h-10 w-full rounded-lg border border-outline-variant/20 bg-surface-container-lowest pl-10 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface/35 focus:border-primary focus:ring-2 focus:ring-primary/10"
                 defaultValue=""
-                placeholder={config.searchPlaceholder}
+                placeholder={tShell(config.searchPlaceholderKey as any)}
                 type="text"
               />
             </label>
@@ -211,20 +213,20 @@ export default function AdminTopBar({
           </button>
           <div className="hidden h-6 w-px bg-outline-variant/30 md:block" />
 
-          {config.supportLabel ? (
+          {config.supportLabelKey ? (
             <button
               type="button"
               className="rounded-lg border border-primary-fixed/30 bg-surface-container-lowest px-4 py-2 text-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-low"
             >
-              {config.supportLabel}
+              {tShell(config.supportLabelKey as any)}
             </button>
           ) : null}
 
           <AuthUserMenu
-            defaultFullName={adminTopBarCopy.adminLabel}
+            defaultFullName={tTopBar("adminLabel")}
             fallbackInitials={adminInitials}
-            logoutLabel={adminTopBarCopy.logoutLabel}
-            profileLabel={adminTopBarCopy.profileLabel}
+            logoutLabel={tTopBar("logoutLabel")}
+            profileLabel={tTopBar("profileLabel")}
             triggerClassName="border-primary-fixed/35 bg-surface-container-lowest shadow-none hover:bg-surface-container-low hover:translate-y-0"
           />
         </div>

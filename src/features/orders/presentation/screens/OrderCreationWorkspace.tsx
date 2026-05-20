@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import OperationsTopBar from "@/components/layout/OperationsTopBar";
 import { createEmptyOrderInput } from "@/features/orders/domain/value-objects/order-form";
@@ -13,7 +13,6 @@ import OrderForm from "@/features/orders/presentation/components/OrderForm";
 import RoutePreviewCard from "@/features/orders/presentation/components/RoutePreviewCard";
 import { useOrderQuote } from "@/features/orders/presentation/hooks/useOrderQuote";
 import { localizePath, type Locale } from "@/i18n/config";
-import { useI18nCopy } from "@/i18n/useCopy";
 
 type OrderCreationWorkspaceProps = Readonly<{
   showTopBar?: boolean;
@@ -22,7 +21,7 @@ type OrderCreationWorkspaceProps = Readonly<{
 export default function OrderCreationWorkspace({
   showTopBar = true,
 }: OrderCreationWorkspaceProps) {
-  const { orderCreationWorkspaceCopy } = useI18nCopy();
+  const tWorkspace = useTranslations("orders.creationWorkspace");
   const router = useRouter();
   const locale = useLocale() as Locale;
   const [form, setForm] = useState<CreateOrderInput>(createEmptyOrderInput);
@@ -52,7 +51,7 @@ export default function OrderCreationWorkspace({
           value={form}
           onChange={setForm}
           onSubmitSuccess={handleSubmitSuccess}
-          ctaLabel={orderCreationWorkspaceCopy.ctaLabel}
+          ctaLabel={tWorkspace("ctaLabel")}
           quoteState={quoteState}
         />
         <RoutePreviewCard form={form} quoteState={quoteState} />

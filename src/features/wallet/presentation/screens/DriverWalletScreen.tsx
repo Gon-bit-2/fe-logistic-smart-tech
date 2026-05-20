@@ -12,7 +12,7 @@ import {
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
 import { useMyWalletQuery } from "@/features/wallet/presentation/hooks/useWallet";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 
 function getWalletTone(status: string) {
@@ -20,15 +20,15 @@ function getWalletTone(status: string) {
 }
 
 export default function DriverWalletScreen() {
-  const { walletScreenCopy } = useI18nCopy();
+  const tWallet = useTranslations("wallet");
   const walletQuery = useMyWalletQuery();
   const wallet = walletQuery.data;
 
   if (walletQuery.isLoading) {
     return (
       <LoadingState
-        title={walletScreenCopy.driver.loadingTitle}
-        description={walletScreenCopy.driver.loadingDescription}
+        title={tWallet("driver.loadingTitle")}
+        description={tWallet("driver.loadingDescription")}
       />
     );
   }
@@ -36,11 +36,11 @@ export default function DriverWalletScreen() {
   if (walletQuery.isError) {
     return (
       <ErrorState
-        title={walletScreenCopy.driver.errorTitle}
+        title={tWallet("driver.errorTitle")}
         description={walletQuery.error.message}
         action={
           <Button onClick={() => void walletQuery.refetch()} variant="outline">
-            {walletScreenCopy.actions.retry}
+            {tWallet("actions.retry")}
           </Button>
         }
       />
@@ -50,13 +50,13 @@ export default function DriverWalletScreen() {
   return (
     <div className="space-y-7">
       <PageHeader
-        eyebrow={walletScreenCopy.driver.eyebrow}
-        title={walletScreenCopy.driver.title}
-        description={walletScreenCopy.driver.description}
+        eyebrow={tWallet("driver.eyebrow")}
+        title={tWallet("driver.title")}
+        description={tWallet("driver.description")}
         actions={
           <Button onClick={() => void walletQuery.refetch()} variant="outline">
             <RefreshCw className="mr-2 size-4" />
-            {walletScreenCopy.actions.refresh}
+            {tWallet("actions.refresh")}
           </Button>
         }
       />
@@ -64,19 +64,19 @@ export default function DriverWalletScreen() {
       <div className="grid gap-5 md:grid-cols-3">
         <MetricCard
           icon={<CreditCard className="size-6" />}
-          label={walletScreenCopy.metrics.balance}
+          label={tWallet("metrics.balance")}
           value={formatCurrency(wallet?.balance ?? 0, "VND")}
         />
         <MetricCard
           accent="blue"
           icon={<PackageCheck className="size-6" />}
-          label={walletScreenCopy.metrics.codCollected}
+          label={tWallet("metrics.codCollected")}
           value={formatCurrency(wallet?.codCollected ?? 0, "VND")}
         />
         <SectionCard className="flex items-center justify-between p-6">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-on-surface/45">
-              {walletScreenCopy.metrics.status}
+              {tWallet("metrics.status")}
             </p>
             <div className="mt-3">
               <StatusBadge
@@ -95,14 +95,14 @@ export default function DriverWalletScreen() {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 className="text-xl font-black tracking-tight text-on-surface">
-              {walletScreenCopy.driver.codTitle}
+              {tWallet("driver.codTitle")}
             </h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-on-surface/60">
-              {walletScreenCopy.driver.codDescription}
+              {tWallet("driver.codDescription")}
             </p>
             {wallet?.updatedAt ? (
               <p className="mt-3 text-xs font-semibold text-on-surface/45">
-                {walletScreenCopy.driver.lastUpdated}: {formatDate(wallet.updatedAt)}
+                {tWallet("driver.lastUpdated")}: {formatDate(wallet.updatedAt)}
               </p>
             ) : null}
           </div>
@@ -110,12 +110,12 @@ export default function DriverWalletScreen() {
             <Button asChild>
               <Link href="/driver/trips">
                 <Route className="mr-2 size-4" />
-                {walletScreenCopy.actions.openTrips}
+                {tWallet("actions.openTrips")}
               </Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/driver/vehicle">
-                {walletScreenCopy.actions.openVehicle}
+                {tWallet("actions.openVehicle")}
               </Link>
             </Button>
           </div>

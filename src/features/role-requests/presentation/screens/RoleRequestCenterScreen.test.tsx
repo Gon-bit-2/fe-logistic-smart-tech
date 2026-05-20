@@ -50,12 +50,8 @@ describe("RoleRequestCenterScreen", () => {
   it("disables submit when there is already a pending request", () => {
     renderWithProviders(<RoleRequestCenterScreen />);
 
-    expect(
-      screen.getByText(
-        "Bạn đang có một yêu cầu chờ duyệt. Hãy đợi quản trị viên xử lý trước khi gửi yêu cầu mới.",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Gửi yêu cầu" })).toBeDisabled();
+    expect(screen.getByText("center.pendingBanner")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "center.submitLabel" })).toBeDisabled();
   });
 
   it("hides raw backend details when role request history cannot be loaded", () => {
@@ -72,11 +68,7 @@ describe("RoleRequestCenterScreen", () => {
     renderWithProviders(<RoleRequestCenterScreen />);
 
     expect(screen.getByText("Không thể tải yêu cầu vai trò")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Dịch vụ yêu cầu vai trò đang tạm thời gián đoạn. Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu lỗi kéo dài.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText("center.loadErrorFallback")).toBeInTheDocument();
     expect(
       screen.queryByText(/Invalid `prisma\.roleRequest\.findMany\(\)` invocation/i),
     ).not.toBeInTheDocument();

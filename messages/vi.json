@@ -771,5 +771,834 @@
       "trackingErrorTitle": "Không thể tải dòng thời gian nội bộ của lô hàng",
       "viewLiveTracking": "Đang xem luồng theo dõi nội bộ trực tiếp cho {trackingCode}."
     }
+  },
+  "profile": {
+    "title": "Hồ sơ & cài đặt",
+    "description": "Quản lý thông tin tài khoản, danh bạ địa chỉ và các cài đặt vận hành cá nhân.",
+    "tabs": {
+      "account": "Tài khoản",
+      "addressBook": "Danh bạ địa chỉ",
+      "access": "Quyền & thông báo",
+      "security": "Bảo mật"
+    },
+    "account": {
+      "cardTitle": "Hồ sơ vận hành",
+      "cardDescription": "Thông tin này được dùng để hiển thị trong bảng điều hành và các luồng phối hợp vận hành.",
+      "profileId": "Mã người dùng",
+      "role": "Vai trò",
+      "hubId": "Mã trung tâm",
+      "syncReady": "Đã đồng bộ",
+      "syncPending": "Có thay đổi chưa lưu",
+      "syncDescription": "Thông tin tài khoản được cập nhật trực tiếp lên hồ sơ người dùng hiện tại qua API bảo mật.",
+      "fullNameLabel": "Họ và tên / tên doanh nghiệp",
+      "fullNamePlaceholder": "Công ty Emerald Logistics",
+      "phoneLabel": "Số điện thoại liên hệ",
+      "phonePlaceholder": "0900 111 222",
+      "emailLabel": "Email đăng nhập",
+      "emailHint": "Email hiện chưa thể thay đổi trực tiếp từ giao diện hồ sơ.",
+      "save": "Lưu thay đổi",
+      "savePending": "Đang lưu...",
+      "reset": "Khôi phục dữ liệu gốc",
+      "savedState": "Thông tin hồ sơ đã được cập nhật thành công.",
+      "dirtyState": "Bạn có thay đổi chưa được lưu.",
+      "cleanState": "Thông tin cá nhân đang khớp với dữ liệu máy chủ gần nhất.",
+      "validationName": "Vui lòng nhập tên hiển thị hợp lệ.",
+      "validationPhone": "Số điện thoại chỉ nên gồm 9-15 chữ số."
+    },
+    "addressBook": {
+      "title": "Danh bạ địa chỉ",
+      "description": "Lưu các điểm lấy và giao hàng thường dùng để tạo đơn nhanh hơn trong các lần sau.",
+      "add": "Thêm địa chỉ",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "setDefault": "Đặt mặc định",
+      "defaultBadge": "Mặc định",
+      "emptyTitle": "Chưa có địa chỉ nào",
+      "emptyDescription": "Tạo điểm giao nhận đầu tiên để chuẩn hóa thông tin liên hệ và thao tác tạo đơn.",
+      "dialogCreateTitle": "Thêm địa chỉ mới",
+      "dialogEditTitle": "Cập nhật địa chỉ",
+      "dialogDescription": "Thông tin sẽ được lưu trực tiếp vào sổ địa chỉ cá nhân của tài khoản hiện tại.",
+      "save": "Lưu địa chỉ",
+      "create": "Tạo địa chỉ",
+      "cancel": "Hủy",
+      "fields": {
+        "label": "Tên địa chỉ",
+        "contactName": "Người liên hệ",
+        "phone": "Số điện thoại",
+        "addressLine": "Địa chỉ chi tiết",
+        "setAsDefault": "Đặt làm địa chỉ mặc định"
+      },
+      "placeholders": {
+        "label": "Kho chính Quận 7",
+        "contactName": "Nguyễn Văn A",
+        "phone": "0911 223 344",
+        "addressLine": "123 Nguyễn Văn Linh, Quận 7, TP.HCM"
+      },
+      "validation": {
+        "label": "Tên địa chỉ là bắt buộc.",
+        "contactName": "Vui lòng nhập tên người liên hệ.",
+        "phone": "Số điện thoại địa chỉ không hợp lệ.",
+        "addressLine": "Vui lòng nhập địa chỉ chi tiết."
+      },
+      "loading": "Đang tải sổ địa chỉ...",
+      "loadError": "Không thể tải danh bạ địa chỉ lúc này."
+    },
+    "access": {
+      "title": "Điều phối tài khoản",
+      "description": "Theo dõi thông báo hệ thống và các yêu cầu vai trò ngay trong không gian khách hàng.",
+      "notificationsTitle": "Hộp thông báo",
+      "notificationsDescription": "Mở hộp thông báo để xem phê duyệt, nhắc việc và cập nhật vận hành.",
+      "notificationsCta": "Mở hộp thông báo",
+      "rolesTitle": "Yêu cầu vai trò",
+      "rolesDescription": "Theo dõi hoặc gửi yêu cầu trở thành tài xế hay nhân viên kho từ bảng điều hành.",
+      "rolesCta": "Mở trung tâm vai trò"
+    },
+    "security": {
+      "title": "Bảo mật & đăng nhập",
+      "description": "Quản lý kênh đăng nhập chính và chuyển sang luồng đặt lại mật khẩu khi cần.",
+      "emailTitle": "Email đăng nhập",
+      "emailDescription": "Đây là định danh đăng nhập chính của tài khoản hiện tại và chưa hỗ trợ đổi trực tiếp.",
+      "resetTitle": "Đổi mật khẩu",
+      "resetDescription": "Sử dụng luồng quên mật khẩu để nhận OTP và đặt lại mật khẩu an toàn.",
+      "resetCta": "Mở luồng bảo mật"
+    },
+    "loadErrorUnauthorized": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+    "loadErrorForbidden": "Bạn không có quyền truy cập hồ sơ này.",
+    "loadErrorFallback": "Không thể tải thông tin hồ sơ lúc này."
+  },
+  "notifications": {
+    "allTab": "Tất cả",
+    "description": "Theo dõi các cập nhật hệ thống, trạng thái duyệt vai trò và thao tác vận hành mới nhất.",
+    "emptyDescription": "Hiện chưa có thông báo nào phù hợp với bộ lọc hiện tại.",
+    "emptyTitle": "Hộp thông báo đang trống",
+    "loadErrorFallback": "Dịch vụ thông báo đang tạm thời gián đoạn. Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu lỗi kéo dài.",
+    "loadErrorForbidden": "Bạn không có quyền xem hộp thông báo.",
+    "loadErrorUnauthorized": "Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để xem thông báo.",
+    "markAll": "Đánh dấu tất cả đã đọc",
+    "markOne": "Đánh dấu đã đọc",
+    "title": "Hộp thông báo",
+    "unreadTab": "Chưa đọc"
+  },
+  "roleRequests": {
+    "center": {
+      "approveLabel": "Duyệt yêu cầu",
+      "currentRoleLabel": "Vai trò hiện tại",
+      "description": "Gửi yêu cầu trở thành tài xế hoặc nhân viên kho, đồng thời theo dõi trạng thái duyệt theo thời gian thực.",
+      "historyTitle": "Lịch sử yêu cầu của bạn",
+      "loadErrorFallback": "Dịch vụ yêu cầu vai trò đang tạm thời gián đoạn. Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu lỗi kéo dài.",
+      "loadErrorForbidden": "Bạn không có quyền truy cập trung tâm yêu cầu vai trò.",
+      "loadErrorUnauthorized": "Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục thao tác yêu cầu vai trò.",
+      "pendingBanner": "Bạn đang có một yêu cầu chờ duyệt. Hãy đợi quản trị viên xử lý trước khi gửi yêu cầu mới.",
+      "refreshRoleBanner": "Yêu cầu đã được duyệt nhưng phiên đăng nhập hiện tại chưa cập nhật quyền mới. Hãy đăng xuất và đăng nhập lại.",
+      "reasonLabel": "Lý do đăng ký",
+      "submitLabel": "Gửi yêu cầu",
+      "targetRoleLabel": "Vai trò muốn đăng ký",
+      "title": "Trung tâm yêu cầu vai trò"
+    },
+    "admin": {
+      "approveButton": "Duyệt",
+      "description": "Hàng chờ quản trị dành cho các yêu cầu chuyển vai trò, bao gồm gán trung tâm khi duyệt nhân viên kho.",
+      "emptyDescription": "Không còn yêu cầu nào trong hàng chờ hiện tại.",
+      "emptyTitle": "Hàng chờ trống",
+      "hubLabel": "Trung tâm phụ trách",
+      "loadErrorFallback": "Hàng chờ yêu cầu vai trò đang tạm thời không khả dụng. Vui lòng thử lại sau hoặc kiểm tra hệ thống nền.",
+      "queueTitle": "Hàng chờ duyệt",
+      "rejectButton": "Từ chối",
+      "reviewNoteLabel": "Ghi chú duyệt",
+      "title": "Duyệt yêu cầu vai trò"
+    }
+  },
+  "admin": {
+    "screen": {
+      "actions": "Thao tác",
+      "currentEta": "ETA dự kiến",
+      "customer": "Khách hàng",
+      "description": "Quản lý toàn diện các lô hàng, hiệu suất kinh doanh và các chỉ số bảo vệ môi trường trên một giao diện đồng nhất.",
+      "emptyDescription": "Hiện chưa có dữ liệu lô hàng nào trong hệ thống.",
+      "emptyTitle": "Chưa có dữ liệu vận hành",
+      "integrationPendingDescription": "Hệ thống bản đồ và điều phối thời gian thực sẽ khả dụng khi có dữ liệu chuyến đi thực tế.",
+      "integrationPendingTitle": "Phần điều phối trực quan đang chờ tích hợp",
+      "loadingDescription": "Đang tải dữ liệu vận hành...",
+      "loadingTitle": "Đang tải bảng điều hành",
+      "metrics": {
+        "activeOrders": "Đơn hàng đang hoạt động",
+        "availableVehicles": "Xe đang sẵn sàng",
+        "electricVehicles": "Xe điện / hybrid"
+      },
+      "recentOrders": "Đơn hàng hoạt động gần đây",
+      "title": "Trung tâm điều hành vận hành thông minh",
+      "trackingId": "Mã theo dõi",
+      "viewAll": "Xem tất cả"
+    },
+    "topBar": {
+      "adminLabel": "Quản trị",
+      "ecosystemBrand": "Hệ sinh thái Precision",
+      "logoutLabel": "Đăng xuất",
+      "profileLabel": "Hồ sơ"
+    },
+    "sidebar": {
+      "addNewRoute": "Thêm tuyến mới",
+      "adminConsole": "Bảng điều khiển quản trị",
+      "dispatcherHub": "Trung tâm điều phối",
+      "globalOperations": "Vận hành toàn cục",
+      "helpCenter": "Trung tâm hỗ trợ",
+      "logisticsHub": "Trung tâm hậu cần",
+      "logout": "Đăng xuất",
+      "newDispatch": "Tạo điều phối mới",
+      "newShipment": "Tạo lô hàng mới",
+      "signOut": "Thoát phiên"
+    },
+    "dispatcher": {
+      "autoOptimize": "Tự động tối ưu tuyến",
+      "liveSystem": "Hệ thống trực tuyến",
+      "operationalFlow": "Luồng vận hành"
+    },
+    "nav": {
+      "labels": {
+        "dashboard": "Tổng quan",
+        "analytics": "Phân tích",
+        "observability": "Vận hành production",
+        "roleRequests": "Yêu cầu phân quyền",
+        "orders": "Lô hàng",
+        "trips": "Chuyến đi",
+        "fleet": "Đội xe",
+        "wallet": "Đối soát COD",
+        "sustainability": "Bền vững",
+        "warehouses": "Kho hàng",
+        "language": "Ngôn ngữ"
+      }
+    },
+    "shell": {
+      "searchPlaceholderShipment": "Tìm kiếm lô hàng...",
+      "searchPlaceholderInsight": "Tìm kiếm insight...",
+      "searchPlaceholderFleet": "Tìm mã xe hoặc tài xế...",
+      "searchPlaceholderObservability": "Tìm queue, endpoint hoặc audit...",
+      "searchPlaceholderWallet": "Tìm tài xế hoặc biên nhận COD...",
+      "searchPlaceholderOrders": "Lọc lô hàng...",
+      "searchPlaceholderTrips": "Tìm chuyến hoặc biển số...",
+      "searchPlaceholderNotifications": "Tìm thông báo...",
+      "searchPlaceholderRoleRequests": "Tìm yêu cầu phân quyền...",
+      "searchPlaceholderSustainability": "Tìm kiếm theo dõi toàn cục...",
+      "searchPlaceholderWarehouses": "Tìm kiếm kho hàng...",
+      "searchPlaceholderLanguage": "Tìm ngôn ngữ...",
+      "titleDashboard": "Bảng điều khiển quản trị",
+      "titleAdmin": "Khối quản trị Precision",
+      "titleCenter": "Trung tâm điều phối",
+      "supportLabel": "Hỗ trợ"
+    }
+  },
+  "warehouse": {
+    "inventory": {
+      "headings": [
+        "Mã Hub",
+        "Tên Hub",
+        "Địa chỉ",
+        "Tọa độ",
+        "Trạng thái"
+      ],
+      "stockChips": [
+        "Chờ định tuyến"
+      ],
+      "activeInventoryLedger": "Sổ tồn kho hiện hành",
+      "centralHubDescription": "Xử lý chuỗi lạnh tự động cho hàng hoá nhạy cảm và dược phẩm trên toàn hành lang phía Bắc.",
+      "centralHubTitle": "Trung tâm phân phối A1",
+      "emptyDescription": "Hệ thống chưa ghi nhận dữ liệu trung tâm phân phối nào hoặc bạn không có quyền truy cập.",
+      "emptyTitle": "Chưa có dữ liệu trung tâm phân phối",
+      "filters": "Bộ lọc",
+      "hubSubtitle": "Giám sát thời gian thực cho mạng lưới vận hành Precision.",
+      "hubTitle": "Quản lý trung tâm phân phối",
+      "hubVehiclePending": "Dữ liệu tồn kho chi tiết đang được đồng bộ.",
+      "integrationPendingDescription": "Các tính năng sổ kho, quét mã và cảnh báo sẽ hoạt động khi hệ thống kết nối thành công với kho hàng.",
+      "integrationPendingTitle": "Dữ liệu tồn kho chi tiết đang chờ tích hợp",
+      "lowStockAlert": "Cảnh báo tồn kho thấp",
+      "lowStockDescription": "Lithium Cell Packs (Unit-82) đang xuống dưới ngưỡng cảnh báo.",
+      "loadingDescription": "Đang tải danh sách trung tâm phân phối từ hệ thống...",
+      "loadingTitle": "Đang tải dữ liệu kho",
+      "manageFacility": "Quản lý cơ sở",
+      "metricPendingDispatch": "Chờ xuất kho",
+      "metricStorageCapacity": "Công suất lưu trữ",
+      "metricTotalStock": "Tổng tồn kho",
+      "recordsButton": "Xem toàn bộ trung tâm",
+      "searchPlaceholder": "Tìm SKU...",
+      "solarEfficiency": "Hiệu suất lưới điện mặt trời",
+      "solarTitle": "Chỉ số bền vững",
+      "stockSupporting": "Tổng hợp theo dữ liệu trung tâm đang khả dụng",
+      "used": "đã dùng"
+    },
+    "hub": {
+      "destinationHub": "Trung tâm đích",
+      "flagged": "Cần chú ý",
+      "inbound": "Hàng vào",
+      "itemType": "Loại hàng",
+      "logisticsMap": "Xem bản đồ vận hành",
+      "nextFleetArrival": "Lượt xe tiếp theo đến",
+      "outbound": "Hàng ra",
+      "pageTitle": "Quản lý kho hàng",
+      "processed": "Đã xử lý",
+      "readyForInput": "Sẵn sàng nhập liệu",
+      "route": "Tuyến",
+      "scanPlaceholder": "Quét mã theo dõi...",
+      "shiftEfficiency": "Hiệu suất ca làm việc: 94.2%",
+      "shiftText": "Kho hàng đang vận hành ở công suất cao nhất. 450 kiện đã được quét trong 2 giờ gần nhất mà không phát sinh lỗi.",
+      "showing": "Hiển thị 4 / 128 lô hàng",
+      "status": "Trạng thái",
+      "submit": "Gửi",
+      "trackingId": "Mã theo dõi",
+      "weight": "Khối lượng",
+      "pendingDescription": "Giao diện quét mã đã sẵn sàng. Danh sách kiện hàng sẽ hiển thị khi có dữ liệu từ máy quét.",
+      "pendingTitle": "Hệ thống đang chờ dữ liệu quét mã"
+    }
+  },
+  "fleet": {
+    "co2Saved": "CO2 đã tiết kiệm",
+    "evPercentage": "Tỷ lệ xe điện",
+    "exportReport": "Xuất báo cáo",
+    "filters": "Bộ lọc",
+    "integrationPendingDescription": "Chi tiết hiệu suất, nhịp độ hoạt động theo khu vực và chỉ số CO2 sẽ được hiển thị khi có đầy đủ dữ liệu từ hệ thống.",
+    "integrationPendingTitle": "Đang chờ dữ liệu phân tích chuyên sâu",
+    "liveFleetPulse": "Nhịp độ hoạt động trực tuyến",
+    "loadingDescription": "Đang tải danh sách phương tiện từ hệ thống...",
+    "loadingTitle": "Đang tải dữ liệu đội xe",
+    "metricLabels": {
+      "activeVehicles": "Đang hoạt động",
+      "electricVehicles": "Xe điện / hybrid",
+      "totalVehicles": "Tổng số xe"
+    },
+    "operationalDashboard": "Bảng điều hành",
+    "systemPerformance": "Hiệu suất hệ thống",
+    "systemPerformanceText": "Hiệu suất sử dụng đội xe tăng 8,4% so với tuần trước. Các phương tiện xe điện duy trì thời gian hoạt động tối đa không gián đoạn.",
+    "title": "Vận hành đội xe",
+    "vehicleEmptyDescription": "Hệ thống chưa ghi nhận phương tiện nào hoạt động trong thời điểm hiện tại.",
+    "vehicleEmptyTitle": "Chưa có phương tiện để hiển thị",
+    "vehicleErrorDescription": "Lỗi khi tải danh sách phương tiện. Vui lòng kiểm tra lại kết nối mạng hoặc liên hệ bộ phận hỗ trợ.",
+    "vehicleErrorTitle": "Không tải được dữ liệu đội xe",
+    "vehicleSummaryTitle": "Danh sách phương tiện",
+    "viewInsights": "Xem chi tiết",
+    "zone": "Khu vực"
+  },
+  "analytics": {
+    "screen": {
+      "activeVolume": "Sản lượng hoạt động",
+      "dataExport": "Xuất dữ liệu",
+      "exportFormats": "Hỗ trợ định dạng PDF, XLSX, CSV",
+      "integrationPendingDescription": "Màn hình phân tích chuyên sâu sẽ hiển thị khi hệ thống tổng hợp đủ dữ liệu vận hành.",
+      "integrationPendingTitle": "Đang chờ dữ liệu tổng hợp",
+      "optimizationInsight": "Gợi ý tối ưu",
+      "optimizationText": "Gợi ý: Phân bổ thêm 12% xe điện cho Tuyến ven biển B vào thời gian cao điểm có thể giúp giảm 14,2 tấn CO2 mà vẫn đảm bảo thời gian giao hàng.",
+      "ready": "Sẵn sàng",
+      "regionalEyebrow": "Sản lượng theo trung tâm",
+      "regionalPerformance": "Hiệu suất theo khu vực",
+      "subtitle": "Giám sát hiệu suất giao nhận và lượng phát thải carbon theo thời gian thực.",
+      "title": "Phân tích và báo cáo",
+      "totalCapacity": "Tổng công suất",
+      "totalFleet": "Tổng số xe",
+      "vehicleTypeDistribution": "Phân bổ phương tiện",
+      "volumeDescription": "Hiệu suất sử dụng đội xe theo thời gian thực.",
+      "volumeTitle": "Sản lượng và Công suất"
+    },
+    "filters": {
+      "last30Days": "30 ngày gần nhất",
+      "lastQuarter": "Quý gần nhất",
+      "customRange": "Khoảng tuỳ chỉnh"
+    }
+  },
+  "greenTech": {
+    "sustainability": {
+      "activeFleet": "Đội xe đang hoạt động",
+      "adoptionGrowth": "Dữ liệu tăng trưởng",
+      "adoptionSubtitle": "Phân tích mức độ ưu tiên chọn gói dịch vụ xanh của khách hàng",
+      "adoptionTitle": "Tỷ lệ sử dụng dịch vụ thân thiện với môi trường",
+      "averageEfficiency": "Hiệu suất TB",
+      "description": "Theo dõi mức độ tác động môi trường theo thời gian thực và định hướng xây dựng chuỗi cung ứng trung hòa carbon nhờ điều phối thông minh và tối đa hóa xe điện.",
+      "fuelAvoided": "Nhiên liệu đã tiết kiệm",
+      "greeningFleet": "Tiến trình xanh hoá đội xe",
+      "greeningFleetSubtitle": "Mục tiêu chuyển đổi sang 100% xe điện vào năm 2028",
+      "heatmapDescription": "Bản đồ phân bố mức giảm CO2 theo từng khu vực",
+      "heatmapTitle": "Bản đồ tác động môi trường theo khu vực",
+      "heroMetric": "Chỉ số nổi bật",
+      "heroSubtitle": "Tương đương với việc trồng 14.200 cây xanh trưởng thành",
+      "heroTitle": "Tổng lượng CO2 đã tiết kiệm từ khi áp dụng hệ thống",
+      "high": "Cao",
+      "impactSummaryDescription": "Phân tích chi tiết hiệu quả giảm phát thải CO2 theo từng tuyến vận chuyển.",
+      "impactSummaryTitle": "Báo cáo tác động môi trường hàng tháng",
+      "low": "Thấp",
+      "metricTons": "Tấn",
+      "monthlyDescription": "Tổng hợp dữ liệu theo tháng trên toàn bộ mạng lưới giao nhận",
+      "monthlyTitle": "Biểu đồ xu hướng giảm phát thải",
+      "pendingDescription": "Báo cáo chi tiết về tác động môi trường sẽ hiển thị khi hệ thống nhận đủ dữ liệu lượng khí thải trên mỗi chuyến đi.",
+      "pendingTitle": "Đang chờ dữ liệu phát thải thực tế",
+      "reductionIntensity": "Mức độ cắt giảm",
+      "renewableEnergyMix": "Tỷ lệ năng lượng tái tạo",
+      "renewableEnergySubtitle": "Tỉ trọng sử dụng điện lưới quốc gia so với năng lượng sạch",
+      "title": "Tác động bền vững",
+      "topPercent": "Top 2% đơn vị giao nhận toàn cầu"
+    },
+    "co2Dashboard": {
+      "eyebrow": "Phát thải",
+      "title": "Theo dõi lượng CO₂"
+    }
+  },
+  "auth": {
+    "heroPanel": {
+      "auth": {
+        "badge": "Giảm 12% lượng khí thải carbon",
+        "brand": "Điều phối đội xe",
+        "description": "Hệ thống quản lý thông minh giúp chuyển hóa dữ liệu giao nhận thành các báo cáo trực quan, hỗ trợ ra quyết định nhanh chóng.",
+        "protectedFlowLabel": "Kết nối an toàn",
+        "title": "Làm chủ mạng lưới vận tải toàn cầu với sự minh bạch tuyệt đối."
+      },
+      "otp": {
+        "badge": "Đạt chuẩn bảo mật doanh nghiệp ISO 27001",
+        "brand": "Precision Logistics",
+        "description": "Hệ thống bảo mật đa lớp đảm bảo an toàn tuyệt đối cho toàn bộ dữ liệu chuỗi cung ứng của bạn.",
+        "protectedFlowLabel": "Xác thực 2 bước",
+        "title": "Vận hành chính xác trong từng nhịp độ"
+      }
+    },
+    "loginForm": {
+      "activeSessionLabel": "Nhớ mật khẩu",
+      "apiDocsLabel": "Tài liệu hệ thống",
+      "connectGoogleLabel": "Đang kết nối...",
+      "emailLabel": "Email tổ chức",
+      "emailPlaceholder": "ten@precision-stream.com",
+      "footerCopyright": "© 2026 Precision Stream Logistics",
+      "forgotKeyLabel": "Quên mật khẩu?",
+      "fullNameLabel": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "headerDescription": "Truy cập hệ thống quản trị vận hành để theo dõi và tối ưu hoá toàn bộ chuỗi cung ứng của doanh nghiệp.",
+      "headerTitle": "Chào mừng đến với Emerald Logistics",
+      "loginLabel": "Đăng nhập",
+      "googleOptions": [
+        { "label": "Google" },
+        { "label": "GitHub" },
+        { "label": "Microsoft" }
+      ],
+      "loginSuccessStatus": "Đăng nhập thành công. Đang chuyển tới không gian vận hành...",
+      "organizationLabel": "Tổ chức",
+      "organizationPlaceholder": "Công ty Cổ phần ABC",
+      "orEnterWith": "Hoặc đăng nhập với",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "••••••••••••",
+      "phoneLabel": "Số điện thoại",
+      "phonePlaceholder": "0900 111 222",
+      "privacyLabel": "Bảo mật",
+      "registerLabel": "Đăng ký",
+      "registerSuccessStatus": "Mã xác thực đã được gửi. Tiếp tục tới bước xác nhận OTP.",
+      "submitLoading": "Đang xử lý...",
+      "submitLogin": "Truy cập hệ thống",
+      "submitRegister": "Đăng ký và tiếp tục",
+      "supportLabel": "Hỗ trợ"
+    },
+    "forgotPassword": {
+      "backToLoginLabel": "Quay lại đăng nhập",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "emailLabel": "Email tổ chức",
+      "emailPlaceholder": "ten@precision-stream.com",
+      "headerDescription": "Nhận mã xác thực để đặt lại mật khẩu cho tài khoản quản trị của bạn.",
+      "headerTitle": "Khôi phục mật khẩu",
+      "newPasswordLabel": "Mật khẩu mới",
+      "passwordPlaceholder": "••••••••••••",
+      "status": "Mã xác thực đã được gửi. Hãy kiểm tra email của bạn.",
+      "submit": "Gửi mã xác thực",
+      "submitLoading": "Đang gửi...",
+      "supportLabel": "Hỗ trợ"
+    },
+    "otpVerification": {
+      "footerPrivacy": "Chính sách bảo mật",
+      "footerSecureSession": "Phiên bảo mật",
+      "footerSupport": "Hỗ trợ",
+      "resendLabel": "Gửi lại mã",
+      "verifyLoading": "Đang xác minh...",
+      "verifyReset": "Xác minh và đặt lại mật khẩu",
+      "verifyComplete": "Xác minh và hoàn tất",
+      "infoTitle": "Đang gặp sự cố?",
+      "ariaDigitLabel": "Chữ số OTP {index}",
+      "forgotPassword": {
+        "description": "Chúng tôi đã gửi mã 6 chữ số tới {destination}. Nhập bên dưới để xác nhận yêu cầu đặt lại mật khẩu.",
+        "expiredStatus": "Phiên đặt lại mật khẩu đã hết hạn. Vui lòng yêu cầu OTP mới.",
+        "help": "Hãy kiểm tra thư rác hoặc xác nhận lại email đã dùng trong yêu cầu đặt lại mật khẩu.",
+        "resendStatus": "Mã mới đã được gửi tới {email}.",
+        "successStatus": "Mật khẩu đã được cập nhật. Đang chuyển về trang đăng nhập...",
+        "title": "Xác minh đặt lại mật khẩu"
+      },
+      "register": {
+        "description": "Chúng tôi đã gửi mã 6 chữ số tới {destination}. Nhập bên dưới để hoàn tất đăng ký tài khoản.",
+        "expiredStatus": "Phiên đăng ký đã hết hạn. Vui lòng yêu cầu OTP mới.",
+        "help": "Hãy kiểm tra thư rác hoặc xác nhận lại thông tin liên hệ đã dùng khi đăng ký.",
+        "resendStatus": "Mã mới đã được gửi tới {email}.",
+        "successStatus": "Xác minh thành công. Đang chuyển về trang đăng nhập...",
+        "title": "Xác minh bảo mật"
+      }
+    },
+    "googleCallback": {
+      "backToLogin": "Quay lại đăng nhập",
+      "errorCard": "Hãy xem lại lỗi phía trên rồi thử đăng nhập lại.",
+      "errorTitle": "Đăng nhập Google thất bại",
+      "incompleteSession": "Đăng nhập Google không trả về phiên làm việc đầy đủ.",
+      "loginSuccess": "Đăng nhập Google thành công. Đang chuyển tới không gian vận hành...",
+      "secureSessionCard": "Token phiên của bạn đang được lưu an toàn trong phiên trình duyệt.",
+      "successTitle": "Phản hồi đăng nhập Google",
+      "support": "Hỗ trợ"
+    },
+    "runtime": {
+      "missingForgotPasswordSession": "Không tìm thấy phiên đặt lại mật khẩu. Vui lòng yêu cầu OTP mới.",
+      "missingPendingRegistration": "Không tìm thấy phiên đăng ký đang chờ.",
+      "missingRegisterSession": "Không tìm thấy phiên đăng ký. Vui lòng yêu cầu OTP mới."
+    }
+  },
+  "wallet": {
+    "actions": {
+      "openTrips": "Mở chuyến đi",
+      "openVehicle": "Xem phương tiện",
+      "reconcile": "Đối soát COD",
+      "refresh": "Làm mới",
+      "retry": "Tải lại"
+    },
+    "driver": {
+      "codDescription": "Số COD đang giữ được cập nhật khi tài xế xác nhận đã thu tiền mặt ở đơn COD. Kho hoặc admin sẽ đối soát khoản này sau khi bàn giao tiền.",
+      "codTitle": "Theo dõi tiền COD đang giữ",
+      "description": "Kiểm tra số dư ví, khoản COD chưa đối soát và mở nhanh các luồng chuyến đi liên quan.",
+      "errorTitle": "Không tải được ví tài xế",
+      "eyebrow": "Driver wallet",
+      "lastUpdated": "Cập nhật lần cuối",
+      "loadingDescription": "Đang đồng bộ ví và số dư COD...",
+      "loadingTitle": "Đang tải ví tài xế",
+      "title": "Ví & COD tài xế"
+    },
+    "fields": {
+      "amount": "Số tiền COD",
+      "description": "Ghi chú đối soát",
+      "driverId": "ID tài xế",
+      "referenceId": "Mã biên nhận"
+    },
+    "metrics": {
+      "balance": "Số dư ví",
+      "codCollected": "COD đang giữ",
+      "status": "Trạng thái ví"
+    },
+    "reconciliation": {
+      "description": "Ghi nhận khoản COD tài xế đã bàn giao về kho hoặc bộ phận tài chính. Giao dịch sẽ giảm số COD đang giữ của tài xế.",
+      "eyebrow": "COD reconciliation",
+      "previewDescription": "Kiểm tra số tiền và mã biên nhận trước khi xác nhận. Hệ thống sẽ từ chối nếu số tiền lớn hơn COD đang giữ.",
+      "previewEyebrow": "Số tiền đối soát",
+      "successMessage": "Đã ghi nhận đối soát COD thành công.",
+      "title": "Đối soát COD"
+    }
+  },
+  "errorPages": {
+    "notFound": {
+      "code": "404",
+      "eyebrow": "Page not found",
+      "title": "Trang này đã rời khỏi tuyến đường bạn vừa đi",
+      "description": "Trang bạn đang tìm không còn ở vị trí này. Có thể đường dẫn đã bị thay đổi hoặc lô hàng bạn đang truy cập không tồn tại.",
+      "checklist": {
+        "0": "Kiểm tra lại đường dẫn",
+        "1": "Trở lại trang chủ",
+        "2": "Liên hệ hỗ trợ nếu vấn đề tiếp diễn"
+      },
+      "insights": {
+        "0": {
+          "label": "Mã lỗi",
+          "value": "404 Not Found"
+        },
+        "1": {
+          "label": "Trạng thái",
+          "value": "Chưa ghi nhận sự cố hệ thống diện rộng"
+        }
+      },
+      "links": {
+        "0": {
+          "href": "/",
+          "label": "Trang chủ"
+        },
+        "1": {
+          "href": "/auth/login",
+          "label": "Đăng nhập"
+        },
+        "2": {
+          "href": "/tracking",
+          "label": "Theo dõi đơn hàng"
+        }
+      },
+      "primaryAction": {
+        "label": "Về trang chủ",
+        "href": "/"
+      },
+      "secondaryAction": {
+        "label": "Đăng nhập hệ thống",
+        "href": "/auth/login"
+      }
+    },
+    "global": {
+      "configuration": {
+        "code": "500",
+        "eyebrow": "Lỗi cấu hình",
+        "title": "Hệ thống gặp sự cố",
+        "description": "Đã xảy ra lỗi hệ thống nghiêm trọng. Vui lòng thử lại hoặc liên hệ hỗ trợ.",
+        "primaryAction": {
+          "label": "Tải lại trang"
+        },
+        "secondaryAction": {
+          "label": "Về trang chủ",
+          "href": "/"
+        }
+      },
+      "network": {
+        "code": "503",
+        "eyebrow": "Lỗi kết nối",
+        "title": "Mất kết nối với hệ thống",
+        "description": "Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng và thử lại.",
+        "primaryAction": {
+          "label": "Thử lại kết nối"
+        },
+        "secondaryAction": {
+          "label": "Kiểm tra trạng thái hệ thống",
+          "href": "#"
+        }
+      },
+      "fallback": {
+        "code": "500",
+        "eyebrow": "Lỗi không xác định",
+        "title": "Đã xảy ra sự cố",
+        "description": "Chúng tôi đang gặp khó khăn trong việc xử lý yêu cầu của bạn. Vui lòng thử lại sau.",
+        "primaryAction": {
+          "label": "Trở lại an toàn"
+        }
+      }
+    },
+    "dashboard": {
+      "configuration": {
+        "code": "Dashboard Error",
+        "eyebrow": "Lỗi hệ thống nội bộ",
+        "title": "Lỗi cấu hình bảng điều khiển",
+        "description": "Lỗi cấu hình khi tải thông tin điều hành.",
+        "primaryAction": {
+          "label": "Tải lại bảng điều khiển"
+        }
+      },
+      "missingResource": {
+        "code": "404",
+        "eyebrow": "Không tìm thấy dữ liệu",
+        "title": "Dữ liệu vận hành không tồn tại",
+        "description": "Lô hàng hoặc dữ liệu bạn yêu cầu không tồn tại hoặc đã bị xóa khỏi hệ thống.",
+        "primaryAction": {
+          "label": "Quay lại danh sách"
+        }
+      },
+      "network": {
+        "code": "Sync Error",
+        "eyebrow": "Mất đồng bộ",
+        "title": "Không thể đồng bộ dữ liệu thời gian thực",
+        "description": "Kết nối tới trung tâm điều phối đang bị gián đoạn.",
+        "primaryAction": {
+          "label": "Đồng bộ lại"
+        }
+      },
+      "fallback": {
+        "code": "Ops Error",
+        "eyebrow": "Lỗi vận hành",
+        "title": "Gián đoạn hệ thống điều phối",
+        "description": "Có lỗi xảy ra trong quá trình xử lý luồng vận hành.",
+        "primaryAction": {
+          "label": "Thử lại thao tác"
+        }
+      }
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "checklist": [
+      "Kiểm tra lại URL hoặc thử quay về tuyến điều hướng gần nhất.",
+      "Nếu bạn đi từ một liên kết cũ, nội dung có thể đã được đổi hoặc gỡ bỏ.",
+      "Dùng một điểm bắt đầu an toàn như trang chủ, đăng nhập hoặc tra cứu đơn hàng."
+    ],
+    "description": "Trang bạn đang tìm không còn ở vị trí này hoặc chưa từng được xuất bản. Chúng tôi giữ lại cho bạn các lối đi ngắn nhất để quay lại đúng luồng.",
+    "eyebrow": "Page not found",
+    "insights": {
+      "status": "Trạng thái",
+      "statusValue": "Đường dẫn không tồn tại",
+      "impact": "Mức ảnh hưởng",
+      "impactValue": "Chỉ ảnh hưởng URL hiện tại",
+      "recovery": "Khôi phục",
+      "recoveryValue": "Có thể tiếp tục qua các tuyến an toàn bên dưới"
+    },
+    "links": {
+      "home": "Trang chủ",
+      "login": "Đăng nhập",
+      "tracking": "Tra cứu đơn"
+    },
+    "primaryAction": "Về trang chủ",
+    "secondaryAction": "Đăng nhập hệ thống",
+    "title": "Trang này đã rời khỏi tuyến đường bạn vừa đi"
+  },
+  "errorExperience": {
+    "global": {
+      "configuration": {
+        "checklist": [
+          "Kiểm tra biến môi trường và endpoint API trước khi deploy.",
+          "Thử lại sau khi backend hoặc cấu hình dịch vụ đã sẵn sàng.",
+          "Nếu lỗi kéo dài, dùng mã tham chiếu để chuyển cho đội kỹ thuật."
+        ],
+        "description": "Một dịch vụ nền hoặc cấu hình môi trường chưa sẵn sàng, nên trang hiện chưa thể phản hồi ổn định.",
+        "eyebrow": "Configuration issue",
+        "insights": {
+          "group": "Nhóm lỗi",
+          "groupValue": "Cấu hình hoặc tích hợp",
+          "impact": "Tác động",
+          "impactValue": "Các tính năng phụ thuộc API có thể không hoạt động",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "home": "Về landing page",
+          "login": "Đến đăng nhập"
+        },
+        "primaryAction": "Quay về trang chủ",
+        "secondaryAction": "Đăng nhập hệ thống",
+        "title": "Hệ thống chưa sẵn sàng để phục vụ yêu cầu này"
+      },
+      "network": {
+        "checklist": [
+          "Thử tải lại sau vài giây để khôi phục kết nối đến dịch vụ nền.",
+          "Kiểm tra mạng nội bộ hoặc trạng thái backend nếu bạn đang vận hành hệ thống.",
+          "Sử dụng một đường dẫn khác nếu bạn cần tiếp tục thao tác ngay."
+        ],
+        "description": "Ứng dụng đang gặp gián đoạn khi đồng bộ dữ liệu với dịch vụ phía sau, nên phản hồi hiện không ổn định.",
+        "eyebrow": "Service interruption",
+        "insights": {
+          "group": "Nhóm lỗi",
+          "groupValue": "Mất kết nối dịch vụ",
+          "impact": "Tác động",
+          "impactValue": "Dữ liệu có thể tải chậm hoặc không phản hồi",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "home": "Về trang chủ",
+          "tracking": "Tra cứu đơn hàng"
+        },
+        "primaryAction": "Thử lại",
+        "secondaryAction": "Về trang chủ",
+        "title": "Kết nối dịch vụ đang bị gián đoạn"
+      },
+      "unknown": {
+        "checklist": [
+          "Tải lại trang để xem lỗi chỉ là gián đoạn tạm thời hay không.",
+          "Quay về tuyến điều hướng an toàn như trang chủ hoặc dashboard chính.",
+          "Gửi mã tham chiếu cho đội kỹ thuật nếu sự cố lặp lại."
+        ],
+        "description": "Một lỗi không mong muốn vừa xảy ra trong quá trình xử lý. Ứng dụng đã chặn lỗi lại, nhưng trang này hiện chưa thể hiển thị đúng.",
+        "eyebrow": "System failure",
+        "insights": {
+          "group": "Nhóm lỗi",
+          "groupValue": "Lỗi hệ thống tổng quát",
+          "message": "Thông điệp",
+          "messageFallback": "Không có thêm chi tiết từ runtime",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "home": "Về landing page",
+          "dashboard": "Mở dashboard"
+        },
+        "primaryAction": "Thử lại",
+        "secondaryAction": "Về trang chủ",
+        "title": "Máy chủ vừa mất đồng bộ trong lúc xử lý yêu cầu"
+      }
+    },
+    "dashboard": {
+      "configuration": {
+        "checklist": [
+          "Xác minh endpoint backend và biến môi trường của dashboard.",
+          "Kiểm tra service phụ trợ trước khi tải lại trang.",
+          "Tạm quay về màn hình tổng quan nếu cần tiếp tục công việc."
+        ],
+        "description": "Module hiện tại chưa kết nối được nguồn dữ liệu cần thiết, thường do cấu hình môi trường hoặc endpoint chưa hoàn chỉnh.",
+        "eyebrow": "Dashboard configuration",
+        "insights": {
+          "impact": "Mức ảnh hưởng",
+          "impactValue": "Module hiện tại không thể tải dữ liệu",
+          "type": "Loại lỗi",
+          "typeValue": "Cấu hình / tích hợp",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "dashboard": "Về dashboard",
+          "home": "Về landing page"
+        },
+        "primaryAction": "Thử tải lại module",
+        "secondaryAction": "Về dashboard",
+        "title": "Bảng điều khiển chưa kết nối được dữ liệu vận hành"
+      },
+      "missingResource": {
+        "checklist": [
+          "Kiểm tra lại bộ lọc, mã đơn hoặc đường dẫn bạn vừa truy cập.",
+          "Quay về danh sách tổng quan để chọn lại bản ghi hợp lệ.",
+          "Nếu dữ liệu đã bị xóa, dùng tuyến điều hướng khác để tiếp tục thao tác."
+        ],
+        "description": "Dữ liệu hoặc module bạn đang mở không còn khả dụng tại thời điểm này, nên hệ thống không thể dựng màn hình chi tiết.",
+        "eyebrow": "Resource unavailable",
+        "insights": {
+          "impact": "Mức ảnh hưởng",
+          "impactValue": "Không thể hiển thị dữ liệu yêu cầu",
+          "type": "Loại lỗi",
+          "typeValue": "Thiếu bản ghi hoặc tuyến truy cập",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "dashboard": "Về dashboard",
+          "orders": "Xem đơn hàng"
+        },
+        "primaryAction": "Về dashboard",
+        "secondaryAction": "Mở danh sách đơn",
+        "title": "Bản ghi bạn cần không còn khả dụng trong hệ thống"
+      },
+      "network": {
+        "checklist": [
+          "Tải lại module để đồng bộ lại với API hoặc websocket.",
+          "Kiểm tra backend hoặc kết nối mạng nếu lỗi xuất hiện hàng loạt.",
+          "Quay về dashboard chính để tiếp tục các tác vụ không bị ảnh hưởng."
+        ],
+        "description": "Luồng dữ liệu vận hành giữa giao diện và dịch vụ nền đang bị gián đoạn, nên màn hình này chưa thể cập nhật chính xác.",
+        "eyebrow": "Operational sync issue",
+        "insights": {
+          "impact": "Mức ảnh hưởng",
+          "impactValue": "Dữ liệu thời gian thực có thể lỗi thời hoặc trống",
+          "type": "Loại lỗi",
+          "typeValue": "Mất kết nối / timeout",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "dashboard": "Về dashboard",
+          "notifications": "Xem thông báo"
+        },
+        "primaryAction": "Thử đồng bộ lại",
+        "secondaryAction": "Về dashboard",
+        "title": "Luồng dữ liệu dashboard đang bị gián đoạn"
+      },
+      "unknown": {
+        "checklist": [
+          "Tải lại màn hình để thử khôi phục phiên làm việc hiện tại.",
+          "Quay về dashboard tổng quan nếu bạn cần thao tác tiếp ngay.",
+          "Gửi mã tham chiếu cùng thời điểm phát sinh lỗi cho đội kỹ thuật."
+        ],
+        "description": "Module quản trị vừa gặp lỗi xử lý ngoài dự kiến. Hệ thống đã dừng màn hình này để tránh hiển thị dữ liệu sai hoặc không đầy đủ.",
+        "eyebrow": "Operations fallback",
+        "insights": {
+          "impact": "Mức ảnh hưởng",
+          "impactValue": "Chỉ ảnh hưởng module đang mở",
+          "message": "Thông điệp",
+          "messageFallback": "Chưa có thông điệp chi tiết",
+          "reference": "Mã tham chiếu"
+        },
+        "links": {
+          "dashboard": "Về dashboard",
+          "home": "Mở landing page"
+        },
+        "primaryAction": "Thử tải lại module",
+        "secondaryAction": "Về dashboard",
+        "title": "Màn hình vận hành này tạm thời không thể dựng đúng dữ liệu"
+      }
+    },
+    "common": {
+      "noReference": "Không có"
+    }
   }
 }
