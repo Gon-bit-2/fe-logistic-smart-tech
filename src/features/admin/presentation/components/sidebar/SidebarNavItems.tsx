@@ -2,12 +2,13 @@
 
 import { Link } from "@/i18n/routing";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { adminNavItems } from "@/features/admin/domain/config/navigation.config";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { SidebarNavItemsProps } from "../../types/layout.types";
 
 export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsProps>) {
-  const { adminNavItems } = useI18nCopy();
+  const tNav = useTranslations("admin.nav.labels");
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
 
@@ -35,7 +36,7 @@ export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsPr
               )}
             >
               <Icon className="size-[1.125rem]" />
-              <span>{item.label}</span>
+              <span>{tNav(item.labelKey as any)}</span>
             </Link>
           );
         })}
@@ -61,7 +62,7 @@ export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsPr
               )}
             >
               <Icon className="size-4" />
-              <span>{item.label}</span>
+              <span>{tNav(item.labelKey as any)}</span>
             </Link>
           );
         })}
@@ -86,7 +87,7 @@ export function SidebarNavItems({ config, pathname }: Readonly<SidebarNavItemsPr
             )}
           >
             <Icon className="size-[1.125rem]" />
-            <span>{item.label}</span>
+            <span>{tNav(item.labelKey as any)}</span>
           </Link>
         );
       })}

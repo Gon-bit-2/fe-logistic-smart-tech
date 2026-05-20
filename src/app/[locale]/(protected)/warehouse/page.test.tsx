@@ -44,7 +44,7 @@ describe("WarehouseScannerPage", () => {
       async detect() {
         return [];
       }
-    } as unknown as typeof globalThis.BarcodeDetector;
+    } as any;
 
     Object.defineProperty(globalThis.navigator, "mediaDevices", {
       configurable: true,

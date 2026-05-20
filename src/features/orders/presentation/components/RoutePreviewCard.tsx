@@ -3,7 +3,7 @@ import { getServiceTierOption } from "@/features/orders/domain/value-objects/ser
 import type { CreateOrderInput } from "@/features/orders/domain/types/order.types";
 import OrderRouteMap from "@/features/orders/presentation/components/OrderRouteMap";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 
 type RoutePreviewCardProps = Readonly<{
@@ -46,7 +46,7 @@ export default function RoutePreviewCard({
   form,
   quoteState,
 }: RoutePreviewCardProps) {
-  const { routePreviewCopy } = useI18nCopy();
+  const t = useTranslations("orders.routePreview");
   const service = getServiceTierOption(form.serviceTier);
   const primaryRoute = quoteState.quote?.routes[0] ?? null;
   const pickup =
@@ -54,7 +54,7 @@ export default function RoutePreviewCard({
     typeof form.pickup.latitude === "number" &&
     typeof form.pickup.longitude === "number"
       ? {
-          label: form.pickup.address || routePreviewCopy.pickup,
+          label: form.pickup.address || t("pickup"),
           lat: form.pickup.latitude,
           lng: form.pickup.longitude,
         }
@@ -64,7 +64,7 @@ export default function RoutePreviewCard({
     typeof form.delivery.latitude === "number" &&
     typeof form.delivery.longitude === "number"
       ? {
-          label: form.delivery.address || routePreviewCopy.delivery,
+          label: form.delivery.address || t("delivery"),
           lat: form.delivery.latitude,
           lng: form.delivery.longitude,
         }
@@ -85,23 +85,23 @@ export default function RoutePreviewCard({
             />
           </div>
           <div className="absolute left-6 top-6 rounded-full border border-emerald-900/10 bg-white/90 px-3 py-1 text-[10px] font-black tracking-[0.18em] text-emerald-950 uppercase shadow-[0_8px_22px_rgba(6,78,59,0.16)] backdrop-blur-md">
-            {routePreviewCopy.routePreview}
+            {t("routePreview")}
           </div>
           <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-3">
             <div className="rounded-2xl border border-emerald-900/10 bg-white/[0.92] px-4 py-3 text-emerald-950 shadow-[0_14px_34px_rgba(6,78,59,0.18)] backdrop-blur-md">
               <p className="text-[10px] font-black tracking-[0.16em] uppercase text-emerald-800">
-                {routePreviewCopy.pickup}
+                {t("pickup")}
               </p>
               <p className="mt-1 max-w-52 text-sm font-semibold leading-5">
-                {form.pickup.address || routePreviewCopy.pickupMissing}
+                {form.pickup.address || t("pickupMissing")}
               </p>
             </div>
             <div className="rounded-2xl border border-emerald-900/10 bg-white/[0.92] px-4 py-3 text-emerald-950 shadow-[0_14px_34px_rgba(6,78,59,0.18)] backdrop-blur-md">
               <p className="text-[10px] font-black tracking-[0.16em] uppercase text-emerald-800">
-                {routePreviewCopy.delivery}
+                {t("delivery")}
               </p>
               <p className="mt-1 max-w-52 text-sm font-semibold leading-5">
-                {form.delivery.address || routePreviewCopy.deliveryMissing}
+                {form.delivery.address || t("deliveryMissing")}
               </p>
             </div>
           </div>
@@ -112,53 +112,53 @@ export default function RoutePreviewCard({
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {routePreviewCopy.draftSummary}
+              {t("draftSummary")}
             </p>
             <h2 className="mt-2 text-xl font-black tracking-tight text-on-surface">
-              {form.contactName || form.receiverName || routePreviewCopy.newShipment}
+              {form.contactName || form.receiverName || t("newShipment")}
             </h2>
           </div>
-          <Badge>{quoteState.isRefreshing ? routePreviewCopy.pendingQuote : service.label}</Badge>
+          <Badge>{quoteState.isRefreshing ? t("pendingQuote") : service.label}</Badge>
         </div>
 
         <div className="space-y-3 text-sm text-on-surface-variant">
           <div className="flex justify-between">
-            <span>{routePreviewCopy.weight}</span>
+            <span>{t("weight")}</span>
             <span className="font-semibold text-on-surface">
               {form.packageWeightKg > 0
                 ? `${form.packageWeightKg} kg`
-                : routePreviewCopy.pending}
+                : t("pending")}
             </span>
           </div>
           <div className="flex justify-between">
-            <span>{routePreviewCopy.dimensions}</span>
+            <span>{t("dimensions")}</span>
             <span className="font-semibold text-on-surface">
-              {form.packageDimensions || routePreviewCopy.pending}
+              {form.packageDimensions || t("pending")}
             </span>
           </div>
           <div className="flex justify-between">
-            <span>{routePreviewCopy.eta}</span>
+            <span>{t("eta")}</span>
             <span className="font-semibold text-on-surface">
               {form.estimatedArrival
                 ? formatDate(form.estimatedArrival)
-                : routePreviewCopy.pending}
+                : t("pending")}
             </span>
           </div>
           <div className="flex justify-between">
-            <span>{routePreviewCopy.distance}</span>
+            <span>{t("distance")}</span>
             <span className="font-semibold text-on-surface">
               {formatDistance(
                 quoteState.quote?.quote.distanceKm ?? 0,
-                routePreviewCopy.pending,
+                t("pending"),
               )}
             </span>
           </div>
           <div className="flex justify-between">
-            <span>{routePreviewCopy.duration}</span>
+            <span>{t("duration")}</span>
             <span className="font-semibold text-on-surface">
               {formatDuration(
                 primaryRoute?.durationSeconds ?? quoteState.quote?.quote.durationSeconds ?? 0,
-                routePreviewCopy.pending,
+                t("pending"),
                 primaryRoute?.durationText,
               )}
             </span>
@@ -168,16 +168,16 @@ export default function RoutePreviewCard({
         <div className="mt-5 rounded-xl bg-primary/8 px-4 py-4">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-on-primary-container">
-              {routePreviewCopy.pricingSourceLabel}
+              {t("pricingSourceLabel")}
             </span>
             <span className="text-[10px] font-black tracking-[0.14em] text-primary uppercase">
               {quoteState.error
-                ? routePreviewCopy.quoteError
+                ? t("quoteError")
                 : quoteState.validationMessage
-                  ? routePreviewCopy.pendingQuote
+                  ? t("pendingQuote")
                 : quoteState.quote
-                  ? routePreviewCopy.quoteReady
-                  : routePreviewCopy.pendingQuote}
+                  ? t("quoteReady")
+                  : t("pendingQuote")}
             </span>
           </div>
           <p className="mt-2 text-xs leading-5 text-on-surface-variant">
@@ -186,18 +186,18 @@ export default function RoutePreviewCard({
               : quoteState.validationMessage
                 ? quoteState.validationMessage
               : quoteState.quote
-                ? routePreviewCopy.pricingSourceDescription
-                : routePreviewCopy.quotePendingDescription}
+                ? t("pricingSourceDescription")
+                : t("quotePendingDescription")}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl bg-white/70 px-4 py-3">
               <p className="text-[10px] font-black tracking-[0.14em] text-outline uppercase">
-                {routePreviewCopy.shippingFee}
+                {t("shippingFee")}
               </p>
               <p className="mt-2 text-lg font-black text-on-surface">
                 {quoteState.quote
                   ? formatCurrency(quoteState.quote.quote.shippingFee, "VND")
-                  : routePreviewCopy.pending}
+                  : t("pending")}
               </p>
             </div>
             <div className="rounded-xl bg-white/70 px-4 py-3">
@@ -207,7 +207,7 @@ export default function RoutePreviewCard({
               <p className="mt-2 text-lg font-black text-on-surface">
                 {quoteState.quote
                   ? `${quoteState.quote.quote.estimatedCo2Saved.toFixed(2)} kg`
-                  : routePreviewCopy.pending}
+                  : t("pending")}
               </p>
             </div>
           </div>

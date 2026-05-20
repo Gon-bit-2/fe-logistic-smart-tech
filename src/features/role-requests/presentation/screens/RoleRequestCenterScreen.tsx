@@ -14,7 +14,7 @@ import {
   useMyRoleRequestsQuery,
 } from "@/features/role-requests/presentation/hooks/useRoleRequests";
 import { useHubsQuery } from "@/features/warehouses/presentation/hooks/useHubsQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
 import type { TargetRoleName } from "@/features/role-requests/domain/types/role-request.types";
@@ -65,21 +65,19 @@ function getStatusTone(status: string) {
   return "amber" as const;
 }
 
-type RoleRequestCenterCopy = ReturnType<typeof useI18nCopy>["roleRequestCenterCopy"];
-
 function getRoleRequestLoadErrorMessage(
   error: unknown,
-  roleRequestCenterCopy: RoleRequestCenterCopy,
+  t: ReturnType<typeof useTranslations<"roleRequests">>,
 ) {
   if (error instanceof ApiError) {
-    if (error.status === 401) return roleRequestCenterCopy.loadErrorUnauthorized;
-    if (error.status === 403) return roleRequestCenterCopy.loadErrorForbidden;
+    if (error.status === 401) return t("center.loadErrorUnauthorized");
+    if (error.status === 403) return t("center.loadErrorForbidden");
   }
-  return roleRequestCenterCopy.loadErrorFallback;
+  return t("center.loadErrorFallback");
 }
 
 export default function RoleRequestCenterScreen() {
-  const { roleRequestCenterCopy } = useI18nCopy();
+  const t = useTranslations("roleRequests");
   const { user } = useAuthSession();
   const roleRequestsQuery = useMyRoleRequestsQuery({ limit: 10, page: 1 });
   const createRoleRequestMutation = useCreateRoleRequest();
@@ -132,7 +130,7 @@ export default function RoleRequestCenterScreen() {
         title="Không thể tải yêu cầu vai trò"
         description={getRoleRequestLoadErrorMessage(
           roleRequestsQuery.error,
-          roleRequestCenterCopy,
+          t,
         )}
       />
     );
@@ -142,8 +140,8 @@ export default function RoleRequestCenterScreen() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <PageHeader
         eyebrow="Phân quyền"
-        title={roleRequestCenterCopy.title}
-        description={roleRequestCenterCopy.description}
+        title={t("center.title")}
+        description={t("center.description")}
       />
 
       {hasPendingRequest && (
@@ -151,7 +149,7 @@ export default function RoleRequestCenterScreen() {
           <AlertCircle className="size-6 text-amber-500 shrink-0" />
           <div>
             <h3 className="font-bold text-amber-900">Yêu cầu đang chờ duyệt</h3>
-            <p className="text-sm mt-1">{roleRequestCenterCopy.pendingBanner}</p>
+            <p className="text-sm mt-1">{t("center.pendingBanner")}</p>
           </div>
         </div>
       )}
@@ -161,7 +159,7 @@ export default function RoleRequestCenterScreen() {
           <CheckCircle2 className="size-6 text-primary shrink-0" />
           <div>
             <h3 className="font-bold text-primary-900">Yêu cầu đã được phê duyệt</h3>
-            <p className="text-sm mt-1 text-primary/80">{roleRequestCenterCopy.refreshRoleBanner}</p>
+            <p className="text-sm mt-1 text-primary/80">{t("center.refreshRoleBanner")}</p>
           </div>
         </div>
       )}
@@ -178,7 +176,7 @@ export default function RoleRequestCenterScreen() {
               </div>
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
-                  {roleRequestCenterCopy.currentRoleLabel}
+                  {t("center.currentRoleLabel")}
                 </p>
                 <h2 className="text-2xl font-black tracking-tight text-slate-900 mt-1">
                   {getRoleLabel(user?.role)}
@@ -229,7 +227,7 @@ export default function RoleRequestCenterScreen() {
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
                   <FileText className="size-4 text-primary" />
-                  {roleRequestCenterCopy.reasonLabel}
+                  {t("center.reasonLabel")}
                 </label>
                 <textarea
                   className="min-h-[140px] w-full resize-y rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 transition-all placeholder:text-slate-400 hover:bg-slate-50 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
@@ -251,7 +249,7 @@ export default function RoleRequestCenterScreen() {
                 className="w-full h-12 text-base font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 group"
                 disabled={!canSubmit || createRoleRequestMutation.isPending || reason.trim().length === 0 || !hubId}
               >
-                {roleRequestCenterCopy.submitLabel}
+                {t("center.submitLabel")}
                 <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </form>
@@ -264,7 +262,7 @@ export default function RoleRequestCenterScreen() {
               <History className="size-5" />
             </div>
             <h2 className="text-xl font-black tracking-tight text-slate-900">
-              {roleRequestCenterCopy.historyTitle}
+              {t("center.historyTitle")}
             </h2>
           </div>
 

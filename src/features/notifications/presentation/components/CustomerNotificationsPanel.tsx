@@ -9,23 +9,21 @@ import {
   useMarkNotificationRead,
   useNotificationsQuery,
 } from "@/features/notifications/presentation/hooks/useNotifications";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { ApiError } from "@/lib/api/errors";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/formatters";
 
-type NotificationScreenCopy = ReturnType<typeof useI18nCopy>["notificationScreenCopy"];
-
 function getNotificationLoadErrorMessage(
   error: unknown,
-  notificationScreenCopy: NotificationScreenCopy,
+  t: ReturnType<typeof useTranslations<"notifications">>,
 ) {
   if (error instanceof ApiError) {
-    if (error.status === 401) return notificationScreenCopy.loadErrorUnauthorized;
-    if (error.status === 403) return notificationScreenCopy.loadErrorForbidden;
+    if (error.status === 401) return t("loadErrorUnauthorized");
+    if (error.status === 403) return t("loadErrorForbidden");
   }
 
-  return notificationScreenCopy.loadErrorFallback;
+  return t("loadErrorFallback");
 }
 
 type CustomerNotificationsPanelProps = Readonly<{
@@ -35,7 +33,7 @@ type CustomerNotificationsPanelProps = Readonly<{
 export default function CustomerNotificationsPanel({
   enabled = true,
 }: CustomerNotificationsPanelProps) {
-  const { notificationScreenCopy } = useI18nCopy();
+  const t = useTranslations("notifications");
   const { user } = useAuthSession();
   const role = user?.role ?? "customer";
   const notificationsQuery = useNotificationsQuery(
@@ -91,16 +89,16 @@ export default function CustomerNotificationsPanel({
           <div className="rounded-2xl border border-red-100 bg-red-50/80 px-4 py-6 text-sm text-red-700">
             {getNotificationLoadErrorMessage(
               notificationsQuery.error,
-              notificationScreenCopy,
+              t,
             )}
           </div>
         ) : notifications.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-8 text-center">
             <p className="text-sm font-semibold text-slate-700">
-              {notificationScreenCopy.emptyTitle}
+              {t("emptyTitle")}
             </p>
             <p className="mt-2 text-sm text-slate-500">
-              {notificationScreenCopy.emptyDescription}
+              {t("emptyDescription")}
             </p>
           </div>
         ) : (
@@ -160,7 +158,7 @@ export default function CustomerNotificationsPanel({
                           disabled={markReadMutation.isPending}
                           onClick={() => void markReadMutation.mutateAsync(notification.id)}
                         >
-                          {notificationScreenCopy.markOne}
+                          {t("markOne")}
                         </Button>
                       ) : null}
 

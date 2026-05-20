@@ -12,7 +12,7 @@ import type { OrderPricing } from "@/features/orders/domain/types/order.types";
 import { useCheckout } from "@/features/orders/presentation/hooks/useCheckout";
 import { usePaymentLabels } from "@/features/payments/presentation/utils/payment-labels";
 import { useCreatePaymentIntent } from "@/features/payments/presentation/hooks/usePaymentIntent";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { normalizePublicEnvValue } from "@/lib/api/env";
 import { formatCurrency } from "@/utils/formatters";
 
@@ -100,7 +100,7 @@ export default function CheckoutScreen({
   reference = null,
   showTopBar = true,
 }: CheckoutScreenProps) {
-  const { checkoutCopy } = useI18nCopy();
+  const tCheckout = useTranslations("orders.checkout");
   const { getPaymentStatusLabel } = usePaymentLabels();
   const router = useRouter();
   const {
@@ -199,7 +199,7 @@ export default function CheckoutScreen({
         {showTopBar ? <OperationsTopBar active="shipments" /> : null}
         <main className="mx-auto max-w-5xl px-6 py-12 md:px-8">
           <div className="rounded-xl bg-surface-container-lowest p-8 text-on-surface shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
-            {checkoutCopy.loadOrder}
+            {tCheckout("loadOrder")}
           </div>
         </main>
       </div>
@@ -213,13 +213,13 @@ export default function CheckoutScreen({
         <main className="mx-auto max-w-5xl px-6 py-12 md:px-8">
           <div className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
             <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-              {checkoutCopy.checkoutErrorEyebrow}
+              {tCheckout("checkoutErrorEyebrow")}
             </p>
             <h1 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-              {checkoutCopy.checkoutErrorTitle}
+              {tCheckout("checkoutErrorTitle")}
             </h1>
             <p className="mt-3 text-sm leading-6 text-on-surface-variant">
-              {loadError ?? checkoutCopy.emptyOrderDescription}
+              {loadError ?? tCheckout("emptyOrderDescription")}
             </p>
           </div>
         </main>
@@ -233,10 +233,10 @@ export default function CheckoutScreen({
       <main className="mx-auto max-w-7xl px-6 py-10 md:px-8">
         <div className="mb-12">
           <h1 className="text-[2.75rem] font-black tracking-tight text-on-surface">
-            {checkoutCopy.title}
+            {tCheckout("title")}
           </h1>
           <p className="mt-2 font-medium text-slate-500">
-            {checkoutCopy.orderSubtitle(order.reference)}
+            {tCheckout("orderSubtitle", { reference: order.reference })}
           </p>
         </div>
 
@@ -246,7 +246,7 @@ export default function CheckoutScreen({
               <div className="mb-8 flex items-center gap-3">
                 <div className="h-2 w-2 rounded-full bg-primary" />
                 <h2 className="text-xl font-black tracking-tight text-on-surface">
-                  {checkoutCopy.paymentDetails}
+                  {tCheckout("paymentDetails")}
                 </h2>
               </div>
 
@@ -257,12 +257,12 @@ export default function CheckoutScreen({
                   </div>
                 ) : isCodPayment ? (
                   <div className="space-y-4 rounded-xl bg-surface-container-low p-4 text-sm text-on-surface/70">
-                    <p>{checkoutCopy.redirectToCodTracking}</p>
+                    <p>{tCheckout("redirectToCodTracking")}</p>
                     <Link
                       href={`/tracking/${trackingDestination}`}
                       className="inline-flex h-11 items-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
                     >
-                      {checkoutCopy.codTrackingCta}
+                      {tCheckout("codTrackingCta")}
                     </Link>
                   </div>
                 ) : stripePromise && stripeOptions ? (
@@ -270,8 +270,8 @@ export default function CheckoutScreen({
                     <StripePaymentForm
                       onError={setError}
                       onSuccess={() => router.push(`/tracking/${trackingDestination}`)}
-                      payLabel={checkoutCopy.payAndConfirmOrder}
-                      processingLabel={checkoutCopy.processing}
+                      payLabel={tCheckout("payAndConfirmOrder")}
+                      processingLabel={tCheckout("processing")}
                     />
                   </Elements>
                 ) : (
@@ -288,10 +288,10 @@ export default function CheckoutScreen({
 
                 <div className="rounded-xl border border-outline-variant/10 bg-surface-container-low p-4">
                   <p className="font-semibold text-on-surface">
-                    {checkoutCopy.cardPayment}
+                    {tCheckout("cardPayment")}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">
-                    {checkoutCopy.cardPaymentDescription}
+                    {tCheckout("cardPaymentDescription")}
                   </p>
                 </div>
               </div>
@@ -301,10 +301,10 @@ export default function CheckoutScreen({
               <AppIcon name="verified_user" className="text-3xl text-tertiary" />
               <div>
                 <p className="font-bold text-on-surface-variant">
-                  {checkoutCopy.insuranceTitle}
+                  {tCheckout("insuranceTitle")}
                 </p>
                 <p className="text-sm text-slate-500">
-                  {checkoutCopy.insuranceDescription}
+                  {tCheckout("insuranceDescription")}
                 </p>
               </div>
             </div>
@@ -314,49 +314,49 @@ export default function CheckoutScreen({
             <div className="rounded-xl bg-surface-container-lowest p-8 shadow-[0_20px_40px_-10px_rgba(6,78,59,0.08)]">
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-xl font-black tracking-tight text-on-surface">
-                  {checkoutCopy.orderSummary}
+                  {tCheckout("orderSummary")}
                 </h2>
                 <AppIcon name="receipt_long" className="text-slate-300" />
               </div>
 
               <div className="space-y-4 text-on-surface-variant">
                 <div className="flex justify-between">
-                  <span>{checkoutCopy.logisticsFee}</span>
+                  <span>{tCheckout("logisticsFee")}</span>
                   <span className="font-medium">
                     {formatPricingValue(
                       pricing?.logisticsFee,
                       pricing?.currency,
-                      checkoutCopy.pendingApiQuote,
+                      tCheckout("pendingApiQuote"),
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>{checkoutCopy.shippingAndHandling}</span>
+                  <span>{tCheckout("shippingAndHandling")}</span>
                   <span className="font-medium">
                     {formatPricingValue(
                       pricing?.handlingFee,
                       pricing?.currency,
-                      checkoutCopy.pendingApiQuote,
+                      tCheckout("pendingApiQuote"),
                     )}
                   </span>
                 </div>
                 <div className="flex items-center justify-between rounded-lg bg-primary/10 px-3 py-2">
                   <span className="text-sm font-semibold text-primary">
-                    {checkoutCopy.ecoDiscount}
+                    {tCheckout("ecoDiscount")}
                   </span>
                   <span className="font-black text-primary">
                     {typeof pricing?.ecoDiscount === "number"
                       ? `-${formatCurrency(pricing.ecoDiscount, pricing.currency)}`
-                      : checkoutCopy.pendingApiQuote}
+                      : tCheckout("pendingApiQuote")}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>{checkoutCopy.vat}</span>
+                  <span>{tCheckout("vat")}</span>
                   <span className="font-medium">
                     {formatPricingValue(
                       pricing?.vat,
                       pricing?.currency,
-                      checkoutCopy.pendingApiQuote,
+                      tCheckout("pendingApiQuote"),
                     )}
                   </span>
                 </div>
@@ -366,23 +366,23 @@ export default function CheckoutScreen({
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-[10px] font-black tracking-[0.16em] text-slate-400 uppercase">
-                      {checkoutCopy.totalAmount}
+                      {tCheckout("totalAmount")}
                     </p>
                     <p className="mt-1 text-3xl font-black tracking-tight text-on-surface">
                       {formatPricingValue(
                         totalAmount,
                         totalCurrency,
-                        checkoutCopy.pendingApiQuote,
+                        tCheckout("pendingApiQuote"),
                       )}
                     </p>
                   </div>
                   <span className="rounded-full bg-secondary-container px-3 py-1 text-[10px] font-black tracking-[0.12em] text-on-secondary-container uppercase">
-                    {totalCurrency ?? checkoutCopy.awaitingQuote}
+                    {totalCurrency ?? tCheckout("awaitingQuote")}
                   </span>
                 </div>
                 {!pricing ? (
                   <p className="mt-4 text-xs leading-5 text-on-surface-variant">
-                    {checkoutCopy.pricingDescription}
+                    {tCheckout("pricingDescription")}
                   </p>
                 ) : null}
               </div>
@@ -404,12 +404,12 @@ export default function CheckoutScreen({
                 <AppIcon name="eco" className="text-primary" />
               </div>
               <h3 className="mb-2 text-sm font-black text-primary">
-                {checkoutCopy.sustainableChoice}
+                {tCheckout("sustainableChoice")}
               </h3>
               <p className="text-xs leading-6 text-on-surface-variant">
                 {typeof order.co2SavedKg === "number"
-                  ? checkoutCopy.sustainabilityValue(order.co2SavedKg)
-                  : checkoutCopy.sustainabilityMissing}
+                  ? tCheckout("sustainabilityValue", { value: order.co2SavedKg })
+                  : tCheckout("sustainabilityMissing")}
               </p>
             </div>
           </aside>

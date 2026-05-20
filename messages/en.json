@@ -771,5 +771,834 @@
       "trackingErrorTitle": "Unable to load the shipment internal timeline",
       "viewLiveTracking": "Viewing live internal tracking for {trackingCode}."
     }
+  },
+  "profile": {
+    "title": "Profile & settings",
+    "description": "Manage account information, address book, and personal operations settings.",
+    "tabs": {
+      "account": "Account",
+      "addressBook": "Address book",
+      "access": "Access & notifications",
+      "security": "Security"
+    },
+    "account": {
+      "cardTitle": "Operations profile",
+      "cardDescription": "This information is used in dashboards and coordinated operations workflows.",
+      "profileId": "User ID",
+      "role": "Role",
+      "hubId": "Hub ID",
+      "syncReady": "Synced",
+      "syncPending": "Unsaved changes",
+      "syncDescription": "Account information is updated directly to the current user profile through the secure API.",
+      "fullNameLabel": "Full name / business name",
+      "fullNamePlaceholder": "Emerald Logistics Company",
+      "phoneLabel": "Contact phone",
+      "phonePlaceholder": "0900 111 222",
+      "emailLabel": "Login email",
+      "emailHint": "Email cannot be changed directly from the profile interface yet.",
+      "save": "Save changes",
+      "savePending": "Saving...",
+      "reset": "Restore original data",
+      "savedState": "Profile information updated successfully.",
+      "dirtyState": "You have unsaved changes.",
+      "cleanState": "Personal information matches the latest server data.",
+      "validationName": "Please enter a valid display name.",
+      "validationPhone": "Phone number should contain 9-15 digits."
+    },
+    "addressBook": {
+      "title": "Address book",
+      "description": "Save frequent pickup and delivery points to create future orders faster.",
+      "add": "Add address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "setDefault": "Set default",
+      "defaultBadge": "Default",
+      "emptyTitle": "No addresses yet",
+      "emptyDescription": "Create your first pickup or delivery point to standardize contact information and order creation.",
+      "dialogCreateTitle": "Add new address",
+      "dialogEditTitle": "Update address",
+      "dialogDescription": "Information will be saved directly to the current account address book.",
+      "save": "Save address",
+      "create": "Create address",
+      "cancel": "Cancel",
+      "fields": {
+        "label": "Address label",
+        "contactName": "Contact person",
+        "phone": "Phone number",
+        "addressLine": "Address details",
+        "setAsDefault": "Set as default address"
+      },
+      "placeholders": {
+        "label": "Main warehouse District 7",
+        "contactName": "John Smith",
+        "phone": "0911 223 344",
+        "addressLine": "123 Nguyen Van Linh, District 7, Ho Chi Minh City"
+      },
+      "validation": {
+        "label": "Address label is required.",
+        "contactName": "Please enter a contact name.",
+        "phone": "Address phone number is invalid.",
+        "addressLine": "Please enter address details."
+      },
+      "loading": "Loading address book...",
+      "loadError": "Unable to load address book right now."
+    },
+    "access": {
+      "title": "Account coordination",
+      "description": "Track system notifications and role requests from the customer workspace.",
+      "notificationsTitle": "Notification inbox",
+      "notificationsDescription": "Open the inbox to view approvals, reminders, and operations updates.",
+      "notificationsCta": "Open inbox",
+      "rolesTitle": "Role requests",
+      "rolesDescription": "Track or submit requests to become a driver or warehouse staff member from the dashboard.",
+      "rolesCta": "Open role center"
+    },
+    "security": {
+      "title": "Security & login",
+      "description": "Manage the primary login channel and open the password reset flow when needed.",
+      "emailTitle": "Login email",
+      "emailDescription": "This is the primary login identifier for the current account and cannot be changed directly yet.",
+      "resetTitle": "Change password",
+      "resetDescription": "Use the forgot password flow to receive an OTP and reset your password securely.",
+      "resetCta": "Open security flow"
+    },
+    "loadErrorUnauthorized": "Your session has expired. Please log in again.",
+    "loadErrorForbidden": "You do not have permission to access this profile.",
+    "loadErrorFallback": "Unable to load profile information right now."
+  },
+  "notifications": {
+    "allTab": "All",
+    "description": "Track system updates, role approval status, and the latest operations actions.",
+    "emptyDescription": "No notifications match the current filter.",
+    "emptyTitle": "Inbox is empty",
+    "loadErrorFallback": "The notification service is temporarily unavailable. Try again later or contact an administrator if the issue continues.",
+    "loadErrorForbidden": "You do not have permission to view the notification inbox.",
+    "loadErrorUnauthorized": "Your session has expired. Log in again to view notifications.",
+    "markAll": "Mark all as read",
+    "markOne": "Mark as read",
+    "title": "Notification Inbox",
+    "unreadTab": "Unread"
+  },
+  "roleRequests": {
+    "center": {
+      "approveLabel": "Approved request",
+      "currentRoleLabel": "Current role",
+      "description": "Submit a request to become a driver or warehouse staff member and track approval status in real time.",
+      "historyTitle": "Your request history",
+      "loadErrorFallback": "The role request service is temporarily unavailable. Try again later or contact an administrator if the issue continues.",
+      "loadErrorForbidden": "You do not have permission to access the role request center.",
+      "loadErrorUnauthorized": "Your session has expired. Log in again to continue role request actions.",
+      "pendingBanner": "You have a pending request. Wait for an admin to process it before submitting a new one.",
+      "refreshRoleBanner": "The request was approved but the current session has not refreshed the new permission. Log out and log in again.",
+      "reasonLabel": "Request reason",
+      "submitLabel": "Submit request",
+      "targetRoleLabel": "Requested role",
+      "title": "Role Request Center"
+    },
+    "admin": {
+      "approveButton": "Approve",
+      "description": "Admin review queue for role change requests, including hub assignment when approving warehouse staff.",
+      "emptyDescription": "No requests remain in the current queue.",
+      "emptyTitle": "Queue is empty",
+      "hubLabel": "Assigned hub",
+      "loadErrorFallback": "The role request queue is temporarily unavailable. Try again later or check the backend.",
+      "queueTitle": "Pending review queue",
+      "rejectButton": "Reject",
+      "reviewNoteLabel": "Review note",
+      "title": "Role Requests Review"
+    }
+  },
+  "admin": {
+    "screen": {
+      "actions": "Actions",
+      "currentEta": "Estimated ETA",
+      "customer": "Customer",
+      "description": "Manage shipments, business performance, and environmental indicators in one consistent interface.",
+      "emptyDescription": "No shipment data is available in the system yet.",
+      "emptyTitle": "No operations data",
+      "integrationPendingDescription": "Real-time mapping and dispatch will be available once real trip data is connected.",
+      "integrationPendingTitle": "Visual dispatch is waiting for integration",
+      "loadingDescription": "Loading operations data...",
+      "loadingTitle": "Loading control board",
+      "metrics": {
+        "activeOrders": "Active orders",
+        "availableVehicles": "Available vehicles",
+        "electricVehicles": "Electric / hybrid vehicles"
+      },
+      "recentOrders": "Recent active orders",
+      "title": "Intelligent operations command center",
+      "trackingId": "Tracking ID",
+      "viewAll": "View all"
+    },
+    "topBar": {
+      "adminLabel": "Admin",
+      "ecosystemBrand": "Precision ecosystem",
+      "logoutLabel": "Log out",
+      "profileLabel": "Profile"
+    },
+    "sidebar": {
+      "addNewRoute": "Add new route",
+      "adminConsole": "Admin console",
+      "dispatcherHub": "Dispatch hub",
+      "globalOperations": "Global operations",
+      "helpCenter": "Help center",
+      "logisticsHub": "Logistics hub",
+      "logout": "Log out",
+      "newDispatch": "Create dispatch",
+      "newShipment": "Create shipment",
+      "signOut": "Sign out"
+    },
+    "dispatcher": {
+      "autoOptimize": "Auto-optimize route",
+      "liveSystem": "Live system",
+      "operationalFlow": "Operational flow"
+    },
+    "nav": {
+      "labels": {
+        "dashboard": "Overview",
+        "analytics": "Analytics",
+        "observability": "Production ops",
+        "roleRequests": "Role Requests",
+        "orders": "Shipments",
+        "trips": "Trips",
+        "fleet": "Fleet",
+        "wallet": "COD reconciliation",
+        "sustainability": "Sustainability",
+        "warehouses": "Warehouses",
+        "language": "Language"
+      }
+    },
+    "shell": {
+      "searchPlaceholderShipment": "Search shipments...",
+      "searchPlaceholderInsight": "Search insights...",
+      "searchPlaceholderFleet": "Search vehicle or driver...",
+      "searchPlaceholderObservability": "Search queues, endpoints, or audit...",
+      "searchPlaceholderWallet": "Search drivers or COD receipts...",
+      "searchPlaceholderOrders": "Filter shipments...",
+      "searchPlaceholderTrips": "Search trip or plate...",
+      "searchPlaceholderNotifications": "Search notifications...",
+      "searchPlaceholderRoleRequests": "Search role requests...",
+      "searchPlaceholderSustainability": "Search global tracking...",
+      "searchPlaceholderWarehouses": "Search warehouses...",
+      "searchPlaceholderLanguage": "Search languages...",
+      "titleDashboard": "Admin dashboard",
+      "titleAdmin": "Precision Admin",
+      "titleCenter": "Dispatch center",
+      "supportLabel": "Support"
+    }
+  },
+  "warehouse": {
+    "inventory": {
+      "headings": [
+        "Hub Code",
+        "Hub Name",
+        "Address",
+        "Coordinates",
+        "Status"
+      ],
+      "stockChips": [
+        "Awaiting Routing"
+      ],
+      "activeInventoryLedger": "Active inventory ledger",
+      "centralHubDescription": "Automated cold-chain handling for sensitive goods and pharmaceuticals across the northern corridor.",
+      "centralHubTitle": "Distribution center A1",
+      "emptyDescription": "The system has not recorded distribution center data or you do not have access.",
+      "emptyTitle": "No distribution center data",
+      "filters": "Filters",
+      "hubSubtitle": "Real-time monitoring for the Precision logistics network.",
+      "hubTitle": "Distribution center management",
+      "hubVehiclePending": "Detailed inventory data is being synchronized.",
+      "integrationPendingDescription": "Inventory ledger, scanning, and alert features will work after the system connects successfully to warehouses.",
+      "integrationPendingTitle": "Detailed inventory data waiting for integration",
+      "lowStockAlert": "Low stock alert",
+      "lowStockDescription": "Lithium Cell Packs (Unit-82) are below the alert threshold.",
+      "loadingDescription": "Loading distribution centers from the system...",
+      "loadingTitle": "Loading warehouse data",
+      "manageFacility": "Manage facility",
+      "metricPendingDispatch": "Pending dispatch",
+      "metricStorageCapacity": "Storage capacity",
+      "metricTotalStock": "Total stock",
+      "recordsButton": "View all hubs",
+      "searchPlaceholder": "Search SKU...",
+      "solarEfficiency": "Solar grid efficiency",
+      "solarTitle": "Sustainability indicator",
+      "stockSupporting": "Aggregated from available hub data",
+      "used": "used"
+    },
+    "hub": {
+      "destinationHub": "Destination",
+      "flagged": "Needs attention",
+      "inbound": "Inbound",
+      "itemType": "Item type",
+      "logisticsMap": "View logistics map",
+      "nextFleetArrival": "Next fleet arrival",
+      "outbound": "Outbound",
+      "pageTitle": "Warehouse management",
+      "processed": "Processed",
+      "readyForInput": "Ready for input",
+      "route": "Route",
+      "scanPlaceholder": "Scan tracking code...",
+      "shiftEfficiency": "Shift efficiency: 94.2%",
+      "shiftText": "The warehouse is operating at peak capacity. 450 packages were scanned in the last 2 hours without errors.",
+      "showing": "Showing 4 / 128 shipments",
+      "status": "Status",
+      "submit": "Submit",
+      "trackingId": "Tracking ID",
+      "weight": "Weight",
+      "pendingDescription": "The scanning interface is ready. The package list will appear when scanner data is available.",
+      "pendingTitle": "System is waiting for scanner data"
+    }
+  },
+  "fleet": {
+    "co2Saved": "CO2 saved",
+    "evPercentage": "EV percentage",
+    "exportReport": "Export report",
+    "filters": "Filters",
+    "integrationPendingDescription": "Detailed performance, regional operating rhythm, and CO2 indicators will appear when the system has enough data.",
+    "integrationPendingTitle": "Waiting for advanced analytics data",
+    "liveFleetPulse": "Live fleet pulse",
+    "loadingDescription": "Loading vehicle list from the system...",
+    "loadingTitle": "Loading fleet data",
+    "metricLabels": {
+      "activeVehicles": "Active",
+      "electricVehicles": "Electric / hybrid",
+      "totalVehicles": "Total vehicles"
+    },
+    "operationalDashboard": "Operations dashboard",
+    "systemPerformance": "System performance",
+    "systemPerformanceText": "Fleet utilization increased 8.4% from last week. Electric vehicles maintained maximum uninterrupted uptime.",
+    "title": "Fleet operations",
+    "vehicleEmptyDescription": "The system has not recorded active vehicles at this time.",
+    "vehicleEmptyTitle": "No vehicles to display",
+    "vehicleErrorDescription": "Error loading vehicle list. Check your network connection or contact support.",
+    "vehicleErrorTitle": "Unable to load fleet data",
+    "vehicleSummaryTitle": "Vehicle list",
+    "viewInsights": "View insights",
+    "zone": "Zone"
+  },
+  "analytics": {
+    "screen": {
+      "activeVolume": "Active volume",
+      "dataExport": "Export data",
+      "exportFormats": "PDF, XLSX, CSV formats supported",
+      "integrationPendingDescription": "Advanced analytics will appear after the system aggregates enough operational data.",
+      "integrationPendingTitle": "Waiting for aggregated data",
+      "optimizationInsight": "Optimization insight",
+      "optimizationText": "Suggestion: Allocate 12% more electric vehicles to Coastal Route B during peak time to reduce 14.2 tons of CO2 while preserving delivery time.",
+      "ready": "Ready",
+      "regionalEyebrow": "Volume by hub",
+      "regionalPerformance": "Regional performance",
+      "subtitle": "Monitor logistics performance and carbon emissions in real time.",
+      "title": "Analytics & Reports",
+      "totalCapacity": "Total capacity",
+      "totalFleet": "Total fleet",
+      "vehicleTypeDistribution": "Vehicle distribution",
+      "volumeDescription": "Real-time fleet utilization performance.",
+      "volumeTitle": "Volume and Capacity"
+    },
+    "filters": {
+      "last30Days": "Last 30 days",
+      "lastQuarter": "Latest quarter",
+      "customRange": "Custom range"
+    }
+  },
+  "greenTech": {
+    "sustainability": {
+      "activeFleet": "Active fleet",
+      "adoptionGrowth": "Growth data",
+      "adoptionSubtitle": "Analyze customer preference for green service tiers",
+      "adoptionTitle": "Eco-friendly service adoption",
+      "averageEfficiency": "Avg. efficiency",
+      "description": "Track real-time environmental impact and build a carbon-neutral supply chain through smart dispatch and maximum electric vehicle utilization.",
+      "fuelAvoided": "Fuel avoided",
+      "greeningFleet": "Fleet greening progress",
+      "greeningFleetSubtitle": "Goal to transition to 100% electric vehicles by 2028",
+      "heatmapDescription": "CO2 reduction distribution by region",
+      "heatmapTitle": "Regional environmental impact map",
+      "heroMetric": "Highlighted metric",
+      "heroSubtitle": "Equivalent to planting 14,200 mature trees",
+      "heroTitle": "Total CO2 saved since adopting the system",
+      "high": "High",
+      "impactSummaryDescription": "Detailed analysis of CO2 reduction by transport route.",
+      "impactSummaryTitle": "Monthly environmental impact report",
+      "low": "Low",
+      "metricTons": "Tons",
+      "monthlyDescription": "Monthly aggregation across the delivery network",
+      "monthlyTitle": "Emission reduction trend chart",
+      "pendingDescription": "Detailed environmental impact reporting will appear after the system receives emissions data for each trip.",
+      "pendingTitle": "Waiting for real emissions data",
+      "reductionIntensity": "Reduction intensity",
+      "renewableEnergyMix": "Renewable energy mix",
+      "renewableEnergySubtitle": "National grid electricity compared with clean energy",
+      "title": "Sustainability impact",
+      "topPercent": "Top 2% global logistics providers"
+    },
+    "co2Dashboard": {
+      "eyebrow": "Emissions",
+      "title": "CO₂ tracking"
+    }
+  },
+  "auth": {
+    "heroPanel": {
+      "auth": {
+        "badge": "12% lower carbon emissions",
+        "brand": "Fleet Command",
+        "description": "An intelligent management system that turns logistics data into visual reports and supports faster decisions.",
+        "protectedFlowLabel": "Secure connection",
+        "title": "Master your global transport network with complete transparency."
+      },
+      "otp": {
+        "badge": "Enterprise-grade ISO 27001 security",
+        "brand": "Precision Logistics",
+        "description": "Multi-layer security keeps your entire supply chain data protected.",
+        "protectedFlowLabel": "Two-step verification",
+        "title": "Operate with precision in every rhythm"
+      }
+    },
+    "loginForm": {
+      "activeSessionLabel": "Remember password",
+      "apiDocsLabel": "System docs",
+      "connectGoogleLabel": "Connecting...",
+      "emailLabel": "Work email",
+      "emailPlaceholder": "name@precision-stream.com",
+      "footerCopyright": "© 2026 Precision Stream Logistics",
+      "forgotKeyLabel": "Forgot password?",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "John Smith",
+      "headerDescription": "Access the logistics management system to monitor and optimize your entire supply chain.",
+      "headerTitle": "Welcome to Emerald Logistics",
+      "loginLabel": "Log in",
+      "googleOptions": [
+        { "label": "Google" },
+        { "label": "GitHub" },
+        { "label": "Microsoft" }
+      ],
+      "loginSuccessStatus": "Login successful. Redirecting to your operations workspace...",
+      "organizationLabel": "Organization",
+      "organizationPlaceholder": "ABC Corporation",
+      "orEnterWith": "Or sign in with",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••••••",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "0900 111 222",
+      "privacyLabel": "Privacy",
+      "registerLabel": "Sign up",
+      "registerSuccessStatus": "Verification code sent. Continue to OTP confirmation.",
+      "submitLoading": "Processing...",
+      "submitLogin": "Open system",
+      "submitRegister": "Sign up and continue",
+      "supportLabel": "Support"
+    },
+    "forgotPassword": {
+      "backToLoginLabel": "Back to login",
+      "confirmPasswordLabel": "Confirm password",
+      "emailLabel": "Work email",
+      "emailPlaceholder": "name@precision-stream.com",
+      "headerDescription": "Receive a verification code to reset your administrator account password.",
+      "headerTitle": "Reset password",
+      "newPasswordLabel": "New password",
+      "passwordPlaceholder": "••••••••••••",
+      "status": "Verification code sent. Please check your email.",
+      "submit": "Send verification code",
+      "submitLoading": "Sending...",
+      "supportLabel": "Support"
+    },
+    "otpVerification": {
+      "footerPrivacy": "Privacy policy",
+      "footerSecureSession": "Secure session",
+      "footerSupport": "Support",
+      "resendLabel": "Resend code",
+      "verifyLoading": "Verifying...",
+      "verifyReset": "Verify and reset password",
+      "verifyComplete": "Verify and finish",
+      "infoTitle": "Having trouble?",
+      "ariaDigitLabel": "OTP digit {index}",
+      "forgotPassword": {
+        "description": "We sent a 6-digit code to {destination}. Enter it below to confirm your password reset request.",
+        "expiredStatus": "The password reset session has expired. Please request a new OTP.",
+        "help": "Check spam or confirm the email used for the password reset request.",
+        "resendStatus": "A new code has been sent to {email}.",
+        "successStatus": "Password updated. Redirecting to login...",
+        "title": "Verify password reset"
+      },
+      "register": {
+        "description": "We sent a 6-digit code to {destination}. Enter it below to finish account registration.",
+        "expiredStatus": "The registration session has expired. Please request a new OTP.",
+        "help": "Check spam or confirm the contact information used during registration.",
+        "resendStatus": "A new code has been sent to {email}.",
+        "successStatus": "Verification successful. Redirecting to login...",
+        "title": "Security verification"
+      }
+    },
+    "googleCallback": {
+      "backToLogin": "Back to login",
+      "errorCard": "Review the error above and try signing in again.",
+      "errorTitle": "Google sign-in failed",
+      "incompleteSession": "Google sign-in did not return a complete session.",
+      "loginSuccess": "Google sign-in successful. Redirecting to your operations workspace...",
+      "secureSessionCard": "Your session token is being stored securely in this browser session.",
+      "successTitle": "Google sign-in response",
+      "support": "Support"
+    },
+    "runtime": {
+      "missingForgotPasswordSession": "No password reset session found. Please request a new OTP.",
+      "missingPendingRegistration": "No pending registration session found.",
+      "missingRegisterSession": "No registration session found. Please request a new OTP."
+    }
+  },
+  "wallet": {
+    "actions": {
+      "openTrips": "Open trips",
+      "openVehicle": "View vehicle",
+      "reconcile": "Reconcile COD",
+      "refresh": "Refresh",
+      "retry": "Retry"
+    },
+    "driver": {
+      "codDescription": "Held COD is updated when a driver confirms cash collection for a COD order. Warehouse or admin users reconcile this after cash handoff.",
+      "codTitle": "Track held COD",
+      "description": "Review wallet balance, unreconciled COD, and jump into the related trip workflows.",
+      "errorTitle": "Could not load driver wallet",
+      "eyebrow": "Driver wallet",
+      "lastUpdated": "Last updated",
+      "loadingDescription": "Syncing wallet and COD balances...",
+      "loadingTitle": "Loading driver wallet",
+      "title": "Driver wallet & COD"
+    },
+    "fields": {
+      "amount": "COD amount",
+      "description": "Reconciliation note",
+      "driverId": "Driver ID",
+      "referenceId": "Receipt reference"
+    },
+    "metrics": {
+      "balance": "Wallet balance",
+      "codCollected": "Held COD",
+      "status": "Wallet status"
+    },
+    "reconciliation": {
+      "description": "Record COD cash handed off by a driver to warehouse or finance. The transaction reduces the driver's held COD balance.",
+      "eyebrow": "COD reconciliation",
+      "previewDescription": "Check the amount and receipt reference before confirming. The backend rejects amounts above the driver's held COD balance.",
+      "previewEyebrow": "Reconciliation amount",
+      "successMessage": "COD reconciliation recorded successfully.",
+      "title": "COD reconciliation"
+    }
+  },
+  "errorPages": {
+    "notFound": {
+      "code": "404",
+      "eyebrow": "Page not found",
+      "title": "This page is off the route",
+      "description": "The page you are looking for is no longer here. The link may have changed or the shipment you are accessing does not exist.",
+      "checklist": {
+        "0": "Check the URL again",
+        "1": "Return to homepage",
+        "2": "Contact support if the issue persists"
+      },
+      "insights": {
+        "0": {
+          "label": "Error code",
+          "value": "404 Not Found"
+        },
+        "1": {
+          "label": "Status",
+          "value": "No widespread system issues reported"
+        }
+      },
+      "links": {
+        "0": {
+          "href": "/",
+          "label": "Homepage"
+        },
+        "1": {
+          "href": "/auth/login",
+          "label": "Log in"
+        },
+        "2": {
+          "href": "/tracking",
+          "label": "Track shipment"
+        }
+      },
+      "primaryAction": {
+        "label": "Go to homepage",
+        "href": "/"
+      },
+      "secondaryAction": {
+        "label": "Log in to system",
+        "href": "/auth/login"
+      }
+    },
+    "global": {
+      "configuration": {
+        "code": "500",
+        "eyebrow": "Configuration error",
+        "title": "System encountered an issue",
+        "description": "A critical system error has occurred. Please try again or contact support.",
+        "primaryAction": {
+          "label": "Reload page"
+        },
+        "secondaryAction": {
+          "label": "Go to homepage",
+          "href": "/"
+        }
+      },
+      "network": {
+        "code": "503",
+        "eyebrow": "Connection error",
+        "title": "Lost connection to system",
+        "description": "Cannot connect to the server. Please check your network connection and try again.",
+        "primaryAction": {
+          "label": "Retry connection"
+        },
+        "secondaryAction": {
+          "label": "Check system status",
+          "href": "#"
+        }
+      },
+      "fallback": {
+        "code": "500",
+        "eyebrow": "Unknown error",
+        "title": "An issue occurred",
+        "description": "We are having trouble processing your request. Please try again later.",
+        "primaryAction": {
+          "label": "Return to safety"
+        }
+      }
+    },
+    "dashboard": {
+      "configuration": {
+        "code": "Dashboard Error",
+        "eyebrow": "Internal system error",
+        "title": "Dashboard configuration error",
+        "description": "Configuration error when loading operations information.",
+        "primaryAction": {
+          "label": "Reload dashboard"
+        }
+      },
+      "missingResource": {
+        "code": "404",
+        "eyebrow": "Data not found",
+        "title": "Operations data does not exist",
+        "description": "The shipment or data you requested does not exist or has been removed from the system.",
+        "primaryAction": {
+          "label": "Back to list"
+        }
+      },
+      "network": {
+        "code": "Sync Error",
+        "eyebrow": "Out of sync",
+        "title": "Cannot sync real-time data",
+        "description": "Connection to the dispatch center is interrupted.",
+        "primaryAction": {
+          "label": "Sync again"
+        }
+      },
+      "fallback": {
+        "code": "Ops Error",
+        "eyebrow": "Operations error",
+        "title": "Dispatch system interruption",
+        "description": "An error occurred while processing the operations flow.",
+        "primaryAction": {
+          "label": "Retry action"
+        }
+      }
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "checklist": [
+      "Double-check the URL or try returning to the nearest navigation path.",
+      "If you followed an old link, the content may have been changed or removed.",
+      "Use a safe starting point like the homepage, login, or order tracking."
+    ],
+    "description": "The page you are looking for is no longer here or has never been published. We kept the shortest paths for you to get back on track.",
+    "eyebrow": "Page not found",
+    "insights": {
+      "status": "Status",
+      "statusValue": "Path does not exist",
+      "impact": "Impact",
+      "impactValue": "Only affects the current URL",
+      "recovery": "Recovery",
+      "recoveryValue": "Can continue via safe routes below"
+    },
+    "links": {
+      "home": "Home",
+      "login": "Login",
+      "tracking": "Track Order"
+    },
+    "primaryAction": "Go to Home",
+    "secondaryAction": "Login to System",
+    "title": "This page has left the route you just took"
+  },
+  "errorExperience": {
+    "global": {
+      "configuration": {
+        "checklist": [
+          "Verify environment variables and API endpoints before deploying.",
+          "Try again after the backend or service configuration is ready.",
+          "If the error persists, use the reference code to contact the tech team."
+        ],
+        "description": "A background service or environment configuration is not ready, so the page cannot respond reliably at this time.",
+        "eyebrow": "Configuration issue",
+        "insights": {
+          "group": "Error Group",
+          "groupValue": "Configuration or Integration",
+          "impact": "Impact",
+          "impactValue": "API-dependent features may not work",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "home": "Back to landing page",
+          "login": "Go to login"
+        },
+        "primaryAction": "Return to Home",
+        "secondaryAction": "Login to System",
+        "title": "The system is not ready to serve this request"
+      },
+      "network": {
+        "checklist": [
+          "Try reloading in a few seconds to restore the connection to the background service.",
+          "Check the internal network or backend status if you are operating the system.",
+          "Use a different route if you need to continue operations immediately."
+        ],
+        "description": "The application is experiencing interruptions when syncing data with the backend service, so responses are currently unstable.",
+        "eyebrow": "Service interruption",
+        "insights": {
+          "group": "Error Group",
+          "groupValue": "Service Connection Lost",
+          "impact": "Impact",
+          "impactValue": "Data may load slowly or not respond",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "home": "Back to Home",
+          "tracking": "Track Order"
+        },
+        "primaryAction": "Try Again",
+        "secondaryAction": "Return to Home",
+        "title": "Service connection is interrupted"
+      },
+      "unknown": {
+        "checklist": [
+          "Reload the page to see if the error is just a temporary glitch.",
+          "Return to a safe navigation route like the homepage or main dashboard.",
+          "Send the reference code to the tech team if the issue repeats."
+        ],
+        "description": "An unexpected error just occurred during processing. The application caught the error, but this page cannot be displayed correctly right now.",
+        "eyebrow": "System failure",
+        "insights": {
+          "group": "Error Group",
+          "groupValue": "General System Error",
+          "message": "Message",
+          "messageFallback": "No further details from runtime",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "home": "Back to landing page",
+          "dashboard": "Open dashboard"
+        },
+        "primaryAction": "Try Again",
+        "secondaryAction": "Return to Home",
+        "title": "The server just lost synchronization while processing the request"
+      }
+    },
+    "dashboard": {
+      "configuration": {
+        "checklist": [
+          "Verify the backend endpoint and environment variables of the dashboard.",
+          "Check the auxiliary service before reloading the page.",
+          "Temporarily return to the overview screen if you need to continue working."
+        ],
+        "description": "The current module has not yet connected to the required data source, usually due to incomplete environment configuration or endpoint.",
+        "eyebrow": "Dashboard configuration",
+        "insights": {
+          "impact": "Impact Level",
+          "impactValue": "Current module cannot load data",
+          "type": "Error Type",
+          "typeValue": "Configuration / Integration",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "dashboard": "Back to dashboard",
+          "home": "Back to landing page"
+        },
+        "primaryAction": "Try Reloading Module",
+        "secondaryAction": "Back to dashboard",
+        "title": "The dashboard has not connected to operational data"
+      },
+      "missingResource": {
+        "checklist": [
+          "Double-check the filter, order code, or path you just accessed.",
+          "Return to the overview list to select a valid record.",
+          "If the data has been deleted, use another navigation route to continue."
+        ],
+        "description": "The data or module you are opening is no longer available at this time, so the system cannot render the detailed screen.",
+        "eyebrow": "Resource unavailable",
+        "insights": {
+          "impact": "Impact Level",
+          "impactValue": "Cannot display requested data",
+          "type": "Error Type",
+          "typeValue": "Missing record or access route",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "dashboard": "Back to dashboard",
+          "orders": "View Orders"
+        },
+        "primaryAction": "Back to dashboard",
+        "secondaryAction": "Open order list",
+        "title": "The record you need is no longer available in the system"
+      },
+      "network": {
+        "checklist": [
+          "Reload the module to resync with the API or websocket.",
+          "Check the backend or network connection if errors appear in bulk.",
+          "Return to the main dashboard to continue unaffected tasks."
+        ],
+        "description": "The operational data flow between the interface and the background service is interrupted, so this screen cannot update accurately right now.",
+        "eyebrow": "Operational sync issue",
+        "insights": {
+          "impact": "Impact Level",
+          "impactValue": "Real-time data may be outdated or empty",
+          "type": "Error Type",
+          "typeValue": "Connection lost / timeout",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "dashboard": "Back to dashboard",
+          "notifications": "View notifications"
+        },
+        "primaryAction": "Try syncing again",
+        "secondaryAction": "Back to dashboard",
+        "title": "Dashboard data flow is interrupted"
+      },
+      "unknown": {
+        "checklist": [
+          "Reload the screen to try to recover the current session.",
+          "Return to the overview dashboard if you need to continue operations immediately.",
+          "Send the reference code along with the time of the error to the tech team."
+        ],
+        "description": "The administration module just encountered an unexpected processing error. The system has stopped this screen to avoid displaying incorrect or incomplete data.",
+        "eyebrow": "Operations fallback",
+        "insights": {
+          "impact": "Impact Level",
+          "impactValue": "Only affects the open module",
+          "message": "Message",
+          "messageFallback": "No detailed message available",
+          "reference": "Reference Code"
+        },
+        "links": {
+          "dashboard": "Back to dashboard",
+          "home": "Open landing page"
+        },
+        "primaryAction": "Try reloading module",
+        "secondaryAction": "Back to dashboard",
+        "title": "This operational screen temporarily cannot render correct data"
+      }
+    },
+    "common": {
+      "noReference": "None"
+    }
   }
 }

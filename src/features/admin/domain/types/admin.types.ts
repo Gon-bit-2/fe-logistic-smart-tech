@@ -7,22 +7,22 @@ export type AdminTopBarVariant =
   | "ecosystem";
 
 export interface AdminNavItem {
-  readonly label: string;
+  readonly labelKey: string;
   readonly href: string;
   readonly icon: LucideIcon;
 }
 
 export interface AdminShellConfig {
-  readonly title: string;
+  readonly titleKey: string;
   readonly topBarVariant: AdminTopBarVariant;
-  readonly searchPlaceholder: string;
-  readonly supportLabel?: string;
+  readonly searchPlaceholderKey: string;
+  readonly supportLabelKey?: string;
   readonly topTabs?: ReadonlyArray<{
-    readonly label: string;
+    readonly labelKey: string;
     readonly href: string;
   }>;
-  readonly heading?: string;
-  readonly subheading?: string;
+  readonly headingKey?: string;
+  readonly subheadingKey?: string;
   readonly initials?: string;
 }
 

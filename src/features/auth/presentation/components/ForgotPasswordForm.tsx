@@ -6,13 +6,13 @@ import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 const authInputClass =
   "h-12 rounded-xl border-b border-outline-variant/30 px-4 py-3 focus:px-4 focus:rounded-xl";
 
 export default function ForgotPasswordForm() {
-  const { forgotPasswordCopy } = useI18nCopy();
+  const tForgot = useTranslations("auth.forgotPassword");
   const router = useRouter();
   const requestOtpMutation = useRequestForgotPasswordOtpMutation();
   const [status, setStatus] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function ForgotPasswordForm() {
 
     try {
       await requestOtpMutation.mutateAsync(form);
-      setStatus(forgotPasswordCopy.status);
+      setStatus(tForgot("status"));
       startTransition(() => {
         router.push("/auth/otp?mode=forgot-password");
       });
@@ -41,17 +41,17 @@ export default function ForgotPasswordForm() {
     <div className="space-y-6 sm:space-y-8">
       <header className="space-y-2">
         <h1 className="text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
-          {forgotPasswordCopy.headerTitle}
+          {tForgot("headerTitle")}
         </h1>
         <p className="text-sm leading-6 text-on-surface-variant">
-          {forgotPasswordCopy.headerDescription}
+          {tForgot("headerDescription")}
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
         <label className="block space-y-2">
           <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {forgotPasswordCopy.emailLabel}
+            {tForgot("emailLabel")}
           </span>
           <Input
             value={form.email}
@@ -59,14 +59,14 @@ export default function ForgotPasswordForm() {
               setForm((current) => ({ ...current, email: event.target.value }))
             }
             className={authInputClass}
-            placeholder={forgotPasswordCopy.emailPlaceholder}
+            placeholder={tForgot("emailPlaceholder")}
             type="email"
           />
         </label>
 
         <label className="block space-y-2">
           <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {forgotPasswordCopy.newPasswordLabel}
+            {tForgot("newPasswordLabel")}
           </span>
           <Input
             value={form.password}
@@ -74,14 +74,14 @@ export default function ForgotPasswordForm() {
               setForm((current) => ({ ...current, password: event.target.value }))
             }
             className={authInputClass}
-            placeholder={forgotPasswordCopy.passwordPlaceholder}
+            placeholder={tForgot("passwordPlaceholder")}
             type="password"
           />
         </label>
 
         <label className="block space-y-2">
           <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {forgotPasswordCopy.confirmPasswordLabel}
+            {tForgot("confirmPasswordLabel")}
           </span>
           <Input
             value={form.confirmPassword}
@@ -92,7 +92,7 @@ export default function ForgotPasswordForm() {
               }))
             }
             className={authInputClass}
-            placeholder={forgotPasswordCopy.passwordPlaceholder}
+            placeholder={tForgot("passwordPlaceholder")}
             type="password"
           />
         </label>
@@ -103,8 +103,8 @@ export default function ForgotPasswordForm() {
           type="submit"
         >
           {requestOtpMutation.isPending
-            ? forgotPasswordCopy.submitLoading
-            : forgotPasswordCopy.submit}
+            ? tForgot("submitLoading")
+            : tForgot("submit")}
         </Button>
       </form>
 
@@ -122,10 +122,10 @@ export default function ForgotPasswordForm() {
 
       <footer className="flex flex-col gap-3 border-t border-outline-variant/10 pt-6 text-center text-sm text-on-surface-variant sm:flex-row sm:items-center sm:justify-between sm:text-left">
         <Link href="/auth/login" className="font-semibold text-primary">
-          {forgotPasswordCopy.backToLoginLabel}
+          {tForgot("backToLoginLabel")}
         </Link>
         <Link href="/tracking" className="font-semibold">
-          {forgotPasswordCopy.supportLabel}
+          {tForgot("supportLabel")}
         </Link>
       </footer>
     </div>

@@ -1,6 +1,7 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { trackingLookupCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const trackingLookupCopy = viMessages.tracking.lookup;
 import { renderWithProviders } from "@/test/render";
 import TrackingLookupScreen from "./TrackingLookupScreen";
 

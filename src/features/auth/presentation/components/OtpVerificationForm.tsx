@@ -11,7 +11,7 @@ import { useForgotPasswordMutation } from "@/features/auth/presentation/hooks/us
 import { useRegisterWithOtpMutation } from "@/features/auth/presentation/hooks/useRegisterWithOtpMutation";
 import { useRequestForgotPasswordOtpMutation } from "@/features/auth/presentation/hooks/useRequestForgotPasswordOtpMutation";
 import { useRequestRegisterOtpMutation } from "@/features/auth/presentation/hooks/useRequestRegisterOtpMutation";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 const OTP_LENGTH = 6;
 
@@ -20,7 +20,7 @@ function getInitialDigits() {
 }
 
 export default function OtpVerificationForm() {
-  const { otpVerificationCopy } = useI18nCopy();
+  const tOtp = useTranslations("auth.otpVerification");
   const router = useRouter();
   const searchParams = useSearchParams();
   const otpMode =
@@ -84,10 +84,10 @@ export default function OtpVerificationForm() {
       const code = digits.join("");
       if (otpMode === "forgot-password") {
         await forgotPasswordMutation.mutateAsync({ code });
-        setStatus(otpVerificationCopy.forgotPassword.successStatus);
+        setStatus(tOtp("forgotPassword.successStatus"));
       } else {
         await registerMutation.mutateAsync({ code });
-        setStatus(otpVerificationCopy.register.successStatus);
+        setStatus(tOtp("register.successStatus"));
       }
 
       startTransition(() => {
@@ -104,7 +104,7 @@ export default function OtpVerificationForm() {
         otpMode === "forgot-password"
           ? await (async () => {
               if (!pendingPasswordReset) {
-                setStatus(otpVerificationCopy.forgotPassword.expiredStatus);
+                setStatus(tOtp("forgotPassword.expiredStatus"));
                 return null;
               }
 
@@ -112,7 +112,7 @@ export default function OtpVerificationForm() {
             })()
           : await (async () => {
               if (!pendingRegistration) {
-                setStatus(otpVerificationCopy.register.expiredStatus);
+                setStatus(tOtp("register.expiredStatus"));
                 return null;
               }
 
@@ -128,8 +128,8 @@ export default function OtpVerificationForm() {
       inputRefs.current[0]?.focus();
       setStatus(
         otpMode === "forgot-password"
-          ? otpVerificationCopy.forgotPassword.resendStatus(challenge.draft.email)
-          : otpVerificationCopy.register.resendStatus(challenge.draft.email),
+          ? tOtp("forgotPassword.resendStatus", { email: challenge.draft.email })
+          : tOtp("register.resendStatus", { email: challenge.draft.email }),
       );
     } catch {
       return;
@@ -157,13 +157,13 @@ export default function OtpVerificationForm() {
       <header className="space-y-3">
         <h1 className="text-4xl font-black tracking-tight text-on-surface">
           {otpMode === "forgot-password"
-            ? otpVerificationCopy.forgotPassword.title
-            : otpVerificationCopy.register.title}
+            ? tOtp("forgotPassword.title")
+            : tOtp("register.title")}
         </h1>
         <p className="leading-7 text-on-surface-variant">
           {otpMode === "forgot-password"
-            ? otpVerificationCopy.forgotPassword.description(destination)
-            : otpVerificationCopy.register.description(destination)}
+            ? tOtp("forgotPassword.description", { destination })
+            : tOtp("register.description", { destination })}
         </p>
       </header>
 
@@ -185,7 +185,7 @@ export default function OtpVerificationForm() {
               inputMode="numeric"
               maxLength={1}
               className="h-16 w-12 rounded-xl border-b-2 border-outline-variant bg-transparent text-center text-2xl font-black text-primary outline-none transition focus:border-primary focus:bg-surface-container-low focus:ring-4 focus:ring-primary/10 md:w-14"
-              aria-label={otpVerificationCopy.ariaDigitLabel(index + 1)}
+              aria-label={tOtp("ariaDigitLabel", { index: index + 1 })}
             />
           ))}
         </div>
@@ -196,10 +196,10 @@ export default function OtpVerificationForm() {
           className="h-14 w-full bg-gradient-to-r from-primary to-primary-container text-base font-black text-white"
         >
           {isSubmitting
-            ? otpVerificationCopy.verifyLoading
+            ? tOtp("verifyLoading")
             : otpMode === "forgot-password"
-              ? otpVerificationCopy.verifyReset
-              : otpVerificationCopy.verifyComplete}
+              ? tOtp("verifyReset")
+              : tOtp("verifyComplete")}
         </Button>
       </form>
 
@@ -211,7 +211,7 @@ export default function OtpVerificationForm() {
           disabled={(secondsLeft ?? 0) > 0 || resendMutation.isPending || !pendingDraft}
           className="ml-2 inline-flex items-center gap-2 font-black text-primary disabled:text-outline"
         >
-          {otpVerificationCopy.resendLabel}
+          {tOtp("resendLabel")}
           <span className="rounded-full bg-surface-container-high px-2 py-0.5 text-[10px] font-black tracking-[0.08em] text-on-surface-variant uppercase">
             00:{secondsLeft === null ? "--" : secondsLeft.toString().padStart(2, "0")}
           </span>
@@ -233,11 +233,11 @@ export default function OtpVerificationForm() {
       <div className="flex items-start gap-4 rounded-xl border border-outline-variant/10 bg-surface-container p-5">
         <AppIcon name="info" className="text-secondary" />
         <div>
-          <p className="font-semibold text-on-surface">{otpVerificationCopy.infoTitle}</p>
+          <p className="font-semibold text-on-surface">{tOtp("infoTitle")}</p>
           <p className="mt-1 text-sm text-on-surface-variant">
             {otpMode === "forgot-password"
-              ? otpVerificationCopy.forgotPassword.help
-              : otpVerificationCopy.register.help}
+              ? tOtp("forgotPassword.help")
+              : tOtp("register.help")}
           </p>
         </div>
       </div>
@@ -245,15 +245,15 @@ export default function OtpVerificationForm() {
       <footer className="flex items-center justify-between border-t border-outline-variant/10 pt-8 text-sm">
         <div className="flex gap-6 text-on-surface-variant">
           <Link href="/tracking" className="hover:text-primary">
-            {otpVerificationCopy.footerSupport}
+            {tOtp("footerSupport")}
           </Link>
           <Link href="/auth/login" className="hover:text-primary">
-            {otpVerificationCopy.footerPrivacy}
+            {tOtp("footerPrivacy")}
           </Link>
         </div>
         <div className="flex items-center gap-2 text-[10px] font-black tracking-[0.16em] text-on-surface-variant uppercase">
           <AppIcon name="lock" className="text-sm" />
-          {otpVerificationCopy.footerSecureSession}
+          {tOtp("footerSecureSession")}
         </div>
       </footer>
     </div>

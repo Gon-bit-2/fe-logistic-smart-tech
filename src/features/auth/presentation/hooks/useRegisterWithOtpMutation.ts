@@ -7,14 +7,14 @@ import {
   clearOtpFlowState,
   getAuthSessionSnapshot,
 } from "@/features/auth/presentation/state/auth.store";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 type RegisterWithOtpMutationInput = {
   code: string;
 };
 
 export function useRegisterWithOtpMutation() {
-  const { authRuntimeCopy } = useI18nCopy();
+  const tAuthRuntime = useTranslations("auth.runtime");
 
   return useMutation<unknown, ApiError, RegisterWithOtpMutationInput>({
     mutationFn: async ({ code }: RegisterWithOtpMutationInput) => {
@@ -22,7 +22,7 @@ export function useRegisterWithOtpMutation() {
 
       if (!pendingRegistration) {
         throw new ApiError({
-          message: authRuntimeCopy.missingRegisterSession,
+          message: tAuthRuntime("missingRegisterSession"),
         });
       }
 

@@ -1,6 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { googleCallbackCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const googleCallbackCopy = viMessages.auth.googleCallback;
 import { renderWithProviders } from "@/test/render";
 import GoogleCallbackHandler from "./GoogleCallbackHandler";
 

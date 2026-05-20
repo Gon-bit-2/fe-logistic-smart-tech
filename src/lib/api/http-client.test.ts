@@ -52,13 +52,13 @@ function createAxiosInstance() {
 
   instance.interceptors = {
     request: {
-      use: vi.fn((handler: unknown) => {
+      use: vi.fn((handler: any) => {
         instance.__requestHandler = handler;
         return 0;
       }),
     },
     response: {
-      use: vi.fn((onFulfilled: unknown, onRejected: unknown) => {
+      use: vi.fn((onFulfilled: any, onRejected: any) => {
         instance.__responseFulfilled = onFulfilled;
         instance.__responseRejected = onRejected;
         return 0;

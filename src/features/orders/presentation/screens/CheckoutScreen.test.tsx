@@ -1,7 +1,8 @@
 import { screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleOrder } from "../../../../../tests/fixtures/api";
-import { checkoutCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const checkoutCopy = viMessages.orders.checkout;
 import { renderWithProviders } from "@/test/render";
 import CheckoutScreen from "./CheckoutScreen";
 

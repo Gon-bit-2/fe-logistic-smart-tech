@@ -19,7 +19,7 @@ import ServiceTierSelector from "@/features/orders/presentation/components/Servi
 import { useResolvedAddressField } from "@/features/orders/presentation/hooks/useResolvedAddressField";
 import type { OrderQuoteState } from "@/features/orders/presentation/hooks/useOrderQuote";
 import { useCreateOrder } from "@/features/orders/presentation/hooks/useCreateOrder";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/utils/formatters";
 
 type OrderFormProps = Readonly<{
@@ -31,7 +31,7 @@ type OrderFormProps = Readonly<{
 }>;
 
 type AddressAutocompleteFieldProps = {
-  copy: ReturnType<typeof useI18nCopy>["orderFormCopy"];
+  copy: any;
   label: string;
   onChange: (nextValue: ResolvedOrderAddressInput) => void;
   value: ResolvedOrderAddressInput;
@@ -167,24 +167,39 @@ export default function OrderForm({
   quoteState,
   value,
 }: OrderFormProps) {
-  const { orderFormCopy, paymentMethodOptions } = useI18nCopy();
+  const tForm = useTranslations("orders.form");
+  const tPayment = useTranslations("orders.paymentMethodOptions");
+
+  const paymentMethodOptions = useMemo(() => [
+    {
+      id: "STRIPE",
+      label: tPayment("STRIPE.label"),
+      description: tPayment("STRIPE.description"),
+    },
+    {
+      id: "COD",
+      label: tPayment("COD.label"),
+      description: tPayment("COD.description"),
+    },
+  ], [tPayment]);
+
   const { mutateAsync, isPending, order, error } = useCreateOrder();
   const [internalForm, setInternalForm] = useState(createEmptyOrderInput);
   const form = value ?? internalForm;
   const formRef = useRef(form);
   const contactPhoneError = getPhoneValidationMessage(
     form.contactPhone,
-    orderFormCopy.contactPhone,
+    tForm("contactPhone"),
   );
   const dimensionsError =
     form.packageDimensions.trim().length === 0
-      ? orderFormCopy.dimensionsRequired
+      ? tForm("dimensionsRequired")
       : !hasValidPackageDimensions(form.packageDimensions)
-        ? orderFormCopy.dimensionsInvalid
+        ? tForm("dimensionsInvalid")
         : null;
   const receiverPhoneError = getPhoneValidationMessage(
     form.receiverPhone,
-    orderFormCopy.receiverPhone,
+    tForm("receiverPhone"),
   );
 
   useEffect(() => {
@@ -258,15 +273,15 @@ export default function OrderForm({
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="text-[10px] font-black tracking-[0.16em] text-primary uppercase">
-            {orderFormCopy.ordersEyebrow}
+            {tForm("ordersEyebrow")}
           </p>
           <h3 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-            {orderFormCopy.createTitle}
+            {tForm("createTitle")}
           </h3>
-          <p className="mt-1 text-sm text-outline">{orderFormCopy.subtitle}</p>
+          <p className="mt-1 text-sm text-outline">{tForm("subtitle")}</p>
         </div>
         <div className="hidden items-center gap-4 md:flex">
-          {orderFormCopy.stepLabels.map((label, index) => (
+          {[tForm("stepLabels.0"), tForm("stepLabels.1"), tForm("stepLabels.2")].map((label, index) => (
             <div key={label} className="flex flex-col items-center gap-2">
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${
@@ -288,22 +303,22 @@ export default function OrderForm({
       <form className="space-y-8" onSubmit={handleSubmit}>
         <div className="grid gap-6 md:grid-cols-2">
           <AddressAutocompleteField
-            copy={orderFormCopy}
-            label={orderFormCopy.pickupAddress}
+            copy={tForm as any}
+            label={tForm("pickupAddress")}
             value={form.pickup}
             onChange={(nextValue) => updateAddressField("pickup", nextValue)}
           />
 
           <AddressAutocompleteField
-            copy={orderFormCopy}
-            label={orderFormCopy.deliveryAddress}
+            copy={tForm as any}
+            label={tForm("deliveryAddress")}
             value={form.delivery}
             onChange={(nextValue) => updateAddressField("delivery", nextValue)}
           />
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.contactName}
+              {tForm("contactName")}
             </span>
             <Input
               value={form.contactName}
@@ -315,7 +330,7 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.contactPhone}
+              {tForm("contactPhone")}
             </span>
             <Input
               aria-invalid={Boolean(contactPhoneError)}
@@ -331,7 +346,7 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.receiverName}
+              {tForm("receiverName")}
             </span>
             <Input
               value={form.receiverName}
@@ -343,7 +358,7 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.receiverPhone}
+              {tForm("receiverPhone")}
             </span>
             <Input
               aria-invalid={Boolean(receiverPhoneError)}
@@ -359,7 +374,7 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.estimatedArrival}
+              {tForm("estimatedArrival")}
             </span>
             <Input
               type="datetime-local"
@@ -373,7 +388,7 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.weight}
+              {tForm("weight")}
             </span>
             <Input
               type="number"
@@ -390,10 +405,10 @@ export default function OrderForm({
 
           <label className="space-y-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.dimensions}
+              {tForm("dimensions")}
             </span>
             <Input
-              aria-label={orderFormCopy.dimensions}
+              aria-label={tForm("dimensions")}
               value={form.packageDimensions}
               onChange={(event) => updateField("packageDimensions", event.target.value)}
               onBlur={() => {
@@ -405,21 +420,21 @@ export default function OrderForm({
                 }
               }}
               className="border-b border-outline-variant/25 focus:rounded-lg"
-              placeholder={orderFormCopy.dimensionsPlaceholder}
+              placeholder={tForm("dimensionsPlaceholder")}
               required
             />
             {dimensionsError ? (
               <p className="px-1 text-xs text-destructive">{dimensionsError}</p>
             ) : (
               <p className="px-1 text-xs text-on-surface-variant">
-                {orderFormCopy.dimensionsHint}
+                {tForm("dimensionsHint")}
               </p>
             )}
           </label>
 
           <label className="space-y-2 md:col-span-2">
             <span className="px-1 text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-              {orderFormCopy.itemDescription}
+              {tForm("itemDescription")}
             </span>
             <textarea
               value={form.itemDescription}
@@ -431,7 +446,7 @@ export default function OrderForm({
 
         <div className="space-y-4">
           <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {orderFormCopy.selectServiceTier}
+            {tForm("selectServiceTier")}
           </p>
           <ServiceTierSelector
             value={form.serviceTier}
@@ -441,7 +456,7 @@ export default function OrderForm({
 
         <div className="space-y-4">
           <p className="text-[10px] font-black tracking-[0.16em] text-outline uppercase">
-            {orderFormCopy.selectPaymentMethod}
+            {tForm("selectPaymentMethod")}
           </p>
           <div className="grid gap-4 md:grid-cols-2">
             {paymentMethodOptions.map((option) => {
@@ -474,18 +489,18 @@ export default function OrderForm({
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold text-on-surface">
-                {orderFormCopy.pricingSourceLabel}
+                {tForm("pricingSourceLabel")}
               </p>
               <p className="text-xs text-on-surface-variant">
-                {orderFormCopy.pricingSourceDescription}
+                {tForm("pricingSourceDescription")}
               </p>
             </div>
             <div className="text-right text-[10px] font-black tracking-[0.14em] text-primary uppercase">
               {quoteState.isLoading
-                ? orderFormCopy.localMockQuote
+                ? tForm("localMockQuote")
                 : quoteState.quote
                   ? formatCurrency(quoteState.quote.quote.shippingFee, "VND")
-                  : orderFormCopy.localMockQuote}
+                  : tForm("localMockQuote")}
             </div>
           </div>
           {quoteState.validationMessage ? (
@@ -494,11 +509,11 @@ export default function OrderForm({
             </p>
           ) : !isFormComplete ? (
             <p className="mt-3 text-xs text-amber-700">
-              {orderFormCopy.submitDisabledAddress}
+              {tForm("submitDisabledAddress")}
             </p>
           ) : !quoteState.canSubmit ? (
             <p className="mt-3 text-xs text-amber-700">
-              {quoteState.error ?? orderFormCopy.submitDisabledQuote}
+              {quoteState.error ?? tForm("submitDisabledQuote")}
             </p>
           ) : null}
         </div>
@@ -509,16 +524,16 @@ export default function OrderForm({
             disabled={!canSubmit}
             type="submit"
           >
-            {isPending ? orderFormCopy.submitLoading : ctaLabel}
+            {isPending ? tForm("submitLoading") : ctaLabel}
           </Button>
         </div>
       </form>
 
       {order ? (
         <p className="mt-4 rounded-xl bg-primary/8 px-4 py-3 text-sm text-on-surface">
-          {orderFormCopy.orderCreated}: <strong>{order.reference}</strong>
+          {tForm("orderCreated")}: <strong>{order.reference}</strong>
           {order.pricing
-            ? ` • ${orderFormCopy.totalQuoted} ${formatCurrency(order.pricing.total, order.pricing.currency)}`
+            ? ` • ${tForm("totalQuoted")} ${formatCurrency(order.pricing.total, order.pricing.currency)}`
             : ""}
         </p>
       ) : null}

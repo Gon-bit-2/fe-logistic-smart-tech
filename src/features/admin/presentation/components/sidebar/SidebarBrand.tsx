@@ -2,11 +2,12 @@
 
 import { ShieldCheck } from "lucide-react";
 import type { AdminShellConfig } from "@/features/admin/domain/types/admin.types";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import type { SidebarBrandProps } from "../../types/layout.types";
 
 export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
-  const { adminSidebarCopy } = useI18nCopy();
+  const tSidebar = useTranslations("admin.sidebar");
+  const tShell = useTranslations("admin.shell");
   const isDashboard = config.topBarVariant === "dashboard";
   const isEcosystem = config.topBarVariant === "ecosystem";
 
@@ -22,10 +23,10 @@ export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
           </div>
           <div>
             <p className="text-sm font-bold text-on-surface">
-              {adminSidebarCopy.adminConsole}
+              {tSidebar("adminConsole")}
             </p>
             <p className="text-[0.58rem] font-black uppercase tracking-[0.22em] text-on-surface/35">
-              {adminSidebarCopy.globalOperations}
+              {tSidebar("globalOperations")}
             </p>
           </div>
         </div>
@@ -37,7 +38,7 @@ export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
     return (
       <div className="mb-6 hidden md:block">
         <h2 className="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-primary">
-          {adminSidebarCopy.dispatcherHub}
+          {tSidebar("dispatcherHub")}
         </h2>
         <p className="mt-1 text-[0.68rem] text-on-surface/45">Precision Logistics</p>
       </div>
@@ -51,10 +52,10 @@ export function SidebarBrand({ config }: Readonly<SidebarBrandProps>) {
       </div>
       <div>
         <h1 className="text-lg font-black tracking-tight text-primary">
-          {config.title}
+          {tShell(config.titleKey as any)}
         </h1>
         <p className="text-[0.58rem] font-black uppercase tracking-[0.22em] text-on-surface/35">
-          {adminSidebarCopy.logisticsHub}
+          {tSidebar("logisticsHub")}
         </p>
       </div>
     </div>

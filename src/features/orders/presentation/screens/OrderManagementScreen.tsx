@@ -9,7 +9,7 @@ import {
   PageHeader,
   StatusBadge,
 } from "@/features/admin/presentation/components/admin-primitives";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
 import { mapOrdersToManagementRows } from "@/features/orders/application/mappers/order-management.mapper";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,8 @@ export default function OrderManagementScreen(
   _props: Readonly<OrderManagementScreenProps>,
 ) {
   void _props;
-  const { orderManagementCopy, getOrderStatusLabel } = useI18nCopy();
+  const tManagement = useTranslations("orders.management");
+  const tStatus = useTranslations("orders.status");
 
   const ordersQuery = useOrdersListQuery();
   const rawOrders = ordersQuery.data?.data ?? [];
@@ -35,8 +36,8 @@ export default function OrderManagementScreen(
   return (
     <div className="space-y-8">
       <PageHeader
-        title={orderManagementCopy.title}
-        description={orderManagementCopy.description}
+        title={tManagement("title")}
+        description={tManagement("description")}
       />
 
       {ordersQuery.isLoading ? (
@@ -66,28 +67,28 @@ export default function OrderManagementScreen(
               <thead className="border-b border-outline-variant/10 text-on-surface-variant">
                 <tr>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Mã ĐH
+                    {tManagement("orderId")}
                   </th>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Khách hàng
+                    {tManagement("customer")}
                   </th>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Tuyến đường
+                    {tManagement("route")}
                   </th>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Ngày dự kiến
+                    {tManagement("date")}
                   </th>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Độ ưu tiên
+                    {tManagement("priority")}
                   </th>
                   <th className="px-6 py-4 font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Trạng thái
+                    {tManagement("status")}
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/5">
                 {rows.map((row) => {
-                  const statusLabel = getOrderStatusLabel(row.status);
+                  const statusLabel = tStatus.has(row.status as any) ? tStatus(row.status as any) : row.status;
                   const badgeTone =
                     row.status === "DELIVERED"
                       ? "green"

@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ServiceTierOption } from "@/features/orders/domain/value-objects/service-tier.catalog";
 import type { ServiceTier } from "@/features/orders/domain/types/order.types";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 
 type ServiceTierSelectorProps = Readonly<{
   onChange: (value: ServiceTier) => void;
@@ -50,11 +50,26 @@ function ServiceTierCard({
   );
 }
 
+const OPTIONS = [
+  { id: "express", accent: "tertiary" },
+  { id: "eco_green", accent: "primary", highlight: true },
+  { id: "standard", accent: "outline" },
+] as const;
+
 export default function ServiceTierSelector({
   onChange,
   value,
 }: ServiceTierSelectorProps) {
-  const { serviceTierOptions, serviceTierSelectorCopy } = useI18nCopy();
+  const tOptions = useTranslations("orders.serviceTierOptions");
+  const tSelector = useTranslations("orders.serviceTierSelector");
+
+  const serviceTierOptions: ServiceTierOption[] = OPTIONS.map(opt => ({
+    accent: opt.accent,
+    id: opt.id,
+    label: tOptions(`${opt.id}.label`),
+    description: tOptions(`${opt.id}.description`),
+    highlight: "highlight" in opt && opt.highlight ? tOptions(`${opt.id}.highlight` as any) : undefined,
+  }));
 
   return (
     <div className="grid gap-3">
@@ -64,7 +79,7 @@ export default function ServiceTierSelector({
           option={option}
           isSelected={option.id === value}
           onSelect={() => onChange(option.id)}
-          quoteLabel={serviceTierSelectorCopy.apiQuote}
+          quoteLabel={tSelector("apiQuote")}
         />
       ))}
     </div>

@@ -49,7 +49,7 @@ describe("tracking-view-model.mapper", () => {
       trackingCode: "ELG-EMPTY",
       currentStatus: "PENDING",
       events: [],
-    });
+    }, "vi");
 
     expect(viewModel.events).toEqual([
       {

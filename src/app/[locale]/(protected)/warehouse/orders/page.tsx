@@ -6,7 +6,7 @@ import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { useCancelOrder } from "@/features/orders/presentation/hooks/useCancelOrder";
 import { useOrdersListQuery } from "@/features/orders/presentation/hooks/useOrdersListQuery";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { StatusBadge } from "@/features/admin/presentation/components/admin-primitives";
 import type { OrderStatus } from "@/features/orders/domain/types/order.types";
 
@@ -44,7 +44,7 @@ function getWarehouseOrderTone(status: string) {
 }
 
 export default function WarehouseOrdersPage() {
-  const { getOrderStatusLabel } = useI18nCopy();
+  const tOrderStatus = useTranslations("orders.status");
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("");
   const [page, setPage] = useState(1);
@@ -226,7 +226,7 @@ export default function WarehouseOrdersPage() {
                         </td>
                         <td className="px-6 py-4">
                           <StatusBadge
-                            label={getOrderStatusLabel(order.status)}
+                            label={tOrderStatus(order.status as OrderStatus)}
                             tone={getWarehouseOrderTone(order.status)}
                           />
                         </td>

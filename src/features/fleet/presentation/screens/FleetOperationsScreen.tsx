@@ -21,7 +21,7 @@ import { useUpdateVehicle } from "@/features/fleet/presentation/hooks/useUpdateV
 import { useDeleteVehicle } from "@/features/fleet/presentation/hooks/useDeleteVehicle";
 import { useImageUpload } from "@/lib/hooks/useImageUpload";
 import ImageUploadField from "@/components/ui/ImageUploadField";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { formatEnumLabel } from "@/utils/formatters";
 import type {
   CreateVehicleInput,
@@ -56,7 +56,7 @@ export default function FleetOperationsScreen(
   _props: Readonly<FleetOperationsScreenProps>,
 ) {
   void _props;
-  const { fleetScreenCopy } = useI18nCopy();
+  const tFleet = useTranslations("fleet");
 
   // === Queries & Mutations ===
   const vehiclesQuery = useFleetVehiclesQuery();
@@ -135,8 +135,8 @@ export default function FleetOperationsScreen(
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow={fleetScreenCopy.operationalDashboard}
-        title={fleetScreenCopy.title}
+        eyebrow={tFleet("operationalDashboard")}
+        title={tFleet("title")}
         actions={
           <button
             type="button"
@@ -153,19 +153,19 @@ export default function FleetOperationsScreen(
       <div className="grid gap-6 xl:grid-cols-4">
         <MetricCard
           icon={<Truck className="size-8" />}
-          label={fleetScreenCopy.metricLabels.totalVehicles}
+          label={tFleet("metricLabels.totalVehicles")}
           value={String(totalVehicles)}
         />
         <MetricCard
           accent="blue"
           icon={<Wrench className="size-8" />}
-          label={fleetScreenCopy.metricLabels.activeVehicles}
+          label={tFleet("metricLabels.activeVehicles")}
           value={String(activeVehicles)}
         />
         <MetricCard
           accent="dark"
           icon={<Zap className="size-8" />}
-          label={fleetScreenCopy.metricLabels.electricVehicles}
+          label={tFleet("metricLabels.electricVehicles")}
           value={String(electricVehicles)}
         />
         <SectionCard className="bg-primary p-8 text-white">
@@ -175,7 +175,7 @@ export default function FleetOperationsScreen(
             </div>
             <div>
               <p className="text-xl font-black uppercase tracking-[0.24em] text-white/70">
-                {fleetScreenCopy.evPercentage}
+                {tFleet("evPercentage")}
               </p>
               <p className="mt-5 text-6xl font-black tracking-tight">
                 {electricShare}
@@ -421,8 +421,8 @@ export default function FleetOperationsScreen(
 
       {vehiclesQuery.isError ? (
         <ErrorState
-          title={fleetScreenCopy.vehicleErrorTitle}
-          description={fleetScreenCopy.vehicleErrorDescription}
+          title={tFleet("vehicleErrorTitle")}
+          description={tFleet("vehicleErrorDescription")}
         />
       ) : null}
 
@@ -430,8 +430,8 @@ export default function FleetOperationsScreen(
       !vehiclesQuery.isError &&
       vehicles.length === 0 ? (
         <EmptyState
-          title={fleetScreenCopy.vehicleEmptyTitle}
-          description={fleetScreenCopy.vehicleEmptyDescription}
+          title={tFleet("vehicleEmptyTitle")}
+          description={tFleet("vehicleEmptyDescription")}
         />
       ) : null}
 
@@ -443,7 +443,7 @@ export default function FleetOperationsScreen(
           <div className="flex items-center justify-between border-b border-outline-variant/12 px-8 py-6">
             <div>
               <h2 className="text-[2rem] font-black tracking-tight text-on-surface">
-                {fleetScreenCopy.vehicleSummaryTitle}
+                {tFleet("vehicleSummaryTitle")}
               </h2>
               <p className="mt-2 text-sm text-on-surface/55">
                 Dữ liệu đội xe đang được cập nhật trực tiếp từ hệ thống vận

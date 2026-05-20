@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import ErrorExperience from "@/components/ui/error-experience";
-import { getGlobalErrorContent } from "@/lib/error-experience";
+import { useGlobalErrorContent } from "@/lib/error-experience";
 
 export default function GlobalError({
   error,
@@ -15,7 +15,7 @@ export default function GlobalError({
     console.error("Global Error Boundary caught:", error);
   }, [error]);
 
-  const content = getGlobalErrorContent(error);
+  const content = useGlobalErrorContent(error);
 
   return <ErrorExperience content={content} onPrimaryAction={reset} />;
 }

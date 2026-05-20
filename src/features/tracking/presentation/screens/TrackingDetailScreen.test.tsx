@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleOrder } from "../../../../../tests/fixtures/api";
 import { sampleTrackingViewModel } from "../../../../../tests/fixtures/api";
 import { ApiError } from "@/lib/api/errors";
-import { trackingDetailCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const trackingDetailCopy = viMessages.tracking.detail;
 import { renderWithProviders } from "@/test/render";
 import TrackingDetailScreen from "./TrackingDetailScreen";
 

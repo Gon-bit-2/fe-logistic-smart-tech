@@ -1,11 +1,11 @@
 "use client";
 
 import { useEmissionAnalytics } from "@/features/analytics/presentation/hooks/useEmissionAnalytics";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CO2Dashboard() {
-  const { co2DashboardCopy } = useI18nCopy();
+  const tCo2 = useTranslations("greenTech.co2Dashboard");
   const { data, isLoading, isError } = useEmissionAnalytics();
 
   const totalCo2Emitted = data?.reduce((sum, item) => sum + Number(item.co2Emitted), 0) ?? 0;
@@ -16,10 +16,10 @@ export default function CO2Dashboard() {
     <section className="rounded-[1.5rem] border border-border bg-card p-6">
       <div className="mb-5">
         <p className="text-xs font-black uppercase tracking-[0.28em] text-primary">
-          {co2DashboardCopy.eyebrow}
+          {tCo2("eyebrow")}
         </p>
         <h3 className="mt-2 text-2xl font-black tracking-tight text-on-surface">
-          {co2DashboardCopy.title}
+          {tCo2("title")}
         </h3>
       </div>
 

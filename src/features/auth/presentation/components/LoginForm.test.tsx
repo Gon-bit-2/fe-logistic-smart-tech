@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { loginFormCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const loginFormCopy = viMessages.auth.loginForm;
 import { renderWithProviders } from "@/test/render";
 import LoginForm from "./LoginForm";
 

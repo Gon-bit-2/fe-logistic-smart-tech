@@ -1,7 +1,8 @@
 import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleOrder, sampleVehicleList } from "../../../../../tests/fixtures/api";
-import { adminScreenCopy } from "@/i18n/vi";
+import viMessages from "@/messages/vi.json";
+const adminScreenCopy = viMessages.admin.screen;
 import { renderWithProviders } from "@/test/render";
 import DispatcherDashboardScreen from "./DispatcherDashboardScreen";
 

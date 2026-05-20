@@ -14,7 +14,7 @@ import {
   useApproveRoleRequest,
   useRejectRoleRequest,
 } from "@/features/role-requests/presentation/hooks/useRoleRequests";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { useTranslations } from "next-intl";
 import { ApiError } from "@/lib/api/errors";
 import { formatDate } from "@/utils/formatters";
 import type { RoleRequestStatus } from "@/features/role-requests/domain/types/role-request.types";
@@ -64,21 +64,19 @@ function getStatusTone(status: RoleRequestStatus) {
   return "amber" as const;
 }
 
-type RoleRequestAdminCopy = ReturnType<typeof useI18nCopy>["roleRequestAdminCopy"];
-
 function getAdminRoleRequestLoadErrorMessage(
   error: unknown,
-  roleRequestAdminCopy: RoleRequestAdminCopy,
+  t: ReturnType<typeof useTranslations<"roleRequests">>,
 ) {
   if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
     return error.message;
   }
 
-  return roleRequestAdminCopy.loadErrorFallback;
+  return t("admin.loadErrorFallback");
 }
 
 export default function RoleRequestAdminScreen() {
-  const { roleRequestAdminCopy } = useI18nCopy();
+  const t = useTranslations("roleRequests");
   const [status, setStatus] = useState<RoleRequestStatus>("PENDING");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const roleRequestsQuery = useAdminRoleRequestsQuery({
@@ -108,7 +106,7 @@ export default function RoleRequestAdminScreen() {
         title="Không thể tải hàng chờ yêu cầu vai trò"
         description={getAdminRoleRequestLoadErrorMessage(
           roleRequestsQuery.error,
-          roleRequestAdminCopy,
+          t,
         )}
       />
     );
@@ -118,8 +116,8 @@ export default function RoleRequestAdminScreen() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Duyệt yêu cầu"
-        title={roleRequestAdminCopy.title}
-        description={roleRequestAdminCopy.description}
+        title={t("admin.title")}
+        description={t("admin.description")}
         actions={
           <div className="flex flex-wrap items-center gap-2 rounded-[1.15rem] bg-surface-container-low p-1.5">
             {filterOptions.map((filter) => (
@@ -143,15 +141,15 @@ export default function RoleRequestAdminScreen() {
 
       {requests.length === 0 ? (
         <EmptyState
-          title={roleRequestAdminCopy.emptyTitle}
-          description={roleRequestAdminCopy.emptyDescription}
+          title={t("admin.emptyTitle")}
+          description={t("admin.emptyDescription")}
         />
       ) : (
         <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
           <SectionCard className="overflow-hidden">
             <div className="border-b border-outline-variant/10 px-6 py-5">
               <h2 className="text-2xl font-black tracking-tight text-on-surface">
-                {roleRequestAdminCopy.queueTitle}
+                {t("admin.queueTitle")}
               </h2>
             </div>
             <div className="divide-y divide-outline-variant/10">
@@ -192,7 +190,7 @@ export default function RoleRequestAdminScreen() {
           {selectedRequest ? (
             <RoleRequestReviewPanel
               key={selectedRequest.id}
-              copy={roleRequestAdminCopy}
+              t={t}
               request={selectedRequest}
               hubs={hubsQuery.data?.data ?? []}
               approveMutation={approveMutation}
@@ -207,20 +205,19 @@ export default function RoleRequestAdminScreen() {
 
 interface RoleRequestReviewPanelProps {
   readonly approveMutation: ReturnType<typeof useApproveRoleRequest>;
-  readonly copy: RoleRequestAdminCopy;
+  readonly t: ReturnType<typeof useTranslations<"roleRequests">>;
   readonly hubs: ReadonlyArray<{ code: string; id: number | string; name: string }>;
   readonly rejectMutation: ReturnType<typeof useRejectRoleRequest>;
   readonly request: RoleRequestViewModel;
 }
 
 function RoleRequestReviewPanel({
-  copy,
+  t,
   request,
   hubs,
   approveMutation,
   rejectMutation,
 }: Readonly<RoleRequestReviewPanelProps>) {
-  const roleRequestAdminCopy = copy;
   const [reviewNote, setReviewNote] = useState(request.reviewNote ?? "");
   const [hubId, setHubId] = useState(request.hubId != null ? String(request.hubId) : "");
   const requireHub = request.targetRoleName === "WAREHOUSE_STAFF" || request.targetRoleName === "DRIVER";
@@ -282,7 +279,7 @@ function RoleRequestReviewPanel({
 
         <label className="block space-y-2">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-on-surface/45">
-              {roleRequestAdminCopy.hubLabel}
+              {t("admin.hubLabel")}
             </span>
             <select
               className="h-12 w-full rounded-xl border border-outline-variant/20 bg-surface-container-lowest px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
@@ -300,7 +297,7 @@ function RoleRequestReviewPanel({
 
         <label className="block space-y-2">
           <span className="text-xs font-black uppercase tracking-[0.18em] text-on-surface/45">
-            {roleRequestAdminCopy.reviewNoteLabel}
+            {t("admin.reviewNoteLabel")}
           </span>
           <textarea
             className="min-h-36 w-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
@@ -324,14 +321,14 @@ function RoleRequestReviewPanel({
               (requireHub && !hubId)
             }
           >
-            {roleRequestAdminCopy.approveButton}
+            {t("admin.approveButton")}
           </Button>
           <Button
             variant="destructive"
             onClick={() => void handleReject()}
             disabled={approveMutation.isPending || rejectMutation.isPending}
           >
-            {roleRequestAdminCopy.rejectButton}
+            {t("admin.rejectButton")}
           </Button>
         </div>
       </div>

@@ -2,12 +2,11 @@
 import { usePathname } from "@/i18n/routing";
 import AdminSidebar from "@/features/admin/presentation/components/AdminSidebar";
 import AdminTopBar from "@/features/admin/presentation/components/AdminTopBar";
-import { useI18nCopy } from "@/i18n/useCopy";
+import { adminShellConfigByPath } from "@/features/admin/domain/config/navigation.config";
 import { cn } from "@/lib/utils";
 import type { AdminShellProps } from "../types/layout.types";
 
 export default function AdminShell({ children }: Readonly<AdminShellProps>) {
-  const { adminShellConfigByPath } = useI18nCopy();
   const pathname = usePathname();
   const matchedPath =
     adminShellConfigByPath[pathname] !== undefined
